@@ -1,23 +1,23 @@
 
-#ifndef __mixr_models_SimpleStoresMgr_HPP__
-#define __mixr_models_SimpleStoresMgr_HPP__
+#ifndef __mixr_models_SimpleStoresMgr_H__
+#define __mixr_models_SimpleStoresMgr_H__
 
-#include "mixr/models/system/IStoresMgr.hpp"
+#include "mixr/models/system/StoresMgr.hpp"
 
 namespace mixr {
 namespace base { class Boolean; class String; }
 namespace models {
-class IWeapon;
+class AbstractWeapon;
 class Bomb;
 class Missile;
-class ITrack;
+class Track;
 class Chaff;
 class Flare;
 class Decoy;
 
 //------------------------------------------------------------------------------
 // Class: SimpleStoresMgr
-// Description: Concrete, simple (example) external stores management systems
+// Description: Simple (example) external stores management systems
 //
 // Factory name: StoresMgr
 //
@@ -29,9 +29,9 @@ class Decoy;
 //       to the flyout weapon, or zero if unable to release a weapon.
 //
 //------------------------------------------------------------------------------
-class SimpleStoresMgr final: public IStoresMgr
+class SimpleStoresMgr : public StoresMgr
 {
-    DECLARE_SUBCLASS(SimpleStoresMgr, IStoresMgr)
+    DECLARE_SUBCLASS(SimpleStoresMgr, StoresMgr)
 
 public:
    SimpleStoresMgr();
@@ -46,18 +46,18 @@ public:
    virtual Bomb* getSpecificBomb(const base::String* const bombType);
 
    // Get the first weapon by type from our weapons list (Pre-ref()'d)
-   virtual IWeapon* getSpecificWeapon(const std::type_info& type);
+   virtual AbstractWeapon* getSpecificWeapon(const std::type_info& type);
 
    // Get the target track
-   virtual ITrack* getNextTarget();
+   virtual Track* getNextTarget();
 
    virtual bool setWeaponReleaseTimer(const double v);   // Sets the release timer
 
    bool onWpnRelEvent(const base::Boolean* const sw = 0) override;
    bool onTriggerSwEvent(const base::Boolean* const sw = 0) override;
 
-   IWeapon* getCurrentWeapon() override;
-   const IWeapon* getCurrentWeapon() const override;
+   AbstractWeapon* getCurrentWeapon() override;
+   const AbstractWeapon* getCurrentWeapon() const override;
    bool isWeaponReleased() const override;
    Missile* getNextMissile() override;
    const Missile* getNextMissile() const override;

@@ -1,26 +1,25 @@
-
-#include "mixr/interop/INtmOutputNode.hpp"
+//==============================================================================
+// Classes: dis::NetIO and dis::NtmInputNode
+//==============================================================================
 
 #include "mixr/interop/dis/NetIO.hpp"
 #include "mixr/interop/dis/Nib.hpp"
 #include "mixr/interop/dis/Ntm.hpp"
-#include "NtmInputNode.hpp"
 #include "mixr/interop/dis/EmissionPduHandler.hpp"
 #include "mixr/interop/dis/pdu.hpp"
-#include "mixr/interop/dis/utils.hpp"
 
+#include "mixr/models/system/Radar.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/network/INetHandler.hpp"
-#include "mixr/base/Identifier.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/String.hpp"
 
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
+#include "mixr/base/units/Times.hpp"
 
 #include "mixr/base/util/str_utils.hpp"
 
@@ -29,8 +28,50 @@
 #include <cctype>
 
 namespace mixr {
+
 namespace dis {
 
+//==============================================================================
+// Class: dis::NtmInputNode
+// Description: DIS incoming NTM class
+//==============================================================================
+
+class NtmInputNode : public interop::NetIO::NtmInputNode
+{
+   DECLARE_SUBCLASS(NtmInputNode, interop::NetIO::NtmInputNode)
+
+public:
+   enum { ROOT_LVL, KIND_LVL, DOMAIN_LVL, COUNTRYCODE_LVL,
+         CATEGORY_LVL, SUBCATEGORY_LVL, SPECIFIC_LVL, EXTRA_LVL };
+
+public:
+   NtmInputNode(const unsigned int level, const unsigned int code, const Ntm* ntm = nullptr);
+
+   virtual const Ntm* findNtmByTypeCodes(
+         const unsigned char  kind,
+         const unsigned char  domain,
+         const unsigned short countryCode,
+         const unsigned char  category,
+         const unsigned char  subcategory = 0,
+         const unsigned char  specific = 0,
+         const unsigned char  extra = 0
+      ) const;
+
+   // NetIO::NtmOutputNode class functions
+   const interop::Ntm* findNetworkTypeMapper(const interop::Nib* const nib) const override;
+   bool add2OurLists(interop::Ntm* const ntm) override;
+
+private:
+   unsigned int level {};        // Level
+   unsigned int code {};         // Code for this level
+   const Ntm* ourNtm {};         // Our default NTM
+   base::List* subnodeList {};   // List of NtmInputNode nodes below this level
+};
+
+
+//==============================================================================
+// Class: dis::NetIO
+//==============================================================================
 IMPLEMENT_SUBCLASS(NetIO, "DisNetIO")
 
 //------------------------------------------------------------------------------
@@ -57,7 +98,7 @@ static const double EE_FREQ_THRSH         {1.0};           //  Hz
 static const double EE_FRNG_THRSH         {1.0};           //  Hz
 static const double EE_PRF_THRSH          {1.0};           //  Hz
 static const double EE_PW_THRSH           {1.0e-6};        //  seconds
-//static const unsigned int EE_HIGH_DENSITY_THRSH {10};               //  no qty
+//static const unsigned int EE_HIGH_DENSITY_THRSH {10};               //  no units
 
 BEGIN_SLOTTABLE(NetIO)
    "netInput",             //  1) Network input handler
@@ -75,30 +116,30 @@ BEGIN_SLOTTABLE(NetIO)
 END_SLOTTABLE(NetIO)
 
 BEGIN_SLOT_MAP(NetIO)
-   ON_SLOT(1, setSlotNetInput,            base::INetHandler)
-   ON_SLOT(2, setSlotNetOutput,           base::INetHandler)
-   ON_SLOT(3, setSlotVersion,             base::Integer)
+   ON_SLOT(1, setSlotNetInput,            base::NetHandler)
+   ON_SLOT(2, setSlotNetOutput,           base::NetHandler)
+   ON_SLOT(3, setSlotVersion,             base::Number)
 
-   ON_SLOT(4, setSlotMaxTimeDR,           base::ITime)
-   ON_SLOT(4, setSlotMaxTimeDR,           base::IPairStream)
+   ON_SLOT(4, setSlotMaxTimeDR,           base::Time)
+   ON_SLOT(4, setSlotMaxTimeDR,           base::PairStream)
 
-   ON_SLOT(5, setSlotMaxPositionErr,      base::ILength)
-   ON_SLOT(5, setSlotMaxPositionErr,      base::IPairStream)
+   ON_SLOT(5, setSlotMaxPositionErr,      base::Distance)
+   ON_SLOT(5, setSlotMaxPositionErr,      base::PairStream)
 
-   ON_SLOT(6, setSlotMaxOrientationErr,   base::IAngle)
-   ON_SLOT(6, setSlotMaxOrientationErr,   base::IPairStream)
+   ON_SLOT(6, setSlotMaxOrientationErr,   base::Angle)
+   ON_SLOT(6, setSlotMaxOrientationErr,   base::PairStream)
 
-   ON_SLOT(7, setSlotMaxAge,              base::ITime)
-   ON_SLOT(7, setSlotMaxAge,              base::IPairStream)
+   ON_SLOT(7, setSlotMaxAge,              base::Time)
+   ON_SLOT(7, setSlotMaxAge,              base::PairStream)
 
-   ON_SLOT(8, setSlotMaxEntityRange,      base::ILength)
-   ON_SLOT(8, setSlotMaxEntityRange,      base::IPairStream)
+   ON_SLOT(8, setSlotMaxEntityRange,      base::Distance)
+   ON_SLOT(8, setSlotMaxEntityRange,      base::PairStream)
 
-   ON_SLOT(9, setSlotEmissionPduHandlers, base::IPairStream)
+   ON_SLOT(9, setSlotEmissionPduHandlers, base::PairStream)
 
-   ON_SLOT(10, setSlotSiteID,             base::Integer)
-   ON_SLOT(11, setSlotApplicationID,      base::Integer)
-   ON_SLOT(12, setSlotExerciseID,         base::Integer)
+   ON_SLOT(10, setSlotSiteID,             base::Number)
+   ON_SLOT(11, setSlotApplicationID,      base::Number)
+   ON_SLOT(12, setSlotExerciseID,         base::Number)
 END_SLOT_MAP()
 
 NetIO::NetIO() : netInput(nullptr), netOutput(nullptr)
@@ -114,7 +155,7 @@ void NetIO::initData()
    setMaxPositionErr(DRA_POS_THRST_DFLT, 255, 255);          //  (meters)
    setMaxOrientationErr(DRA_ORIENT_THRST_DFLT, 255, 255);    //  (radians)
    setMaxAge(HRT_BEAT_MPLIER*HRT_BEAT_TIMER, 255, 255);      //  (seconds)
-   setMaxEntityRange(0.0, 255, 255);                         // no range filtering
+   setMaxEntityRange(static_cast<double>(0), 255, 255);      // no range filtering
 }
 
 void NetIO::copyData(const NetIO& org, const bool cc)
@@ -169,7 +210,7 @@ bool NetIO::setVersion(const unsigned char v)
 
 bool NetIO::initNetwork()
 {
-    bool ok{true};
+    bool ok {true};
 
     // Initialize network input handler
     if (netInput != nullptr) {
@@ -196,7 +237,7 @@ bool NetIO::initNetwork()
 void NetIO::netInputHander()
 {
    // Read PDUs
-   unsigned int j0{};
+   unsigned int j0 {};
    while ( (j0 < MAX_PDUs) && (recvData(reinterpret_cast<char*>(&inputBuffer[j0]), MAX_PDU_SIZE) > 0) ) {
       j0++;
    }
@@ -204,9 +245,9 @@ void NetIO::netInputHander()
    while (j0 > 0) {
 
       // Process incoming PDUs
-      unsigned int j1{};
+      unsigned int j1 {};
       while (j1 < j0) {
-         PDUHeader* header{reinterpret_cast<PDUHeader*>(&inputBuffer[j1++][0])};
+         PDUHeader* header {reinterpret_cast<PDUHeader*>(&inputBuffer[j1++][0])};
 
          if (isInputEnabled()) {
 
@@ -220,8 +261,8 @@ void NetIO::netInputHander()
 
                   case PDU_ENTITY_STATE: {
                      //std::cout << "Entity State PDU." << std::endl;
-                     EntityStatePDU* pPdu{reinterpret_cast<EntityStatePDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     EntityStatePDU* pPdu {reinterpret_cast<EntityStatePDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->entityID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->entityID.simulationID.applicationIdentification) {
                            processEntityStatePDU(pPdu);
@@ -230,8 +271,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_FIRE: {
-                     FirePDU* pPdu{reinterpret_cast<FirePDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     FirePDU* pPdu {reinterpret_cast<FirePDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->firingEntityID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->firingEntityID.simulationID.applicationIdentification) {
                            processFirePDU(pPdu);
@@ -240,8 +281,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_DETONATION: {
-                     DetonationPDU* pPdu{reinterpret_cast<DetonationPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     DetonationPDU* pPdu {reinterpret_cast<DetonationPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->firingEntityID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->firingEntityID.simulationID.applicationIdentification) {
                            processDetonationPDU(pPdu);
@@ -250,8 +291,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_SIGNAL: {
-                     SignalPDU* pPdu{reinterpret_cast<SignalPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     SignalPDU* pPdu {reinterpret_cast<SignalPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->radioRefID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->radioRefID.simulationID.applicationIdentification) {
                            processSignalPDU(pPdu);
@@ -260,8 +301,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_TRANSMITTER: {
-                     TransmitterPDU* pPdu{reinterpret_cast<TransmitterPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     TransmitterPDU* pPdu {reinterpret_cast<TransmitterPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->radioRefID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->radioRefID.simulationID.applicationIdentification) {
                            processTransmitterPDU(pPdu);
@@ -270,8 +311,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_ELECTROMAGNETIC_EMISSION: {
-                     ElectromagneticEmissionPDU* pPdu{reinterpret_cast<ElectromagneticEmissionPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     ElectromagneticEmissionPDU* pPdu {reinterpret_cast<ElectromagneticEmissionPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->emittingEntityID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->emittingEntityID.simulationID.applicationIdentification) {
                            processElectromagneticEmissionPDU(pPdu);
@@ -280,8 +321,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_DATA_QUERY: {
-                     DataQueryPDU* pPdu{reinterpret_cast<DataQueryPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     DataQueryPDU* pPdu {reinterpret_cast<DataQueryPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processDataQueryPDU(pPdu);
@@ -290,8 +331,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_DATA: {
-                     DataPDU* pPdu{reinterpret_cast<DataPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     DataPDU* pPdu {reinterpret_cast<DataPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processDataPDU(pPdu);
@@ -300,8 +341,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_COMMENT: {
-                     CommentPDU* pPdu{reinterpret_cast<CommentPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     CommentPDU* pPdu {reinterpret_cast<CommentPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processCommentPDU(pPdu);
@@ -310,8 +351,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_START_RESUME: {
-                     StartPDU* pPdu{reinterpret_cast<StartPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     StartPDU* pPdu {reinterpret_cast<StartPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processStartPDU(pPdu);
@@ -320,8 +361,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_STOP_FREEZE: {
-                     StopPDU* pPdu{reinterpret_cast<StopPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     StopPDU* pPdu {reinterpret_cast<StopPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processStopPDU(pPdu);
@@ -330,8 +371,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_ACKNOWLEDGE: {
-                     AcknowledgePDU* pPdu{reinterpret_cast<AcknowledgePDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     AcknowledgePDU* pPdu {reinterpret_cast<AcknowledgePDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processAcknowledgePDU(pPdu);
@@ -340,8 +381,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_ACTION_REQUEST: {
-                     ActionRequestPDU* pPdu{reinterpret_cast<ActionRequestPDU*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     ActionRequestPDU* pPdu {reinterpret_cast<ActionRequestPDU*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processActionRequestPDU(pPdu);
@@ -350,8 +391,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_ACTION_REQUEST_R: {
-                     ActionRequestPDU_R* pPdu{reinterpret_cast<ActionRequestPDU_R*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     ActionRequestPDU_R* pPdu {reinterpret_cast<ActionRequestPDU_R*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processActionRequestPDU_R(pPdu);
@@ -360,8 +401,8 @@ void NetIO::netInputHander()
                   break;
 
                   case PDU_ACTION_RESPONSE_R: {
-                     ActionResponsePDU_R* pPdu{reinterpret_cast<ActionResponsePDU_R*>(header)};
-                     if (base::INetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
+                     ActionResponsePDU_R* pPdu {reinterpret_cast<ActionResponsePDU_R*>(header)};
+                     if (base::NetHandler::isNotNetworkByteOrder()) pPdu->swapBytes();
                      if (getSiteID() != pPdu->originatingID.simulationID.siteIdentification ||
                         getApplicationID() != pPdu->originatingID.simulationID.applicationIdentification) {
                            processActionResponsePDU_R(pPdu);
@@ -397,12 +438,12 @@ void NetIO::netInputHander()
 void NetIO::processInputList()
 {
    for (unsigned int idx = 0; idx < getInputListSize(); idx++) {
-      Nib* nib{static_cast<Nib*>(getInputNib(idx))};
-      if (nib != nullptr) nib->updateProxyPlayer();
+      Nib* nib {static_cast<Nib*>(getInputNib(idx))};
+      if (nib != nullptr) nib->updateTheIPlayer();
    }
 
 //   std::cout << "n = " << getInputListSize();      // #DPG#
-//   base::IPairStream* p = getSimulation()->getPlayers();
+//   base::PairStream* p = getSimulation()->getPlayers();
 //   if (p != nullptr) {
 //      std::cout << ";  np = " << p->entries();
 //      p->unref();
@@ -509,7 +550,7 @@ bool NetIO::processUserPDU(const PDUHeader* const)
 //------------------------------------------------------------------------------
 // nibFactory() -- Create a new Nib
 //------------------------------------------------------------------------------
-interop::INib* NetIO::nibFactory(const interop::INetIO::IoType ioType)
+interop::Nib* NetIO::nibFactory(const interop::NetIO::IoType ioType)
 {
    return new Nib(ioType);
 }
@@ -519,9 +560,9 @@ interop::INib* NetIO::nibFactory(const interop::INetIO::IoType ioType)
 // Create a new NIBs
 //------------------------------------------------------------------------------
 
-interop::INib* NetIO::createNewOutputNib(models::IPlayer* const player)
+interop::Nib* NetIO::createNewOutputNib(models::Player* const player)
 {
-   Nib* nib{static_cast<Nib*>(nibFactory(OUTPUT_NIB))};
+   Nib* nib {static_cast<Nib*>(nibFactory(OUTPUT_NIB))};
    if (nib != nullptr) {
       nib->setNetIO(this);
       nib->setPlayer(player);
@@ -531,17 +572,17 @@ interop::INib* NetIO::createNewOutputNib(models::IPlayer* const player)
       // Default DR: World, No rotation, 2nd order linear
       nib->setDeadReckoning(Nib::FVW_DRM);
 
-      bool ok{true};
-      std::string fName{getFederateName()};
-      unsigned short site{getSiteID()};
-      unsigned short app{getApplicationID()};
-      if (player->isProxyPlayer()) {
-         const auto pNib = dynamic_cast<interop::INib*>(player->getNib());
+      bool ok {true};
+      const base::String* fName {getFederateName()};
+      unsigned short site {getSiteID()};
+      unsigned short app  {getApplicationID()};
+      if (player->isNetworkedPlayer()) {
+         const auto pNib = dynamic_cast<interop::Nib*>(player->getNib());
          fName = pNib->getFederateName();
          // Mapping another federate name to DIS site and application IDs.
          // Currently using parseFederateName(), but really should have a
          // more robust federate name to site/app ID map list.
-         if (!fName.empty()) ok = parseFederateName(&site, &app, fName.c_str());
+         if (fName != nullptr) ok = parseFederateName(&site, &app, *fName);
          else ok = false;
       }
       nib->setFederateName(fName);
@@ -566,14 +607,16 @@ interop::INib* NetIO::createNewOutputNib(models::IPlayer* const player)
 //------------------------------------------------------------------------------
 Nib* NetIO::findDisNib(const unsigned short playerID, const unsigned short site, const unsigned short app, const IoType ioType)
 {
-   Nib* nib{};
-   char fName[32]{};
-   bool ok{makeFederateName(fName, 32, site, app)};
+   Nib* nib {};
+   char cbuff[32] {};
+   bool ok {makeFederateName(cbuff, 32, site, app)};
    if (ok) {
-      nib = dynamic_cast<Nib*>( findNib(playerID, fName, ioType) );
+      base::String fname(cbuff);
+      nib = dynamic_cast<Nib*>( findNib(playerID, &fname, ioType) );
    }
    return nib;
 }
+
 
 //------------------------------------------------------------------------------
 // processElectromagneticEmissionPDU() callback --
@@ -583,9 +626,9 @@ void NetIO::processElectromagneticEmissionPDU(const ElectromagneticEmissionPDU* 
     // ---
     // Emitting Player's ID checks
     // ---
-    unsigned short ePlayerId{pdu->emittingEntityID.ID};
-    unsigned short eSiteId{pdu->emittingEntityID.simulationID.siteIdentification};
-    unsigned short eApplicationId{pdu->emittingEntityID.simulationID.applicationIdentification};
+    unsigned short ePlayerId {pdu->emittingEntityID.ID};
+    unsigned short eSiteId {pdu->emittingEntityID.simulationID.siteIdentification};
+    unsigned short eApplicationId {pdu->emittingEntityID.simulationID.applicationIdentification};
 
     // Ignore our own PDUs
     if (eSiteId == getSiteID() && eApplicationId == getApplicationID()) return;
@@ -596,11 +639,11 @@ void NetIO::processElectromagneticEmissionPDU(const ElectromagneticEmissionPDU* 
     // Or if we have no emission handlers
     if (nEmissionHandlers == 0) return;
 
-    // Find the NIB and proxy player for the emitting player (they must exist or we're too early)
+    // Find the NIB and IPlayer for the emitting player (they must exist or we're too early)
     Nib* eNib {findDisNib(ePlayerId, eSiteId, eApplicationId, INPUT_NIB)};
     if (eNib == nullptr) return;
 
-    // Pass on to the proxy player's NIB for processing
+    // Pass on to the IPlayer's NIB for processing
     eNib->processElectromagneticEmissionPDU(pdu);
 }
 
@@ -609,7 +652,7 @@ void NetIO::processElectromagneticEmissionPDU(const ElectromagneticEmissionPDU* 
 //------------------------------------------------------------------------------
 int NetIO::recvData(char* const packet, const int maxSize)
 {
-   int result{};
+   int result {};
    if (netInput != nullptr) {
       result = netInput->recvData(packet, maxSize);
    }
@@ -621,7 +664,7 @@ int NetIO::recvData(char* const packet, const int maxSize)
 //------------------------------------------------------------------------------
 bool NetIO::sendData(const char* const packet, const int size)
 {
-   bool result{};
+   bool result {};
    if (netOutput != nullptr) {
       result = netOutput->sendData( packet, size );
    }
@@ -633,7 +676,7 @@ bool NetIO::sendData(const char* const packet, const int size)
 //------------------------------------------------------------------------------
 unsigned int NetIO::timeStamp()
 {
-   unsigned int ts{};
+   unsigned int ts {};
    if (getTimeline() == UTC) {
       ts = makeTimeStamp( static_cast<double>(getSimulation()->getSysTimeOfDay()), true );
    } else {
@@ -648,8 +691,8 @@ unsigned int NetIO::timeStamp()
 unsigned int NetIO::makeTimeStamp(const double ctime, const bool absolute)
 {
     // compute seconds in this hour
-    const int hours{static_cast<int>(ctime / 3600.0)};
-    const double secondsThisHour{(ctime - static_cast<double>(hours*3600.0))};
+    const int hours {static_cast<int>(ctime / 3600.0)};
+    const double secondsThisHour {(ctime - static_cast<double>(hours*3600))};
 
     // 31 MSBs are for the 3600 seconds in this hour
     unsigned int ts {static_cast<unsigned int>((secondsThisHour/3600.0) * 0x7fffffff)};
@@ -657,6 +700,181 @@ unsigned int NetIO::makeTimeStamp(const double ctime, const bool absolute)
     if (absolute) ts = (ts | 0x01);    // Sets LSB if using absolute time
 
     return ts;
+}
+
+
+//------------------------------------------------------------------------------
+// Generate a federate name from the site and application numbers:
+//  "SnnAmm" -- where nn and mm are the site and app numbers.
+//------------------------------------------------------------------------------
+bool NetIO::makeFederateName(char* const fedName, const unsigned int len, const unsigned short site, const unsigned short app)
+{
+   static const int p10[5] = { 10000, 1000, 100, 10, 1 };
+
+   bool ok {};
+   if (fedName != nullptr && len > 0 && site > 0 && app > 0) {
+      char cbuff[64] {};
+      unsigned int idx {};
+
+      // First the site number: Snnn
+      cbuff[idx++] = 'S';
+      {
+         int tmp {site};
+         bool digits {};
+         for (unsigned int i = 0; i < 5; i++) {
+            int rr {tmp/p10[i]};
+            if (rr > 0 || digits) {
+               cbuff[idx++] = '0' + char(rr);
+               digits = true;
+            }
+            tmp -= (rr * p10[i]);
+         }
+      }
+
+      // then the application number: Annn
+      cbuff[idx++] = 'A';
+      {
+         int tmp {app};
+         bool digits {};
+         for (unsigned int i = 0; i < 5; i++) {
+            int rr {tmp/p10[i]};
+            if (rr > 0 || digits) {
+               cbuff[idx++] = '0' + char(rr);
+               digits = true;
+            }
+            tmp -= (rr * p10[i]);
+         }
+      }
+
+      cbuff[idx++] = 0;
+
+      if (idx <= len) {
+         base::utStrcpy(fedName,len,cbuff);
+         ok = true;
+      }
+   }
+   return ok;
+}
+
+
+//------------------------------------------------------------------------------
+// Parse federate name for the site and application numbers
+//  (We're expecting "SnnAmm" where nn and mm are the site and app numbers.)
+//------------------------------------------------------------------------------
+bool NetIO::parseFederateName(unsigned short* const site, unsigned short* const app, const char* const fedName)
+{
+   bool ok {};
+   if (site != nullptr && app != nullptr && fedName != nullptr) {
+      unsigned short tSite {};
+      unsigned short tApp {};
+      unsigned int idx {};
+
+      // First check and convert site number
+      ok = ( std::toupper(fedName[idx++]) == 'S' );
+      if (ok) {
+         unsigned int tmp {};
+         unsigned int cnt {};
+         while (cnt < 5 && std::isdigit(fedName[idx])) {
+            tmp *= 10;
+            tmp += static_cast<int>(fedName[idx++] - '0');
+            cnt++;
+         }
+         ok = (tmp > 0) && (tmp <= 0xFFFF);
+         if (ok) tSite = static_cast<unsigned short>(tmp);
+      }
+
+      // Next check and convert application number
+      ok = ( std::toupper(fedName[idx++]) == 'A' );
+      if (ok) {
+         unsigned int tmp {};
+         unsigned int cnt {};
+         while (cnt < 5 && std::isdigit(fedName[idx])) {
+            tmp *= 10;
+            tmp += static_cast<int>(fedName[idx++] - '0');
+            cnt++;
+         }
+         ok = (tmp > 0) && (tmp <= 0xFFFF);
+         if (ok) tApp = static_cast<unsigned short>(tmp);
+      }
+
+      // If all is well, send the values back to the user.
+      if (ok) {
+         *site = tSite;
+         *app  = tApp;
+      }
+   }
+   return ok;
+}
+
+
+//------------------------------------------------------------------------------
+// Generate a federation name from the exercise numbers:
+//  "Ennn" -- where nnn is the exercise number, which must be greater than zero
+//------------------------------------------------------------------------------
+bool NetIO::makeFederationName(char* const fedName, const unsigned int len, const unsigned short exercise)
+{
+   static const int p10[5] = { 10000, 1000, 100, 10, 1 };
+
+   bool ok {};
+   if (fedName != nullptr && len > 0 && exercise > 0) {
+      char cbuff[64] {};
+      unsigned int idx {};
+
+      cbuff[idx++] = 'E';
+      {
+         int tmp {exercise};
+         bool digits {};
+         for (unsigned int i = 0; i < 5; i++) {
+            int rr {tmp/p10[i]};
+            if (rr > 0 || digits) {
+               cbuff[idx++] = '0' + char(rr);
+               digits = true;
+            }
+            tmp -= (rr * p10[i]);
+         }
+      }
+
+      cbuff[idx++] = 0;
+
+      if (idx <= len) {
+         base::utStrcpy(fedName,len,cbuff);
+         ok = true;
+      }
+   }
+   return ok;
+}
+
+
+//------------------------------------------------------------------------------
+// Parse federation name for the exercise number
+//  (We're expecting "Ennn" where nnn is the exercise.)
+//------------------------------------------------------------------------------
+bool NetIO::parseFederationName(unsigned short* const exercise, const char* const fedName)
+{
+   bool ok {};
+   if (exercise != nullptr && fedName != nullptr) {
+      unsigned short tExercise {};
+      unsigned int idx {};
+
+      ok = ( std::toupper(fedName[idx++]) == 'E' );
+      if (ok) {
+         unsigned int tmp {};
+         unsigned int cnt {};
+         while (cnt < 5 && std::isdigit(fedName[idx])) {
+            tmp *= 10;
+            tmp += static_cast<int>(fedName[idx++] - '0');
+            cnt++;
+         }
+         ok = (tmp > 0) && (tmp <= 0xFFFF);
+         if (ok) tExercise = static_cast<unsigned short>(tmp);
+      }
+
+      // If all is well, send the value back to the user.
+      if (ok) {
+         *exercise = tExercise;
+      }
+   }
+   return ok;
 }
 
 //------------------------------------------------------------------------------
@@ -672,7 +890,7 @@ const dis::Ntm* NetIO::findNtmByTypeCodes(
          const unsigned char  extra
       ) const
 {
-   const dis::Ntm* result{};
+   const dis::Ntm* result {};
 
    const auto disRoot = dynamic_cast<const dis::NtmInputNode*>( getRootNtmInputNode() );
    if (disRoot != nullptr) {
@@ -687,14 +905,14 @@ const dis::Ntm* NetIO::findNtmByTypeCodes(
 // Data access (get) routines
 //------------------------------------------------------------------------------
 
-double NetIO::getMaxEntityRange(const interop::INib* const nib) const
+double NetIO::getMaxEntityRange(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxEntityRange[k][d] : 0;
       } else {
          value = BaseClass::getMaxEntityRange(nib);
@@ -703,14 +921,14 @@ double NetIO::getMaxEntityRange(const interop::INib* const nib) const
    return value;
 }
 
-double NetIO::getMaxEntityRangeSquared(const interop::INib* const nib) const
+double NetIO::getMaxEntityRangeSquared(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxEntityRange2[k][d] : 0;
       } else {
          value = BaseClass::getMaxEntityRangeSquared(nib);
@@ -719,14 +937,14 @@ double NetIO::getMaxEntityRangeSquared(const interop::INib* const nib) const
    return value;
 }
 
-double NetIO::getMaxTimeDR(const interop::INib* const nib) const
+double NetIO::getMaxTimeDR(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxTimeDR[k][d] : 0;
       } else {
          value = BaseClass::getMaxTimeDR(nib);
@@ -735,14 +953,14 @@ double NetIO::getMaxTimeDR(const interop::INib* const nib) const
    return value;
 }
 
-double NetIO::getMaxPositionErr(const interop::INib* const nib) const
+double NetIO::getMaxPositionErr(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxPositionErr[k][d] : 0;
       } else {
          value = BaseClass::getMaxPositionErr(nib);
@@ -751,14 +969,14 @@ double NetIO::getMaxPositionErr(const interop::INib* const nib) const
    return value;
 }
 
-double NetIO::getMaxOrientationErr(const interop::INib* const nib) const
+double NetIO::getMaxOrientationErr(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxOrientationErr[k][d] : 0;
       } else {
          value = BaseClass::getMaxOrientationErr(nib);
@@ -767,14 +985,14 @@ double NetIO::getMaxOrientationErr(const interop::INib* const nib) const
    return value;
 }
 
-double NetIO::getMaxAge(const interop::INib* const nib) const
+double NetIO::getMaxAge(const interop::Nib* const nib) const
 {
-   double value{};
+   double value {};
    if (nib != nullptr) {
       const auto disNib = dynamic_cast<const Nib*>(nib);
       if (disNib != nullptr) {
-         const unsigned char k{disNib->getEntityKind()};
-         const unsigned char d{disNib->getEntityDomain()};
+         const unsigned char k {disNib->getEntityKind()};
+         const unsigned char d {disNib->getEntityDomain()};
          value = (k < NUM_ENTITY_KINDS && d < MAX_ENTITY_DOMAINS) ? maxAge[k][d] : 0;
       } else {
          value = BaseClass::getMaxAge(nib);
@@ -791,13 +1009,15 @@ double NetIO::getMaxAge(const interop::INib* const nib) const
 void NetIO::defineFederateName()
 {
    if (siteID > 0 && appID > 0) {
-      char fName[32]{};
-      bool ok{makeFederateName(fName, 32, siteID, appID)};
+      char cbuff[32] {};
+      bool ok {makeFederateName(cbuff, 32, siteID, appID)};
       if (ok) {
-         setFederateName(fName);
+         const auto p = new base::String(cbuff);
+         setFederateName(p);
+         p->unref();
       }
    } else {
-      setFederateName("");
+      setFederateName(nullptr);
    }
 }
 
@@ -805,13 +1025,15 @@ void NetIO::defineFederateName()
 void NetIO::defineFederationName()
 {
    if (exerciseID > 0) {
-      char fName[32]{};
-      bool ok{makeFederationName(fName, 32, exerciseID)};
+      char cbuff[32] {};
+      bool ok {makeFederationName(cbuff, 32, exerciseID)};
       if (ok) {
-         setFederationName(fName);
+         const auto p = new base::String(cbuff);
+         setFederationName(p);
+         p->unref();
       }
    } else {
-      setFederationName("");
+      setFederationName(nullptr);
    }
 }
 
@@ -824,9 +1046,9 @@ bool NetIO::setSiteID(const unsigned short v)
 }
 
 // Sets the network's application ID
-bool NetIO::setApplicationID(const unsigned short x)
+bool NetIO::setApplicationID(const unsigned short v)
 {
-    appID = x;
+    appID = v;
     defineFederateName();
     return true;
 }
@@ -843,10 +1065,10 @@ bool NetIO::setExerciseID(const unsigned char v)
 bool NetIO::setMaxEntityRange(const double v, const unsigned char kind, const unsigned char domain)
 {
    // default loop limits (just in case we're doing all)
-   unsigned char imin{};
-   unsigned char imax{NUM_ENTITY_KINDS};
-   unsigned char jmin{};
-   unsigned char jmax{MAX_ENTITY_DOMAINS};
+   unsigned char imin {};
+   unsigned char imax {NUM_ENTITY_KINDS};
+   unsigned char jmin {};
+   unsigned char jmax {MAX_ENTITY_DOMAINS};
 
    // Clamp i to kind (if valid)
    if (kind < NUM_ENTITY_KINDS) {
@@ -874,10 +1096,10 @@ bool NetIO::setMaxEntityRange(const double v, const unsigned char kind, const un
 bool NetIO::setMaxTimeDR(const double v, const unsigned char kind, const unsigned char domain)
 {
    // default loop limits (just in case we're doing all)
-   unsigned char imin{};
-   unsigned char imax{NUM_ENTITY_KINDS};
-   unsigned char jmin{};
-   unsigned char jmax{MAX_ENTITY_DOMAINS};
+   unsigned char imin {};
+   unsigned char imax {NUM_ENTITY_KINDS};
+   unsigned char jmin {};
+   unsigned char jmax {MAX_ENTITY_DOMAINS};
 
    // Clamp i to kind (if valid)
    if (kind < NUM_ENTITY_KINDS) {
@@ -904,10 +1126,10 @@ bool NetIO::setMaxTimeDR(const double v, const unsigned char kind, const unsigne
 bool NetIO::setMaxPositionErr(const double v, const unsigned char kind, const unsigned char domain)
 {
    // default loop limits (just in case we're doing all)
-   unsigned char imin{};
-   unsigned char imax{NUM_ENTITY_KINDS};
-   unsigned char jmin{};
-   unsigned char jmax{MAX_ENTITY_DOMAINS};
+   unsigned char imin {};
+   unsigned char imax {NUM_ENTITY_KINDS};
+   unsigned char jmin {};
+   unsigned char jmax {MAX_ENTITY_DOMAINS};
 
    // Clamp i to kind (if valid)
    if (kind < NUM_ENTITY_KINDS) {
@@ -934,10 +1156,10 @@ bool NetIO::setMaxPositionErr(const double v, const unsigned char kind, const un
 bool NetIO::setMaxOrientationErr(const double v, const unsigned char kind, const unsigned char domain)
 {
    // default loop limits (just in case we're doing all)
-   unsigned char imin{};
-   unsigned char imax{NUM_ENTITY_KINDS};
-   unsigned char jmin{};
-   unsigned char jmax{MAX_ENTITY_DOMAINS};
+   unsigned char imin {};
+   unsigned char imax {NUM_ENTITY_KINDS};
+   unsigned char jmin {};
+   unsigned char jmax {MAX_ENTITY_DOMAINS};
 
    // Clamp i to kind (if valid)
    if (kind < NUM_ENTITY_KINDS) {
@@ -964,10 +1186,10 @@ bool NetIO::setMaxOrientationErr(const double v, const unsigned char kind, const
 bool NetIO::setMaxAge(const double v, const unsigned char kind, const unsigned char domain)
 {
    // default loop limits (just in case we're doing all)
-   unsigned char imin{};
-   unsigned char imax{NUM_ENTITY_KINDS};
-   unsigned char jmin{};
-   unsigned char jmax{MAX_ENTITY_DOMAINS};
+   unsigned char imin {};
+   unsigned char imax {NUM_ENTITY_KINDS};
+   unsigned char jmin {};
+   unsigned char jmax {MAX_ENTITY_DOMAINS};
 
    // Clamp i to kind (if valid)
    if (kind < NUM_ENTITY_KINDS) {
@@ -995,52 +1217,61 @@ bool NetIO::setMaxAge(const double v, const unsigned char kind, const unsigned c
 //------------------------------------------------------------------------------
 
 // Sets max entity range for this entity kind/domain
-bool NetIO::setMaxEntityRange(const base::ILength* const p, const unsigned char kind, const unsigned char domain)
+bool NetIO::setMaxEntityRange(const base::Distance* const p, const unsigned char kind, const unsigned char domain)
 {
-    bool ok{};
+    bool ok {};
     if (p != nullptr) {
-        ok = setMaxEntityRange(p->getValueInMeters(), kind, domain);
+        base::Meters ref;
+        double meters {ref.convert(*p)};
+        ok = setMaxEntityRange(meters, kind, domain);
     }
     return ok;
 }
 
 // Sets max DR time for this entity kind/domain
-bool NetIO::setMaxTimeDR(const base::ITime* const p, const unsigned char kind, const unsigned char domain)
+bool NetIO::setMaxTimeDR(const base::Time* const p, const unsigned char kind, const unsigned char domain)
 {
-    bool ok{};
+    bool ok {};
     if (p != nullptr) {
-        ok = setMaxTimeDR(p->getValueInSeconds(), kind, domain);
+        base::Seconds ref;
+        double sec {ref.convert(*p)};
+        ok = setMaxTimeDR(sec, kind, domain);
     }
     return ok;
 }
 
 // Sets max position error for this entity kind/domain
-bool NetIO::setMaxPositionErr(const base::ILength* const p, const unsigned char kind, const unsigned char domain)
+bool NetIO::setMaxPositionErr(const base::Distance* const p, const unsigned char kind, const unsigned char domain)
 {
-    bool ok{};
+    bool ok {};
     if (p != nullptr) {
-        ok = setMaxPositionErr(p->getValueInMeters(), kind, domain);
+        base::Meters ref;
+        double meters {ref.convert(*p)};
+        ok = setMaxPositionErr(meters, kind, domain);
     }
     return ok;
 }
 
 // Sets max orientation error for this entity kind/domain
-bool NetIO::setMaxOrientationErr(const base::IAngle* const p, const unsigned char kind, const unsigned char domain)
+bool NetIO::setMaxOrientationErr(const base::Angle* const p, const unsigned char kind, const unsigned char domain)
 {
-    bool ok{};
+    bool ok {};
     if (p != nullptr) {
-        const double radians{p->getValueInRadians()};
+        base::Radians ref;
+        double radians {static_cast<double>(ref.convert(*p))};
         ok = setMaxOrientationErr(radians, kind, domain);
     }
     return ok;
 }
 
 // Sets max age (without update) of a networked player of this entity kind/domain
-bool NetIO::setMaxAge(const base::ITime* const p, const unsigned char kind, const unsigned char domain)
+bool NetIO::setMaxAge(const base::Time* const p, const unsigned char kind, const unsigned char domain)
 {
-    bool ok{};
+    bool ok {};
     if (p != nullptr) {
-        ok = setMaxAge(p->getValueInSeconds(), kind, domain);
+        base::Seconds ref;
+        double sec {ref.convert(*p)};
+        ok = setMaxAge(sec, kind, domain);
     }
     return ok;
 }
@@ -1088,10 +1319,10 @@ void NetIO::clearEmissionPduHandlers()
 // Find Emission PDU handlers
 //------------------------------------------------------------------------------
 
-// By IRfSensor data
-const EmissionPduHandler* NetIO::findEmissionPduHandler(const models::IRfSensor* const msg)
+// By RfSensor data
+const EmissionPduHandler* NetIO::findEmissionPduHandler(const models::RfSensor* const msg)
 {
-   const EmissionPduHandler* handler{};
+   const EmissionPduHandler* handler {};
    if (msg != nullptr && nEmissionHandlers > 0) {
       // Try to find one with a matching R/F sensor ...
       for (unsigned int i = 0; i < nEmissionHandlers && handler == nullptr; i++) {
@@ -1112,7 +1343,7 @@ const EmissionPduHandler* NetIO::findEmissionPduHandler(const models::IRfSensor*
 // By Emission System PDU data
 const EmissionPduHandler* NetIO::findEmissionPduHandler(const EmissionSystem* const msg)
 {
-   const EmissionPduHandler* handler{};
+   const EmissionPduHandler* handler {};
    if (msg != nullptr && nEmissionHandlers > 0) {
       // Try to find one with a matching emitter name
       for (unsigned int i = 0; i < nEmissionHandlers && handler == nullptr; i++) {
@@ -1135,39 +1366,39 @@ const EmissionPduHandler* NetIO::findEmissionPduHandler(const EmissionSystem* co
 //------------------------------------------------------------------------------
 
 // Sets our federate name (override NetIO)
-bool NetIO::setSlotFederateName(const base::Identifier* const)
+bool NetIO::setSlotFederateName(const base::String* const)
 {
    std::cerr << "NetIO::setSlotFederateName() -- With NetIO, use the siteID and applicationID slots to create the federate name" << std::endl;
    return false;
 }
 
 // Sets our federation name (override NetIO)
-bool NetIO::setSlotFederationName(const base::Identifier* const)
+bool NetIO::setSlotFederationName(const base::String* const)
 {
    std::cerr << "NetIO::setSlotFederationName() -- With NetIO, use the exerciseID slot to create the federation name" << std::endl;
    return false;
 }
 
 // Set Network Input Handler
-bool NetIO::setSlotNetInput(base::INetHandler* const msg)
+bool NetIO::setSlotNetInput(base::NetHandler* const msg)
 {
     netInput = msg;
     return true;
 }
 
 // Net Network Output Handler
-bool NetIO::setSlotNetOutput(base::INetHandler* const msg)
+bool NetIO::setSlotNetOutput(base::NetHandler* const msg)
 {
     netOutput = msg;
     return true;
 }
 
 // DIS version number [ 0 .. 6 ] (IST-CF-03-01, May 5, 2003)
-bool NetIO::setSlotVersion(const base::Integer* const num)
+bool NetIO::setSlotVersion(const base::Number* const num)
 {
-    bool ok{};
+    bool ok {};
     if (num != nullptr) {
-        const int v{num->asInt()};
+        const int v {num->getInt()};
         if (v >= 0 && v < VERSION_MAX) {
             setVersion(static_cast<unsigned char>(v));
             ok = true;
@@ -1179,23 +1410,23 @@ bool NetIO::setSlotVersion(const base::Integer* const num)
 }
 
 // Sets the maximum range for pairs of entities by kind/domain
-bool NetIO::setSlotMaxEntityRange(const base::IPairStream* const msg)
+bool NetIO::setSlotMaxEntityRange(const base::PairStream* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const base::IList::Item* item {msg->getFirstItem()};
+      const base::List::Item* item {msg->getFirstItem()};
       while (item != nullptr) {
 
             // get the slot and object from the pair
             const auto p = static_cast<const base::Pair*>(item->getValue());
-            const char* const slotname{p->slot().c_str()};
-            const auto pp = dynamic_cast<const base::ILength*>( p->object() );
+            const char* const slotname {*p->slot()};
+            const auto pp = dynamic_cast<const base::Distance*>( p->object() );
 
             if (pp != nullptr) {
                // Ok, we have a valid object,
                //  now can we get valid 'kind' and 'domain' numbers from the slot name?
-               unsigned char kind{255};
-               unsigned char domain{255};
+               unsigned char kind {255};
+               unsigned char domain {255};
                bool isNum {slot2KD(slotname, &kind, &domain)};
                if (isNum) {
                   // Everything is valid, so let setMaxEntityRange() handle it
@@ -1204,7 +1435,7 @@ bool NetIO::setSlotMaxEntityRange(const base::IPairStream* const msg)
                   std::cerr << "NetIO::setSlotMaxEntityRange(): slot: " << slotname << " is not a valid." << std::endl;
                }
             } else {
-               std::cerr << "NetIO::setSlotMaxEntityRange(): slot: " << slotname << " is not a valid base::Length!" << std::endl;
+               std::cerr << "NetIO::setSlotMaxEntityRange(): slot: " << slotname << " is not a valid base::Distance!" << std::endl;
             }
 
             item = item->getNext();
@@ -1214,23 +1445,23 @@ bool NetIO::setSlotMaxEntityRange(const base::IPairStream* const msg)
 }
 
 // Sets the maximum range for all entity types
-bool NetIO::setSlotMaxEntityRange(const base::ILength* const msg)
+bool NetIO::setSlotMaxEntityRange(const base::Distance* const msg)
 {
    return setMaxEntityRange(msg, 255, 255);
 }
 
 // Sets max DR times for pairs of entities by kind/domain
-bool NetIO::setSlotMaxTimeDR(const base::IPairStream* const msg)
+bool NetIO::setSlotMaxTimeDR(const base::PairStream* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const base::IList::Item* item {msg->getFirstItem()};
+      const base::List::Item* item {msg->getFirstItem()};
       while (item != nullptr) {
 
             // get the slot and object from the pair
             const auto p = static_cast<const base::Pair*>(item->getValue());
-            const char* const slotname{p->slot().c_str()};
-            const auto pp = dynamic_cast<const base::ITime*>( p->object() );
+            const char* const slotname {*p->slot()};
+            const auto pp = dynamic_cast<const base::Time*>( p->object() );
 
             if (pp != nullptr) {
                // Ok, we have a valid object,
@@ -1256,24 +1487,24 @@ bool NetIO::setSlotMaxTimeDR(const base::IPairStream* const msg)
 
 
 // Sets max DR times for all entity types
-bool NetIO::setSlotMaxTimeDR(const base::ITime* const msg)
+bool NetIO::setSlotMaxTimeDR(const base::Time* const msg)
 {
    return setMaxTimeDR(msg, 255, 255);
 }
 
 
 // Sets max position errors for pairs of entities by kind/domain
-bool NetIO::setSlotMaxPositionErr(const base::IPairStream* const msg)
+bool NetIO::setSlotMaxPositionErr(const base::PairStream* const msg)
 {
-   bool ok{};
+   bool ok {};
    if (msg != nullptr) {
-      const base::IList::Item* item{msg->getFirstItem()};
+      const base::List::Item* item {msg->getFirstItem()};
       while (item != nullptr) {
 
             // get the slot and object from the pair
             const auto p = static_cast<const base::Pair*>(item->getValue());
-            const char* const slotname{p->slot().c_str()};
-            const auto pp = dynamic_cast<const base::ILength*>( p->object() );
+            const char* const slotname {*p->slot()};
+            const auto pp = dynamic_cast<const base::Distance*>( p->object() );
 
             if (pp != nullptr) {
                // Ok, we have a valid object,
@@ -1288,7 +1519,7 @@ bool NetIO::setSlotMaxPositionErr(const base::IPairStream* const msg)
                   std::cerr << "NetIO::setSlotMaxPositionErr(): slot: " << slotname << " is not a valid." << std::endl;
                }
             } else {
-               std::cerr << "NetIO::setSlotMaxPositionErr(): slot: " << slotname << " is not a valid base::Length!" << std::endl;
+               std::cerr << "NetIO::setSlotMaxPositionErr(): slot: " << slotname << " is not a valid base::Distance!" << std::endl;
             }
 
             item = item->getNext();
@@ -1298,23 +1529,23 @@ bool NetIO::setSlotMaxPositionErr(const base::IPairStream* const msg)
 }
 
 // Sets max position errors for all entity types
-bool NetIO::setSlotMaxPositionErr(const base::ILength* const msg)
+bool NetIO::setSlotMaxPositionErr(const base::Distance* const msg)
 {
    return setMaxPositionErr(msg, 255, 255);
 }
 
 // Sets max orientation errors for pairs of entities by kind/domain
-bool NetIO::setSlotMaxOrientationErr(const base::IPairStream* const msg)
+bool NetIO::setSlotMaxOrientationErr(const base::PairStream* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const base::IList::Item* item {msg->getFirstItem()};
+      const base::List::Item* item {msg->getFirstItem()};
       while (item != nullptr) {
 
             // get the slot and object from the pair
             const auto p = static_cast<const base::Pair*>(item->getValue());
-            const char* const slotname{p->slot().c_str()};
-            const auto pp = dynamic_cast<const base::IAngle*>( p->object() );
+            const char* const slotname {*p->slot()};
+            const auto pp = dynamic_cast<const base::Angle*>( p->object() );
 
             if (pp != nullptr) {
                // Ok, we have a valid object,
@@ -1339,24 +1570,24 @@ bool NetIO::setSlotMaxOrientationErr(const base::IPairStream* const msg)
 }
 
 // Sets max orientation errors for all entity types
-bool NetIO::setSlotMaxOrientationErr(const base::IAngle* const msg)
+bool NetIO::setSlotMaxOrientationErr(const base::Angle* const msg)
 {
    return setMaxOrientationErr(msg, 255, 255);
 }
 
 
 // Sets max ages (without update) of for pairs of networked entities by kind/domain
-bool NetIO::setSlotMaxAge(const base::IPairStream* const msg)
+bool NetIO::setSlotMaxAge(const base::PairStream* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const base::IList::Item* item {msg->getFirstItem()};
+      const base::List::Item* item {msg->getFirstItem()};
       while (item != nullptr) {
 
             // get the slot and object from the pair
             const auto p = static_cast<const base::Pair*>(item->getValue());
-            const char* const slotname {p->slot().c_str()};
-            const auto pp = dynamic_cast<const base::ITime*>( p->object() );
+            const char* const slotname {*p->slot()};
+            const auto pp = dynamic_cast<const base::Time*>( p->object() );
 
             if (pp != nullptr) {
                // Ok, we have a valid object,
@@ -1381,13 +1612,13 @@ bool NetIO::setSlotMaxAge(const base::IPairStream* const msg)
 }
 
 // Sets max ages (without update) of all entity types
-bool NetIO::setSlotMaxAge(const base::ITime* const msg)
+bool NetIO::setSlotMaxAge(const base::Time* const msg)
 {
    return setMaxAge(msg, 255, 255);
 }
 
 // Sets the list of Electromagnetic Emission PDU handlers
-bool NetIO::setSlotEmissionPduHandlers(base::IPairStream* const msg)
+bool NetIO::setSlotEmissionPduHandlers(base::PairStream* const msg)
 {
     bool ok {};
     if (msg != nullptr) {
@@ -1395,7 +1626,7 @@ bool NetIO::setSlotEmissionPduHandlers(base::IPairStream* const msg)
        clearEmissionPduHandlers();
 
        // Now scan the pair stream and put all Ntm objects into the table.
-       base::IList::Item* item {msg->getFirstItem()};
+       base::List::Item* item {msg->getFirstItem()};
        while (item != nullptr && nEmissionHandlers < MAX_EMISSION_HANDLERS) {
           const auto pair = static_cast<base::Pair*>(item->getValue());
           const auto handler = dynamic_cast<EmissionPduHandler*>( pair->object() );
@@ -1458,11 +1689,11 @@ bool NetIO::slot2KD(const char* const slotname, unsigned char* const kind, unsig
 }
 
 // Set Site ID
-bool NetIO::setSlotSiteID(const base::Integer* const x)
+bool NetIO::setSlotSiteID(const base::Number* const num)
 {
     bool ok {};
-    if (x != nullptr) {
-        const int v {x->asInt()};
+    if (num != nullptr) {
+        int v {num->getInt()};
         if (v >= 0 && v <= 65535) {
             ok = setSiteID(static_cast<unsigned short>(v));
         } else {
@@ -1473,11 +1704,11 @@ bool NetIO::setSlotSiteID(const base::Integer* const x)
 }
 
 // Set Application ID
-bool NetIO::setSlotApplicationID(const base::Integer* const x)
+bool NetIO::setSlotApplicationID(const base::Number* const num)
 {
     bool ok {};
-    if (x != nullptr) {
-        const int v {x->asInt()};
+    if (num != nullptr) {
+        int v {num->getInt()};
         if (v >= 0 && v <= 65535) {
             ok = setApplicationID(static_cast<unsigned short>(v));
         } else {
@@ -1488,11 +1719,11 @@ bool NetIO::setSlotApplicationID(const base::Integer* const x)
 }
 
 // Set Exercise ID
-bool NetIO::setSlotExerciseID(const base::Integer* const x)
+bool NetIO::setSlotExerciseID(const base::Number* const num)
 {
     bool ok {};
-    if (x != nullptr) {
-        const int v {x->asInt()};
+    if (num != nullptr) {
+        int v {num->getInt()};
         if (v >= 0 && v <= 255) {
             ok = setExerciseID(static_cast<unsigned char>(v));
         } else {
@@ -1505,15 +1736,15 @@ bool NetIO::setSlotExerciseID(const base::Integer* const x)
 //------------------------------------------------------------------------------
 // Test quick lookup of incoming entity types
 //------------------------------------------------------------------------------
-void NetIO::testInputEntityTypes(const int n)
+void NetIO::testInputEntityTypes(const unsigned int n)
 {
-   const interop::INtmInputNode* root{getRootNtmInputNode()};
-   const int maxTypes{getNumInputEntityTypes()};
+   const NtmInputNode* root {getRootNtmInputNode()};
+   const unsigned int maxTypes {getNumInputEntityTypes()};
    if (n > 0 && root != nullptr && maxTypes > 0) {
-      for (int i{}; i < n; i++) {
-         const int r {std::rand()};
-         const double nr {(static_cast<double>(r) / static_cast<double>(RAND_MAX))};
-         const int idx {base::nint(nr * static_cast<double>(maxTypes - 1))};
+      for (unsigned int i = 0; i < n; i++) {
+         int r {std::rand()};
+         double nr {(static_cast<double>(r) / static_cast<double>(RAND_MAX))};
+         int idx {base::nint(nr * (maxTypes - 1))};
          const Ntm* origNtm {static_cast<const Ntm*>(getInputEntityType(idx))};
          std::cout << "i= " << i;
          std::cout << "; idx= " << idx;
@@ -1542,9 +1773,9 @@ void NetIO::testInputEntityTypes(const int n)
 
             std::cout << "; foundNtm= " << foundNtm;
             if (foundNtm != nullptr) {
-               const models::IPlayer* foundP {origNtm->getTemplatePlayer()};
+               const models::Player* foundP {origNtm->getTemplatePlayer()};
                std::cout << "; form: " << foundP->getFactoryName();
-               base::safe_ptr<const base::String> foundType( static_cast<const base::String*>( foundP->getType_old() ) );
+               base::safe_ptr<const base::String> foundType( static_cast<const base::String*>( foundP->getType() ) );
                if (foundType != nullptr) std::cout << "; type: " << *foundType;
             }
             if (origNtm == foundNtm) {
@@ -1565,46 +1796,46 @@ void NetIO::testInputEntityTypes(const int n)
 // draw of a Ntm from the main NTM list, getting and cloning the template
 // player, optionally modifying the type string, and doing a lookup.
 //------------------------------------------------------------------------------
-void NetIO::testOutputEntityTypes(const int n)
+void NetIO::testOutputEntityTypes(const unsigned int n)
 {
-   const interop::INtmOutputNode* root{getRootNtmOutputNode()};
-   const int maxTypes{getNumOutputEntityTypes()};
+   const NtmOutputNode* root {getRootNtmOutputNode()};
+   const unsigned int maxTypes {getNumOutputEntityTypes()};
    if (n > 0 && root != nullptr && maxTypes > 0) {
-      for (int i{}; i < n; i++) {
-         const int r{std::rand()};
-         const double nr{static_cast<double>(r) / static_cast<double>(RAND_MAX)};
-         const int idx{base::nint(nr * static_cast<double>(maxTypes - 1))};
-         const Ntm* origNtm{static_cast<const Ntm*>(getOutputEntityTypes(idx))};
+      for (unsigned int i = 0; i < n; i++) {
+         int r {std::rand()};
+         double nr {static_cast<double>(r) / static_cast<double>(RAND_MAX)};
+         int idx {base::nint(nr * (maxTypes - 1))};
+         const Ntm* origNtm {static_cast<const Ntm*>(getOutputEntityTypes(idx))};
          std::cout << "i= " << i;
          std::cout << "; idx= " << idx;
          std::cout << "; origNtm= " << origNtm;
          if (origNtm != nullptr) {
 
-            const models::IPlayer* origP {origNtm->getTemplatePlayer()};
-            models::IPlayer* origP1 {origP->clone()};
+            const models::Player* origP {origNtm->getTemplatePlayer()};
+            models::Player* origP1 {origP->clone()};
 
             std::cout << "; form: " << origP->getFactoryName();
-            base::safe_ptr<base::String> origType( (base::String*) origP->getType_old() );
+            base::safe_ptr<base::String> origType( (base::String*) origP->getType() );
             if (origType != nullptr) {
 
                char cbuff[64] {};
-               base::utStrcpy(cbuff, 64, origType->c_str());
+               base::utStrcpy(cbuff, 64, origType->getString());
 
 #if 0 /* optionally increment the last character to look for generic matches */
-               std::size_t ll{std::strlen(cbuff)};
+               std::size_t ll = std::strlen(cbuff);
                if (ll > 1) {
                   cbuff[ll-1]++;
                }
 #endif
 
                const auto newType = new base::String(cbuff);
-               origP1->setType_old(newType);
+               origP1->setType(newType);
 
-               const auto origType1 = const_cast<base::String*>(static_cast<const base::String*>(origP1->getType_old()));
+               const auto origType1 = const_cast<base::String*>(static_cast<const base::String*>(origP1->getType()));
                std::cout << "; type1: " << *origType1;
             }
 
-            const Ntm* foundNtm = static_cast<const Ntm*>(root->findNetworkTypeMapper(origP1));
+            const auto foundNtm = static_cast<const Ntm*>(root->findNetworkTypeMapper(origP1));
             std::cout << "; foundNtm= " << foundNtm;
             if (foundNtm != nullptr) {
                std::cout << "; [ ";
@@ -1619,7 +1850,8 @@ void NetIO::testOutputEntityTypes(const int n)
             }
             if (origNtm == foundNtm) {
                std::cout << "; Match!!";
-            } else {
+            }
+            else {
                std::cout << "; NO match!!";
             }
          }
@@ -1628,12 +1860,317 @@ void NetIO::testOutputEntityTypes(const int n)
    }
 }
 
+//==============================================================================
+// Class: dis::NtmInputNode
+// Description: DIS incoming NTM node
+//==============================================================================
+
+IMPLEMENT_SUBCLASS(NtmInputNode, "NtmInputNode")
+EMPTY_SLOTTABLE(NtmInputNode)
+
 //------------------------------------------------------------------------------
 // root incoming NTM node factory
 //------------------------------------------------------------------------------
-interop::INtmInputNode* NetIO::rootNtmInputNodeFactory() const
+interop::NetIO::NtmInputNode* NetIO::rootNtmInputNodeFactory() const
 {
-   return new dis::NtmInputNode(dis::NtmInputNode::ROOT_LVL, 0); // root level
+   return new dis::NtmInputNode(dis::NtmInputNode::ROOT_LVL,0); // root level
+}
+
+//------------------------------------------------------------------------------
+// Class support functions
+//------------------------------------------------------------------------------
+NtmInputNode::NtmInputNode(const unsigned int l, const unsigned int c, const Ntm* ntm)
+   : level(l), code(c), ourNtm(nullptr), subnodeList(nullptr)
+{
+   STANDARD_CONSTRUCTOR()
+
+   if (ntm != nullptr) {
+      ourNtm = ntm;
+      ourNtm->ref();
+   }
+   subnodeList = new base::List();
+}
+
+void NtmInputNode::copyData(const NtmInputNode& org, const bool cc)
+{
+   BaseClass::copyData(org);
+
+   if (cc) {
+      ourNtm = nullptr;
+      subnodeList = nullptr;
+   }
+
+   level = org.level;
+   code = org.code;
+
+   if (ourNtm != nullptr) {
+      ourNtm->unref();
+      ourNtm = nullptr;
+   }
+   if (org.ourNtm != nullptr) {
+      ourNtm = org.ourNtm->clone();
+   }
+
+   if (subnodeList != nullptr) {
+      subnodeList->unref();
+      subnodeList = nullptr;
+   }
+   if (org.subnodeList != nullptr) {
+      subnodeList = org.subnodeList->clone();
+   }
+}
+
+void NtmInputNode::deleteData()
+{
+   if (ourNtm != nullptr) {
+      ourNtm->unref();
+      ourNtm = nullptr;
+   }
+
+   if (subnodeList != nullptr) {
+      subnodeList->unref();
+      subnodeList = nullptr;
+   }
+}
+
+//------------------------------------------------------------------------------
+// Find the NTM based on the incoming entity type codes in the NIB
+//------------------------------------------------------------------------------
+const interop::Ntm* NtmInputNode::findNetworkTypeMapper(const interop::Nib* const nib) const
+{
+   const interop::Ntm* result {};
+
+   const auto disNib = dynamic_cast<const dis::Nib*>( nib );
+   if (disNib != nullptr) {
+      result = findNtmByTypeCodes(
+            disNib->getEntityKind(),
+            disNib->getEntityDomain(),
+            disNib->getEntityCountry(),
+            disNib->getEntityCategory(),
+            disNib->getEntitySubcategory(),
+            disNib->getEntitySpecific(),
+            disNib->getEntityExtra()
+         );
+   }
+   return result;
+}
+
+//------------------------------------------------------------------------------
+// Find the NTM based on the incoming entity type codes in the NIB
+//------------------------------------------------------------------------------
+const Ntm* NtmInputNode::findNtmByTypeCodes(
+      const unsigned char  kind,
+      const unsigned char  domain,
+      const unsigned short countryCode,
+      const unsigned char  category,
+      const unsigned char  subcategory,
+      const unsigned char  specific,
+      const unsigned char  extra
+   ) const
+{
+   const Ntm* result {};
+
+   {
+      // Yes we have the proper type of NIB ...
+
+      // Make sure that the NIB's code for this level matches our code
+      bool match {true};
+      switch (level) {
+         case ROOT_LVL :         match = true;                   break; // the 'root' node always matches
+         case KIND_LVL :         match = (code == kind);         break;
+         case DOMAIN_LVL :       match = (code == domain);       break;
+         case COUNTRYCODE_LVL :  match = (code == countryCode);  break;
+         case CATEGORY_LVL :     match = (code == category);     break;
+         case SUBCATEGORY_LVL :  match = (code == subcategory);  break;
+         case SPECIFIC_LVL :     match = (code == specific);     break;
+         case EXTRA_LVL :        match = (code == extra);        break;
+      }
+
+      if (match) {
+
+         // First, if we're not the last 'extra' level then search
+         // our subnodes to see if they can find a match
+         if (level < EXTRA_LVL) {
+            const base::List::Item* item {subnodeList->getFirstItem()};
+            while (item != nullptr && result == nullptr) {
+               const NtmInputNode* subnode = static_cast<const NtmInputNode*>(item->getValue());
+               result = subnode->findNtmByTypeCodes(kind, domain, countryCode, category, subcategory, specific, extra);
+               item = item->getNext();
+            }
+         }
+
+         // Second, we can use our NTM object, but only if we're at the category
+         // level or higher (i.e., we must have match at the kind, domain, country
+         // code and category levels)
+         if (result == nullptr && level >= CATEGORY_LVL) {
+            result = ourNtm;
+         }
+      }
+
+   }
+
+   return result;
+}
+
+
+//------------------------------------------------------------------------------
+// Add the NTM to our sublist of nodes.
+//------------------------------------------------------------------------------
+bool NtmInputNode::add2OurLists(interop::Ntm* const ntm)
+{
+   bool ok {};
+
+   // Make sure we have the correct kind of NTM ...
+   const auto disNtm = dynamic_cast<dis::Ntm*>( ntm );
+   if (disNtm != nullptr) {
+
+      // Make sure that the NTM's code for this level matches our code
+      unsigned int currLevelCode {};
+      unsigned int nextLevelCode {};
+      switch (level) {
+         case ROOT_LVL : {
+            currLevelCode = 0;
+            nextLevelCode = disNtm->getEntityKind();
+            break;
+          }
+         case KIND_LVL : {
+            currLevelCode = disNtm->getEntityKind();
+            nextLevelCode = disNtm->getEntityDomain();
+            break;
+          }
+         case DOMAIN_LVL : {
+            currLevelCode = disNtm->getEntityDomain();
+            nextLevelCode = disNtm->getEntityCountry();
+            break;
+          }
+         case COUNTRYCODE_LVL : {
+            currLevelCode = disNtm->getEntityCountry();
+            nextLevelCode = disNtm->getEntityCategory();
+            break;
+          }
+         case CATEGORY_LVL : {
+            currLevelCode = disNtm->getEntityCategory();
+            nextLevelCode = disNtm->getEntitySubcategory();
+            break;
+          }
+         case SUBCATEGORY_LVL : {
+            currLevelCode = disNtm->getEntitySubcategory();
+            nextLevelCode = disNtm->getEntitySpecific();
+            break;
+          }
+         case SPECIFIC_LVL : {
+            currLevelCode = disNtm->getEntitySpecific();
+            nextLevelCode = disNtm->getEntityExtra();
+            break;
+          }
+         case EXTRA_LVL : {
+            currLevelCode = disNtm->getEntityExtra();
+            nextLevelCode = 0;
+            break;
+          }
+      }
+
+      // Does our code match the NIB's entity type code for this level?
+      // And the 'root' node always matches.
+      bool match {(code == currLevelCode) || (level == ROOT_LVL)};
+
+      if (match) {
+         bool err {};
+
+         // Case #1; if we're at the 'category' level or above, and all remaining codes are
+         // zero, then this becomes a wild card terminal node.
+         {
+            bool wild {(level >= CATEGORY_LVL)};
+
+            if (wild && level < EXTRA_LVL)        wild = (disNtm->getEntityExtra() == 0);
+            if (wild && level < SPECIFIC_LVL)     wild = (disNtm->getEntitySpecific() == 0);
+            if (wild && level < SUBCATEGORY_LVL)  wild = (disNtm->getEntitySubcategory() == 0);
+
+            if (wild) {
+               // wild card terminal node
+               if (ourNtm == nullptr) {
+                  ourNtm = disNtm;
+                  ourNtm->ref();
+                  ok = true;
+               } else if (isMessageEnabled(MSG_WARNING)) {
+                  std::cerr << "Warning: duplicate incoming NTM(";
+                  std::cerr << static_cast<int>(disNtm->getEntityKind()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntityDomain()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntityCountry()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntityCategory()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntitySubcategory()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntitySpecific()) << ",";
+                  std::cerr << static_cast<int>(disNtm->getEntityExtra()) << ")";
+                  std::cerr << ", second ignored" << std::endl;
+                  err = true;
+               }
+            }
+         }
+
+         // Case #2; if we're at the 'specific' level, then create a terminal node
+         // for the Ntm.  The wild card case was handle in case #1.
+         if (!ok && !err && level == SPECIFIC_LVL) {
+
+            // make sure the terminal node doesn't already exist.
+            bool alreadyExists {};
+            const base::List::Item* item {subnodeList->getFirstItem()};
+            while (item != nullptr && !alreadyExists) {
+               //NtmInputNode* subnode = (NtmInputNode*) item->getValue();
+               const NtmInputNode* csubnode {static_cast<const NtmInputNode*>(item->getValue())};
+               NtmInputNode* subnode {const_cast<NtmInputNode*>(csubnode)};
+               alreadyExists = (nextLevelCode == subnode->code);
+               item = item->getNext();
+            }
+
+            if (!alreadyExists) {
+               const auto newNode = new NtmInputNode( (level+1), nextLevelCode, disNtm );
+               subnodeList->put(newNode);
+               newNode->unref();   // ref()'d when put into the subnodelist
+               ok = true;
+            }
+            else if (isMessageEnabled(MSG_WARNING)) {
+               std::cerr << "Warning: duplicate incoming NTM(";
+               std::cerr << static_cast<int>(disNtm->getEntityKind()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntityDomain()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntityCountry()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntityCategory()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntitySubcategory()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntitySpecific()) << ",";
+               std::cerr << static_cast<int>(disNtm->getEntityExtra()) << ")";
+               std::cerr << ", second ignored" << std::endl;
+               err = true;
+            }
+         }
+
+         // Case #3; if we're at a level less than the 'specific' level, so try
+         // to add the NTM to one of our existing subnodes.
+         if (!ok && !err && level < SPECIFIC_LVL) {
+            const base::List::Item* item {subnodeList->getFirstItem()};
+            while (item != nullptr && !ok) {
+               //NtmInputNode* subnode = (NtmInputNode*) item->getValue();
+               const NtmInputNode* csubnode = static_cast<const NtmInputNode*>(item->getValue());
+               NtmInputNode* subnode = const_cast<NtmInputNode*>(csubnode);
+               if (nextLevelCode == subnode->code) {
+                  ok = subnode->add2OurLists(disNtm);
+               }
+               item = item->getNext();
+            }
+         }
+
+         // Case #4; We didn't create a terminal node, and the NTM was added to
+         // one of our existing subnodes, then create a new subnode for it.
+         if (!ok && !err) {
+            // Create a new node and add the NTM
+            const auto newNode = new NtmInputNode( (level+1), nextLevelCode );
+            subnodeList->put(newNode);
+            ok = newNode->add2OurLists(disNtm);
+            newNode->unref();   // ref()'d when put into the subnodelist
+         }
+      }
+
+   }
+
+   return ok;
 }
 
 }

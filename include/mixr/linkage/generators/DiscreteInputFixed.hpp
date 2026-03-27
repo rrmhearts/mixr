@@ -1,11 +1,11 @@
 
-#ifndef __mixr_linkage_DiscreteInputFixed_HPP__
-#define __mixr_linkage_DiscreteInputFixed_HPP__
+#ifndef __mixr_linkage_DiscreteInputFixed_H__
+#define __mixr_linkage_DiscreteInputFixed_H__
 
-#include "mixr/linkage/generators/IGenerator.hpp"
+#include "mixr/linkage/generators/AbstractGenerator.hpp"
 
 namespace mixr {
-namespace base { class IIoData; class IIoDevice; class Angle; class Frequency; class Integer; class Identifier; }
+namespace base { class AbstractIoData; class AbstractIoDevice; class Number; class Angle; class Frequency; class String; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -16,14 +16,14 @@ namespace linkage {
 //
 // Factory name: DiscreteInputFixed
 // Slots:
-//      signal    <Identifier>   ! Type identifiers { on, off }
-//                               !  (default: off )
+//      signal    <Identifier>   ! Signal type { ON, OFF }
+//                               !  (default: OFF )
 //
-//      di        <Integer>      ! IIoData's DI channel index
+//      di        <Number>       ! AbstractIoData's DI channel index
 //------------------------------------------------------------------------------
-class DiscreteInputFixed final: public IGenerator
+class DiscreteInputFixed final: public AbstractGenerator
 {
-   DECLARE_SUBCLASS(DiscreteInputFixed, IGenerator)
+   DECLARE_SUBCLASS(DiscreteInputFixed, AbstractGenerator)
 
 public:
    enum class Signal { ON, OFF };
@@ -34,21 +34,21 @@ public:
    void reset() final    {}
 
 private:
-   void processInputsImpl(const double dt, base::IIoData* const) final;
+   void processInputsImpl(const double dt, base::AbstractIoData* const) final;
 
-   // IIoData's AI channel index
+   // AbstractIoData's AI channel index
    int getChannel() const                              { return channel; }
    bool setChannel(const int x)                        { channel = x; return true; }
-   int channel{};
+   int channel {};
 
-   Signal signal{Signal::OFF};  // Signal type
+   Signal signal {Signal::OFF};  // Signal type
 
    bool setSignalType(const Signal x)                  { signal = x;   return true; }
 
 private:
    // slot table helper methods
-   bool setSlotChannel(const base::Integer* const);
-   bool setSlotSignal(const base::Identifier* const);
+   bool setSlotChannel(const base::Number* const);
+   bool setSlotSignal(const base::String* const);
 };
 
 }

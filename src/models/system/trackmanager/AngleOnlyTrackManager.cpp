@@ -1,22 +1,22 @@
 
 #include "mixr/models/system/trackmanager/AngleOnlyTrackManager.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
-#include "mixr/models/track/ITrack.hpp"
+#include "mixr/models/Track.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IDataRecorder.hpp"
+#include "mixr/simulation/AbstractDataRecorder.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
-#include "mixr/base/qty/times.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/units/Times.hpp"
+#include "mixr/base/units/Angles.hpp"
 
 #include <cmath>
 
@@ -31,8 +31,8 @@ BEGIN_SLOTTABLE(AngleOnlyTrackManager)
 END_SLOTTABLE(AngleOnlyTrackManager)
 
 BEGIN_SLOT_MAP(AngleOnlyTrackManager)
-    ON_SLOT(1, setSlotAzimuthBin,   base::IAngle)
-    ON_SLOT(2, setSlotElevationBin, base::IAngle)
+    ON_SLOT(1, setSlotAzimuthBin,   base::Number)
+    ON_SLOT(2, setSlotElevationBin, base::Number)
 END_SLOT_MAP()
 
 AngleOnlyTrackManager::AngleOnlyTrackManager() : queryQueue(MAX_TRKS)
@@ -150,7 +150,7 @@ IrQueryMsg* AngleOnlyTrackManager::getQuery(double* const sn)
 //------------------------------------------------------------------------------
 // addTrack() -- Add a track to the list
 //------------------------------------------------------------------------------
-bool AngleOnlyTrackManager::addTrack(ITrack* const t)
+bool AngleOnlyTrackManager::addTrack(Track* const t)
 {
     bool ok{};
 
@@ -168,40 +168,52 @@ bool AngleOnlyTrackManager::addTrack(ITrack* const t)
 //------------------------------------------------------------------------------
 // Sets azimuth bin
 //------------------------------------------------------------------------------
-bool AngleOnlyTrackManager::setSlotAzimuthBin(const base::IAngle* const x)
+bool AngleOnlyTrackManager::setSlotAzimuthBin(const base::Number* const msg)
 {
-    bool ok{};
+    double value{};
 
-    if (x != nullptr) {
-        azimuthBin = x->getValueInRadians();
-        ok = true;
+    const auto a = dynamic_cast<const base::Angle*>(msg);
+    if (a != nullptr) {
+        base::Radians r;
+        value = static_cast<double>(r.convert(*a));
+    } else if (msg != nullptr) {
+        value = msg->getReal();
     }
-    return ok;
+
+    azimuthBin = value;
+
+    return true;
 }
 
 //------------------------------------------------------------------------------
 // Sets azimuth bin
 //------------------------------------------------------------------------------
-bool AngleOnlyTrackManager::setSlotElevationBin(const base::IAngle* const x)
+bool AngleOnlyTrackManager::setSlotElevationBin(const base::Number* const msg)
 {
-    bool ok{};
+    double value{};
 
-    if (x != nullptr) {
-        azimuthBin = x->getValueInRadians();
-        ok = true;
+    const auto a = dynamic_cast<const base::Angle*>(msg);
+    if (a != nullptr) {
+        base::Radians r;
+        value = static_cast<double>(r.convert(*a));
+    } else if (msg != nullptr) {
+        value = msg->getReal();
     }
-    return ok;
+
+    elevationBin = value;
+
+    return true;
 }
 
 //------------------------------------------------------------------------------
 // Sets alpha
 //------------------------------------------------------------------------------
-bool AngleOnlyTrackManager::setSlotAlpha(const base::INumber* const msg)
+bool AngleOnlyTrackManager::setSlotAlpha(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
         ok = true;
-        alpha = msg->asDouble();
+        alpha = msg->getReal();
         oneMinusAlpha = 1.0 - alpha;
     }
     return ok;
@@ -210,12 +222,12 @@ bool AngleOnlyTrackManager::setSlotAlpha(const base::INumber* const msg)
 //------------------------------------------------------------------------------
 // Sets beta
 //------------------------------------------------------------------------------
-bool AngleOnlyTrackManager::setSlotBeta(const base::INumber* const msg)
+bool AngleOnlyTrackManager::setSlotBeta(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
         ok = true;
-        beta = msg->asDouble();
+        beta = msg->getReal();
         oneMinusBeta = 1.0 - beta;
     }
     return ok;

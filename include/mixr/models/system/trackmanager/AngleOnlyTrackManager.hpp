@@ -1,29 +1,30 @@
 
-#ifndef __mixr_models_common_AngleOnlyTrackManager_HPP__
-#define __mixr_models_common_AngleOnlyTrackManager_HPP__
+#ifndef __mixr_models_AngleOnlyTrackManager_H__
+#define __mixr_models_AngleOnlyTrackManager_H__
 
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 #include "mixr/base/safe_queue.hpp"
 #include "mixr/base/util/constants.hpp"
 
 namespace mixr {
-namespace base { class IAngle; class INumber; }
+namespace base { class Number; }
 namespace models {
 class IrQueryMsg;
-class ITrack;
+class Track;
 
 //------------------------------------------------------------------------------
 // Class: AngleOnlyTrackManager
-// Description: Interface class for Angle Only Track Managers
+// Description: Abstract class for Angle Only Track Managers
 //
 // Factory name: AngleOnlyTrackManager
 // Slots:
-//    azimuthBin    <base::IAngle>   ! Azimuth Bin (default: PI)
-//    elevationBin  <base::IAngle>   ! Elevation Bin (default: PI)
+//    azimuthBin    <Number>   ! Azimuth Bin (default: PI)
+//    elevationBin  <Number>   ! Elevation Bin (default: PI)
+//
 //------------------------------------------------------------------------------
-class AngleOnlyTrackManager : public ITrackMgr
+class AngleOnlyTrackManager : public TrackManager
 {
-   DECLARE_SUBCLASS(AngleOnlyTrackManager, ITrackMgr)
+   DECLARE_SUBCLASS(AngleOnlyTrackManager, TrackManager)
 
 public:
    AngleOnlyTrackManager();
@@ -31,7 +32,7 @@ public:
    virtual void newReport(IrQueryMsg* q, double snDbl);
 
    void clearTracksAndQueues() override;
-   bool addTrack(ITrack* const t) override;
+   bool addTrack(Track* const t) override;
 
 protected:
    virtual IrQueryMsg* getQuery(double* const sn);                     // Get the next 'new' report from the queue
@@ -39,20 +40,20 @@ protected:
    bool shutdownNotification() override;
 
    // Prediction parameters
-   double azimuthBin{base::PI};     // Azimuth Bin
-   double elevationBin{base::PI};   // Elevation Bin
-   double oneMinusAlpha{};          // 1 - Alpha parameter
-   double oneMinusBeta{1.0};        // 1 - Beta parameter
+   double azimuthBin {base::PI};     // Azimuth Bin
+   double elevationBin {base::PI};   // Elevation Bin
+   double oneMinusAlpha {};          // 1 - Alpha parameter
+   double oneMinusBeta {1.0};        // 1 - Beta parameter
 
 private:
    base::safe_queue<IrQueryMsg*> queryQueue;  // Emission input queue (used with the
                                               //   TrackManager::queueLock semaphore)
 private:
    // slot table helper methods
-   bool setSlotAzimuthBin(const base::IAngle* const);
-   bool setSlotElevationBin(const base::IAngle* const);
-   bool setSlotAlpha(const base::INumber* const) override;
-   bool setSlotBeta(const base::INumber* const) override;
+   bool setSlotAzimuthBin(const base::Number* const);
+   bool setSlotElevationBin(const base::Number* const);
+   bool setSlotAlpha(const base::Number* const) override;
+   bool setSlotBeta(const base::Number* const) override;
 };
 
 }

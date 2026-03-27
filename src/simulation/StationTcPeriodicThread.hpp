@@ -1,8 +1,8 @@
 
-#ifndef __mixr_simulation_StationTcPeriodicThread_HPP__
-#define __mixr_simulation_StationTcPeriodicThread_HPP__
+#ifndef __mixr_simulation_StationTcPeriodicThread_H__
+#define __mixr_simulation_StationTcPeriodicThread_H__
 
-#include "mixr/base/threads/IPeriodicThread.hpp"
+#include "mixr/base/threads/PeriodicThread.hpp"
 
 namespace mixr {
 namespace simulation {
@@ -10,9 +10,9 @@ namespace simulation {
 // ---
 // Time-critical thread
 // ---
-class StationTcPeriodicThread final : public base::IPeriodicThread
+class StationTcPeriodicThread final : public base::PeriodicThread
 {
-   public: StationTcPeriodicThread(base::IComponent* const parent, const double rate);
+   public: StationTcPeriodicThread(base::Component* const parent, const double rate);
    private: unsigned long userFunc(const double dt) final;
 };
 

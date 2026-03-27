@@ -10,7 +10,7 @@ OBJS =  \
 	DataFile.o \
 	factory.o \
 	QuadMap.o \
-	ITerrain.o
+	Terrain.o
 
 .PHONY: all clean
 

@@ -1,12 +1,12 @@
 
-#ifndef __mixr_models_IrAtmosphere_HPP__
-#define __mixr_models_IrAtmosphere_HPP__
+#ifndef __mixr_models_IrAtmosphere_H__
+#define __mixr_models_IrAtmosphere_H__
 
-#include "mixr/models/environment/IAtmosphere.hpp"
+#include "mixr/models/environment/AbstractAtmosphere.hpp"
 
 namespace mixr {
 namespace base { class Number; class Table1; class Table2; class Table3;
-                 class Table4; class INumber; }
+                 class Table4; class Number; }
 namespace models {
 class IrQueryMsg;
 
@@ -29,26 +29,26 @@ class IrQueryMsg;
 //                              const double upperWavelength,   // The upper range of the wave band (microns)
 //                              const double range)             // Ground range to the target (meters)
 //        Return the fraction of infrared radiation transmitted in the region
-//        of the spectrum defined by the upper and lower wavelengths as a function
-//        of the range from seeker to target. The return value is between
+//        of the spectrum defined by the upper and lower wavelengths as a function 
+//        of the range from seeker to target. The return value is between 
 //        0.0 (no power gets through) and 1.0 (All power gets through)
 //
 //    double getTransmissivity(const double wavebandCenter,       // The waveband center (microns)
 //                             const double range)                // Ground range to the target (meters)
-//        Return the fraction of infrared radiation transmitted in the region surrounded
+//        Return the fraction of infrared radiation transmitted in the region surrounded 
 //        by the center of the waveband as a function of the range from seeker to target.
 //        The routine does a table lookup in a 3-D table where the x-coordinate is the center of the
-//        user defined waveband, the y-coordinate is the range of the seeker. The return value is between 0.0
+//        user defined waveband, the y-coordinate is the range of the seeker. The return value is between 0.0 
 //        (no power gets through) and 1.0 (All power gets through)
 //
 //     double getLowerEndOfWavelengthOverlap(const double lowerRadiationWaveband,      // Lower end of the wavebands represented by the atmosphere (microns)
 //                                           const double lowerSensorWaveband) const;  // Lower end of the sensor waveband (microns)
-//        Return the lowest wavelength for which data for the atmosphere is required. It is higher of the bottom
+//        Return the lowest wavelength for which data for the atmosphere is required. It is higher of the bottom 
 //        sensor waveband and the lowest waveband represented by the atmosphere.
 //
 //     double getUpperEndOfWavelengthOverlap(const double upperRadiationWaveband,      // Upper end of the wavebands represented by the atmosphere (microns)
 //                                           const double upperSensorWaveband) const;  // Upper end of the sensor waveband (microns)
-//        Return the highest wavelength for which data for the atmosphere is required. It is lower of the top
+//        Return the highest wavelength for which data for the atmosphere is required. It is lower of the top 
 //        of the sensor waveband and the highest waveband represented by the atmosphere.
 //
 //
@@ -75,9 +75,9 @@ class IrQueryMsg;
 //   )
 //
 //------------------------------------------------------------------------------
-class IrAtmosphere : public IAtmosphere
+class IrAtmosphere : public AbstractAtmosphere
 {
-   DECLARE_SUBCLASS(IrAtmosphere, IAtmosphere)
+   DECLARE_SUBCLASS(IrAtmosphere, AbstractAtmosphere)
 
 public:
    IrAtmosphere();
@@ -86,7 +86,7 @@ public:
    virtual bool calculateAtmosphereContribution(IrQueryMsg* const msg, double* totalSignal, double* totalBackground);
 
    //Get the number of waveband bins
-   int getNumWaveBands() const              { return numWaveBands; }
+   unsigned int getNumWaveBands() const              { return numWaveBands; }
 
    // getWaveBandCenters() -- Return center frequency of all wave bands
    const double* getWaveBandCenters() const;
@@ -94,17 +94,17 @@ public:
    // getWaveBandWidths() -- Return widths for all wave band frequencies
    const double* getWaveBandWidths() const;
 
-   // Return the lowest wavelength for which data for the atmosphere is required.
+   // Return the lowest wavelength for which data for the atmosphere is required. 
    // It is higher of the bottom sensor waveband and the lowest waveband represented by the atmosphere.
    double getLowerEndOfWavelengthOverlap (
       const double lowerRadiationWaveband, // Lower end of the wavebands represented by the atmosphere (microns)
       const double lowerSensorWaveband     // Lower end of the sensor waveband (microns)
-   ) const
+   ) const 
    {
       return ((lowerRadiationWaveband > lowerSensorWaveband) ? lowerRadiationWaveband : lowerSensorWaveband);
    }
 
-   // Return the highest wavelength for which data for the atmosphere is required.
+   // Return the highest wavelength for which data for the atmosphere is required. 
    // It is lower of the top of the sensor waveband and the highest waveband represented by the atmosphere.
    double getUpperEndOfWavelengthOverlap(
       const double upperRadiationWaveband, // Upper end of the wavebands represented by the atmosphere (microns)
@@ -115,7 +115,7 @@ public:
    }
 
 protected:
-   double getTransmissivity(const int i, const double range) const;
+   double getTransmissivity(const unsigned int i, const double range) const;
    double getTransmissivity(const double waveBandCenter, const double range) const;
    double getSkyRadiance() const {return skyRadiance;}
    double getEarthRadiance() const {return earthRadiance;}
@@ -132,8 +132,8 @@ private:
    // slot operations
    bool setSlotWaveBands(const base::Table1* const);
    bool setSlotTransmissivityTable1(const base::Table1* const);
-   bool setSlotSkyRadiance(base::INumber* const);
-   bool setSlotEarthRadiance(base::INumber* const);
+   bool setSlotSkyRadiance(base::Number* const);
+   bool setSlotEarthRadiance(base::Number* const);
 };
 
 }

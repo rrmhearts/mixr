@@ -1,12 +1,12 @@
 
 #include "mixr/models/system/Rwr.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
-#include "mixr/models/RfEmission.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
+#include "mixr/models/Emission.hpp"
 
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
 
 #include "mixr/base/util/math_utils.hpp"
@@ -55,7 +55,7 @@ void Rwr::copyData(const Rwr& org, const bool)
 void Rwr::deleteData()
 {
    // Clear out the queues
-   for (RfEmission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
+   for (Emission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
 }
 
 //------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ void Rwr::deleteData()
 bool Rwr::shutdownNotification()
 {
    // Clear out the queues
-   for (RfEmission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
+   for (Emission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
    return BaseClass::shutdownNotification();
 }
 
@@ -86,8 +86,8 @@ void Rwr::receive(const double dt)
 #endif
 
    // Process received emissions
-   ITrackMgr* tm{getTrackManager()};
-   RfEmission* em{};
+   TrackManager* tm{getTrackManager()};
+   Emission* em{};
    double signal{};
 
    // Get an emission from the queue
@@ -176,7 +176,7 @@ void Rwr::process(const double dt)
    // ---
    // Process Emissions into tracks
    // ---
-   for (RfEmission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) {
+   for (Emission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) {
       // finished
       em->unref();   // this undoes the ref() added in Rwr::receive()
    }
@@ -185,12 +185,12 @@ void Rwr::process(const double dt)
 //------------------------------------------------------------------------------
 // killedNotification() -- We were just killed by player 'p'
 //------------------------------------------------------------------------------
-bool Rwr::killedNotification(IPlayer* const p)
+bool Rwr::killedNotification(Player* const p)
 {
     // ---
     // Clear out the queues
     // ---
-    for (RfEmission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
+    for (Emission* em = rptQueue.get(); em != nullptr; em = rptQueue.get()) { em->unref(); }
 
     // ---
     // Make sure our base class knows we're dead.

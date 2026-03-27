@@ -1,9 +1,8 @@
 
 #include "mixr/instruments/buttons/RotarySwitch.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -17,8 +16,8 @@ BEGIN_SLOTTABLE(RotarySwitch)
 END_SLOTTABLE(RotarySwitch)
 
 BEGIN_SLOT_MAP(RotarySwitch)
-   ON_SLOT(1, setSlotAngles,        base::IPairStream)
-   ON_SLOT(2, setSlotStartPosition, base::Integer)
+   ON_SLOT(1, setSlotAngles,        base::PairStream)
+   ON_SLOT(2, setSlotStartPosition, base::Number)
 END_SLOT_MAP()
 
 RotarySwitch::RotarySwitch()
@@ -40,20 +39,20 @@ void RotarySwitch::copyData(const RotarySwitch& org, const bool)
 //------------------------------------------------------------------------------
 // setSlotNumPositions() - sets number of positions for switch
 //------------------------------------------------------------------------------
-bool RotarySwitch::setSlotAngles(const base::IPairStream* const x)
+bool RotarySwitch::setSlotAngles(const base::PairStream* const x)
 {
     bool ok = false;
     numAngs = 0;
     for (int i = 0; i < MAX_ANGLES; i++) angles[i] = 0;
     if (x != nullptr) {
         ok = true;
-        const base::IList::Item* item = x->getFirstItem();
+        const base::List::Item* item = x->getFirstItem();
         while(item != nullptr) {
             base::Pair* pair = (base::Pair*)item->getValue();
             if (pair != nullptr) {
-                const auto n = dynamic_cast<base::INumber*>(pair->object());
+                const auto n = dynamic_cast<base::Number*>(pair->object());
                 if (n != nullptr) {
-                    angles[numAngs++] = n->asDouble();
+                    angles[numAngs++] = n->getReal();
                 }
             }
             item = item->getNext();
@@ -65,10 +64,10 @@ bool RotarySwitch::setSlotAngles(const base::IPairStream* const x)
 //------------------------------------------------------------------------------
 // setSlotStartPosition() - set the position we start from
 //------------------------------------------------------------------------------
-bool RotarySwitch::setSlotStartPosition(const base::Integer* const x)
+bool RotarySwitch::setSlotStartPosition(const base::Number* const x)
 {
     if (x != nullptr) {
-        startPosition = x->asInt();
+        startPosition = x->getInt();
         currentPosition = startPosition;
     }
     return true;

@@ -1,22 +1,22 @@
 
-#ifndef __mixr_models_Jammer_HPP__
-#define __mixr_models_Jammer_HPP__
+#ifndef __mixr_models_Jammer_H__
+#define __mixr_models_Jammer_H__
 
-#include "mixr/models/system/IRfSensor.hpp"
+#include "mixr/models/system/RfSensor.hpp"
 
 namespace mixr {
 namespace models {
 
 //------------------------------------------------------------------------------
 // Class: Jammer
-// Description: Concrete Jammer
+// Description: Example Jammer
 // Factory name: Jammer
 //
 // Default R/F sensor type ID is "JAMMER"
 //------------------------------------------------------------------------------
-class Jammer final: public IRfSensor
+class Jammer : public RfSensor
 {
-    DECLARE_SUBCLASS(Jammer, IRfSensor)
+    DECLARE_SUBCLASS(Jammer, RfSensor)
 
 public:
     Jammer();

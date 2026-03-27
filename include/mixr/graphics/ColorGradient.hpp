@@ -1,12 +1,12 @@
 
-#ifndef __mixr_graphics_ColorGradient_HPP__
-#define __mixr_graphics_ColorGradient_HPP__
+#ifndef __mixr_graphics_ColorGradient_H__
+#define __mixr_graphics_ColorGradient_H__
 
-#include "mixr/base/colors/IColor.hpp"
+#include "mixr/base/colors/Color.hpp"
 
 namespace mixr {
 
-namespace base { class IPairStream; }
+namespace base { class PairStream; }
 
 namespace graphics {
 
@@ -16,22 +16,22 @@ namespace graphics {
 // This will be used by graphics to create a per-vertex color, which makes a
 // gradient.
 //------------------------------------------------------------------------------
-class ColorGradient : public base::IColor
+class ColorGradient : public base::Color
 {
-    DECLARE_SUBCLASS(ColorGradient, base::IColor)
+    DECLARE_SUBCLASS(ColorGradient, base::Color)
 
 public:
     ColorGradient();
 
-    base::IColor* getColorByIdx(const int idx);
+    base::Color* getColorByIdx(const int idx);
 
 private:
     static const int MAX_VALUES = 50;
-    base::IPairStream* myColors {};
+    base::PairStream* myColors {};
 
 private:
     // slot table helper methods
-    bool setSlotColors(base::IPairStream* const);
+    bool setSlotColors(base::PairStream* const);
 };
 
 }

@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_IoData_HPP__
-#define __mixr_linkage_IoData_HPP__
+#ifndef __mixr_linkage_IoData_H__
+#define __mixr_linkage_IoData_H__
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
 
 #include <vector>
 
 namespace mixr {
-namespace base { class Integer; }
+namespace base { class Number; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -22,15 +22,15 @@ namespace linkage {
 //
 // Factory name: IoData
 // Slots:
-//    numAI    <Integer>   ! Number of analog inputs (AIs)
-//    numAO    <Integer>   ! Number of analog outputs (AOs)
-//    numDI    <Integer>   ! Number of discrete inputs (DIs)
-//    numDO    <Integer>   ! Number of discrete outputs (DOs)
+//    numAI    <Number>   ! Number of analog inputs (AIs)
+//    numAO    <Number>   ! Number of analog outputs (AOs)
+//    numDI    <Number>   ! Number of discrete inputs (DIs)
+//    numDO    <Number>   ! Number of discrete outputs (DOs)
 //
 //------------------------------------------------------------------------------
-class IoData : public base::IIoData
+class IoData : public base::AbstractIoData
 {
-   DECLARE_SUBCLASS(IoData, base::IIoData)
+   DECLARE_SUBCLASS(IoData, base::AbstractIoData)
 
 public:
    IoData();
@@ -72,10 +72,10 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotNumAI(const base::Integer* const);
-   bool setSlotNumAO(const base::Integer* const);
-   bool setSlotNumDI(const base::Integer* const);
-   bool setSlotNumDO(const base::Integer* const);
+   bool setSlotNumAI(const base::Number* const);
+   bool setSlotNumAO(const base::Number* const);
+   bool setSlotNumDI(const base::Number* const);
+   bool setSlotNumDO(const base::Number* const);
 };
 
 }

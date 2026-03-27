@@ -1,10 +1,10 @@
 
 #include "mixr/models/player/effect/Effect.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 #include "mixr/base/Identifier.hpp"
 #include "mixr/base/osg/Vec3d"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <cmath>
 
@@ -19,7 +19,7 @@ BEGIN_SLOTTABLE(Effect)
 END_SLOTTABLE(Effect)
 
 BEGIN_SLOT_MAP(Effect)
-    ON_SLOT(1, setSlotDragIndex, base::INumber)
+    ON_SLOT(1, setSlotDragIndex, base::Number)
 END_SLOT_MAP()
 
 // Weapon data for general bomb
@@ -32,8 +32,7 @@ Effect::Effect()
     STANDARD_CONSTRUCTOR()
 
     static base::String generic("Effect");
-    setType_old(&generic);
-    setType("Effect");
+    setType(&generic);
 
     // Default: unguided, ballistic
     setMaxTOF(10.0);
@@ -56,19 +55,19 @@ void Effect::copyData(const Effect& org, const bool)
 bool Effect::crashNotification()
 {
     const bool ok{killedNotification()};
-    setDetonationResults(Detonation::NONE);
-    setMode(Mode::DETONATED);
+    setDetonationResults(DETONATE_NONE);
+    setMode(DETONATED);
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // collisionNotification() -- We just impacted with another player (need to check fusing and all that jazz)
 //------------------------------------------------------------------------------
-bool Effect::collisionNotification(IPlayer* const p)
+bool Effect::collisionNotification(Player* const p)
 {
     const bool ok{killedNotification(p)};
-    setMode(Mode::DETONATED);
-    setDetonationResults(Detonation::NONE);
+    setMode(DETONATED);
+    setDetonationResults(DETONATE_NONE);
     return ok;
 }
 
@@ -78,15 +77,15 @@ bool Effect::collisionNotification(IPlayer* const p)
 void Effect::updateTOF(const double dt)
 {
    // As long as we're active ...
-   if (isMode(Mode::ACTIVE)) {
+   if (isMode(ACTIVE)) {
 
       // update time of flight,
       setTOF( getTOF() + dt );
 
       // and check for the end of the flight
       if (getTOF() >= getMaxTOF()) {
-         setMode(Mode::DETONATED);
-         setDetonationResults(Detonation::NONE);
+         setMode(DETONATED);
+         setDetonationResults(DETONATE_NONE);
          return;
       }
    }
@@ -98,7 +97,7 @@ void Effect::updateTOF(const double dt)
 void Effect::weaponDynamics(const double dt)
 {
    // Useful constant
-   static const double g{base::ETHG * base::length::FT2M};      // Acceleration of Gravity (m/s/s)
+   static const double g{base::ETHG * base::distance::FT2M};      // Acceleration of Gravity (m/s/s)
 
    // ---
    // Compute & Set acceleration vector (earth)
@@ -146,9 +145,9 @@ void Effect::weaponDynamics(const double dt)
 //------------------------------------------------------------------------------
 
 // dragIndex: drag index used by default dynamics
-bool Effect::setSlotDragIndex(base::INumber* const p)
+bool Effect::setSlotDragIndex(base::Number* const p)
 {
-    setDragIndex( p->asDouble() );
+    setDragIndex( p->getReal() );
     return true;
 }
 

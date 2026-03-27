@@ -1,7 +1,8 @@
 
 #include "mixr/base/colors/Hls.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Float.hpp"
+#include "mixr/base/util/math_utils.hpp"
 #include <cmath>
 
 #include "mixr/base/util/platform_api.hpp"
@@ -19,9 +20,9 @@ BEGIN_SLOTTABLE(Hls)
 END_SLOTTABLE(Hls)
 
 BEGIN_SLOT_MAP(Hls)
-    ON_SLOT(1, setSlotHue,        INumber)
-    ON_SLOT(2, setSlotLightness,  INumber)
-    ON_SLOT(3, setSlotSaturation, INumber)
+    ON_SLOT(1, setSlotHue,        Number)
+    ON_SLOT(2, setSlotLightness,  Number)
+    ON_SLOT(3, setSlotSaturation, Number)
 END_SLOT_MAP()
 
 Hls::Hls(const double h, const double l, const double s)
@@ -68,15 +69,16 @@ double Hls::lightness() const
 
 void Hls::getHLS(Vec3d& hhh) const
 {
-    hhh.set(hls[HUE], hls[SATURATION], hls[LIGHTNESS]);
+    hhh.set(hls[HUE],hls[SATURATION],hls[LIGHTNESS]);
 }
 
 //------------------------------------------------------------------------------
 // setSlotHue() -- set the hue value
 //------------------------------------------------------------------------------
-bool Hls::setSlotHue(const INumber* const x)
+bool Hls::setSlotHue(const Number* const msg)
 {
-    const double value{x->asDouble()};
+    if (msg == nullptr) return false;
+    const double value{msg->getReal()};
     const bool ok{value >= 0 && value <= 360};
     if (ok) {
         hls[HUE] = value;
@@ -90,9 +92,10 @@ bool Hls::setSlotHue(const INumber* const x)
 //------------------------------------------------------------------------------
 // setSlotSaturation() -- set the saturation value
 //------------------------------------------------------------------------------
-bool Hls::setSlotSaturation(const INumber* const x)
+bool Hls::setSlotSaturation(const Number* const msg)
 {
-    const double value{x->asDouble()};
+    if (msg == nullptr) return false;
+    const double value{msg->getReal()};
     const bool ok{value >= 0 && value <= 1};
     if (ok) {
         hls[SATURATION] = value;
@@ -106,9 +109,10 @@ bool Hls::setSlotSaturation(const INumber* const x)
 //------------------------------------------------------------------------------
 // setSlotLightness() -- set the lightness value
 //------------------------------------------------------------------------------
-bool Hls::setSlotLightness(const INumber* const x)
+bool Hls::setSlotLightness(const Number* const msg)
 {
-    const double value{x->asDouble()};
+    if (msg == nullptr) return false;
+    const double value{msg->getReal()};
     const bool ok{value >= 0 && value <= 1};
     if (ok) {
         hls[LIGHTNESS] = value;

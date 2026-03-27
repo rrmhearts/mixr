@@ -1,13 +1,13 @@
 
-#ifndef __mixr_models_common_CommRadio_HPP__
-#define __mixr_models_common_CommRadio_HPP__
+#ifndef __mixr_models_CommRadio_H__
+#define __mixr_models_CommRadio_H__
 
-#include "mixr/models/system/IRadio.hpp"
+#include "mixr/models/system/Radio.hpp"
 
 namespace mixr {
 namespace models {
 class Datalink;
-class RfEmission;
+class Emission;
 
 //------------------------------------------------------------------------------
 // Class: CommRadio
@@ -15,9 +15,9 @@ class RfEmission;
 //
 // Factory name: CommRadio
 //------------------------------------------------------------------------------
-class CommRadio : public IRadio
+class CommRadio : public Radio
 {
-   DECLARE_SUBCLASS(CommRadio, IRadio)
+   DECLARE_SUBCLASS(CommRadio, Radio)
 
 public:
    CommRadio();
@@ -28,10 +28,10 @@ public:
    virtual bool setDatalink(Datalink* const);
 
    // Transmit a datalink message
-   virtual bool transmitDataMessage(base::IObject* const);
+   virtual bool transmitDataMessage(base::Object* const);
 
 protected:
-   void receivedEmissionReport(RfEmission* const) override;
+   void receivedEmissionReport(Emission* const) override;
 
 private:
    base::safe_ptr<Datalink> datalink;   // Our companion datalink system

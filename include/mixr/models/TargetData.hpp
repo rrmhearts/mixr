@@ -1,12 +1,11 @@
 
-#ifndef __mixr_models_common_TargetData_HPP__
-#define __mixr_models_common_TargetData_HPP__
+#ifndef __mixr_models_TargetData_H__
+#define __mixr_models_TargetData_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
-namespace base { class IAngle; class Boolean; class Identifier; class Integer; class ILength;
-                 class INumber; class String; class ITime; }
+namespace base { class Angle; class Distance; class Identifier; class Number; class String; class Time; }
 namespace models {
 
 //------------------------------------------------------------------------------
@@ -23,34 +22,34 @@ namespace models {
 //    manualAssign     <Boolean>        ! Manually assign weapon to target? (default: false)
 //    stickType        <Identifier>     ! Weapon stick option (MIDPOINT, LEADING_EDGE) (default: MIDPOINT)
 //
-//    stickDistance    <ILength>        ! Weapon stick length (default: 0)
-//    stickDistance    <INumber>        ! (feet)
+//    stickDistance    <Distance>       ! Weapon stick length (default: 0)
+//    stickDistance    <Number>         ! (feet)
 //
-//    interval         <ITime>          ! Time between weapon releases (default: 0)
-//    interval         <INumber>        ! (MSec)
+//    interval         <Time>           ! Time between weapon releases (default: 0)
+//    interval         <Number>         ! (MSec)
 //
-//    maxMissDistance  <ILength>        ! Maximum miss distance (default: 0)
-//    maxMissDistance  <INumber>        ! (feet)
+//    maxMissDistance  <Distance>       ! Maximum miss distance (default: 0)
+//    maxMissDistance  <Number>         ! (feet)
+// 
+//    armDelay         <Time>           ! Arming delay (default: 0)
+//    armDelay         <Number>         ! (0-99.9 sec)
 //
-//    armDelay         <ITime>          ! Arming delay (default: 0)
-//    armDelay         <INumber>        ! (0-99.9 sec)
+//    angle            <Angle>          ! Impact angle (default: 0)
+//    angle            <Number>         ! (degrees)
 //
-//    angle            <IAngle>         ! Impact angle (default: 0)
-//    angle            <INumber>        ! (degrees)
+//    azimuth          <Angle>          ! Azimuth angle (default: 0)
+//    azimuth          <Number>         ! (degrees)
 //
-//    azimuth          <IAngle>         ! Azimuth angle (default: 0)
-//    azimuth          <INumber>        ! (degrees)
-//
-//    velocity         <INumber>        ! Impact velocity (ft/sec) (default: 0)
+//    velocity         <Number>         ! Impact velocity (ft/sec) (default: 0)
 //------------------------------------------------------------------------------
-class TargetData : public base::IObject
+class TargetData : public base::Object
 {
-   DECLARE_SUBCLASS(TargetData, base::IObject)
+   DECLARE_SUBCLASS(TargetData, base::Object)
 
 public:
    // 'Stick' types
-   static const unsigned int MIDPOINT{};
-   static const unsigned int LEADING_EDGE{1};
+   static const unsigned int MIDPOINT = 0;
+   static const unsigned int LEADING_EDGE = 1;
 
 public:
     TargetData();
@@ -102,25 +101,25 @@ private:
     bool manualAssign {};
 
 private:
-   bool setSlotEnabled(const base::Boolean* const);
-   bool setSlotCompleted(const base::Boolean* const);
+   bool setSlotEnabled(const base::Number* const);
+   bool setSlotCompleted(const base::Number* const);
    bool setSlotWpnType(const base::String* const);
-   bool setSlotQuantity(const base::Integer* const);
-   bool setSlotManualAssign(const base::Boolean* const);
+   bool setSlotQuantity(const base::Number* const);
+   bool setSlotManualAssign(const base::Number* const);
    bool setSlotStickType(const base::Identifier* const);
-   bool setSlotStickDistance(const base::ILength* const);
-   bool setSlotStickDistance(const base::INumber* const);
-   bool setSlotInterval(const base::ITime* const);
-   bool setSlotInterval(const base::INumber* const);
-   bool setSlotMaxMissDistance(const base::ILength* const);
-   bool setSlotMaxMissDistance(const base::INumber* const);
-   bool setSlotArmDelay(const base::ITime* const);
-   bool setSlotArmDelay(const base::INumber* const);
-   bool setSlotAngle(const base::IAngle* const);
-   bool setSlotAngle(const base::INumber* const);
-   bool setSlotAzimuth(const base::IAngle* const);
-   bool setSlotAzimuth(const base::INumber* const);
-   bool setSlotVelocity(const base::INumber* const);
+   bool setSlotStickDistance(const base::Distance* const);
+   bool setSlotStickDistance(const base::Number* const);
+   bool setSlotInterval(const base::Time* const);
+   bool setSlotInterval(const base::Number* const);
+   bool setSlotMaxMissDistance(const base::Distance* const);
+   bool setSlotMaxMissDistance(const base::Number* const);
+   bool setSlotArmDelay(const base::Time* const);
+   bool setSlotArmDelay(const base::Number* const);
+   bool setSlotAngle(const base::Angle* const);
+   bool setSlotAngle(const base::Number* const);
+   bool setSlotAzimuth(const base::Angle* const);
+   bool setSlotAzimuth(const base::Number* const);
+   bool setSlotVelocity(const base::Number* const);
 };
 
 inline bool TargetData::isEnabled() const                    { return enabled; }

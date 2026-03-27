@@ -1,11 +1,11 @@
 
-#ifndef __mixr_models_SimAgent_HPP__
-#define __mixr_models_SimAgent_HPP__
+#ifndef __mixr_models_SimAgent_H__
+#define __mixr_models_SimAgent_H__
 
 #include "mixr/base/ubf/Agent.hpp"
 
 namespace mixr {
-namespace simulation { class IStation; }
+namespace simulation { class Station; }
 namespace models {
 class WorldModel;
 
@@ -35,7 +35,7 @@ protected:
 
    void initActor() override;
 
-   simulation::IStation* getStation();
+   simulation::Station* getStation();
    WorldModel* getWorldModel();
 
    // sets which component ("actor") the agent is for
@@ -45,7 +45,7 @@ protected:
 private:
    const base::String* actorPlayerName {};
    const base::String* actorComponentName {};
-   simulation::IStation* myStation {};
+   simulation::Station* myStation {};
 
 private:
    // slot table helper methods

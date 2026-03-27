@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_Aircraft_HPP__
-#define __mixr_models_common_Aircraft_HPP__
+#ifndef __mixr_models_Aircraft_H__
+#define __mixr_models_Aircraft_H__
 
 #include "mixr/models/player/air/AirVehicle.hpp"
 

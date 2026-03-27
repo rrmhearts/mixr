@@ -11,10 +11,9 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include "mixr/base/osg/math.hpp"
+#include "mixr/base/osg/osg_math.hpp"
 
 #include <cstring>
-#include <cmath>
 
 namespace mixr {
 namespace base {
@@ -110,10 +109,10 @@ double asciiToDouble(const char* str)
     }
     else
     {
-        double mantissa{value[0]*sign[0]};
-        double exponent{value[1]*sign[1]};
+        double mantissa = value[0]*sign[0];
+        double exponent = value[1]*sign[1];
         //OSG_NOTICE<<"Read "<<str<<" mantissa = "<<mantissa<<" exponent="<<exponent<<" result = "<<mantissa*pow(10.0,exponent)<<std::endl;
-        return mantissa * std::pow(10.0,exponent);
+        return mantissa*pow(10.0,exponent);
     }
 }
 

@@ -1,18 +1,18 @@
 
 #include "StationTcPeriodicThread.hpp"
 
-#include "mixr/simulation/IStation.hpp"
+#include "mixr/simulation/Station.hpp"
 
 namespace mixr {
 namespace simulation {
 
-StationTcPeriodicThread::StationTcPeriodicThread(base::IComponent* const parent, const double rate): base::IPeriodicThread(parent, rate)
+StationTcPeriodicThread::StationTcPeriodicThread(base::Component* const parent, const double rate): base::PeriodicThread(parent, rate)
 {
 }
 
 unsigned long StationTcPeriodicThread::userFunc(const double dt)
 {
-   IStation* station{static_cast<IStation*>(getParent())};
+   Station* station{static_cast<Station*>(getParent())};
    station->processTimeCriticalTasks(dt);
    return 0;
 }

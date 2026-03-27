@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ighost">
+      <UniqueIdentifier>{F57D156C-61DF-F279-EA4C-392C56AD2939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ighost\pov">
+      <UniqueIdentifier>{7921F955-E558-41ED-EE62-A5105A1968E6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ighost">
+      <UniqueIdentifier>{CA52AE61-B60A-F0AE-1F12-C90A0BE98A9F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ighost\pov">
+      <UniqueIdentifier>{CE58EA62-BA26-DE68-A3BA-4E8F8F27BACD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\ighost\pov\EntityState.hpp">
+      <Filter>include\mixr\ighost\pov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\pov\PovHost.hpp">
+      <Filter>include\mixr\ighost\pov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\pov\factory.hpp">
+      <Filter>include\mixr\ighost\pov</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\ighost\pov\PovHost.cpp">
+      <Filter>src\ighost\pov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\pov\factory.cpp">
+      <Filter>src\ighost\pov</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

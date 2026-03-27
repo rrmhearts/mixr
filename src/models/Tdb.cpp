@@ -1,28 +1,28 @@
 
 #include "mixr/models/Tdb.hpp"
 
-#include "mixr/base/osg/Vec3d"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/system/Gimbal.hpp"
+#include "mixr/models/WorldModel.hpp"
+
+#include "mixr/terrain/Terrain.hpp"
+
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 #include "mixr/base/util/osg_utils.hpp"
-
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/system/IGimbal.hpp"
-#include "mixr/models/WorldModel.hpp"
-#include "mixr/terrain/ITerrain.hpp"
 
 #include <cmath>
 
 namespace mixr {
 namespace models {
 
-IMPLEMENT_PARTIAL_SUBCLASS(Tdb, "Tdb")
+IMPLEMENT_PARTIAL_SUBCLASS(Tdb, "Gimbal_Tdb")
 EMPTY_SLOTTABLE(Tdb)
 
-Tdb::Tdb(const unsigned int mt, const IGimbal* const gp)
+Tdb::Tdb(const unsigned int mt, const Gimbal* const gp)
 {
    STANDARD_CONSTRUCTOR()
    setGimbal(gp);
@@ -111,7 +111,7 @@ void Tdb::clearArrays()
 bool Tdb::resizeArrays(const unsigned int newSize)
 {
    bool ok{};
-   if (newSize <= IGimbal::MAX_PLAYERS) {
+   if (newSize <= Gimbal::MAX_PLAYERS) {
 
       // Clear out the old data
       clearArrays();
@@ -147,7 +147,7 @@ bool Tdb::resizeArrays(const unsigned int newSize)
             aar      = new double[newSize];
             aazr     = new double[newSize];
             aelr     = new double[newSize];
-            targets  = new IPlayer*[newSize];
+            targets  = new Player*[newSize];
             for (unsigned int i = 0; i < newSize; i++) {
                targets[i] = nullptr;
             }
@@ -173,7 +173,7 @@ bool Tdb::resizeArrays(const unsigned int newSize)
 // max angles, etc.
 // (Background task)
 //------------------------------------------------------------------------------
-unsigned int Tdb::processPlayers(base::IPairStream* const players)
+unsigned int Tdb::processPlayers(base::PairStream* const players)
 {
    // ---
    // Early out checks (no ownship, no players of interest, no target data arrays)
@@ -183,7 +183,7 @@ unsigned int Tdb::processPlayers(base::IPairStream* const players)
    // ---
    // Terrain occulting check setup
    // ---
-   const terrain::ITerrain* terrain{};
+   const terrain::Terrain* terrain{};
    if (gimbal->isTerrainOccultingEnabled()) {
       const WorldModel* const sim{ownship->getWorldModel()};
       terrain = sim->getTerrain();
@@ -248,7 +248,7 @@ unsigned int Tdb::processPlayers(base::IPairStream* const players)
    // If we're using ECEF coordinates then we compute the distance
    // to the earth horizon and the tangent of the angle from our
    // local level to the earth horizon
-   double hDist{1000000.0 * base::length::NM2M};  // Distance to horizon (m) (default: really far away)
+   double hDist{1000000.0 * base::distance::NM2M};  // Distance to horizon (m) (default: really far away)
    double hTanAng{};                                // Tangent of the angle to horizon (positive down)
    if (usingEcefFlg) {
       // Our vertical offset from our ownship is the inverse of the 'z'
@@ -271,20 +271,20 @@ unsigned int Tdb::processPlayers(base::IPairStream* const players)
    }
 
    // Are we a space vehicle?
-   const bool osSpaceVehicle{ownship->isMajorType(IPlayer::SPACE_VEHICLE)};
+   const bool osSpaceVehicle{ownship->isMajorType(Player::SPACE_VEHICLE)};
 
    // ---
    // 1) Scan the player list ---
    // ---
    bool finished{};
-   for (base::IList::Item* item = players->getFirstItem(); item != nullptr && numTgts < maxTargets && !finished; item = item->getNext()) {
+   for (base::List::Item* item = players->getFirstItem(); item != nullptr && numTgts < maxTargets && !finished; item = item->getNext()) {
 
       // Get the pointer to the target player
       base::Pair* pair{static_cast<base::Pair*>(item->getValue())};
-      IPlayer* target{static_cast<IPlayer*>(pair->object())};
+      Player* target{static_cast<Player*>(pair->object())};
 
       // Did we complete the local only players?
-      finished = localOnly && target->isProxyPlayer();
+      finished = localOnly && target->isNetworkedPlayer();
 
       // We should process this target if ...
       const bool processTgt {
@@ -356,13 +356,13 @@ unsigned int Tdb::processPlayers(base::IPairStream* const players)
                      const double tgtAlt{target->getAltitudeM()};
 
                      // Is the target a space vehicle?
-                     if ( target->isMajorType(IPlayer::SPACE_VEHICLE) ) {
+                     if ( target->isMajorType(Player::SPACE_VEHICLE) ) {
                         // Get the true, great-circle bearing to the target
                         double tbrg{}, distNM{};
                         base::nav::vll2bd(osLat, osLon, tgtLat, tgtLon, &tbrg, &distNM);
 
                         // Set the distance to check to 60 nm
-                        double dist{60.0 * base::length::NM2M};
+                        double dist{60.0 * base::distance::NM2M};
 
                         // Terrain occulting check toward the space vehicle
                         occulted = terrain->targetOcculting2(osLat, osLon, osAlt, tbrg, dist, -tanTgtAng);
@@ -531,7 +531,7 @@ unsigned int Tdb::computeBoresightData()
 //------------------------------------------------------------------------------
 // Sets our Gimbal
 //------------------------------------------------------------------------------
-void Tdb::setGimbal(const IGimbal* const newGimbal)
+void Tdb::setGimbal(const Gimbal* const newGimbal)
 {
    // Unref() the old, set and ref() the new
    if (ownship != nullptr) { ownship->unref(); ownship = nullptr; }

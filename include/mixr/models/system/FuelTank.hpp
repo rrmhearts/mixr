@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_FuelTank_HPP__
-#define __mixr_models_common_FuelTank_HPP__
+#ifndef __mixr_models_FuelTank_H__
+#define __mixr_models_FuelTank_H__
 
-#include "mixr/models/system/IExternalStore.hpp"
+#include "mixr/models/system/ExternalStore.hpp"
 
 namespace mixr {
 namespace models {
@@ -10,17 +10,17 @@ namespace models {
 //------------------------------------------------------------------------------
 // Class: FuelTank
 //
-// Description: Concrete fuel tank
+// Description: Generic fuel tank
 //
 // Factory name: FuelTank
 // Slots:
-//    fuelWt      <INumber>  ! Fuel wt (lb) (default: -1)
-//    capacity    <INumber>  ! Tank capacity (lb) (default: -1)
+//    fuelWt      <Number>  ! Fuel wt (lb) (default: -1)
+//    capacity    <Number>  ! Tank capacity (lb) (default: -1)
 //
 //------------------------------------------------------------------------------
-class FuelTank final: public IExternalStore
+class FuelTank : public ExternalStore
 {
-   DECLARE_SUBCLASS(FuelTank, IExternalStore)
+   DECLARE_SUBCLASS(FuelTank, ExternalStore)
 
 public:
    FuelTank();
@@ -44,8 +44,8 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotFuelWt(const base::INumber* const);
-   bool setSlotCapacity(const base::INumber* const);
+   bool setSlotFuelWt(const base::Number* const);
+   bool setSlotCapacity(const base::Number* const);
 };
 
 }

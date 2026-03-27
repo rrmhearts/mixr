@@ -1,20 +1,21 @@
 
 #include "mixr/models/system/trackmanager/AirTrkMgr.hpp"
 
-#include "mixr/models/RfEmission.hpp"
-#include "mixr/models/track/ITrack.hpp"
-#include "mixr/models/track/RfTrack.hpp"
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/Emission.hpp"
+#include "mixr/models/Track.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/numeric/Number.hpp"
+
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/units/Times.hpp"
 
-#include "mixr/simulation/IDataRecorder.hpp"
+#include "mixr/base/units/Distances.hpp"
+
+#include "mixr/simulation/AbstractDataRecorder.hpp"
 #include "mixr/models/WorldModel.hpp"
 
 namespace mixr {
@@ -29,9 +30,9 @@ BEGIN_SLOTTABLE(AirTrkMgr)
 END_SLOTTABLE(AirTrkMgr)
 
 BEGIN_SLOT_MAP(AirTrkMgr)
-   ON_SLOT(1, setSlotPositionGate, base::INumber)
-   ON_SLOT(2, setSlotRangeGate,    base::INumber)
-   ON_SLOT(3, setSlotVelocityGate, base::INumber)
+   ON_SLOT(1, setSlotPositionGate, base::Number)
+   ON_SLOT(2, setSlotRangeGate,    base::Number)
+   ON_SLOT(3, setSlotVelocityGate, base::Number)
 END_SLOT_MAP()
 
 AirTrkMgr::AirTrkMgr()
@@ -43,7 +44,7 @@ AirTrkMgr::AirTrkMgr()
 
 void AirTrkMgr::initData()
 {
-   setType( ITrack::ONBOARD_SENSOR_BIT | ITrack::AIR_TRACK_BIT );
+   setType( Track::ONBOARD_SENSOR_BIT | Track::AIR_TRACK_BIT );
 
    reportNumMatches = new unsigned int[MAX_REPORTS];
    trackNumMatches = new unsigned int[MAX_TRKS];
@@ -113,7 +114,7 @@ void AirTrkMgr::deleteData()
 void AirTrkMgr::processTrackList(const double dt)
 {
    // Make sure we have an ownship to work with
-   const auto ownship = dynamic_cast<IPlayer*>( findContainerByType(typeid(IPlayer)) );
+   const auto ownship = dynamic_cast<Player*>( findContainerByType(typeid(Player)) );
    if (ownship == nullptr || dt == 0) return;
 
    // Make sure we have the A and B matrix
@@ -139,25 +140,25 @@ void AirTrkMgr::processTrackList(const double dt)
 
    // Get each new emission report from the queue
    unsigned int nReports{};
-   RfEmission* emissions[MAX_REPORTS]{};
+   Emission* emissions[MAX_REPORTS]{};
    double newSignal[MAX_REPORTS]{};
    double newRdot[MAX_REPORTS]{};
    base::Vec3d tgtPos[MAX_REPORTS]{};
    double tmp{};
-   for (RfEmission* em = getReport(&tmp); em != nullptr; em = getReport(&tmp)) {
+   for (Emission* em = getReport(&tmp); em != nullptr; em = getReport(&tmp)) {
 
       if (nReports < MAX_REPORTS) {
 
-      IPlayer* tgt{em->getTarget()};
+      Player* tgt{em->getTarget()};
 
       bool dummy{};
-      if (tgt->isMajorType(IPlayer::WEAPON)) {
-         dummy = (static_cast<const IWeapon*>(tgt))->isDummy();
+      if (tgt->isMajorType(Player::WEAPON)) {
+         dummy = (static_cast<const AbstractWeapon*>(tgt))->isDummy();
       }
 
-      if ( tgt->isMajorType(IPlayer::AIR_VEHICLE) ||
-         tgt->isMajorType(IPlayer::SHIP) ||
-         (tgt->isMajorType(IPlayer::WEAPON) && !dummy)
+      if ( tgt->isMajorType(Player::AIR_VEHICLE) ||
+         tgt->isMajorType(Player::SHIP) ||
+         (tgt->isMajorType(Player::WEAPON) && !dummy)
          ) {
             // Using only air vehicles
             emissions[nReports] = em;
@@ -185,7 +186,7 @@ void AirTrkMgr::processTrackList(const double dt)
    for (unsigned int it = 0; it < nTrks; it++) {
       trackNumMatches[it] = 0;
       const RfTrack* const trk{static_cast<const RfTrack*>(tracks[it])};  // we produce only RfTracks
-      const IPlayer* const tgt{trk->getLastEmission()->getTarget()};
+      const Player* const tgt{trk->getLastEmission()->getTarget()};
       for (unsigned int ir = 0; ir < nReports; ir++) {
          if (emissions[ir]->getTarget() == tgt) {
             // We have a new report for the same target as this track ...
@@ -335,7 +336,7 @@ void AirTrkMgr::processTrackList(const double dt)
          const auto newTrk = new RfTrack();
          newTrk->setTrackID( getNewTrackID() );
          newTrk->setTarget( emissions[i]->getTarget() );
-         newTrk->setType(ITrack::AIR_TRACK_BIT | ITrack::ONBOARD_SENSOR_BIT);
+         newTrk->setType(Track::AIR_TRACK_BIT | Track::ONBOARD_SENSOR_BIT);
          newTrk->setPosition(tgtPos[i]);
          newTrk->ownshipDynamics(osGndTrk, osVel, osAccel, 0.0);
          newTrk->setRangeRate(newRdot[i]);
@@ -360,39 +361,27 @@ void AirTrkMgr::processTrackList(const double dt)
 //------------------------------------------------------------------------------
 // setPositionGate() -- Sets the size of the position gate
 //------------------------------------------------------------------------------
-bool AirTrkMgr::setSlotPositionGate(const base::INumber* const x)
+bool AirTrkMgr::setSlotPositionGate(const base::Number* const num)
 {
    double value{};
-   if (x != nullptr) {
-      // We have only a number, assume it's in meters ...
-      value = x->asDouble();
-   }
-
-   // Set the value if it's valid
-   bool ok{true};
-   if (value > 0.0) {
-      posGate = value;
-   } else {
-      std::cerr << "ITrackMgr::setPositionGate: invalid gate, must be greater than zero." << std::endl;
-      ok = true;
-   }
-   return ok;
-}
-
-bool AirTrkMgr::setSlotPositionGate(const base::ILength* const x)
-{
-   double value{};
-   if (x != nullptr) {
+   const auto p = dynamic_cast<const base::Distance*>(num);
+   if (p != nullptr) {
       // We have a distance and we want it in meters ...
-      value = x->getValueInMeters();
+      base::Meters meters;
+      value = meters.convert(*p);
+   }
+   else if (num != nullptr) {
+      // We have only a number, assume it's in meters ...
+      value = num->getReal();
    }
 
    // Set the value if it's valid
    bool ok{true};
    if (value > 0.0) {
       posGate = value;
-   } else {
-      std::cerr << "ITrackMgr::setPositionGate: invalid gate, must be greater than zero." << std::endl;
+   }
+   else {
+      std::cerr << "TrackManager::setPositionGate: invalid gate, must be greater than zero." << std::endl;
       ok = true;
    }
    return ok;
@@ -401,12 +390,18 @@ bool AirTrkMgr::setSlotPositionGate(const base::ILength* const x)
 //------------------------------------------------------------------------------
 // setRangeGate() -- Sets the size of the range gate
 //------------------------------------------------------------------------------
-bool AirTrkMgr::setSlotRangeGate(const base::INumber* const x)
+bool AirTrkMgr::setSlotRangeGate(const base::Number* const num)
 {
    double value{};
-   if (x != nullptr) {
+   const auto p = dynamic_cast<const base::Distance*>(num);
+   if (p != nullptr) {
+      // We have a distance and we want it in meters ...
+      base::Meters meters;
+      value = meters.convert(*p);
+   }
+   else if (num != nullptr) {
       // We have only a number, assume it's in meters ...
-      value = x->asDouble();
+      value = num->getReal();
    }
 
    // Set the value if it's valid
@@ -415,26 +410,7 @@ bool AirTrkMgr::setSlotRangeGate(const base::INumber* const x)
       rngGate = value;
    }
    else {
-      std::cerr << "ITrackMgr::setRangeGate: invalid gate, must be greater than zero." << std::endl;
-      ok = true;
-   }
-   return ok;
-}
-
-bool AirTrkMgr::setSlotRangeGate(const base::ILength* const x)
-{
-   double value{};
-   if (x != nullptr) {
-      // We have a distance and we want it in meters ...
-      value = x->getValueInMeters();
-   }
-
-   // Set the value if it's valid
-   bool ok{ true };
-   if (value > 0.0) {
-      rngGate = value;
-   } else {
-      std::cerr << "ITrackMgr::setRangeGate: invalid gate, must be greater than zero." << std::endl;
+      std::cerr << "TrackManager::setRangeGate: invalid gate, must be greater than zero." << std::endl;
       ok = true;
    }
    return ok;
@@ -443,12 +419,12 @@ bool AirTrkMgr::setSlotRangeGate(const base::ILength* const x)
 //------------------------------------------------------------------------------
 // setVelocityGate() -- Sets the size of the velocity gate
 //------------------------------------------------------------------------------
-bool AirTrkMgr::setSlotVelocityGate(const base::INumber* const x)
+bool AirTrkMgr::setSlotVelocityGate(const base::Number* const num)
 {
    double value{};
-   if (x != nullptr) {
+   if (num != nullptr) {
       // We have only a number, assume it's in meters ...
-      value = x->asDouble();
+      value = num->getReal();
    }
 
    // Set the value if it's valid
@@ -457,7 +433,7 @@ bool AirTrkMgr::setSlotVelocityGate(const base::INumber* const x)
       velGate = value;
    }
    else {
-      std::cerr << "ITrackMgr::setVelocityGate: invalid gate, must be greater than zero." << std::endl;
+      std::cerr << "TrackManager::setVelocityGate: invalid gate, must be greater than zero." << std::endl;
       ok = true;
    }
    return ok;

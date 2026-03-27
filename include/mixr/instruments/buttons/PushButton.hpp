@@ -1,11 +1,10 @@
 
-#ifndef __mixr_instruments_PushButton_HPP__
-#define __mixr_instruments_PushButton_HPP__
+#ifndef __mixr_instruments_PushButton_H__
+#define __mixr_instruments_PushButton_H__
 
 #include "mixr/instruments/buttons/Button.hpp"
 
 namespace mixr {
-namespace base { class Boolean; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -14,7 +13,7 @@ namespace instruments {
 //------------------------------------------------------------------------------
 class PushButton : public Button
 {
-    DECLARE_SUBCLASS(PushButton, Button)
+    DECLARE_SUBCLASS(PushButton,Button)
 
 public:
     PushButton();
@@ -35,20 +34,20 @@ public:
    bool onCancel() override;
 
    void updateData(const double dt = 0.0) override;
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
 
 private:
-   bool functionType{};      // false = momentary, true = maintained
-   bool currentState{};      // false = off, true = on
-   bool mouseDown{};         // mouse press down status
+   bool functionType {};     // false = momentary, true = maintained
+   bool currentState {};     // false = off, true = on
+   bool mouseDown {};        // mouse press down status
    SendData buttonStatusSD;  // what is our button doing?
-   bool initState{};         // initial state
+   bool initState {};        // initial state
 
 private:
    // slot table helper methods
    // sets the pushbutton type to momentary = false or maintained = true
-   bool setSlotFunction(const base::Boolean* const);
-   bool setSlotStartState(const base::Boolean* const);
+   bool setSlotFunction(const base::Number* const);
+   bool setSlotStartState(const base::Number* const);
 };
 
 }

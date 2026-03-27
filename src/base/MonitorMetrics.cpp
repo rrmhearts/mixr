@@ -2,14 +2,15 @@
 #include "mixr/base/MonitorMetrics.hpp"
 
 #include "mixr/base/colors/Cie.hpp"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/relations/Table1.hpp"
+#include "mixr/base/numeric/Float.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/functors/Table1.hpp"
 #include <cstdio>
 
 namespace mixr {
 namespace base {
 
-IMPLEMENT_SUBCLASS(MonitorMetrics, "MonitorMetrics")
+IMPLEMENT_SUBCLASS(MonitorMetrics,"monitorMetrics")
 
 BEGIN_SLOTTABLE(MonitorMetrics)
     "red",       // 1: ... Red Luminance vs RGB level
@@ -24,9 +25,9 @@ BEGIN_SLOT_MAP(MonitorMetrics)
     ON_SLOT(1, setSlotRed,       Table1)
     ON_SLOT(2, setSlotGreen,     Table1)
     ON_SLOT(3, setSlotBlue,      Table1)
-    ON_SLOT(4, setSlotPhosphors, IList)
-    ON_SLOT(5, setSlotWhiteRGB,  IList)
-    ON_SLOT(6, setSlotWhiteCIE,  IList)
+    ON_SLOT(4, setSlotPhosphors, List)
+    ON_SLOT(5, setSlotWhiteRGB,  List)
+    ON_SLOT(6, setSlotWhiteCIE,  List)
 END_SLOT_MAP()
 
 MonitorMetrics::MonitorMetrics(const Table1* redLumTbl, const Table1* greenLumTbl, const Table1* blueLumTbl,
@@ -123,9 +124,9 @@ bool MonitorMetrics::setSlotBlue(const Table1* const blue)
     return computeMatrix();
 }
 
-bool MonitorMetrics::setSlotPhosphors(const IList* const phosphors)
+bool MonitorMetrics::setSlotPhosphors(const List* const phosphors)
 {
-    double listItems[6]{};
+    double listItems[6] {};
 
     if ( phosphors == nullptr ) return false;
     if ( phosphors->entries() != 6 ) return false;
@@ -139,9 +140,9 @@ bool MonitorMetrics::setSlotPhosphors(const IList* const phosphors)
     return computeMatrix();
 }
 
-bool MonitorMetrics::setSlotWhiteRGB(const IList* const whiteRGB)
+bool MonitorMetrics::setSlotWhiteRGB(const List* const whiteRGB)
 {
-    double listItems[3]{};
+    double listItems[3] {};
 
     if ( whiteRGB == nullptr ) return false;
     if ( whiteRGB->entries() != 6 ) return false;
@@ -151,9 +152,9 @@ bool MonitorMetrics::setSlotWhiteRGB(const IList* const whiteRGB)
     return computeMatrix();
 }
 
-bool MonitorMetrics::setSlotWhiteCIE(const IList* const whiteCIE)
+bool MonitorMetrics::setSlotWhiteCIE(const List* const whiteCIE)
 {
-    double listItems[3]{};
+    double listItems[3] {};
 
     if ( whiteCIE == nullptr ) return false;
     if ( whiteCIE->entries() != 6 ) return false;
@@ -195,12 +196,12 @@ void MonitorMetrics::cie2rgb(Vec4d& rgba, const Vec3d& cie) const
 
     ciexyz.set(cie[Cie::X], cie[Cie::Y], 1-cie[Cie::X]-cie[Cie::Y]);
     rgb = transform * ciexyz;
-    rgb *= cie[Cie::LUMINANCE]/(rgb[IColor::RED]+rgb[IColor::GREEN]+rgb[IColor::BLUE]);
+    rgb *= cie[Cie::LUMINANCE]/(rgb[Color::RED]+rgb[Color::GREEN]+rgb[Color::BLUE]);
 
-    rgba[IColor::RED] = redLuminance->lfi( rgb[IColor::RED] );
-    rgba[IColor::GREEN] = redLuminance->lfi( rgb[IColor::GREEN] );
-    rgba[IColor::BLUE] = redLuminance->lfi( rgb[IColor::BLUE] );
-    rgba[IColor::ALPHA] = IColor::getDefaultAlpha();
+    rgba[Color::RED] = redLuminance->lfi( rgb[Color::RED] );
+    rgba[Color::GREEN] = redLuminance->lfi( rgb[Color::GREEN] );
+    rgba[Color::BLUE] = redLuminance->lfi( rgb[Color::BLUE] );
+    rgba[Color::ALPHA] = Color::getDefaultAlpha();
 }
 
 }

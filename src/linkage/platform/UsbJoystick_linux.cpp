@@ -16,9 +16,9 @@
 #include "mixr/base/util/str_utils.hpp"
 #include "mixr/base/util/system_utils.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 namespace mixr {
 namespace linkage {
@@ -31,7 +31,7 @@ BEGIN_SLOTTABLE(UsbJoystick)
 END_SLOTTABLE(UsbJoystick)
 
 BEGIN_SLOT_MAP(UsbJoystick)
-   ON_SLOT(1, setSlotDeviceIndex, base::Integer)
+   ON_SLOT(1, setSlotDeviceIndex, base::Number)
 END_SLOT_MAP()
 
 UsbJoystick::UsbJoystick()
@@ -187,11 +187,11 @@ void UsbJoystick::readInputs()
    }
 }
 
-bool UsbJoystick::setSlotDeviceIndex(const base::Integer* const msg)
+bool UsbJoystick::setSlotDeviceIndex(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      deviceIndex = msg->asInt();
+      deviceIndex = msg->getInt();
       ok = true;
    }
    return ok;

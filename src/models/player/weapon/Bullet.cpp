@@ -2,8 +2,8 @@
 #include "mixr/models/player/weapon/Bullet.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include <cmath>
 
@@ -26,8 +26,7 @@ Bullet::Bullet()
    STANDARD_CONSTRUCTOR()
 
    static base::String generic("Bullet");
-   setType_old(&generic);
-   setType("Bullet");
+   setType(&generic);
 
    setMaxTOF( DEFAULT_MAX_TOF );
 }
@@ -72,7 +71,7 @@ void Bullet::reset()
 //------------------------------------------------------------------------------
 void Bullet::weaponDynamics(const double dt)
 {
-   if (isMode(Mode::ACTIVE)) {
+   if (isMode(ACTIVE)) {
       updateBurstTrajectories(dt);
       checkForTargetHit();
 
@@ -101,30 +100,30 @@ void Bullet::weaponDynamics(const double dt)
 void Bullet::updateTOF(const double)
 {
    // As long as we're active ...
-   if (isMode(Mode::ACTIVE)) {
+   if (isMode(ACTIVE)) {
 
       // count the number of active bursts and remove aged bullet bursts.
       int n{};
       int nhits{};
       for (int i = 0; i < nbt; i++) {
-         if (bursts[i].bStatus == Burst::Status::ACTIVE) {
+         if (bursts[i].bStatus == Burst::ACTIVE) {
             n++;
             if ( bursts[i].bTof >= getMaxTOF() ) {
-               bursts[i].bStatus = Burst::Status::MISS;
+               bursts[i].bStatus = Burst::MISS;
             }
-         } else if (bursts[i].bStatus == Burst::Status::HIT) {
+         } else if (bursts[i].bStatus == Burst::HIT) {
             nhits++;
          }
       }
 
       // If we have no active bursts .. we've detonated (so to speak)
       if (n == 0) {
-         setMode(Mode::DETONATED);
+         setMode(DETONATED);
          // final detonation results (hit or miss) are located with each burst ...
          if (nhits > 0) {
-            setDetonationResults( Detonation::ENTITY_IMPACT );
+            setDetonationResults( DETONATE_ENTITY_IMPACT );
          } else {
-            setDetonationResults( Detonation::NONE );
+            setDetonationResults( DETONATE_NONE );
          }
          // final time of flight (slave to the first burst)
          setTOF( bursts[0].bTof );
@@ -152,7 +151,7 @@ bool Bullet::burstOfBullets(const base::Vec3d* const pos, const base::Vec3d* con
       bursts[nbt].bNum = num;  // Number of rounds in burst
       bursts[nbt].bRate = rate;// Round rate for this burst (rds per sec)
       bursts[nbt].bEvent = e;  // Release event number for burst
-      bursts[nbt].bStatus = Burst::Status::ACTIVE;
+      bursts[nbt].bStatus = Burst::ACTIVE;
       nbt++;
    }
    return true;
@@ -163,12 +162,12 @@ bool Bullet::burstOfBullets(const base::Vec3d* const pos, const base::Vec3d* con
 //------------------------------------------------------------------------------
 void Bullet::updateBurstTrajectories(const double dt)
 {
-   static const double g{base::ETHG * base::length::FT2M};      // Acceleration of Gravity (m/s/s)
+   static const double g{base::ETHG * base::distance::FT2M};      // Acceleration of Gravity (m/s/s)
 
    // For all active bursts
    for (int i = 0; i < nbt; i++) {
-      if (bursts[i].bStatus == Burst::Status::ACTIVE) {
-         bursts[i].bVel[IPlayer::IDOWN] = bursts[i].bVel[IPlayer::IDOWN] + (g*dt);  // falling bullets
+      if (bursts[i].bStatus == Burst::ACTIVE) {
+         bursts[i].bVel[Player::IDOWN] = bursts[i].bVel[Player::IDOWN] + (g*dt);  // falling bullets
 
          bursts[i].bPos = bursts[i].bPos + (bursts[i].bVel * dt);
          bursts[i].bTof += dt;
@@ -181,21 +180,21 @@ void Bullet::updateBurstTrajectories(const double dt)
 //------------------------------------------------------------------------------
 bool Bullet::checkForTargetHit()
 {
-   IPlayer* ownship{getLaunchVehicle()};
-   IPlayer* tgt{getTargetPlayer()};
+   Player* ownship{getLaunchVehicle()};
+   Player* tgt{getTargetPlayer()};
    if (ownship != nullptr && tgt != nullptr) {
       base::Vec3d osPos{tgt->getPosition()};
 
       // For all active bursts ...
       for (int i = 0; i < nbt; i++) {
-         if (bursts[i].bStatus == Burst::Status::ACTIVE) {
+         if (bursts[i].bStatus == Burst::ACTIVE) {
 
             // Check if we're within range of the target
             base::Vec3d rPos{bursts[i].bPos - osPos};
             double rng{rPos.length()};
             if (rng < 10.0) {
                // Yes -- it's a hit!
-               bursts[i].bStatus = Burst::Status::HIT;
+               bursts[i].bStatus = Burst::HIT;
                setHitPlayer(tgt);
                setLocationOfDetonation();
                tgt->processDetonation(rng,this);
@@ -218,13 +217,13 @@ bool Bullet::checkForTargetHit()
         double maxRange{1.0};                  // close range of detonation
         WorldModel* sim{getWorldModel()};
         if (sim != nullptr) {
-            base::IPairStream* players{sim->getPlayers()};
+            base::PairStream* players{sim->getPlayers()};
             if (players != nullptr) {
-                base::IList::Item* item{players->getFirstItem()};
+                base::List::Item* item{players->getFirstItem()};
                 while (item != nullptr) {
                     const auto pair = static_cast<base::Pair*>(item->getValue());
                     if (pair != nullptr) {
-                        const auto player = dynamic_cast<IPlayer*>(pair->object());
+                        const auto player = dynamic_cast<Player*>(pair->object());
                         if (player != nullptr && player != ownship && player->isMajorType(LIFE_FORM) && !player->isDestroyed()) {
                             // ok, calculate our position from this guy
                             tgtPos = player->getPosition();
@@ -252,7 +251,7 @@ bool Bullet::checkForTargetHit()
 //------------------------------------------------------------------------------
 // setHitPlayer() -- set a pointer to the player we just hit
 //------------------------------------------------------------------------------
-void Bullet::setHitPlayer(IPlayer* p)
+void Bullet::setHitPlayer(Player* p)
 {
    hitPlayer = p;
 }

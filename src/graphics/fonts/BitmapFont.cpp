@@ -2,11 +2,9 @@
 #include "mixr/graphics/fonts/BitmapFont.hpp"
 
 #include "mixr/base/String.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
+#include "mixr/base/numeric/Number.hpp"
+#include "mixr/base/util/str_utils.hpp"
 
-#include "mixr/base/util/filesystem_utils.hpp"
-
-#include <string>
 #include <cstdio>
 #include <cmath>
 
@@ -17,15 +15,15 @@ IMPLEMENT_SUBCLASS(BitmapFont, "BitmapFont")
 EMPTY_DELETEDATA(BitmapFont)
 
 // Default font size
-const int defaultFontWidth{10};
-const int defaultFontHeight{15};
+const unsigned int defaultFontWidth {10};
+const unsigned int defaultFontHeight {15};
 
 BEGIN_SLOTTABLE(BitmapFont)
     "reverse",      // Invert the bitmap's bits (reverse video)
 END_SLOTTABLE(BitmapFont)
 
 BEGIN_SLOT_MAP(BitmapFont)
-    ON_SLOT(1, setSlotReverse, base::Boolean)
+    ON_SLOT(1, setSlotReverse, base::Number)
 END_SLOT_MAP()
 
 BitmapFont::BitmapFont()
@@ -154,9 +152,10 @@ void BitmapFont::loadFont()
 //------------------------------------------------------------------------------
 // sets text in reverse type
 //------------------------------------------------------------------------------
-bool BitmapFont::setSlotReverse(const base::Boolean* const x)
+bool BitmapFont::setSlotReverse(const base::Number* const rnumber)
 {
-    reverse = x->asBool();
+    if (rnumber != nullptr)
+        reverse = rnumber->getBoolean();
     return true;
 }
 
@@ -427,7 +426,7 @@ static const char* defaultMap[] =
    nullptr                    // 0xFF
 };
 
-const int BitmapFont::defaultNumFonts = sizeof(defaultMap) / sizeof(const char*);
+const unsigned int BitmapFont::defaultNumFonts = sizeof(defaultMap) / sizeof(const char*);
 const char** BitmapFont::defaultFontMap = &defaultMap[0];
 
 // Reverse the order of the bits
@@ -470,10 +469,19 @@ GLubyte* BitmapFont::loadTypeFace(const GLint index, const GLenum reverse)
    if (fontMap[index] == nullptr)
       return nullptr;
 
-   std::string fontPathname{base::buildPath(fontDirectory(), fontMap[index])};
+   // Create the font file name
+   const std::size_t FONTPATHNAME_LENGTH {256};
+   char fontPathname[FONTPATHNAME_LENGTH] {};
+   if (fontDirectory() != nullptr)
+      base::utStrcpy(fontPathname, FONTPATHNAME_LENGTH, fontDirectory());
+   else
+      base::utStrcpy(fontPathname, FONTPATHNAME_LENGTH, "./");
+
+   base::utStrcat(fontPathname, FONTPATHNAME_LENGTH, fontMap[index]);
+
    // Open the font file
-   FILE* fp{std::fopen(fontPathname.c_str(), "r")};
-   if (fp == nullptr) {
+   FILE* fp = nullptr;
+   if( (fp = std::fopen(fontPathname, "r")) ==nullptr ) {
       if (isMessageEnabled(MSG_ERROR)) {
          std::cerr << "BitmapFont::loadTypeFace: unable to open font file: " << fontPathname << std::endl;
       }
@@ -481,21 +489,21 @@ GLubyte* BitmapFont::loadTypeFace(const GLint index, const GLenum reverse)
    }
 
    // Calculate the size of the font
-   unsigned int width1{};
+   unsigned int width1 {};
    std::fscanf(fp, "%u\n", &width1);
-   unsigned int height1{};
+   unsigned int height1 {};
    std::fscanf(fp, "%u\n", &height1);
 
-   unsigned int numBytesWide{static_cast<unsigned int>(std::ceil(static_cast<double>(width1) / 8.0))};
-   unsigned int numFileBytes{numBytesWide * height1};
-   unsigned int numFontBytes{numBytesWide * getBitmapHeight()};
+   unsigned int numBytesWide {static_cast<unsigned int>(std::ceil(static_cast<double>(width1) / 8.0))};
+   unsigned int numFileBytes {numBytesWide * height1};
+   unsigned int numFontBytes {numBytesWide * getBitmapHeight()};
 
    const auto bitmap = new GLubyte[numFontBytes];
 
-   unsigned int i{};  // index
+   unsigned int i {};  // index
 
    // Pad rest of the height
-   unsigned int diff{numFontBytes - numFileBytes};
+   unsigned int diff {numFontBytes - numFileBytes};
    for (i = 0; i < diff; i++) {
       bitmap[i] = reverse ? 255 : 0;
    }

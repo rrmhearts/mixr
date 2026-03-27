@@ -1,6 +1,10 @@
 
 #include "mixr/models/player/Ship.hpp"
 
+#include "mixr/base/List.hpp"
+#include "mixr/base/osg/Matrixd"
+#include "mixr/base/units/Angles.hpp"
+
 namespace mixr {
 namespace models {
 
@@ -11,8 +15,7 @@ Ship::Ship()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericShip");
-    setType_old(&generic);
-    setType("GenericShip");
+    setType(&generic);
 }
 
 void Ship::copyData(const Ship& org, const bool)

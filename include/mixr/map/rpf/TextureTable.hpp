@@ -1,8 +1,8 @@
 
-#ifndef __mixr_map_rpf_TextureTable_HPP__
-#define __mixr_map_rpf_TextureTable_HPP__
+#ifndef __mixr_map_rpf_TextureTable_H__
+#define __mixr_map_rpf_TextureTable_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
 namespace graphics { class Texture; }
@@ -37,9 +37,9 @@ namespace rpf {
 //      graphics::Texture* TextureTable::getTexture(int row, int col)
 //
 // ------------------------------------------------------------------------------
-class TextureTable : public base::IObject
+class TextureTable : public base::Object
 {
-    DECLARE_SUBCLASS(TextureTable, base::IObject)
+    DECLARE_SUBCLASS(TextureTable, base::Object)
 
 public:
     TextureTable();

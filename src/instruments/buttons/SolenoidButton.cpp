@@ -4,10 +4,10 @@
 #include "mixr/instruments/buttons/SolenoidSwitch.hpp"
 
 #include "mixr/graphics/Display.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/timers/ITimer.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/Timers.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -18,7 +18,7 @@ EMPTY_DELETEDATA(SolenoidButton)
 
 BEGIN_EVENT_HANDLER(SolenoidButton)
    ON_EVENT(INPUT_LEFT_EDGE, onMouseDown)
-   ON_EVENT_OBJ(USER_KEY_EVENT, onPicked, base::Boolean)
+   ON_EVENT_OBJ(USER_KEY_EVENT, onPicked, base::Number)
 END_EVENT_HANDLER()
 
 SolenoidButton::SolenoidButton()
@@ -60,9 +60,9 @@ bool SolenoidButton::onSingleClick()
     return true;
 }
 
-bool SolenoidButton::onPicked(const base::Boolean* const x)
+bool SolenoidButton::onPicked(const base::Number* const x)
 {
-    if (x != nullptr) pushed = x->asBool();
+    if (x != nullptr) pushed = x->getBoolean();
     return true;
 }
 

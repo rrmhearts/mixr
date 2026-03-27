@@ -19,9 +19,7 @@ Flare::Flare()
     STANDARD_CONSTRUCTOR()
 
     static base::String generic("Flare");
-    setType_old(&generic);
-    setType("Flare");
-
+    setType(&generic);
 }
 
 }

@@ -1,6 +1,6 @@
 
-#ifndef __mixr_graphics_OctalReadout_HPP__
-#define __mixr_graphics_OctalReadout_HPP__
+#ifndef __mixr_graphics_OctalReadout_H__
+#define __mixr_graphics_OctalReadout_H__
 
 #include "NumericReadout.hpp"
 
@@ -9,29 +9,27 @@ namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: OctalReadout
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: OctalReadout
-//------------------------------------------------------------------------------
+//
 // Example formats:
 //
 //    ######    // Octal number
 //    00000#    // Octal number w/leading zeros
 //
 //------------------------------------------------------------------------------
-class OctalReadout final: public NumericReadout
+class OctalReadout : public NumericReadout
 {
    DECLARE_SUBCLASS(OctalReadout, NumericReadout)
 
 public:
    OctalReadout();
-   void makeText() final;
-   char filterInputEvent(const int event, const char tc) final;
-   double getInputValue() const final;
+   void makeText() override;
+   char filterInputEvent(const int event, const int tc) override;
+   double getInputValue() const override;
 
 protected:
-   void reformat(const char* const example) final;
+   void reformat(const char* const example) override;
 };
 
 }

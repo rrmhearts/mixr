@@ -1,12 +1,12 @@
 
-#ifndef __mixr_models_IrAtmosphere1_HPP__
-#define __mixr_models_IrAtmosphere1_HPP__
+#ifndef __mixr_models_IrAtmosphere1_H__
+#define __mixr_models_IrAtmosphere1_H__
 
 #include "mixr/models/environment/IrAtmosphere.hpp"
 
 namespace mixr {
 namespace base { class Number; class Table1; class Table2; class Table3;
-                 class Table4; class INumber; }
+                 class Table4; class Number; }
 namespace models {
 class IrQueryMsg;
 
@@ -51,7 +51,7 @@ class IrQueryMsg;
 //                              const double targetAltitude)      // Altitude of the target (meters)
 //        Return the amount of solar radiation in the region of the spectrum defined by the
 //        upper and lower wavelengths as a function of the target altitude. The output is in
-//        the qty watts/steradian sq-m.
+//        the units watts/steradian sq-m.
 //
 //    double getSolarRadiation(const double wavebandCenter,       // The waveband center (microns)
 //                             const double targetAltitude)       // The altitude of the target (meters)

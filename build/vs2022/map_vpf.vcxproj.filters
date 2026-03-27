@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\map">
+      <UniqueIdentifier>{251F6C0B-1118-8B5D-3A4A-70E226A26A69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\map\vpf">
+      <UniqueIdentifier>{40F41C15-2C83-A6DE-D5A1-BAD9C10FB784}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\map">
+      <UniqueIdentifier>{1A1C30A9-86FB-AE44-8F13-3A1BFB7115A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\map\vpf">
+      <UniqueIdentifier>{B563D0BD-2119-49B3-AA0D-438A16C23FB7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VMap0FeatureClass.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VMap0LibDirectory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VMap0MainDirectory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VMap0RefCoverageDirectory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VMap0ReferenceDirectory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfDataType.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfDirectory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfIndexTable.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfRecord.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfSpatialIndexTable.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\VpfTable.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\vpf\factory.hpp">
+      <Filter>include\mixr\map\vpf</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\map\vpf\VMap0FeatureClass.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VMap0LibDirectory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VMap0MainDirectory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VMap0RefCoverageDirectory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VMap0ReferenceDirectory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfDataType.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfDirectory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfIndexTable.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfRecord.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfSpatialIndexTable.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\VpfTable.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\vpf\factory.cpp">
+      <Filter>src\map\vpf</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

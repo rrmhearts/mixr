@@ -1,11 +1,11 @@
 
-#ifndef __mixr_linkage_AnalogInputFixed_HPP__
-#define __mixr_linkage_AnalogInputFixed_HPP__
+#ifndef __mixr_linkage_AnalogInputFixed_H__
+#define __mixr_linkage_AnalogInputFixed_H__
 
-#include "mixr/linkage/generators/IGenerator.hpp"
+#include "mixr/linkage/generators/AbstractGenerator.hpp"
 
 namespace mixr {
-namespace base { class IIoData; class Integer; class INumber; }
+namespace base { class AbstractIoData; class Number; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -15,12 +15,12 @@ namespace linkage {
 //
 // Factory name: AnalogInputFixed
 // Slots:
-//      ai        <Integer>      ! AbstractIoData's AI channel index
-//      value     <INumber>      ! Default is 0.0
+//      ai        <Number>       ! AbstractIoData's AI channel index
+//      value     <Number>       ! Default is 0.0
 //------------------------------------------------------------------------------
-class AnalogInputFixed final: public IGenerator
+class AnalogInputFixed final: public AbstractGenerator
 {
-   DECLARE_SUBCLASS(AnalogInputFixed, IGenerator)
+   DECLARE_SUBCLASS(AnalogInputFixed, AbstractGenerator)
 
 public:
    AnalogInputFixed();
@@ -28,7 +28,7 @@ public:
    void reset() final    {}
 
 private:
-   void processInputsImpl(const double dt, base::IIoData* const) final;
+   void processInputsImpl(const double dt, base::AbstractIoData* const) final;
 
    // AbstractIoData's AI channel index
    int getChannel() const                              { return channel; }
@@ -42,8 +42,8 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotChannel(const base::Integer* const);
-   bool setSlotValue(const base::INumber* const);
+   bool setSlotChannel(const base::Number* const);
+   bool setSlotValue(const base::Number* const);
 };
 
 }

@@ -2,7 +2,7 @@
 #include "mixr/models/system/CommRadio.hpp"
 
 #include "mixr/models/system/Datalink.hpp"
-#include "mixr/models/RfEmission.hpp"
+#include "mixr/models/Emission.hpp"
 
 namespace mixr {
 namespace models {
@@ -56,7 +56,7 @@ bool CommRadio::setDatalink(Datalink* const p)
 // transmitDataMessage() -- send a data message emission;
 // returns true if the data emission was sent.
 //------------------------------------------------------------------------------
-bool CommRadio::transmitDataMessage(base::IObject* const msg)
+bool CommRadio::transmitDataMessage(base::Object* const msg)
 {
    bool sent{};
    // Transmitting, scanning and have an antenna?
@@ -69,7 +69,7 @@ bool CommRadio::transmitDataMessage(base::IObject* const msg)
 
    if (msg != nullptr && isTransmitterEnabled() && getAntenna() != nullptr) {
       // Send the emission to the other player
-      const auto em = new RfEmission();
+      const auto em = new Emission();
       em->setDataMessage(msg);
       em->setFrequency(getFrequency());
       em->setBandwidth(getBandwidth());
@@ -89,12 +89,12 @@ bool CommRadio::transmitDataMessage(base::IObject* const msg)
 // receivedEmissionReport() -- Datalink messages --
 //  Handle reports of valid emission reports (signal/noise ratio above threshold).
 //------------------------------------------------------------------------------
-void CommRadio::receivedEmissionReport(RfEmission* const em)
+void CommRadio::receivedEmissionReport(Emission* const em)
 {
    if (em != nullptr && datalink != nullptr) {
       // If we have a datalink and this emission contains a message, then it
       // must be a datalink message.
-      base::IObject* msg{em->getDataMessage()};
+      base::Object* msg{em->getDataMessage()};
       if (msg != nullptr) datalink->event(DATALINK_MESSAGE, msg);
    }
 }

@@ -1,6 +1,6 @@
 
-#ifndef __mixr_instruments_AnalogGuage_HPP__
-#define __mixr_instruments_AnalogGuage_HPP__
+#ifndef __mixr_instruments_AnalogGuage_H__
+#define __mixr_instruments_AnalogGuage_H__
 
 #include "mixr/instruments/Instrument.hpp"
 
@@ -53,10 +53,10 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotLeftBoundary(const base::INumber* const);
-    bool setSlotRightBoundary(const base::INumber* const);
-    bool setSlotIsOutlined(const base::Boolean* const);
-    bool setSlotIsVertical(const base::Boolean* const);
+    bool setSlotLeftBoundary(const base::Number* const);
+    bool setSlotRightBoundary(const base::Number* const);
+    bool setSlotIsOutlined(const base::Number* const);
+    bool setSlotIsVertical(const base::Number* const);
 };
 
 }

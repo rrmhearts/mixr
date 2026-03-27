@@ -1,7 +1,6 @@
 
 #include "mixr/instruments/gauges/AnalogGauge.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <iostream>
 
 namespace mixr {
@@ -18,10 +17,10 @@ BEGIN_SLOTTABLE(AnalogGauge)
 END_SLOTTABLE(AnalogGauge)
 
 BEGIN_SLOT_MAP(AnalogGauge)
-    ON_SLOT(1, setSlotLeftBoundary,  base::INumber)
-    ON_SLOT(2, setSlotRightBoundary, base::INumber)
-    ON_SLOT(3, setSlotIsOutlined,    base::Boolean)
-    ON_SLOT(4, setSlotIsVertical,    base::Boolean)
+    ON_SLOT(1, setSlotLeftBoundary,  base::Number)
+    ON_SLOT(2, setSlotRightBoundary, base::Number)
+    ON_SLOT(3, setSlotIsOutlined,    base::Number)
+    ON_SLOT(4, setSlotIsVertical,    base::Number)
 END_SLOT_MAP()
 
 AnalogGauge::AnalogGauge()
@@ -83,37 +82,37 @@ void AnalogGauge::drawFunc()
 //------------------------------------------------------------------------------
 // setSlotLeftBoundary() -- sets the left side of the gauge
 //------------------------------------------------------------------------------
-bool AnalogGauge::setSlotLeftBoundary(const base::INumber* const newLB)
+bool AnalogGauge::setSlotLeftBoundary(const base::Number* const newLB)
 {
     bool ok = false;
-    if (newLB != nullptr) ok = setLeftBoundary(newLB->asDouble());
+    if (newLB != nullptr) ok = setLeftBoundary(newLB->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotRightBoundary() -- sets the right side of the gauge
 //------------------------------------------------------------------------------
-bool AnalogGauge::setSlotRightBoundary(const base::INumber* const newRB)
+bool AnalogGauge::setSlotRightBoundary(const base::Number* const newRB)
 {
     bool ok = false;
-    if (newRB != nullptr) ok = setRightBoundary(newRB->asDouble());
+    if (newRB != nullptr) ok = setRightBoundary(newRB->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotIsOutlined() -- determines whether we are a filled bar or outlined
 //------------------------------------------------------------------------------
-bool AnalogGauge::setSlotIsOutlined(const base::Boolean* const newO)
+bool AnalogGauge::setSlotIsOutlined(const base::Number* const newO)
 {
-    bool ok{};
-    if (newO != nullptr) ok = setIsOutlined(newO->asBool());
+    bool ok = false;
+    if (newO != nullptr) ok = setIsOutlined(newO->getBoolean());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotIsVertical() - sets our vertical flag
 //------------------------------------------------------------------------------
-bool AnalogGauge::setSlotIsVertical(const base::Boolean* const newV)
+bool AnalogGauge::setSlotIsVertical(const base::Number* const newV)
 {
     bool ok = false;
-    if (newV != nullptr) ok = setIsVertical(newV->asBool());
+    if (newV != nullptr) ok = setIsVertical(newV->getBoolean());
     return ok;
 }
 

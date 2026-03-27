@@ -1,28 +1,28 @@
 
-#ifndef __mixr_interop_dis_EmissionPduHandler_HPP__
-#define __mixr_interop_dis_EmissionPduHandler_HPP__
+#ifndef __mixr_interop_dis_EmissionPduHandler_H__
+#define __mixr_interop_dis_EmissionPduHandler_H__
 
 #include "mixr/interop/dis/NetIO.hpp"
 #include "mixr/interop/dis/structs.hpp"
 
 namespace mixr {
-namespace models { class Antenna; class Boolean; class Integer; class Number; class IRfSensor; }
+namespace models { class Antenna; class RfSensor; }
 namespace dis {
 
 //------------------------------------------------------------------------------
 // Class: EmissionPduHandler
 //
 // Description: Handles the DIS input/output from an emitter system
-//              (e.g., IRfSensor class)
+//              (e.g., RfSensor class)
 //
 // Factory name: EmissionPduHandler
 // Slots:
-//     emitterName      <Integer>   ! DIS emitter name (see DIS enums)
-//     emitterFunction  <Integer>   ! DIS emitter function code (see enums)
-//     sensor           <IRfSensor> ! Template sensor model
-//     antenna          <Antenna>   ! Template antenna model
-//     defaultIn        <Boolean>   ! This is the default handler for incoming PDUs
-//     defaultOut       <Boolean>   ! This is the default handler for outgoing PDUs
+//     emitterName      (Number)    DIS emitter name (see DIS enums)
+//     emitterFunction  (Number)    DIS emitter function code (see enums)
+//     sensor           (RfSensor)  Template sensor model
+//     antenna          (Antenna)   Template antenna model
+//     defaultIn        (Boolean)   This is the default handler for incoming PDUs
+//     defaultOut       (Boolean)   This is the default handler for outgoing PDUs
 //
 //
 // Example:
@@ -34,9 +34,9 @@ namespace dis {
 //    )
 //
 //------------------------------------------------------------------------------
-class EmissionPduHandler : public base::IObject
+class EmissionPduHandler : public base::Object
 {
-    DECLARE_SUBCLASS(EmissionPduHandler, base::IObject)
+    DECLARE_SUBCLASS(EmissionPduHandler, base::Object)
 
 public:
    enum { MAX_EM_BEAMS   = 6 };
@@ -109,13 +109,13 @@ public:
    unsigned char getEmitterFunction() const;                   // Emitter function code
    virtual bool setEmitterFunction(const unsigned char num);   // Emitter function code
 
-   models::IRfSensor* getSensor();                         // Our R/F emitter System
-   const models::IRfSensor* getSensor() const;             // Our R/F emitter System (const version)
-   virtual bool setSensor(models::IRfSensor* const);       // Sets our R/F emitter system
+   models::RfSensor* getSensor();                          // Our R/F emitter System
+   const models::RfSensor* getSensor() const;              // Our R/F emitter System (const version)
+   virtual bool setSensor(models::RfSensor* const);        // Sets our R/F emitter system
 
-   models::IRfSensor* getSensorModel();                    // Our template sensor model
-   const models::IRfSensor* getSensorModel() const;        // Our template sensor model
-   virtual bool setSensorModel(models::IRfSensor* const);  // Sets our template sensor model
+   models::RfSensor* getSensorModel();                     // Our template sensor model
+   const models::RfSensor* getSensorModel() const;         // Our template sensor model
+   virtual bool setSensorModel(models::RfSensor* const);   // Sets our template sensor model
 
    models::Antenna* getAntennaModel();                     // Our template antenna model
    const models::Antenna* getAntennaModel() const;         // Our template antenna model
@@ -130,9 +130,9 @@ public:
    bool isDefaultOutgoingHandler() const;    // Is this the default outgoing emission PDU handler?
    bool setDefaultOut(const bool);
 
-   // True if IRfSensor data matches our parameters
+   // True if RfSensor data matches our parameters
    // (does not check the default handler flags)
-   virtual bool isMatchingRfSystemType(const models::IRfSensor* const) const;
+   virtual bool isMatchingRfSystemType(const models::RfSensor* const) const;
 
    // True if EmissionSystem PDU data matches our parameters
    // (does not check the default handler flags)
@@ -176,39 +176,39 @@ private:
    unsigned char emitterIdNumber {};                   // Unique ID number for each emitter system
    unsigned char emitterFunction {ESF_FIRE_CONTROL};   // Emitter function code
 
-   base::safe_ptr<models::IRfSensor> sensor;           // The R/F sensor (radar, jammers, etc)
-   base::safe_ptr<models::IRfSensor> sensorModel;      // Our template sensor model
+   base::safe_ptr<models::RfSensor> sensor;            // The R/F sensor (radar, jammers, etc)
+   base::safe_ptr<models::RfSensor> sensorModel;       // Our template sensor model
    base::safe_ptr<models::Antenna>  antennaModel;      // Our template antenna model
 
    double emPduExecTime {};                            // Exec time of last Emission PDU output (seconds)
 
 private:
    // slot table helper methods
-   bool setSlotEmitterName(const base::Integer* const);      // Sets our DIS Emitter Name
-   bool setSlotEmitterFunction(const base::Integer* const);  // Sets our DIS Emitter Function
-   bool setSlotSensorTemplate(models::IRfSensor* const);     // Sets our template sensor model
-   bool setSlotAntennaTemplate(models::Antenna* const);      // Sets our template antenna model
-   bool setSlotDefaultIn(const base::Boolean* const);
-   bool setSlotDefaultOut(const base::Boolean* const);
+   bool setSlotEmitterName(const base::Number* const);      // Sets our DIS Emitter Name
+   bool setSlotEmitterFunction(const base::Number* const);  // Sets our DIS Emitter Function
+   bool setSlotSensorTemplate(models::RfSensor* const);     // Sets our template sensor model
+   bool setSlotAntennaTemplate(models::Antenna* const);     // Sets our template antenna model
+   bool setSlotDefaultIn(const base::Number* const);
+   bool setSlotDefaultOut(const base::Number* const);
 };
 
-inline unsigned char EmissionPduHandler::getEmitterIdNumber() const        { return emitterIdNumber; }
-inline unsigned short EmissionPduHandler::getEmitterName() const           { return emitterName; }
-inline unsigned char EmissionPduHandler::getEmitterFunction() const        { return emitterFunction; }
+inline unsigned char EmissionPduHandler::getEmitterIdNumber() const  { return emitterIdNumber; }
+inline unsigned short EmissionPduHandler::getEmitterName() const     { return emitterName; }
+inline unsigned char EmissionPduHandler::getEmitterFunction() const  { return emitterFunction; }
 
-inline models::IRfSensor* EmissionPduHandler::getSensor()                  { return sensor; }
-inline const models::IRfSensor* EmissionPduHandler::getSensor() const      { return sensor; }
+inline models::RfSensor* EmissionPduHandler::getSensor()             { return sensor; }
+inline const models::RfSensor* EmissionPduHandler::getSensor() const { return sensor; }
 
-inline models::IRfSensor* EmissionPduHandler::getSensorModel()             { return sensorModel; }
-inline const models::IRfSensor* EmissionPduHandler::getSensorModel() const { return sensorModel; }
+inline models::RfSensor* EmissionPduHandler::getSensorModel()    { return sensorModel; }
+inline const models::RfSensor* EmissionPduHandler::getSensorModel() const { return sensorModel; }
 
-inline models::Antenna* EmissionPduHandler::getAntennaModel()              { return antennaModel; }
-inline const models::Antenna* EmissionPduHandler::getAntennaModel() const  { return antennaModel; }
+inline models::Antenna* EmissionPduHandler::getAntennaModel()    { return antennaModel; }
+inline const models::Antenna* EmissionPduHandler::getAntennaModel() const { return antennaModel; }
 
-inline bool EmissionPduHandler::isDefaultIncomingHandler() const           { return defaultIn; }
-inline bool EmissionPduHandler::isDefaultOutgoingHandler() const           { return defaultOut; }
+inline bool EmissionPduHandler::isDefaultIncomingHandler() const     { return defaultIn; }
+inline bool EmissionPduHandler::isDefaultOutgoingHandler() const     { return defaultOut; }
 
-inline bool EmissionPduHandler::getTemplatesFound() const                  { return !noTemplatesFound; }
+inline bool EmissionPduHandler::getTemplatesFound() const { return !noTemplatesFound; }
 
 inline const EmissionSystem* EmissionPduHandler::getSavedEmissionSystemData() const  { return &emissionSystemN1; }
 

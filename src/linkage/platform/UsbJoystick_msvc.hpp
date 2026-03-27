@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_windows_UsbJoystick_msvc_HPP__
-#define __mixr_linkage_windows_UsbJoystick_msvc_HPP__
+#ifndef __mixr_linkage_windows_UsbJoystick_msvc_H__
+#define __mixr_linkage_windows_UsbJoystick_msvc_H__
 
 #include "mixr/linkage/IoDevice.hpp"
 
 #include <vector>
 
 namespace mixr {
-namespace base { class Integer; class IIoData; }
+namespace base { class Number; class AbstractIoData; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotDeviceIndex(const base::Integer* const);
+   bool setSlotDeviceIndex(const base::Number* const);
 };
 
 }

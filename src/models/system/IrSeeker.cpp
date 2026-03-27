@@ -4,16 +4,17 @@
 
 #include "mixr/models/system/IrSeeker.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/IrSensor.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 #include "mixr/models/system/OnboardComputer.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
 
 #include "mixr/models/environment/IrAtmosphere.hpp"
 
 #include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
@@ -178,7 +179,7 @@ void IrSeeker::irRequestSignature(IrQueryMsg* const irQuery)
    // Need something to store the required data for the IR signatures and someone to send to
 
    Tdb* tdb0{getCurrentTDB()};
-   IPlayer* ownship{getOwnship()};
+   Player* ownship{getOwnship()};
    if (irQuery == nullptr || tdb0 == nullptr || ownship == nullptr) {
       // Clean up and leave
       if (tdb0 != nullptr) tdb0->unref();
@@ -205,8 +206,8 @@ void IrSeeker::irRequestSignature(IrQueryMsg* const irQuery)
       const double* anglesOffBoresight{tdb0->getBoresightErrorAngles()};
       const base::Vec3d* losO2T{tdb0->getLosVectors()};
       const base::Vec3d* losT2O{tdb0->getTargetLosVectors()};
-      IPlayer** targets{tdb0->getTargets()};
-      const double maximumRange{irQuery->getMaxRangeNM()*base::length::NM2M};
+      Player** targets{tdb0->getTargets()};
+      const double maximumRange{irQuery->getMaxRangeNM()*base::distance::NM2M};
 
       // ---
       // Send query packets to the targets
@@ -317,7 +318,7 @@ IMPLEMENT_SUBCLASS(TdbIr,"Seeker_TdbIr")
 EMPTY_SLOTTABLE(TdbIr)
 EMPTY_DELETEDATA(TdbIr)
 
-TdbIr::TdbIr(const unsigned int mt, const IGimbal* const gp) : Tdb(mt,gp)
+TdbIr::TdbIr(const unsigned int mt, const Gimbal* const gp) : Tdb(mt,gp)
 {
    STANDARD_CONSTRUCTOR()
 }
@@ -369,7 +370,7 @@ unsigned int TdbIr::processPlayers(base::PairStream* const players)
    // 1) Scan the player list --- compute the normalized Line-Of-Sight (LOS) vectors,
    // range, and range rate for each target.
    // ---
-   for (base::IList::Item* item = players->getFirstItem(); item != 0 && numTgts < maxTargets; item = item->getNext()) {
+   for (base::List::Item* item = players->getFirstItem(); item != 0 && numTgts < maxTargets; item = item->getNext()) {
 
       // Get the pointer to the target player
       base::Pair* pair = static_cast<base::Pair*>(item->getValue());

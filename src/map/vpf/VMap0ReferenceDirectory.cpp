@@ -41,7 +41,7 @@ void VMap0ReferenceDirectory::loadTables()
     createTable(VpfDirectory::CAT);
     table = getTable(VpfDirectory::CAT);
     if (table != nullptr) {
-        ok = table->loadTableFromFile(string->c_str(), "cat", VpfDirectory::CAT);
+        ok = table->loadTableFromFile(string->getString(), "cat", VpfDirectory::CAT);
         cvgOk = ok;
     }
 
@@ -50,7 +50,7 @@ void VMap0ReferenceDirectory::loadTables()
     createTable(VpfDirectory::LHT);
     table = getTable(VpfDirectory::LHT);
     if (table != nullptr) {
-        ok = table->loadTableFromFile(string->c_str(), "lht", VpfDirectory::LHT);
+        ok = table->loadTableFromFile(string->getString(), "lht", VpfDirectory::LHT);
     }
 
     table = nullptr;
@@ -58,7 +58,7 @@ void VMap0ReferenceDirectory::loadTables()
     table = getTable(VpfDirectory::GRT);
     if (table != nullptr) {
         // geographic reference table
-        ok = table->loadTableFromFile(string->c_str(), "grt", VpfDirectory::GRT);
+        ok = table->loadTableFromFile(string->getString(), "grt", VpfDirectory::GRT);
         if (ok) {
             // go through and read our records
             int count {1};
@@ -92,7 +92,7 @@ void VMap0ReferenceDirectory::loadTables()
     table = getTable(VpfDirectory::LINEAGE);
     if (table != nullptr) {
         // lineage
-        ok = table->loadTableFromFile(string->c_str(), "lineage.doc", VpfDirectory::LINEAGE);
+        ok = table->loadTableFromFile(string->getString(), "lineage.doc", VpfDirectory::LINEAGE);
     }
 
     // now we have all our data type and values loaded from the rference directory, we must descend into our coverage directories
@@ -106,7 +106,7 @@ void VMap0ReferenceDirectory::loadTables()
             int index {1};
             VpfRecord* record {table->getRecord(index)};
             while (record != nullptr) {
-                string->clear();
+                string->empty();
                 // column 2 is the column we need
                 char* x = const_cast<char*>(record->getData(2));
                 std::size_t size {std::strlen(x)};

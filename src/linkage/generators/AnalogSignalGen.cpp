@@ -1,14 +1,14 @@
 
 #include "mixr/linkage/generators/AnalogSignalGen.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/Identifier.hpp"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/frequencies.hpp"
+#include "mixr/base/String.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Frequencies.hpp"
 
 #include <cmath>
 #include <string>
@@ -22,16 +22,16 @@ EMPTY_DELETEDATA(AnalogSignalGen)
 
 BEGIN_SLOTTABLE(AnalogSignalGen)
     "ai",         // 1) Analog channel index
-    "signal",     // 2) Type identifier { sine, cosine, square, saw }
+    "signal",     // 2) Signal type { SINE, COSINE, SQUARE, SAW }
     "frequency",  // 3) Signal frequency
     "phase",      // 4) Phase shift
 END_SLOTTABLE(AnalogSignalGen)
 
 BEGIN_SLOT_MAP(AnalogSignalGen)
-   ON_SLOT( 1, setSlotChannel,   base::Integer)
-   ON_SLOT( 2, setSlotSignal,    base::Identifier)
-   ON_SLOT( 3, setSlotFrequency, base::IFrequency)
-   ON_SLOT( 4, setSlotPhase,     base::IAngle)
+   ON_SLOT( 1, setSlotChannel,   base::Number)
+   ON_SLOT( 2, setSlotSignal,    base::String)
+   ON_SLOT( 3, setSlotFrequency, base::Frequency)
+   ON_SLOT( 4, setSlotPhase,     base::Angle)
 END_SLOT_MAP()
 
 AnalogSignalGen::AnalogSignalGen()
@@ -54,7 +54,7 @@ void AnalogSignalGen::reset()
    time = 0.0;
 }
 
-void AnalogSignalGen::processInputsImpl(const double dt, base::IIoData* const inData)
+void AnalogSignalGen::processInputsImpl(const double dt, base::AbstractIoData* const inData)
 {
    const double value{calc(dt)};
 
@@ -111,11 +111,11 @@ double AnalogSignalGen::calc(const double dt)
 // Slot Functions
 //------------------------------------------------------------------------------
 
-bool AnalogSignalGen::setSlotChannel(const base::Integer* const x)
+bool AnalogSignalGen::setSlotChannel(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int v{x->asInt()};
+   if (msg != nullptr) {
+      const int v = msg->getInt();
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -124,12 +124,12 @@ bool AnalogSignalGen::setSlotChannel(const base::Integer* const x)
 }
 
 // signal: Signal type { SINE, COSINE, SQUARE, SAW }
-bool AnalogSignalGen::setSlotSignal(const base::Identifier* const x)
+bool AnalogSignalGen::setSlotSignal(const base::String* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
+   if (msg != nullptr) {
 
-      std::string signalType{x->c_str()};
+      std::string signalType(msg->getString());
       // convert to lowercase
       std::transform(signalType.begin(), signalType.end(), signalType.begin(), ::tolower);
       // set the type
@@ -140,7 +140,7 @@ bool AnalogSignalGen::setSlotSignal(const base::Identifier* const x)
 
       if (!ok && isMessageEnabled(MSG_ERROR)) {
          std::cerr << "AnalogSignalGen::setSlotSignal(): Invalid signal type: " << signalType;
-         std::cerr << ", use: { sine, cosine, square, saw }" << std::endl;
+         std::cerr << ", use: { SINE, COSINE, SQUARE, SAW }" << std::endl;
       }
 
    }
@@ -148,21 +148,21 @@ bool AnalogSignalGen::setSlotSignal(const base::Identifier* const x)
 }
 
 // frequency: frequency
-bool AnalogSignalGen::setSlotFrequency(const base::IFrequency* const x)
+bool AnalogSignalGen::setSlotFrequency(const base::Frequency* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      ok = setFrequency(x->getValueInHertz());
+   if (msg != nullptr) {
+      ok = setFrequency( base::Hertz::convertStatic(*msg) );
    }
    return ok;
 }
 
 // phase: Phase shift
-bool AnalogSignalGen::setSlotPhase(const base::IAngle* const x)
+bool AnalogSignalGen::setSlotPhase(const base::Angle* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      ok = setPhase(x->getValueInRadians());
+   if (msg != nullptr) {
+      ok = setPhase( static_cast<double>(base::Radians::convertStatic(*msg)) );
    }
    return ok;
 }

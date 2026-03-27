@@ -1,657 +1,392 @@
 ================================================================================
-Changes since v18.01
+Changes since v17.06c
 ================================================================================
 
 --------------------------------------------------------------------------------
-General framework-wide changes, improvements, trends, philosophy, and goals
-
-- Topic: Consistency in terminology with regard to represented Players discovered,
-         created and/or managed by an interoperability interface.
-
-  Within MIXR, different terms associated with interoperability discovered,
-  created and/or managed players had been used.  For example, in some parts
-  of the code, the term 'remote' player was used, in others, the terms 'networked',
-  'interoperability' and even 'surrogate' could be found. To further confuse
-  matters, the term 'ghost' is sometimes used in other simulation packages.
-  The use of terms implies the same thing; a stand-in representation of
-  a player being updated or managed by a different simulation (most likely executed
-  on a different computer within a distributed environment).
-
-  To improve the consistent use of terminology within MIXR, we have
-  shifted all references for this kind of stand-in representation, to a 'proxy' (e.g.,
-  a proxy player).  Proxies are updated and/or managed, etc., by another
-  (i.e., different, often networked) simulation, that is connected via a 'network'
-  interface.  This interaction is facilitated by some kind of 'interoperability'
-  protocol or mechanism. In other words, this stand-in representation (that is not being
-  updated or managed by this simulation) is called a proxy. We feel the term 'proxy'
-  more fairly conveys what it is, as opposed to how it comes about or where it comes from.
-
-  We especially wanted to avoid using the term 'interoperability' player (or 'IPlayer'
-  as abbreviated in code), as the 'I' is often stylistically (in code) used to
-  imply interface, or more specifically an interface class; in this case, to a player.
-
-  Moving to a consistent and more specific terminology also communicates that a
-  degree of uncertainty or difference (due to the inconsistency of state and/or
-  representation) between locally managed representations and stand-ins might exist.
-  For example, from an analysis point of view, the outcomes (or results) from
-  interactions between locally managed players and proxy players (especially, if not
-  time-sync'd) might be different than outcomes that do not include induced consistency
-  or representation differences.
-
-- Topic: Being explicit (String verses Identifier)
-
-  The processing of a Extensible Description Language (EDL) configuration file is
-  enabled by a language parser and code embedded within Object-based classes.  Within it,
-  two important data types, the String and the Identifier are of particular interest.
-
-  Strings are defined in the language as quoted sequences of characters (e.g.,
-  "Hello, World") as is common in many computer languages.  Identifiers are a bit different,
-  they are an unquoted sequence of characters (e.g., 'blue', 'localhost', etc.), in other
-  words, they are a sequence of printable characters without embedded spaces.
-  (Note: We use single quotes (') in the examples above to indicate a particular valid
-  character sequence for an Identifier; they are not to be used in a real configuration
-  file.)
-
-  Identifiers, like most computer languages, are defined using one or more deemed
-  valid characters that excludes spaces; they are most commonly used to label
-  or name things such as objects and variables. They are stored as a string value,
-  and used to identify (no pun intended) things.  Their value is used in several ways,
-  for example, from an input file parsing perspective, the value might be used to select a
-  specific behavior of interest within an object instance (e.g., the type of scan).
-
-  Within MIXR, although not enforced, stylistically, we prefer and strive to keep
-  all identifiers lower case.  We believe this improves the readability of
-  configuration input files and avoids potential confusion with macros (which
-  are often written in UPPER case).
-
-  Even though both Identifiers and Strings are created and defined as a sequence
-  of characters, they are distinguished by the role they play within the language.
-  Under the hood, their value is stored as a string, but they serve different
-  purposes in terms of semantic meaning.  Identifiers can be viewed as value types
-  that have internal meaning to the application (e.g., the mode for a sensor)
-  Strings can be viewed as value types that have external meaning, for example,
-  a description of something not terribly relevant to the executing application,
-  a filename, or even a network address for which no unique data type (think token)
-  has been defined.  Identifiers play the same role as symbols within a programming
-  language (e.g., x=10, 'x' is a symbol), strings are used to communicate information
-  to a user (e.g, "input>").  Note: It makes no sense for identifiers to be mutable
-  (e.g., it would like saying the value '5' is mutable, as '5' is a value).
-
-  Internal to the EDL parser, Strings and Identifiers are distinguished by
-  different tokens.  Within the C++ code base, they were confounded - namely,
-  an Identifier was defined as a subclass to a String. So, all Identifiers
-  were considered Strings, even though their use and meaning is different.
-
-  Change:
-
-  The previous IS-A relationship within the C++ codebase no longer exists;
-  Identifiers and Strings are now entirely different types. From an
-  implementation point of view, they both use a string to store a particular
-  value; but they are now unrelated types. This had an impact on the code base,
-  but interestingly, very little, in fact, almost no impact on the configuration
-  files.  Configuration files mostly specified types completely consistent with
-  the EDL specification.  It was the C++ side or Object-based classes that
-  required some rework and tweaking.
-
-  In several cases, classes that defined slots to accept an identifier-type value
-  information (such as Antenna with its slot to define polarization as either
-  'none', 'vertical', 'horizontal', 'slant', etc.) was in fact accepting a
-  String to process the same input value.  This worked because of the previous
-  IS-A relationship between the two; Identifier values were being accepted
-  as a valid 'String'.
-
-  We feel that the role of Identifiers and Strings are more easily understood
-  without an IS-A relationship obfuscating it.  All classes have been updated to
-  handle slot inputs more in-line with the value types they expect. Specific
-  changes are listed within each library.
-
-- Topic: Being explicit (Boolean verses Number)
-
-  The Extensible Description Language (EDL) system is enabled by a language parser
-  and code embedded within Object-based classes.  Within it, two important data
-  types, Boolean and Number are of particular interest.
-
-  Previously, within the C++ code base, the Boolean type (i.e., class) was defined
-  as a subclass to Number (i.e., IS-A relationship).  This relationship allowed
-  for Boolean's to be a valid substitute for any Number, even though, both
-  mathematically and in many computer languages are often considered to
-  be different types (e.g., C++ 'bool' vs 'int'). Note: The C programming language
-  provides no primitive Boolean type, its properties has to be emulated using
-  an integer.
-
-  Much like String and Identifiers, this can lead to some confusion.  For example,
-  configuration files settings for things things that are on/off, true/false, etc.
-  were, unfortunately conflated with other Number representations (e.g., '5') -
-  which, somewhat disturbingly 'worked' where it was used. Worked in the sense that
-  numbers were being interpreted as Boolean values (e.g., true if positive), but
-  misaligned with the semantics for the kind of input that was expected. (This is
-  commonly referred to as "weak" typing.)
-
-  To resolve any possible misunderstanding of input file settings, and to better
-  align the documentation of classes (which often indicates a desired Boolean value)
-  with code implementation, we have revised Boolean's and Number's to be
-  different types (i.e., there is no longer an IS-A relationship between them).
-  Number's no longer convert to Boolean's, and Boolean's don't have a Number value
-  equivalent.  Such conversions are, of course, available within the C++ domain
-  as explicit type conversions. (In fact, this is a general trend in programming
-  languages - make the programmer "say" exactly what they want.)
-
-- Topic: General refactoring of EDL -> C++ support classes
-
-  The Extensible Description Language (EDL) parses character strings into
-  bite size chunks called tokens.  The meaning of those tokens, and how they are
-  organized defines the language.
-
-  In the case of computer programs, this input language (i.e., EDL) is 'spoken'
-  in the form of an ASCII-based file (which we call a configuration file). It is
-  interpreted (i.e., translated) by reading it and building an Object tree which
-  eventually is handed (returned) to the C++-based program for use.
-
-  Just like the EDL, C++ is a language as well. The software code that connects
-  (or streamlines their interaction with each other) between these languages is
-  referred to as 'binding' code.  Developers might also call this code
-  'wrapper' code.  The purpose of the code is to provide a way to interface these
-  different languages (i.e., smooth the 'impedance mismatch' between them).  For
-  EDL based inputs, this means the process of parsing and translating what is
-  specified into it's C++ equivalent.  (Technically, is not translating EDL to
-  C++, but serving as a useful tool to help the developer create useful classes,
-  and allow a user to configure them for their own needed.
-
-  The translation aspect of this process is supported by tokens as defined
-  by the EDL scanner and C++ classes to represent that information.  The
-  process of translating can be thought of a series of representational casts.
-  For example, in EDL land, a string is a series of characters surrounded by
-  quotes ("hello world").  This is represented by a token with a particular value,
-  which will be stored in a C++-defined class called String and eventually
-  be used by the C++-based code.  As another example, Boolean's in the EDL are
-  represented by "true" and "false" string values as identified by the scanner
-  which creates a C++ Boolean object.  Once this translation happens, the C++ code
-  might convert this representation to it's own primitive 'bool' type for internal use.
-  In this class the Boolean class exists to facilite this intereaction between languages
-  and can be considered part of the binding code.
-
-  We could of exclusively used C++ primitive types for many of EDL's understood
-  types, such as 'int', 'double' and 'float' but we wanted to lessen the burden
-  on the user by being less picky (in terms of syntax) on how a number is written.
-  From an EDL language perspective, the Number 5 can be written as 5, 5., 5.0, etc...
-  If we require (from the user) a more specific representation for an integer (e.g., '5')
-  or a float (5.0), those classes exist.
-
-  For example, consider a slot parameter called 'range' - in which we allow a user
-  to enter (input or specify) a number.  If we used purely C++ number representations,
-  the user would be forced to enter one of a number of possible variations of a number
-  (e.g., 1, 1.0, 1.0f, etc).  In the C++ language, the value 1 is considered to be an
-  integer, the value 1.0 is considered a double and 1.0f is a float.  In other words,
-  the C++ language (by default) defines a more strict or finer resolution representations
-  for a number.  EDL doesn't care, we are perfectly willing to accept 1 or 1.0
-  as a reasonable value input, then we can just accept a Number.
-
-  From this perspective, the EDL language is purposely weakened (comparied to C++) in the
-  domain of numbers.  It understands integers and floating point numbers, but that's about
-  it.  In other words, both of these types are considered just concrete variations of
-  the more abstract concept called 'Number'.  If, for example, we want the user to specify
-  the parameter 'range', an abstract Number representation is probably good enough
-  for what's intended.
-
-  Rules (or suggestions):
-
-  Within C++ classes that process EDL parser supplied inputs, accept Number if the
-  user is suppose to provide it.  Accept an Integer if you want the user to specify
-  an integer - it's kind of weird to see code that is ultimately looking for a C++ 'int'
-  accept and happily process, without warning or error, an input value of say, 3.4.
-  Not only does that not make sense, it can lead to a input file values that are
-  easily misunderstood. If the user should specify a Boolean-type input, force
-  them to specify 'true' or 'false' by using the Boolean class to clearly differentiate
-  and/or strengthen that type.
-
-  All code within MIXR (including examples) that is expecting a integer type value
-  ('int') to be entered, has been updated to accept Integers, not the more general
-  Number type.  This disallows, the possible acceptance of commonly understood floating
-  point values (e.g., 1.0, 3.4, etc) and their interpretation as integers (e.g., 1, 3).
-  This improvement makes more visible the values expected (and considered
-  correct) and reduces the possible misunderstanding of a configuration input.
-  Note: no configuration inputs were found to be incorrect or in error after this
-  change was made.
-
-- Topic: Being explicit (Unit classes)
-
-  Units are no longer (IS-A) Numbers; they are units (Meters != 5).  Units represents
-  magnitudes of a quantity. Obviously they are related to numbers; and are often
-  view as meta-data about the numeric value of interest - but, units themselves
-  are not numbers. Because they relate to numbers, or a specific value, the
-  unit classes within MIXR contain a value for which it is associated with.
-  When parsing and reading in an EDL file, the value they are associated with
-  is accessed via 'getValue()' - which returns, by default, a double precision
-  number (not Number!).  Maintaining units as a distinct type provides the means
-  understand the value presented in terms of its measurement.
-
-- Topic: Being explicit (Accepting Number vs Unit as Configuration Parameters)
-
-  At many points in the code base, quantities (with an associated numerical value)
-  are needed. As an example, the EarthModel class exposes configurable parameters
-  for two lengths (a & b) and a flattening (f) value. It can accept parameters
-  'a' and 'b' as either a 'Length' (a unit instance) or simply as a 'Number'.  According
-  to the documentation (within source code), if a number is supplied, it would be
-  interpreted as a length in meters.  While this is convenient, if the value is
-  specified as a number, the meaning of it is certainly not explicit within a
-  configuration file.
-
-  In other parts of the code, numbers are accepted as a valid configuration
-  parameter, only to be downcast to check if, for example, an 'Angle' was specifed
-  (see Gun class).  Since Angle used to be a subclass of Number, all of this worked.
-  While, again, this is convenient, it can lead to not very explicit configuration
-  files.
-
-  Arguments can be made between convenience, explicitness and correctness. Convenience
-  comes from allowing a person to be less verbose - if used this way, correctness is
-  based on knowledge of how that input will be interpreted and used.  Explicitness
-  causes configuration files to become more verbose, but reduces the possibility of them
-  being incorrect, better yet helps reduce the possibility of a less knowledgable person
-  from entering incorrect information.
-
-  We have decided on being explicit and remove any ambiguity within the MIXR-base classes.
-  If a number associated with a quantity is going to be used, the slot/configuration
-  parameter will be defined to accept that quantity.  Classes built 'on top' of MIXR can
-  define classes to accept parameters in whatever way is desired (numbers, angles,
-  power, etc.) - which allows for configuration flexibility, but caution should be
-  exercised if correctness is of primary importance.
-
-- Topic: Character arrays, the String class and std::string
-
-  Many years ago, C++ (a superset of C) did not include much support for string handling.
-  In fact, the string class (std::string) was not defined until 1998. Because
-  initial versions of C++ only included low-level C string functionality,
-  multiple incompatible designs for string handling classes were designed.
-  In retrospect, even the inventor of C++ (Bjarne Stoustrup) considers this
-  one of the worse mistakes he made during development.
-
-  Unfortunately, because of legacy code, this issue persists even today;
-  multiple conventions often need to be handled within applications - MIXR is
-  no different in this regard. But now, std::string has been around for over
-  20 years, it's probably as good a time as any to reduce the complexity of
-  the code base by using it, and try to avoid the management of strings via
-  C-style character arrays as much as possible.
-
-  MIXR, defines its own Object-based reference counted String class - it,
-  along with a character-based (char*) representation has been used almost
-  exclusively as the way to manage and represent strings throughout the
-  code base; this is changing.
-
-  Starting with this release, we are transitioning to using the std library
-  provided 'std::string' class as much as possible. We still need to retain
-  MIXR's String class because of its Object-based compatibilities that
-  streamlines interactions with the EDL parser.  But for places
-  within the code base where this is not an issue, we are striving to replace
-  String, String* and character-based representations with 'std::string'.
-  At this point in time, we consider and treat 'std::string' much like any
-  other C++ primitive (int, double, bool, etc).
-
-  Design goal:
-
-  At the end of this transition, we would like to use std::string as much as
-  possible, and only use MIXR's String class when the need to marshal it around
-  as an Object-based representation. Ultimately, the String class will become an
-  Object-based, reference counted wrapper for std::string (as opposed to char*,
-  which is currently what it does).
-
-  Transition approach:
-
-  It's difficult to make the transition from MIXR Strings and char*
-  representations to std::string in one step.  Here are a series of steps we
-  are taking right now:
-
-  1) We are making MIXR's String class interface look more like (i.e., mimic)
-     std::string. We renamed the 'getString()' method to 'c_str()', as among C++
-     developers, 'c_str' is universally understood to be a C-style string.
-
-     Note: we corrected a basic behavior of the String class to always
-     represent a valid String by always maintaining a valid C string.  Previously,
-     instantiating a String instance would create a 'shell' object which would
-     return a null pointer when asked for its char* representation (via getString(),
-     implicit char* or const char* methods).  Now, every instance of String
-     manages a valid string representation (in other words, a String really IS a
-     string! This is RAII!).
-
-     A review of the code base indicated that Strings were always initialized
-     - in other words, the behavior of existing code did not rely on possible
-     String instances returning null pointers when asked for its char* pointer.
-     Because 'std::string' always returns a valid C string (via c_str()), even if
-     it's empty (it never returns a nullptr); we felt it important to mimic this
-     behavior.
-
-  2) Eliminated the implicit conversions from String to either 'char*' or
-     'const char*'. The standard library string class does not allow this, neither
-     should we.  It did make a few places within code more verbose (as
-     '->c_str()' was occasionally added), but arguably, it did make the code more clear.
-     Also, later in this transition, it's easy to search for all those 'c_str()' method
-     calls and review them as opportunities to streamline type translations or
-     mismatches.
-
-  3) Separate the concepts of a String from an Identifier - in other words, we separated
-     the concept of what a string is (a data type), from how it's interpreted or used.
-     Identifier is no longer a subclass of String.  This simple change causes source code
-     and a few configuration files to change in a way that made them more clear.
-
-- Topic: Being explicit (User defined enumeration data types in C++11)
-
-  The C programming language includes the capability to define user defined
-  data types using the 'enum' keyword.  For example:
-
-  enum State {Working, Failed};
-  enum Color {Red = 0, Green = 1, Blue = 2};
-
-  While this is convenient, problematic issues surface.
-
-  1) The defined 'types' (State and Color) are unscoped, meaning,
-     Working, Failed, Red, Green and Blue are all defined within
-     the same scope. As is, Working, Failed, Red, Green and Blue
-     represent integers and can be freely interchanged, and easily
-     used in the wrong program context.
-
-  2) The identifiers (e.g., Green) can be used directly to set integer
-     variables.  In this case, the enumeration carries a value that has
-     meaning.  Unfortunately, so does Working and Failed, which is
-     less than obvious.
-
-  In C++11, finer grained control over both aspects are available to avoid
-  possible confusion. Now, one would write the equivalent desired code
-  as follows:
-
-  enum class State {Working, Failed}
-  enum class Color: int {Red = 0, Green = 1, Blue = 2};
-
-  Now Working and Failed belong to the class 'State' and Red, Green and Blue
-  belong to the class 'Color' - never to be confused.  Additionally, Red,
-  Green and Blue will (under the hood) be stored using an integer with
-  the value as defined.  The underlying values can be extracted using
-  an explicit cast as the example below shows:
-
-  // extract the value for Red
-  int x = static_cast<int>(Color::Red);
-
-  - or -
-
-  Color color{Color::Red};          // color initialized to Red
-  color = Color::Green;             // now being reassigned
-  int x = static_cast<int>(color);  // underlying value extracted
-
-  MIXR code has been revised to use these (C++11) provided capabilities.
+General framework-wide changes/improvements/trends/philosophy/goals
+
+- Many of the software changes are based on reasons or rationale gleamed from
+  reading material concerning good coding practices from influential people
+  within the world of C++ programming, such as Bjarne Stroustrup, Scott Meyers,
+  Herb Sutter and Andrei Alexandrescu.  We also cannot dismiss high quality answers
+  posted by folks on Stack Overflow and even the consolidated treasure trove of design
+  practices espoused by Microsoft in their "Framework Design Guidelines for .NET" book.
+  This book in many ways rolls up and integrates guidelines in a nice way.  Of course,
+  some of the changes are a result of dwelling on these issues or topics for probably
+  unreasonable amounts of time, and equally, how they might be applied in a systematic
+  way over time to improve the MIXR code base.
+
+- Renamed user interface directory from 'gui' to 'ui' as it's more general.
+
+- Removed 'serialize()' method from base Object.  This method is no longer needed
+  and was rarely used, so all functionality associated with it has been removed.
+  As a consequence, in user code, remove all 'serialize()' methods you have
+  defined in your classes.  If you did not define any such methods, you probably
+  used the 'EMPTY_SERIALIZE()' macro to satisfy the Object-based dependency, which
+  defined the method itself (to do nothing). Remove this macro from your mixr-based
+  application code, otherwise, compiling errors will be produced.
+
+- Prefixed all 'size_t' types with std (e.g., std::size_t) to clearly indicate
+  that this type is defined in the std library (it is not defined as part of the core
+  C++ language).  This has no impact on API. This was done to improve code base by
+  adopting explicit C++ notation as opposed to using global 'C' types (i.e., 'size_t'
+  without a namespace qualifier).
+
+- Using uniform/brace initialization syntax for types throughout code base.
+  This notation forces more explicit initialization of types, and avoids
+  nonsensical coercions from taking place which, in some cases, might
+  surprise or even alarm a developer about a potential problem.  For example, it
+  prevents accidental initializations from 'ints' to 'doubles' or 'doubles' to
+  'ints.' This change required a significant investment in time, but yielded a
+  few interesting cases to address.
+
+- Topic: use of 'unsigned int', 'unsigned short', etc. verses plain old 'int'.
+
+  Throughout the code base, use of the 'unsigned' primitive types prevails. This
+  is because, in the old days, using, what was considered the most
+  appropriate type for a particular programming problem, seemed rather
+  logical - which of course it is. There is nothing wrong with that argument,
+  but what was deemed 'appropriate' may have been evaluated with a bias that
+  favored the correct 'signedness' of the type, without regard to other issues.
+
+  Given a more fair evaluation of 'other issues' means we have decided to shift
+  to using 'int's as opposed to 'unsigned int's almost exclusively; we are moving
+  this direction in a staged manner, meaning, transitioning slowly as opportunities
+  naturally arise or stand out in an obvious way due to uniform initialization.
+
+  Rationale:
+
+  The reason to shift away from using 'unsigned' types is to improve code
+  quality and conform to conventions.  The convention is often stated as follows:
+  "Favor the use of int's over unsigned int's unless there is a strong reason
+  not to." In general, the signedness of the type is not considered a strong reason,
+  but it is acknowledged that there are a few good places to stick with the unsigned
+  types.
+
+  Today, the use of unsigned types is out of favor, as they introduce a number of
+  problems - some potentially severe, some annoying, some due to readability,
+  and some due to an assumed intended purpose (e.g., low level bit manipulation).
+
+  There are many cited concrete reasons to follow this convention, such as:
+  1) as an algebraic type, 'unsigned int's are discontinuous at 0, leading to
+  potential problems, 2) 'int' is shorter to type, read and generally mentally
+  digest, and 3) int's always, 100% of the time, map directly to the architecture
+  of computer processing hardware (i.e., CPUs/GPUs).
+
+  The only significant detractor comes from the standard library - it
+  defines the std::size_t datatype, unfortunately, as unsigned. It has to be,
+  as its value range represents the full address space of computer memory (which
+  is never negative!).  Even so, some in the C++ community believe the standards
+  committee messed up.
+
+  As we move towards using more C++11 features (such as universal
+  initialization), the inadvertent mixing of unsigned with signed types is no
+  longer masked due to implicit type conversions (coercions).  Narrowing
+  conversions (coercions) now produce compiler errors.  Explicit conversions
+  back and forth make the code ugly to read and often harder to comprehend.
+
+  For example:
+
+  double x = 1;    // compiles, but is technically wrong, 1 is an 'int' which
+                   // will be coerced (converted) into a double.
+
+  double x{1};     // using brace initialization, the compiler will flag this
+                   // as an error.
+
+  double x{1.0};   // correct, perfectly aligned types, no casting required.
+
+  The big picture is this - C++11 provides the features to sharpen distinctions
+  between types (including primitives) which is a good thing - we are starting
+  to take advantage of this to improve type-safety which improves code quality.
+  Moving to using plain old int's improves readability, reduces conversion issues,
+  and helps avoid explicit 'signed' and 'unsigned' casts which reduces noisy
+  syntax.
+
+- Topic: directory names.  Adopting a naming convention for directories
+  that include C++ class definitions has consumed more time and
+  brain power than we'd like to admit.  The struggle to be consistent ultimately
+  comes down to the use of singular verses plural names for directories.
+
+  For example, the 'models' library is plural to indicate a collection
+  of models, yet the 'sensor' directory within could have been named 'sensors'
+  to again indicate a collection.  The tension to name a 'collection of things'
+  as opposed to only stating 'what it is' is not always obvious. To make matters
+  worse, some words just seem to naturally fit better.
+
+  We are doing our best to make good choices, and as a general rule, will favor
+  the use of plural names.  Examples of this include 'graphics', 'instruments',
+  'models', 'colors', 'units', etc. Reviewing the code base and overall organization
+  will reveal some inconsistencies, such as 'util' - which is a collection
+  of utilities. Over time, these issues will be addressed, but in a way to avoid
+  massive end-user changes to existing application code.
+
+- Topic: Interface vs Abstract vs Base vs Concrete classes.  What is what, and
+  why it matters.
+
+  What is what?
+
+  Interface: C++ does not officially have an explicit 'interface' class type or
+  keyword like Java. It does support an equivalent concept as a class entirely
+  defined by pure virtual methods. This type of class defines no implementation,
+  no state, no algorithm, nothing, zero - well, function signatures.  Most importantly,
+  this class type isn't necessarily used as a foundation for a class hierarchy -
+  in fact, quite the oppose, it's useful because it defines a set of functionality
+  (i.e., methods names / function signatures) that maybe implemented by classes,
+  potentially in completely different hierarchies.  Within MIXR, we don't have any
+  interfaces defined in this sense.  Of course, MIXR classes are mostly organized
+  in a single hierarchy rooted by Object.
+
+  Abstract: C++ does officially acknowledge the concept of an abstract class.
+  It's simply a class that is not completely defined, therefore object instances
+  cannot be created. Given that, an abstract class often defines something, at least
+  a set of methods, and maybe a high level algorithm that partially defines how
+  it works (hopefully documented).  These high level algorithms define the blueprint
+  for the design of what subclasses are suppose to do, and to a limited extent,
+  how it does it (i.e., a partial algorithm). Particular aspects of those algorithms
+  often leave the door open for subclasses to define or change (i.e., tailor).
+  In some cases, those doors are wide open for redefinition, meaning, absolutely
+  no high level algorithm, within the class is defined (think Interface!).
+
+  The means to tailor how a class operates include defining so-called 'extension
+  points' and 'hook' methods.  The difference between 'extension points' and
+  'hook' methods is subtle; extension points are usually available as private
+  virtual methods that can be used to alter aspects of how the high level algorithm
+  executes.
+
+  Hook methods are a little different; they are usually available as public
+  virtual methods. They don't necessarily complement a defined algorithm -
+  they open the door to doing almost anything.  In some cases this is desirable,
+  but recommended practice is to minimize public virtual methods (i.e., hook
+  methods), and in some cases, eliminate them all together (see the Non-Virtual
+  Interface idiom and the Template method design pattern for more information).
+  Within MIXR, we are starting to define more explicit standalone abstract classes,
+  as they are often define the foundation (and principle value) that the framework
+  or platform provides.
+
+  Abstract classes do in fact define a public interface - they just add detail
+  beyond what a typical Interface class provides.  They are the foundation for
+  class hierarchies.  Given that, within MIXR, we are striving to present more
+  non-virtual methods within class public interfaces.
+
+  From a naming perspective, we are starting to prefix abstract classes with
+  the word 'Abstract' to indicate it's role within a hierarchy.
+
+  Base: The meaning of a 'base' class in C++ is overloaded.  In alignment
+  with Microsoft's framework guidelines, MIXR base classes define useful
+  'common code' for subclasses to leverage (if needed).  They should be abstract
+  as well, meaning, they should not be concrete, otherwise they wouldn't
+  necessarily be a 'base' to anything at all.
+
+  It easy to understand the recommended practice of avoiding defining too many
+  'base' classes between abstracts and concretes (i.e., layers), as code will
+  become difficult to understand. Having said that, it's not an all or nothing
+  thing, we do have hierarchies of classes within MIXR that serves as useful
+  points to derive completely functional concrete instances.  This is always
+  being re-evaluated from the standpoint of understandability such that there
+  is continued improvement in platform capabilities and flexibility.  It
+  can be challenging to optimize all these aspects at the same time.
+
+  Concrete: These classes are maybe the easiest to digest - they complete,
+  define or fill in remaining bits of implementation functionality
+  needed to create real working instances. MIXR obviously includes many of these
+  classes.  Some argue that all concrete class should be marked 'final'
+  as they are complete and help resolve other issues (assignments and copying!).
+  For now, this is not the case in MIXR code, we have concrete classes that are
+  effectively serving as 'base' classes through extension.
+
+  Why it matters?
+
+  In a nutshell, code clarity, and a more clear separation of 'interface'
+  from 'implementation.'  One goal of frameworks is to define relationships
+  and organize code in a way to build a variety of applications efficiently.
+  Abstract classes that define high level algorithms, in effect, provide
+  structures or patterns that are useful - in other words, abstract classes
+  can serve as a blueprints for classes, much like class relationships serve
+  as high level organizational blueprints that define an architecture.
+  Identifying the role a class plays within the code base, helps a developer
+  organize it in a way that provides the most value.
+
+  Topic: The Non-Virtual Interface (NVI) idiom
+
+  If every method in a class can be overridden, then you are effectively
+  telling the developer "you are free to throw away the provided blueprint
+  and go your own way."  That does maximize flexibility of how you might use
+  the class, but arguably, it opens the door to abuse and the creation of
+  code that is very difficult to follow or comprehend.
+
+  To avoid the problem of making too many methods virtual, the NVI
+  idiom flips the situation, it effectively says NO public methods should be
+  virtual; all of them should be non-virtual.  Sticking with the role of
+  what abstract classes are about, using NVI, non-virtual methods are
+  supported by private virtual methods that serve as points of extension;
+  the so-called 'extension points' - public virtual methods are the
+  'hooks' as described.
+
+  So within the MIXR code base, why do we care?
+
+  To improve code clarity, a recommended practice is to minimize
+  'inheritance call chains.'  Inheritance call chains are formed when
+  subclasses call parent methods of the same name. Unfortunately,
+  calling the parent class method such as updateTc()
+  (i.e., BaseClass::updateTc()) within a subclasses updateTc() provides
+  no indication of what the shared common code is doing.  As an alternative,
+  for example, calling a protected method within a base classes common
+  code makes things more obvious - for example, 'readDeviceInputs()'.
+
+  The NVI idiom prevents inheritance call chains because the extension
+  points are private - they cannot call the private methods in parent
+  classes!  They in effect, force the developer of the parent class to
+  define methods (with names that indicates what they are doing) to be
+  used by the concretes.  Basically what is happening is all the classes
+  between the abstracts and concretes define implementation code - their
+  role as abstract 'base' classes is to define useful common code for the
+  concretes.  This allows the concrete classes to clearly express their
+  behavior in a more understandable way.
+
+  A point to consider.  If you are implementing a algorithm (i.e., an
+  'extension point') then consider defining a new extension point that
+  further defines details and base class hasn't done.  This ensures
+  concretes don't totally violate 'what they are' in terms of how they
+  act relative to their parents.  'Hooks' are totally different, as
+  stated before, they open the door much wider than 'extension points'
+  for subclasses to tailor.
+
+  Using inheritance call chains implements the functionality of class members
+  in a somewhat awkward way - basically opposite of what virtual methods are
+  for - instead of overriding a methods behavior, they extend a methods
+  behaviors by reusing everything defined before it.  This techniques is
+  called 'program by difference' which requires a developer to understand
+  the implementation code of all the classes from abstract to concrete
+  to really understand what is going on.  Simplifying this aspect should
+  improve clarity.
+
+  Within MIXR, inheritance call chains are in abundance - as code is updated,
+  there is a conscious effect to minimize them. (See linkage library as
+  an example.)
+
+- Topic: Guidelines for virtual function declaration
+
+  C++ core guidelines recommends that virtual functions should specify exactly
+  one of 'virtual', 'override', or 'final' for a number of reasons including:
+  readability and detection of mistakes.
+
+  Recommendation: use 'virtual' only when declaring a new virtual function,
+  use 'override' only when declaring an overrider, and use 'final' only
+  when declaring a final overrider.
+
+  Some time ago, we updated the entire MIXR code base by adding 'override'
+  at the appropriate spots - but left the 'virtual' specification alone.
+  This was a very good first step, as it helped detect mistakes; now we
+  are starting to adopt this guideline by systematically stripping
+  off 'virtual' where it no longer needed to adhere to this recommendation.
+
+- Topic: Slot table helper methods
+
+  Throughout the code base, methods that support the processing of
+  EDL configuration file inputs defined by so-called 'slot names'
+  have not always been defined in a consistent manner.  For example,
+  code written long ago frequently defined the visibility of them
+  as 'private' - later, newer classes often set their visibility as
+  'protected', and even later the visibility was often made 'public.'
+  In some cases, they were defined as hooks by allowing them to be overridden
+  as a virtual method.
+
+  With this release, all (with a few minor exceptions) slot methods have
+  been made 'non-virtual private'.  This was done for several reason,
+  but first and foremost, was to reduce cluttering up the public interfaces
+  of class definitions as much as possible.  This improves the
+  understandability of classes, and because almost all were named
+  'setSlotThis' or 'setSlotThat', it restates and solidifies their role as
+  an EDL slot table helper methods not necessarily intended to be a
+  general purpose object 'public' interface.
+
+  This change should have no impact on existing applications.
 
 --------------------------------------------------------------------------------
 
 #####################################################
-Infrastructure libraries
+Infrastructure oriented libraries
 #####################################################
 
 --------------------------------------------------------------------------------
 base library (mixr_base)
 
-- All addresses in network handler classes have been updated to use type std::string
-  as opposed to char*.  Also, all of the classes for which this matters also defines a
-  slot method to accept Identifiers for specific hostnames.  Strings are still used
-  to specify IP addresses.
+   -- Renamed 'concurrent' directory to 'threads' and removed all thread pool
+      related classes (ThreadPool, ThreadPoolManager and ThreadPoolManagerThread)
+      as they are not used.  Some work done to streamline the existing
+      classes to eventually use C++11 std library thread functionality.
 
-- The directory containing all the function and table classes (previously called
-  'functors') has been renamed to 'relations' to more properly describe the
-  commonality of the classes it contains - namely, relationships. Background: in
-  mathematics, a relation is just an ordered set of relationships between sets of
-  information.  A function is a logical subset and is considered to be a
-  'well-behaved' relation - meaning the pairing is always one for one (i.e., given
-  an 'x', we get only and exactly one 'y').  Tables also implement relations.
+      Note that the 'create()' method has been renamed to 'start(const double
+      priority)' to better indicate what is happening (i.e., start a thread
+      with a given execution priority).  Threads are created via 'new Thread()',
+      after that, they can be started.
 
-   -------------------
-   - Color classes -
-   -------------------
+      Specific thread classes defined in ig_host_cigi, linkage and simulation
+      libraries have been updated and renamed to more clearly indicate what kind
+      of thread is being used (i.e., periodic, single shot or sync'd).
 
-   Color class
-      1) Operators to convert a color to either Vec3d or Vec4d are now marked explicit.
-         For example:
-         // this (not completely obvious)
-         const base::Vec4d* p = *color;
-         // becomes (i.e., more obvious)
-         const base::Vec4d* p = static_cast<const base::Vec4d*>(*color);
-         // or even better (shorter, and still obvious)
-         const auto p = static_cast<const base::Vec4d*>(*color);
-      2) This class is now abstract
+   -- Renamed all the device-oriented I/O classes to 'AbstractThis' or 'AbstractThat'
+      to more clearly convey their purpose; namely a structure that defines the
+      architecture of the I/O linkage system. It should also be noted that these
+      classes are abstract and are oriented at defining interfaces and much less about
+      how to do it (i.e., no domain implementation code).  All of these classes
+      are now grouped in the subdirectory called 'base/concepts/linkage'.
 
-   --------------------------
-   - Linear Systems classes -
-   --------------------------
+      Classes have been simplified to reduce complexity, yet retain flexibility.
+      Simplification has come in the form of rebaselining several of them
+      to be Objects with clear interfaces as opposed to Components which presents
+      a much more complex interface.
 
-   All the classes from the linearsystems library have been integrated into 'base' -
-   the linearsystems library no longer exists.
+      See linkage library documentation in this changelog for more info.
 
-   -------------------
-   - Network classes -
-   -------------------
+   -- Removed all random number generation-oriented classes which included the
+      Mersenne Twister algorithm and distribution classes.  C++11 includes
+      all of this capability and more as part of the standard library.
 
-   PosixHandler class
-      1) Slot parameter 'localIpAddress' now accepts both a String for IP addresses
-         (e.g., "127.0.0.1") and Identifiers for addresses specified as hostnames
-         (e.g., 'localhost')
-      2) Internally, 'localIpAddress' is now stored as a std::string
-      3) Slot parameter 'shared' now accepts a Boolean
-      4) This class is now abstract
+   -- Moved all classes that represent numeric types into 'base/numeric'
+      This includes Boolean, Complex, Float, Integer, Number and Operator
+      classes.
 
-   TcpClient class
-      1) Slot parameter 'ipAddress' now accepts both a String and Identifier with
-         the same functionality as PosixHandler class changes
-      2) Internally, 'ipAddress' is now stored as a std::string
-      3) Class now marked final
+   -- Moved all color classes into 'base/colors'.  This included Cie, Cmy, Color,
+      Hls, Hsv, Hsva, Rgb, Rgba and Yiq.
 
-   TcpHandler class
-      1) Class is now abstract
+   -- Moved the Decibel class into 'units' directory.
 
-   UdpBroadcastHandler class
-      1) Internally, 'networkMask' is now being stored as a std::string
-      2) Class now marked final
+   -- EDL parser function signature has changed slightly.
 
-   UdpMulticastHandler class
-      1) Internally, 'multicastGroup' is now being stored as a std::string
-      2) Slot parameter 'loopback' now accepts a Boolean
-      3) Class now marked final
+      From : Object* edl_parser(..., unsigned int* num_errors = nullptr);
+      To   : Object* edl_parser(..., int* num_errors = nullptr);
 
-   UdpUnicastHandler class
-      1) Slot parameter 'ipAddress; now accepts both a String and Identifier with
-         the same functionality as PosixHandler class changes
-      2) Internally, ipAddr is now being stored as a std::string
-      3) Class now marked final
+      The only difference is the shift from using 'unsigned int' to 'int' to
+      report a parser calculated and returned error count.
 
-   -------------------
-   - Numeric classes -
-   -------------------
-
-   Boolean class
-      1) This class has been refactored and it now based on Object.  It is
-         no longer a subclass of Number.
-
-   Complex class
-      1) This class in no longer a subclass of Number.  Even through complex
-         numbers are obviously 'numbers', they are usually treated uniquely
-         different in mathematics and in C++.
-      2) This class is primarily used to enable the creation of complex
-         values as part of a configuration specification (i.e., an EDL
-         file).  With the availability of std::complex as part of the C++
-         standard library, there is no longer a need to maintain our own
-         unique data type.  Therefore, much of the infrastructure to do
-         that has been removed.
-      3) The accessor asComplex() has been added to return a reference to
-         the double-valued std::complex representation (i.e., complex<double>&).
-      4) The special functions listed below have been deleted as well, but
-         are available within the standard library; a simple mapping is as
-         follows:
-
-             zExp()  --> std::exp(std::complex)
-             zLog()  --> std::log(std::complex)
-             zPow()  --> std::pow(std::complex)
-             zConj() --> std::conj(std::complex)
-             zInv()  --> 1.0/std::complex
-
-   Number class
-      1) Methods associated with processing of Boolean values have been removed,
-         please use the Boolean class instead
-      2) Deleted 'getInt64' method.  Unused, and probably returns the wrong
-         result on certain machines.  If you need it, do an explicit cast of
-         the value contained by Number instance to what you want:
-
-         Number x(4.0);
-         int64_t my64 = static_cast<int64_t>(x.getValue());
-
-         MIXR's representation of a Number can be viewed as a more relaxed,
-         understood representation of a number (e.g., 1, 1.0), as opposed to
-         the C++ perspective of simply being an integer or a double.  In other
-         words, Number is a slightly weakened (less strongly typed) version
-         of a number.  It's quite useful for obtaining user-defined numerical
-         values from a configuration file.
-
-   Operator and Operator-based classes
-      1) These classes, provide the capability to add, subtract, multiply
-         and divide Number types (Integer and Float).  They have been slightly
-         refactored by creation of an abstract 'Operator' class to provide
-         the foundation for operators more generally.
-
-   -------------------
-   - Transformation classes -
-   -------------------
-
-   Transform-based classes
-      1) Transform is now abstract with several 'final' concretes 'Translate',
-         'Rotate' and 'Scale'
-      2) Transform and subclasses are designed to follow non-virtual public
-         interface pattern.  'computeMatrix()' is a private pure abstract in base
-         and implemented by subclasses.
-      3) Operator to return a const reference Matrixd is now marked explicit
-      4) A new directory 'transformations' has been created to contain all the
-         individual transformation classes
-
-   -------------------
-   - Unit classes -
-   -------------------
-
-   -- Unit classes are no longer based on Number.
-   -- As these classes were being updated, it appears that a number of rate
-      oriented units are unfinished and probably non-functional. At some point,
-      these will be improved.
-   -- All rate oriented classes (AngularVelocity, FlowRate and LinearVelocity)
-      have been moved and grouped into the folder called 'rates'
-
-   FlowRate class
-      1) This class appears to be broken.
-
-   Unit class
-      1) New abstract class that serves the role of storing a double
-         precision value that is managed by specific concrete unit classes.
-
-   -------------------
-   - Other classes -
-   -------------------
-
-   Component class
-      1) Slot parameters 'enableTimingStats', 'printTimingStats', and
-         'freeze' now accept a Boolean
-
-   FileReader class
-      1) This class has been reworked to use std::string to represent
-         file and path names.
-
-   Identifier class
-      1) This class is no longer a subclass of String.  It provides a complete
-         implementation to manage a std::string-based identifier.  It is
-         a subclass of Object to remain compatible with EDL parsing system.
-         It has also been marked as a 'final' class.
-      2) Two methods are of particular importance, 'c_str()' and 'str()' which
-         returns a C-based and std::string-based representation, respectively.
+   -- All the classes defined in Tables and Functions within the 'functors' subfolder
+      have been separated into individual files.  The depreciated header files
+      Functions.hpp and Tables.hpp have been removed.  This folder needs a better
+      name, although it's not clear what it should be.
 
    LatLon class
-      1) Deleted class - use Latitude or Longitude to specify the coordinate
-         of interest.
+      1) Limited scope of 'Dir' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
-   Latitude & Longitude classes
-      1) These new 'single responsibility' classes replace the functionality
-         of the previous LatLon class.  Before this change, instances
-         of the LatLon class was used to specify either a latitude or longitude
-         coordinate.  We feel is better to more 'strongly' type this aspect of
-         specifying coordinates to avoid possible confusion and/or misconfiguration
-         of input values, which would accept latitude (or longitude) specific
-         values, when the oppose is desired.  In other words, the previous design
-         relied upon the particular inputs to be set correctly to be used
-         correctly - this change helps avoid configuration input mistakes.
-      2) Inputs for slot 'direction' is now an identifier for both classes that
-         accept valid directions { north, south } or { east, west }.
+   Referenced class
+      1) Changed internal reference count type from 'unsigned int' to 'int'.
 
-   List class
-      1) Updated return types for 'sizes' to be std::size_t as opposed to 'unsigned int' - this
-         keeps all the code as generic as possible for differnent architectures.
+   StateMachine class
+      1) Limited scope of 'Mode' and 'StateTableCode' enums to 'enum class'. This
+         constrains the scope of this enumerated type.
 
    String class
-      1) Removal of 'virtual' from several methods that don't need it. String is a
-         fully defined concrete class, so ideally, it should not serve as a base
-         class to something else.
-      2) The method 'getString' has been renamed to 'c_str' per discussion above.
-      3) Removed method 'getCopyString' which allocated a new character array and
-         copied the internal contents of the String object into it.  It returned
-         a char* (character pointer) back to callee.  While seemingly useful, this
-         method was almost never used.  As the move towards using std::string
-         progresses, this method becomes less useful (std::string already provides
-         this functionality).
+      1) Limited scope of 'Justify' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
-         String x("hello");
-         std::string y = x->c_str();   // properly copies the char*-based string
+   Timer classes
+      1) Limited scope of 'Type' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
-      4) Now that the dafif library has been reworked, and the abstract Record
-         is no longer a subclass to String, this String class is now marked 'final'
-         to prevent subclassing of this type.
-      5) The method 'empty()' which erases the contents of the string has been renamed
-         to 'clear()' to more closely match std::string interface. For the time being,
-         the method 'isEmpty()' will remain - it is equivalent to the std::string
-         'empty()' method.
-
-   Table class
-      1) Slot parameter 'extrapolate' now accepts a Boolean
-
-   Timer class
-      1) Slot parameter 'active' now accepts a Boolean
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-dafif library (mixr_dafif)
-
-- This library has been revised and updated in a few ways.
-  1) All database loader classes are now grouped within a 'loaders' directory.
-  2) All record oriented classes are now grouped within a 'records' directory.
-  3) All of the code has been revised to use std::string to represent strings
-     throughout.
-  4) The testDafif example program has also been revised to use and pass only
-     std::string's to/from this library.
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-recorder library (mixr_recorder)
-
-   DataRecorder class
-      1) Slot parameters 'eventName' and 'application' now accept an Identifier
-
-   PrintSelected class
-      1) Slot parameter 'timeOnly' now accepts a Boolean
-
-   NetInput class
-      1) Slot parameter 'noWait' now accepts a Boolean
-
-   NetOutput class
-      1) Slot parameter 'noWait' now accepts a Boolean
-
-   TabPrinter class
-      1) Slot parameter 'msgHdrOptn' now accepts an Identifier
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-terrain library (mixr_terrain)
-
-   DtedFile class
-      1) Slot parameter 'verifyChecksum' now accepts a Boolean
+   util/nav_utils
+      1) Limited scope of 'Status' enum to 'enum class'. This constrains the scope of
+         this enumerated type.  Code that used this type was updated.
 
 --------------------------------------------------------------------------------
 
@@ -662,14 +397,31 @@ Devices, I/O, controllers libraries
 --------------------------------------------------------------------------------
 linkage library (mixr_linkage)
 
-   Ai2DiSwitch class
-      1) Slot parameter 'inverted' now accepts a Boolean
+   -- This library is not new - it was previously named 'iodevice'.  Renaming was
+      done because it more correctly indicate what this library includes - an
+      implementation of a flexible I/O linkage system to read and write to
+      device(s), transform their value and map them to application defined data
+      structures.  Many aspects of this library have been updated to simplify code
+      base, reduce complexity and ease understandability.
 
-   DiscreteInput class
-      1) Slot parameter 'inverted' now accepts a Boolean
+   -- All 'AbstractAdapter'-based classes have been moved into an 'adapters'
+      subdirectory to improve clarity.
 
-   DiscreteOutput class
-      1) Slot parameter 'inverted' now accepts a Boolean
+   -- 'IoData' no longer includes methods to process the data itself and is not
+      associated with networking - it stores data, nothing more.
+
+   -- 'IoHander' is now abstract and serves as a base class given definitions
+      above, from which concretes are created (see examples).  It should be
+      noted how functionality is used -- inheritance related virtual method
+      call chains have been eliminated.
+
+   -- Added MockDevice class to be used as a container for signal generators.
+      This object serves as a source of input signals from which no real
+      physical device exists - in other words, it's a signal generator.
+
+   -- The 'testIoHandler' example has also been renamed to 'testLinkage' and has
+      been significantly updated to use more modern C++ available features
+      such as std::string and std::array<> where it makes sense.
 
 --------------------------------------------------------------------------------
 
@@ -680,134 +432,43 @@ Graphics oriented libraries
 --------------------------------------------------------------------------------
 graphics library (mixr_graphics)
 
-   -------------------
-   - Font classes -
-   -------------------
+   -- Updated all readout classes to use brace initialization.
 
-   AbstractFont class
-      1) Font file name and path information not stored as an std::string. All
-         subclasses that use this information (namely the loaders) have been
-         adjusted -- a significant amount of code associated with managing
-         null and non-null, variable length char*-based strings disappeared.
+   -- Renamed and moved graphics/Field to graphics/readouts/AbstractField.
+      This class serves as an abstract base to several graphic readout classes.
 
-   BitmapFont class
-      1) Slot parameter 'reverse' now accepts a Boolean
+   -- Renamed and moved graphics/Font to graphics/fonts/AbstractFont.
 
-   -------------------
-   - Readout classes -
-   -------------------
+   -- Moved all font related (derived) classes into graphics/fonts directory.
 
-   AbstractField class
-      1) Slot parameter 'justification' now accepts an Identifier
-      2) Slot parameter 'font' now accepts an Identifier
-      3) Slot parameters 'highlight', 'underline', 'reversed', 'vertical,
-         'brackets', 'linked' and 'inheritColor' now accepts a Boolean
-      4) removed implicit conversion operators for both 'char*' and
-         'const char*'
-      5) Class renamed to 'Readout'
+   -- Separated all FTGL-based classes from FtglFonts.hpp/.cpp into individual
+      files: AbstractFtglFont, FtglBitmapFont, FtglExtrdFont, FtglHaloFont,
+      FtglOutlineFont, FtglPixmapFont, FtglPolygonFont and FtglTextureFont.
 
-   NumericReadout class
-      1) Slot parameter for 'blankIfZero' now accepts a Boolean
+   -- Renamed 2 factory names as follows:
+         FTGLTextureFonts -> FTGLTextureFont
+         FTGLHaloFonts -> FTGLHaloFont
+      Make sure to adjust epp/edl files to account for factory name changes.
 
-   Readout class
-      1) This class is what was once named AbstractField.  It was renamed to
-         'Readout' as it's the root class for all readout classes
-      2) The methods line(const int) and column(const int) now returns void,
-         as opposed to the very value just set
+   readouts/AbstractField class
+      1) Limited scope of 'Mode' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
-   Rotary2 class
-      1) Event handler for 'onSelect' now accepts a Boolean
+   readouts/DirectionReadout class
+      1) Limited scope of 'DirMode' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
-   -------------------
-   - Other classes -
-   -------------------
+   readouts/ReformatScanner class
+      1) Limited scope of 'DataType' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
+
+   readouts/TimeReadout class
+      1) Limited scope of 'TimeMode' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
    Display class
-      1) Slot parameters for 'normalFont' and 'orientation' now accept and correctly
-         process an Identifier
-      2) Slot parameters for 'antiAliasing' and 'reverseVideoBrackets' now
-         accept a Boolean
-
-   Graphic class
-      1) Even handler for 'onSetVisibilityEvent' now accepts a Boolean
-      2) Slot parameters 'noDisplayList', 'subcomponentsFirst', 'stipple', 'visible'
-         and 'mask' now accepts a Boolean
-
-   MapPage class
-      1) Event handler for 'onUpdateCentered' now accepts a Boolean
-      2) Slot parameter 'centered' now accepts a Boolean
-      3) Slot parameter 'northUp' now accepts a Boolean
-
-   Page class
-      1) Slot parameter for 'subpagesFirst' and 'focusSlavedToSubpage' now
-         accepts a Boolean
-
-   Shape classes
-      1) Slot parameter for 'filled' in Cirle class now accepts Boolean
-      2) Slot parameter for 'connect' in Arc class now accepts Boolean
-      3) Slot parameter for 'segment' in Line class now accepts Boolean
-      4) Slot parameter for 'strip' in Quad class now accepts Boolean
-      5) Slot parameter for 'fan' in Triangle class now accepts Boolean
-
-   SymbolLoader class
-      1) Slot parameters 'showOnlyInRange' and 'interconnect' now accept a
-         Boolean
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-instruments library (mixr_instruments)
-
-   AnalogDial class
-      1) Slot parameter 'mobile' now accepts a Boolean
-
-   AnalogGauge class
-      1) Slot parameters 'outlined' and 'vertical' now accepts a Boolean
-
-   CompassRose class
-      1) Event handler 'onUpdateCentered' now accepts a Boolean
-
-   DialArcSegment class
-      1) Slot parameters 'dynamic' and 'filled' now accepts a Boolean
-
-   GhostHorizon class
-      1) Slots for parameters 'skyColor' and 'groundColor' now accept an
-         Identifier
-
-   Knob class
-      1) Slot for parameter 'endless' now accepts a Boolean
-
-   Instrument class
-      1) Slot parameter 'allowComponentPass' now accepts a Boolean
-
-   PushButton class
-      1) Slot parameters 'maintained' and 'startdepressed' now accepts a Boolean
-
-   SolenoidButton class
-      1) Event handler 'onPicked' now accepts a Boolean
-
-   SolenoidSwitch class
-      1) Event handler 'selectLatch' now accepts a Boolean
-
-   Tape class
-      1) Slot for parameters 'vertical' and 'convert' now accepts a Boolean
-
-   TickMarks class
-      1) Slot parameter 'flip' now accepts a Boolean
-
-- Within this library, various edl files have been updated to remain consistent
-  with what is a String verses, what an Identifier.  Very few changes were needed,
-  one of which included specifying the slot parameter 'format' for readouts
-  to be quoted (e.g., "###" vs '###').
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-ui_glut library (mixr_ui_glut)
-
-   GlutDisplay class
-      1) Slot parameters 'fullScreen', 'resizeSubwindows', accumBuff' and
-         'stencilBuff' now accepts a Boolean
+      1) Limited scope of 'Orientation' enum to 'enum class'. This constrains the scope of
+         this enumerated type.
 
 --------------------------------------------------------------------------------
 
@@ -815,20 +476,27 @@ ui_glut library (mixr_ui_glut)
 Image generation oriented libraries
 #####################################################
 
+-- Much clean up and restructuring of the old 'otw' library has taken place. The
+   functionality of 'otw' library has been broken out into 2 specific IG host
+   interfaces.
+
+-- Moved all code common to providing IG capabilities into cigi library.
+   Explicitly removed specific implementations for CIGI and the simple so-called
+   'PC' host driver, which was renamed to 'pov'.
+
 --------------------------------------------------------------------------------
 ig library (mixr_ig_cigi)
 
-   CigiModel class
-      1) Internally 'federateName' is now being stored as an Identifier
-      2) Slot parameter 'hideOwnshipModel' now accepts a Boolean
-
-- The move to storing a federate name as an Identifier caused related code
-  to change to use this datatype.
-
+-- Moved all code common specific to implementing a CIGI driver to this new
+   library.  It has been updated.
+   
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 ig library (mixr_ig_pov)
+
+-- This library is what used to be named the 'PC' host driver.  It has been simplified,
+   and improved to some extent, but basically defines the same functionality.
 
 --------------------------------------------------------------------------------
 
@@ -837,16 +505,9 @@ Map libraries
 #####################################################
 
 --------------------------------------------------------------------------------
-rpf library (mixr_map_rpf)
-
-   MapDrawer class
-      1) Slot parameters 'drawGridMode' and 'showMap' now accepts a Boolean
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
 vpf library (mixr_map_vpf)
 
+-- Resurrected this old 'map' library for reading vector product map data (vmap) 
 --------------------------------------------------------------------------------
 
 
@@ -857,182 +518,29 @@ Models & general capabilities oriented libraries
 --------------------------------------------------------------------------------
 models library (mixr_models)
 
-- All signature classes (IR and RF) are now grouped within the 'signature'
-  folder.  All the classes defined in previous Signatures (.hpp/.cpp) files
-  have been extracted into their own class files.
+-- Much organization of player folder has been made. This includes the creation
+   of additional subfolders to arrange and categorize related types (related in
+   terms of 'is-a').  For example, all the classes that were defined AirVehicle
+   files were separated into individual files and put into a new 'air' folder.
+   This same approach was used for effects, ground vehicles and weapons.
+   This organization is undoubtedly not perfect, but its a step towards being more
+   understandable, in terms of what is what, and what is available.
 
-   IWeapon class
-      1) Slot parameters 'released', 'failed', 'power', 'hang', 'hung', 'dummy',
-         'jettisonable' now accepts a Boolean
-
-   Antenna class
-      1) Polarization enum is now an 'enum class' based integer
-      2) Slot parameter 'polarization' now accepts an Identifier
-      3) Slot parameter 'gainPatternDeg" and 'recycle' now accepts a Boolean
-
-   Autopilot class
-      1) Slot parameters 'navMode', 'altitudeHoldMode', 'velocityHoldMode',
-         'holdHeading', 'loiterMode', 'loiterPatternCcwFlag', and
-         'followTheLeadMode' now accepts a Boolean
-
-   Bomb class
-      1) Slot parameters 'noseFuze', 'midFuze' and 'tailFuze' now accepts
-         a Boolean
-
-   CollisionDetect class
-      1) Slot parameter 'localOnly', 'useWorldCoordinates', and 'sendCrashEvents'
-         now accepts a Boolean
-
-   ExternalStore
-      1) Slot parameter 'jettisonable' now accepts a Boolean
-
-   Gimbal class
-      1) Slot parameter 'type' now accepts an Identifier
-      2) Enumerated type 'Type' is now an 'enum class'
-      3) Enumerated type 'ServoMode' is now an 'enum class'
-      4) 'ServoMode' type names have been shorten by removing the '_SERVO'
-         postfix from each of them
-      5) Slot parameters for 'terrainOcculting', 'checkHorizon', 'localPlayersOfInterest",
-         'useWorldCoordinates', and 'ownHeadingOnly' now accepts a Boolean
-
-   Gun class
-      1) Filename was Guns.hpp/cpp, this was renamed to Gun.hpp/cpp
-
-   Iff class
-      1) Slot parameters 'enableMode1', 'enableMode2', 'enableMode3a', 'enableMode4',
-         'whichMode4', and 'enableModeC' now accepts a Boolean
-
-   IrSensor class
-      1) Slot parameter 'sensorType' now accepts an Identifier
-      2) Enumerated type 'SensorType' is now an 'enum class'
-      3) Slot parameter 'trackManagerName' now accepts an Identifier
-      4) The name of the track manager is now stored as a std::string
-
-   IrSystem class
-      1) Slot parameter 'seekerName' now accepts an Identifier
-      2) The name of the seeker stored in this class is now a std::string
-      3) Slot parameter 'disableQueries' now accepts a Boolean
-
-   Gun class
-      1) Slot parameter 'unlimited' now accepts a Boolean
-
-   Player class
-      1) The enumerated list of coordinate systems is now a class (i.e.,
-         'enum class CoordSys').  Also the enumeration names have been shorted
-         to eliminate the 'CS_' prefix, as it's no longer needed due to
-         class specification
-      2) Slot parameters 'terrainElevReq', 'interpolateTerrain', 'positionFreeze',
-         'altitudeFreeze', 'attitudeFreeze', 'fuelFreeze', 'crashOverride', killOverride',
-         'killRemoval'' 'enableNetOutput' and 'testBodyAxis' now accepts a Boolean
-      3) Removed slot parameter for initPosition with a base::List
-      4) 'useCoordSys' slot redefined to accept an Identifier { world, geod, local },
-         not just any string
-
-   RfSensor class
-      1) Slot parameter 'trackManagerName' now accepts an Identifier
-      2) Internally, this class now stores the track manager name as a
-         std::string. Its API has been updated to set or get its name based on
-         this type
-      3) Slot parameter 'syncXmitWithScan' now accepts a Boolean
-
-   RfSystem class
-      1) Slot parameter 'antennaName' now accepts an Identifier
-      2) Slot parameter 'disableEmissions' now accepts a Boolean
-      3) Fixed bug in setSlotFrequency() in that it was dynamically casting a
-         Frequency provided input value into a Frequency value.  If the cast failed
-         (which is impossible), then treat the value as if it is a Number - which
-         it can't be.
-
-   Route class
-      1) Slot parameters 'autoSequence' and 'wrap' now accepts a Boolean
-
-   ScanGimbal class
-      1) Enumerated type 'Side' is now an 'enum class'
-      2) The anonymous enumerated list of scan modes has been replaced by a
-         'enum class' that defines a ScanMode
-      3) Slot parameter 'scanMode' now accepts an Identifier
-      4) Slot parameter 'leftToRightScan' now accept a Boolean
-
-   SigAzEl class
-      1) Slot parameters 'swapOrder', 'inDegrees' and 'inDecibel' now accepts
-         a Boolean
-
-   TargetData class
-      1) Slot parameters 'enabled', 'completed' and 'manualAssign' now accepts
-         a Boolean
-
-   TrackManager class
-      1) Slot parameter 'logTrackUpdates' now accepts a Boolean
-
-   WorldModel class
-      1) Slot parameter 'gamingAreaUseEarthModel' now accepts a Boolean
-
-- Due to changes associated with 'enum's becoming full-fledged 'enum class'es
-  more specificity was added in other related classes that used those
-  enumerated values.
+-- Renamed 'Buildings' filename to 'Building' to match the class name defined
+   within it.
 
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
 simulation library (mixr_simulation)
 
-   IPlayer class
-      1) Numerical player identifier (ID) was changed to be an 'int' as opposed
-         to 'unsigned short'
-      2) The enumerated list of modes is now a class (i.e., 'enum class Mode').
-      3) Method 'isNetworkedPlayer()' renamed to 'isProxyPlayer()'
-      4) String-based players name is now a std::string
-      5) Slot parameter 'mode' now accepts an Identifier
-
    Station class
-      1) Slot parameter 'ownship' now accepts an Identifier
-      2) Slot parameter 'enableUpdateTimers' now accepts a Boolean
+      1) Renamed 'otw' slot to 'igHosts'.  Use this slot name to define a list,
+         of one or more IG host interfaces.  Note, that a list must be provided!
+      2) Slot 'ioHandler' used to be polymorphic in the sense that it could 
+         accept a single I/O handler, or a list. This behavior has changed, it
+         now allows for one handler to manage the flow of data between a single
+         input/output data buffer and an unlimited number of real or 'mock'
+         signal generating devices.
 
---------------------------------------------------------------------------------
-
-#####################################################
-Interoperability oriented libraries
-#####################################################
-
---------------------------------------------------------------------------------
-interop library (mixr_interop)
-
-   NetIO class
-      1) The number of input and output Nibs and entity types has changed
-         from an 'unsigned int' quantity to a simple 'int'.
-      2) The methods 'testOutputEntityTypes()' and 'testInputEntityTypes()'
-         that did nothing are now designated abstract.  Subclasses must
-         implement.
-      3) Renamed the method 'createIPlayer()' to 'createProxyPlayer()'
-      4) Slot parameters for 'federationName' and 'federateName' now
-         accept an Identifier
-      5) Slot parameters 'enableInput', 'enableOutput' and 'enableRelay'
-         now accepts a Boolean
-
-- Due to changes related to federate and federation names being typed
-  as an Identifier caused other classes to also store that information
-  the same way.
-
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
-dis library (mixr_interop_dis)
---------------------------------------------------------------------------------
-
-   EmissionPduHandler class
-     1) Slot parameters 'defaultIn' and 'defaultOut' now accepts a Boolean
-
-   Nib class
-     1) Renamed the method 'updateTheIPlayer()' to 'updateProxyPlayer()'
-
---------------------------------------------------------------------------------
-hla library (mixr_interop_hla)
---------------------------------------------------------------------------------
-
-   NetIO class
-      1) Slot parameters 'regulatingTime' and 'constrainedTime' now accepts a
-         Boolean
-
---------------------------------------------------------------------------------
-rprfom library (mixr_interop_rprfom)
 --------------------------------------------------------------------------------

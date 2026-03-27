@@ -1,8 +1,6 @@
 
 #include "mixr/instruments/gauges/TickMarks.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <iostream>
 
 namespace mixr {
@@ -19,10 +17,10 @@ BEGIN_SLOTTABLE(TickMarks)
 END_SLOTTABLE(TickMarks)
 
 BEGIN_SLOT_MAP(TickMarks)
-    ON_SLOT(1, setSlotTickMarkLength, base::INumber)
-    ON_SLOT(2, setSlotQuantity,       base::Integer)
-    ON_SLOT(3, setSlotGaugeLength,    base::INumber)
-    ON_SLOT(4, setSlotFlip,           base::Boolean)
+    ON_SLOT(1, setSlotTickMarkLength, base::Number)
+    ON_SLOT(2, setSlotQuantity,       base::Number)
+    ON_SLOT(3, setSlotGaugeLength,    base::Number)
+    ON_SLOT(4, setSlotFlip,           base::Number)
     ON_SLOT(5, setTickGraphic,        graphics::Graphic)
 END_SLOT_MAP()
 
@@ -111,37 +109,37 @@ void TickMarks::drawFunc()
 //------------------------------------------------------------------------------
 // setSlotTickMarkLength() -- sets our tick mark length
 //------------------------------------------------------------------------------
-bool TickMarks::setSlotTickMarkLength(const base::INumber* const newLength)
+bool TickMarks::setSlotTickMarkLength(const base::Number* const newLength)
 {
     bool ok = true;
-    if (newLength != nullptr) ok = setTickMarkLength(newLength->asDouble());
+    if (newLength != nullptr) ok = setTickMarkLength(newLength->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotQuantity() -- sets the number of tick marks
 //------------------------------------------------------------------------------
-bool TickMarks::setSlotQuantity(const base::Integer* const newQ)
+bool TickMarks::setSlotQuantity(const base::Number* const newQ)
 {
-    bool ok{true};
-    if (newQ != nullptr) ok = setQuantity(newQ->asInt());
+    bool ok = true;
+    if (newQ != nullptr) ok = setQuantity(newQ->getInt());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotGaugeLength()
 //------------------------------------------------------------------------------
-bool TickMarks::setSlotGaugeLength(const base::INumber* const newL)
+bool TickMarks::setSlotGaugeLength(const base::Number* const newL)
 {
-    bool ok{true};
-    if (newL != nullptr) ok = setGaugeLength(newL->asDouble());
+    bool ok = true;
+    if (newL != nullptr) ok = setGaugeLength(newL->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotFlit()
 //------------------------------------------------------------------------------
-bool TickMarks::setSlotFlip(const base::Boolean* const x)
+bool TickMarks::setSlotFlip(const base::Number* const x)
 {
-    bool ok{true};
-    if (x != nullptr) ok = setFlip(x->asBool());
+    bool ok = true;
+    if (x != nullptr) ok = setFlip(x->getBoolean());
     return ok;
 }
 //------------------------------------------------------------------------------
@@ -149,7 +147,7 @@ bool TickMarks::setSlotFlip(const base::Boolean* const x)
 //------------------------------------------------------------------------------
 bool TickMarks::setTickGraphic(const graphics::Graphic* const newGraphic)
 {
-    bool ok{true};
+    bool ok = true;
     if (myGraphic != nullptr) {
         myGraphic->unref();
         myGraphic = nullptr;

@@ -1,19 +1,19 @@
 
-#ifndef __mixr_models_CollisionDetect_HPP__
-#define __mixr_models_CollisionDetect_HPP__
+#ifndef __mixr_models_CollisionDetect_H__
+#define __mixr_models_CollisionDetect_H__
 
-#include "mixr/models/system/ISystem.hpp"
+#include "mixr/models/system/System.hpp"
 #include "mixr/config.hpp"
-#include "mixr/base/qty/util/length_utils.hpp"
+#include "mixr/base/units/distance_utils.hpp"
 
 namespace mixr {
-namespace base { class IAngle; class Boolean; class Integer; class ILength; class IPairStream; }
+namespace base { class Angle; class Distance; class Number; class PairStream; }
 namespace models {
-class IPlayer;
+class Player;
 
 //------------------------------------------------------------------------------
 // Class: CollisionDetect
-// Description: Concrete collision detection component -- when added as a component to
+// Description: Collision detection component -- when added as a component to
 //              a player (i.e., our ownship), we will look for collisions with
 //              other players in the simulation player list.  When a collision
 //              is detected, 'CRASH_EVENT' events are sent to our ownship and the
@@ -32,20 +32,20 @@ class IPlayer;
 //
 // Factory name: CollisionDetect
 // Slots:
-//    collisionRange      <Length>         ! Collision range (default: 4 Meters)
-//    maxPlayers          <Integer>        ! Max number of players of interest (default: 20)
-//    playerTypes         <IPairStream>    ! List of player of interest types (default: all types )
+//    collisionRange      <Distance>       ! Collision range (default: 4 Meters)
+//    maxPlayers          <Number>         ! Max number of players of interest (default: 20)
+//    playerTypes         <PairStream>     ! List of player of interest types (default: all types )
 //                                         !   Valid types: { "air" "ground" "weapon" "ship" "building" "lifeform" "space" }
-//    maxRange2Players    <Length>         ! Max range from ownship to players of interest, or zero for all (default: 1.0 NM)
+//    maxRange2Players    <Distance>       ! Max range from ownship to players of interest, or zero for all (default: 1.0 NM)
 //    maxAngle2Players    <Angle>          ! Max angle off the 'nose' of our ownship to players of interest, or zero for all (default: 0)
 //    localOnly           <Boolean>        ! Only check for collisions with local players (default: false)
 //    useWorldCoordinates <Boolean>        ! Using world (ECEF) coordinate system; else NED on the simulation gaming area (default: true)
 //    sendCrashEvents     <Boolean>        ! Send 'CRASH_EVENT' events on collisions (default: false)
 //
 //------------------------------------------------------------------------------
-class CollisionDetect final: public ISystem
+class CollisionDetect : public System
 {
-   DECLARE_SUBCLASS(CollisionDetect, ISystem)
+   DECLARE_SUBCLASS(CollisionDetect, System)
 
 public:
    CollisionDetect();
@@ -53,7 +53,7 @@ public:
    // Returns the current number of collisions, or zero if none.
    // -- Pre-ref()'d pointers to the players that we've collided with and the collision
    // distances (meters) are stored in the caller provided arrays 'list' and 'distances'.
-   unsigned int getCollisions(IPlayer* list[], double distances[], const unsigned int arraySize);
+   unsigned int getCollisions(Player* list[], double distances[], const unsigned int arraySize);
 
    double getCollisionRange() const;      // Collision range (meters)
    double getMaxRange2Players() const;    // Max range from ownship to players of interest, or zero for all (meters)
@@ -80,7 +80,7 @@ protected:
    virtual void clearPoiList();
 
    // Update the POI list with this target player
-   virtual void updatePoiList(IPlayer* const target);
+   virtual void updatePoiList(Player* const target);
 
    void process(const double dt) override;     // Phase 3
 
@@ -92,10 +92,10 @@ protected:
       PlayerOfInterest(const PlayerOfInterest&) = delete;
       PlayerOfInterest& operator=(const PlayerOfInterest&) = delete;
       ~PlayerOfInterest() { player = nullptr; }
-
+      
       void clear()        { player = nullptr; active = false; }
 
-      base::safe_ptr<IPlayer> player;   // The player
+      base::safe_ptr<Player> player;    // The player
       double range {};                  // Previous range (m)
       double rangeRate {};              // Previous range rate (m/s)
       double distance {};               // Distance at collision (m)
@@ -111,7 +111,7 @@ private:
    mutable long poiLock {};      // Semaphore to protect the POI list
 
    unsigned int playerTypes {0xFFFF};  // Player types mask (default: all types)
-   double maxRange2Players {1.0 * base::length::NM2M};   // Max range from ownship to players of interest, or zero for all (meters) (default: 1.0 NM)
+   double maxRange2Players {1.0 * base::distance::NM2M};   // Max range from ownship to players of interest, or zero for all (meters) (default: 1.0 NM)
    double maxAngle2Players {};         // Max angle off the 'nose' of our ownship to players of interest, or zero for all (radians)
    double collisionRange {4.0};        // Collision range (meters)
    bool useWorld {true};               // Using player of interest's world coordinates
@@ -123,14 +123,14 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotCollisionRange(const base::ILength* const);
-   bool setSlotMaxPlayers(const base::Integer* const);
-   bool setSlotPlayerTypes(const base::IPairStream* const);
-   bool setSlotMaxRange2Players(const base::ILength* const);
-   bool setSlotMaxAngle2Players(const base::IAngle* const);
-   bool setSlotUseWorldCoordinates(const base::Boolean* const);
-   bool setSlotLocalOnly(const base::Boolean* const);
-   bool setSlotSendCrashEvents(const base::Boolean* const);
+   bool setSlotCollisionRange(const base::Distance* const);
+   bool setSlotMaxPlayers(const base::Number* const);
+   bool setSlotPlayerTypes(const base::PairStream* const);
+   bool setSlotMaxRange2Players(const base::Distance* const);
+   bool setSlotMaxAngle2Players(const base::Angle* const);
+   bool setSlotUseWorldCoordinates(const base::Number* const);
+   bool setSlotLocalOnly(const base::Number* const);
+   bool setSlotSendCrashEvents(const base::Number* const);
 };
 
 inline double CollisionDetect::getCollisionRange() const       { return collisionRange; }

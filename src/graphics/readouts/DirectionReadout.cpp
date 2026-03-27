@@ -29,32 +29,31 @@ void DirectionReadout::copyData(const DirectionReadout& org, const bool)
 
 //------------------------------------------------------------------------------
 // input mode function --
-//   filterInputEvent() -- Filter input events using a template character (x)
+//   filterInputEvent() -- Filter input events using a template character (tc)
 //------------------------------------------------------------------------------
-char DirectionReadout::filterInputEvent(const int event, const char x)
+char DirectionReadout::filterInputEvent(const int event, const int tc)
 {
-   const char tc{static_cast<char>(x)};
    if (tc == '+') {
       // sign keys
-      if (event == '4' && minusChar != '\0') {
+      if (event == '4' && minusChar != '\0')
          return minusChar;
-      } else if (event == '7') {
+      else if (event == '7')
          return '-';
-      } else if (event == '6' && plusChar != '\0') {
+      else if (event == '6' && plusChar != '\0')
          return plusChar;
-      } else if (event == '9') {
+      else if (event == '9')
          return '+';
-      } else {
+      else
          return '\0';
-      }
-   } else if (tc == '0' || tc == 'D' || tc == 'M' || tc == 'S') {
+   }
+   else if (tc == '0' || tc == 'D' || tc == 'M' || tc == 'S') {
       // Default numeric keys
-      if ( event >= '0' && event <= '9' ) {
+      if ( event >= '0' && event <= '9' )
          return char(event);
-      } else {
+      else
          return '\0';
-      }
-   } else {
+   }
+   else {
       return BaseClass::filterInputEvent(event,tc);
    }
 }
@@ -64,12 +63,12 @@ char DirectionReadout::filterInputEvent(const int event, const char x)
 //------------------------------------------------------------------------------
 double DirectionReadout::getInputValue() const
 {
-   double value{};
+   double value {};
 
    // copy string to buffer with correct sign character
-   const std::size_t CBUFLOCAL_LEN{100};
-   char cbuf[CBUFLOCAL_LEN]{};
-   const char* p{this->str.c_str()};
+   const std::size_t CBUFLOCAL_LEN {100};
+   char cbuf[CBUFLOCAL_LEN] {};
+   const char* p {*this};
    base::utStrcpy(cbuf, CBUFLOCAL_LEN, p);
    if (cbuf[0] == plusChar)  cbuf[0] = '+';
    if (cbuf[0] == minusChar) cbuf[0] = '-';
@@ -154,7 +153,7 @@ void DirectionReadout::makeText()
    // then turn any '@' characters to degree symbols.
    {
       std::size_t len {std::strlen(cbuf)};
-      for (std::size_t i{}; i < len; i++) {
+      for (unsigned int i = 0; i < len; i++) {
          if (cbuf[i] == '@') cbuf[i] = static_cast<char>(0xB0);
       }
    }

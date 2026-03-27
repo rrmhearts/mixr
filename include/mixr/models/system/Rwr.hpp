@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_Rwr_HPP__
-#define __mixr_models_common_Rwr_HPP__
+#ifndef __mixr_models_Rwr_H__
+#define __mixr_models_Rwr_H__
 
-#include "mixr/models/system/IRfSensor.hpp"
+#include "mixr/models/system/RfSensor.hpp"
 #include "mixr/base/safe_queue.hpp"
 
 namespace mixr {
@@ -11,12 +11,12 @@ namespace models {
 //------------------------------------------------------------------------------
 // Class: Rwr
 //
-// Description: Concrete Radar Warning Receiver (RWR) Model
+// Description: General Radar Warning Receiver (RWR) Model
 // Factory name: Rwr
 //------------------------------------------------------------------------------
-class Rwr final: public IRfSensor
+class Rwr : public RfSensor
 {
-    DECLARE_SUBCLASS(Rwr, IRfSensor)
+    DECLARE_SUBCLASS(Rwr, RfSensor)
 
 public:
     Rwr();
@@ -31,12 +31,12 @@ public:
     void clearRays(const int ibuff)
     {
        if (ibuff == 0 || ibuff == 1) {
-          int i{};
+          int i = 0;
           while (i < NUM_RAYS) rays[ibuff][i++] = 0.0;
        }
     }
 
-    bool killedNotification(IPlayer* const killedBy = nullptr) override;
+    bool killedNotification(Player* const killedBy = 0) override;
 
 protected:
    static const int MAX_EMISSIONS{1000};
@@ -55,7 +55,7 @@ protected:
    }
 
 private:
-   base::safe_queue<RfEmission*> rptQueue {MAX_EMISSIONS};   // Report queue
+   base::safe_queue<Emission*> rptQueue {MAX_EMISSIONS};   // Report queue
 
    double rays[2][NUM_RAYS] {};     // Back (sensor) buffer [0][*] and front (graphics) buffer [1][*]
 };

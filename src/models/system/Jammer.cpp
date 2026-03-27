@@ -1,15 +1,15 @@
 
 #include "mixr/models/system/Jammer.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/RfEmission.hpp"
+#include "mixr/models/Emission.hpp"
 
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/frequencies.hpp"
-#include "mixr/base/qty/powers.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Frequencies.hpp"
+#include "mixr/base/units/Powers.hpp"
 
 namespace mixr {
 namespace models {
@@ -38,7 +38,7 @@ void Jammer::transmit(const double)
 {
     // Send the emission to the other player
     if ( !areEmissionsDisabled() && isTransmitting() ) {
-        const auto em = new RfEmission();
+        const auto em = new Emission();
         em->setFrequency(getFrequency());
         const double p{getPeakPower()};
         em->setPower(p);
@@ -47,7 +47,7 @@ void Jammer::transmit(const double)
         em->setBandwidth(getBandwidth());
         em->setTransmitter(this);
         em->setReturnRequest(false);
-        em->setECM(RfEmission::ECM_NOISE);
+        em->setECM(Emission::ECM_NOISE);
         getAntenna()->rfTransmit(em);
         em->unref();
     }

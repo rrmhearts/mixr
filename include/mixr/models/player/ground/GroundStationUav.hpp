@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_GroundStationUav_HPP__
-#define __mixr_models_common_GroundStationUav_HPP__
+#ifndef __mixr_models_GroundStationUav_H__
+#define __mixr_models_GroundStationUav_H__
 
 #include "mixr/models/player/ground/GroundStation.hpp"
 

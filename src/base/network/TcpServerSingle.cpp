@@ -29,9 +29,9 @@
 
 #include "mixr/base/network/TcpServerSingle.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
 
 #include <cstdio>

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_base_Matrix_HPP__
-#define __mixr_base_Matrix_HPP__
+#ifndef __mixr_base_Matrix_H__
+#define __mixr_base_Matrix_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/base/osg/Matrixf"
 #include "mixr/base/osg/Matrixd"
@@ -15,21 +15,18 @@ class RVector; // Row vector
 //------------------------------------------------------------------------------
 // Class: Matrix
 // Description:  Generic NxM matrix class
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: Matrix
-// Slots: none
+//
+// References:
+// "Introduction to Numerical Analysis", 2ed, Kendall E. Atkinson, Wiley (1989)
+// "Numerical Methods", 1ed, Robert W. Hornbeck, Quantum (1975)
+// "Applied Numerical Methods for Digital Computation", 4ed, James-Smith-Wolford, Harper Collins (1993)
+// "Applied Numerical Analysis Using Matlab", 1ed, Laurene V. Fausett, Prentice Hall (1999)
 //------------------------------------------------------------------------------
-// Notes: References
-//    "Introduction to Numerical Analysis", 2ed, Kendall E. Atkinson, Wiley (1989)
-//    "Numerical Methods", 1ed, Robert W. Hornbeck, Quantum (1975)
-//    "Applied Numerical Methods for Digital Computation", 4ed, James-Smith-Wolford, Harper Collins (1993)
-//    "Applied Numerical Analysis Using Matlab", 1ed, Laurene V. Fausett, Prentice Hall (1999)
-//------------------------------------------------------------------------------
-class Matrix : public IObject
+class Matrix : public Object
 {
-   DECLARE_SUBCLASS(Matrix, IObject)
+   DECLARE_SUBCLASS(Matrix, Object)
 
 public:
    static const unsigned int DEF_FLDWIDTH{8};

@@ -1,11 +1,11 @@
 
-#ifndef __mixr_graphics_Shapes_HPP__
-#define __mixr_graphics_Shapes_HPP__
+#ifndef __mixr_graphics_Shapes_H__
+#define __mixr_graphics_Shapes_H__
 
 #include "Graphic.hpp"
 
 namespace mixr {
-namespace base { class INumber; }
+namespace base { class Number; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
@@ -13,10 +13,23 @@ namespace graphics {
 //
 // Factory name: Circle
 // Slots:
-//  radius    <INumber>   ! Radius of the circle (default: 1 )
-//  filled    <Boolean>   ! True if circle is filled (default: false)
-//  slices    <Integer>   ! Number of slices in the circle (i.e. number of sides)
+//  radius    <Number>    ! Radius of the circle (default: 1 )
+//  filled    <Number>    ! True if circle is filled (default: false)
+//  slices    <Number>    ! Number of slices in the circle (i.e. number of sides)
 //                        ! (default: 16)
+//
+//
+// Public member functions:
+//
+//  bool setRadius(Number* srobj)
+//      Sets the radius to srobj and returns true if successful.
+//
+//  bool setFilled(Number* sfobj)
+//      Sets filled to sfobj and returns true if successful.
+//
+//  bool setSlices(Number* ssobj)
+//      Sets slices to ssobj and returns true if successful.
+//
 //------------------------------------------------------------------------------
 class Circle : public Graphic
 {
@@ -27,22 +40,19 @@ public:
 
     void drawFunc() override;
 
-    // sets radius and returns true if successful.
     virtual bool setRadius(const double x)   { radius = x; return true; }
-    // sets filled and returns true if successful.
     virtual bool setFilled(const bool x)     { filled = x; return true; }
-    // sets slices and returns true if successful.
     virtual bool setSlices(const int x)      { slices = x; return true; }
 
     double getRadius()       { return radius; }
     bool isFilled()          { return filled; }
     int getSlices()          { return slices; }
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // event functions
-    bool updateRadius(const base::INumber* const x);
+    bool updateRadius(const base::Number* const x);
 
 private:
     double radius {1.0};
@@ -51,9 +61,9 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotRadius(const base::INumber* const);
-    bool setSlotFilled(const base::Boolean* const);
-    bool setSlotSlices(const base::Integer* const);
+    bool setSlotRadius(const base::Number* const);
+    bool setSlotFilled(const base::Number* const);
+    bool setSlotSlices(const base::Number* const);
 };
 
 //------------------------------------------------------------------------------
@@ -61,7 +71,7 @@ private:
 //
 // Factory name: OcclusionCircle
 // Slots:
-//  outerRadius   <INumber>   ! Outer radius of our circle (default: 1.1 )
+//  outerRadius   <Number>    ! Outer radius of our circle (default: 1.1 )
 //
 // Draws a nice doughnut type circle, based on inner and outer radius
 //------------------------------------------------------------------------------
@@ -82,7 +92,7 @@ private:
     double outerRadius {1.1};        // portion that is occluded (just a bit bigger than inner radius)
 
 private:
-    bool setSlotOuterRadius(const base::INumber* const);
+    bool setSlotOuterRadius(const base::Number* const);
 };
 
 
@@ -91,20 +101,20 @@ private:
 //
 // Factory name: Arc
 // Slots:
-//  startAngle   <INumber>   ! Start angle of the arc in degrees (default: 0 )
-//  arcLength    <INumber>   ! length of the arc in degrees (default: 90)
-//  connect      <Boolean>   ! if true, we connect the lines (so the circle looks like a piece of pie,
+//  startAngle   <Number>    ! Start angle of the arc in degrees (default: 0 )
+//  arcLength    <Number>    ! length of the arc in degrees (default: 90)
+//  connect      <Number>    ! if true, we connect the lines (so the circle looks like a piece of pie,
 //                           ! instead of an open ended arc) (default: false)
 //
 // Public member functions:
 //
-//  bool setStartAngle(INumber* ssaobj)
+//  bool setStartAngle(Number* ssaobj)
 //      Sets the start angle to ssaobj and returns true if successful.
 //
-//  bool setArcLength(INumber* seaobj)
+//  bool setArcLength(Number* seaobj)
 //      Sets the arc length te seaobj and returns true if successful.
 //
-//  bool setIsConnected(INumber* iscobj)
+//  bool setIsConnected(Number* iscobj)
 //      Sets isConnected (boolean) and returns true if successful.
 //
 //------------------------------------------------------------------------------
@@ -130,10 +140,10 @@ private:
     bool connected {};
 
 private:
-    // slot table helper methods
-    bool setSlotStartAngle(const base::INumber* const);
-    bool setSlotArcLength(const base::INumber* const);
-    bool setSlotIsConnected(const base::Boolean* const);
+    // slot table helper methods   
+    bool setSlotStartAngle(const base::Number* const);
+    bool setSlotArcLength(const base::Number* const);
+    bool setSlotIsConnected(const base::Number* const);
 };
 
 //------------------------------------------------------------------------------
@@ -164,7 +174,7 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotOuterRadius(const base::INumber* const);
+    bool setSlotOuterRadius(const base::Number* const);
 };
 
 
@@ -210,7 +220,7 @@ public:
 //
 // Factory name: Line
 // Slots:
-//  segment   <Boolean>    ! True if line segments (default: false)
+//  segment   <Number>    ! True if line segments (default: false)
 //
 // Public member functions:
 //
@@ -236,8 +246,8 @@ private:
     bool segment {};         // True if line segments
 
 private:
-    // slot table helper methods
-    bool setSlotSegments(const base::Boolean* const);
+    // slot table helper methods      
+    bool setSlotSegments(const base::Number* const);
 };
 
 //------------------------------------------------------------------------------
@@ -263,7 +273,7 @@ protected:
 
 private:
     // slot table helper methods
-    bool setSlotStrip(const base::Boolean* const);
+    bool setSlotStrip(const base::Number* const);
 };
 
 //------------------------------------------------------------------------------
@@ -291,7 +301,7 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotFan(const base::Boolean* const);
+    bool setSlotFan(const base::Number* const);
 };
 
 }

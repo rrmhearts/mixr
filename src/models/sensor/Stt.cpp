@@ -1,11 +1,10 @@
 
 #include "mixr/models/sensor/Stt.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/system/IScanGimbal.hpp"
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
-#include "mixr/models/track/ITrack.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
+#include "mixr/models/Track.hpp"
 
 namespace mixr {
 namespace models {
@@ -34,10 +33,10 @@ void Stt::dynamics(const double dt)
     // ---
     // Update the antenna's Reference position
     // ---
-    ITrackMgr* tm{getTrackManager()};
+    TrackManager* tm{getTrackManager()};
     if (getAntenna() != nullptr && getOwnship() != nullptr && tm != nullptr) {
 
-        base::safe_ptr<ITrack> trackList[2];
+        base::safe_ptr<Track> trackList[2];
         int n = tm->getTrackList(trackList,2);
 
         if (n > 0) {
@@ -51,9 +50,9 @@ void Stt::dynamics(const double dt)
             // rotate to ownship heading
             double sinHdg{getOwnship()->getSinHeading()};
             double cosHdg{getOwnship()->getCosHeading()};
-            double x{dpoi[IPlayer::INORTH] * cosHdg + dpoi[IPlayer::IEAST] * sinHdg};
-            double y{-dpoi[IPlayer::INORTH] * sinHdg + dpoi[IPlayer::IEAST] * cosHdg};
-            double z{dpoi[IPlayer::IDOWN]};
+            double x{dpoi[Player::INORTH] * cosHdg + dpoi[Player::IEAST] * sinHdg};
+            double y{-dpoi[Player::INORTH] * sinHdg + dpoi[Player::IEAST] * cosHdg};
+            double z{dpoi[Player::IDOWN]};
 
             // Compute az & el to track
             double grng{std::sqrt(x*x + y*y)};
@@ -75,14 +74,14 @@ void Stt::dynamics(const double dt)
             // Set the reference 'look' angles and conical scan mode
             getAntenna()->setRefAzimuth(az);
             getAntenna()->setRefElevation(el);
-            getAntenna()->setScanMode(IScanGimbal::ScanMode::CONICAL_SCAN);
+            getAntenna()->setScanMode(Antenna::CONICAL_SCAN);
         } else {
             // ---
             // when we don't have any tracks, enter the default (from input file) search mode
             // ---
             getAntenna()->setRefAzimuth(0.0);
             getAntenna()->setRefElevation(0.0);
-            getAntenna()->setScanMode(IScanGimbal::ScanMode::HORIZONTAL_BAR_SCAN);
+            getAntenna()->setScanMode(Antenna::HORIZONTAL_BAR_SCAN);
         }
     }
 }

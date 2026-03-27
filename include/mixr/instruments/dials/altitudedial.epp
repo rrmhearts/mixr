@@ -23,7 +23,7 @@
         )
     alt:    
     ( AltitudeDial 
-            allowComponentPass: false   // - keep this 'false' for this to work optimally 
+            allowComponentPass: 0   // - keep this 0 for this to work optimally 
             components: {
                 dialalt:
                 ( DialPointer
@@ -259,7 +259,7 @@
                 ( Circle
                     color: gray1
                     slices: 100
-                    filled: true
+                    filled: 1
                     radius: 5.2
                     linewidth: 7
                 )
@@ -267,7 +267,7 @@
                 ( OcclusionCircle
                     color: white
                     slices: 50
-                    filled: true
+                    filled: 1
                     radius: 5.2
                     outerRadius: 5.3
                 )

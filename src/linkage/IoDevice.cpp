@@ -1,14 +1,14 @@
 
 #include "mixr/linkage/IoDevice.hpp"
 
-#include "mixr/linkage/adapters/IAdapter.hpp"
+#include "mixr/linkage/adapters/AbstractAdapter.hpp"
 
-#include "mixr/base/concepts/linkage/IIoHandler.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoHandler.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include <iostream>
 
@@ -23,7 +23,7 @@ BEGIN_SLOTTABLE(IoDevice)
 END_SLOTTABLE(IoDevice)
 
 BEGIN_SLOT_MAP(IoDevice)
-   ON_SLOT(1, setSlotAdapters,    base::IPairStream)
+   ON_SLOT(1, setSlotAdapters,    base::PairStream)
 END_SLOT_MAP()
 
 IoDevice::IoDevice()
@@ -42,13 +42,13 @@ void IoDevice::copyData(const IoDevice& org, const bool)
    // copy the list of adapters
    // ---
    if (org.adapters != nullptr) {
-      const auto copy = static_cast<base::IPairStream*>(org.adapters->clone());
+      const auto copy = static_cast<base::PairStream*>(org.adapters->clone());
       setSlotAdapters(copy);
       copy->unref();
    }
 }
 
-void IoDevice::processInputAdapters(base::IIoData* const inData)
+void IoDevice::processInputAdapters(base::AbstractIoData* const inData)
 {
    // ### Since we'll process all of the input adapters, our derived I/O device
    // classes should process their device inputs BEFORE calling this base
@@ -56,17 +56,17 @@ void IoDevice::processInputAdapters(base::IIoData* const inData)
 
    // process any input adapters
    if (adapters != nullptr) {
-      base::IList::Item* item{adapters->getFirstItem()};
+      base::List::Item* item{adapters->getFirstItem()};
       while (item != nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         const auto p = static_cast<IAdapter*>(pair->object());
+         const auto p = static_cast<AbstractAdapter*>(pair->object());
          p->processInputs(this, inData);
          item = item->getNext();
       }
    }
 }
 
-void IoDevice::processOutputAdapters(const base::IIoData* const outData)
+void IoDevice::processOutputAdapters(const base::AbstractIoData* const outData)
 {
    // ### Since we'll process all of the output I/O adapters, our derived I/O
    // device classes should process their device outputs AFTER calling this
@@ -76,10 +76,10 @@ void IoDevice::processOutputAdapters(const base::IIoData* const outData)
    if (adapters != nullptr) {
 
       if (outData != nullptr) {
-         base::IList::Item* item{adapters->getFirstItem()};
+         base::List::Item* item{adapters->getFirstItem()};
          while (item != nullptr) {
             const auto pair = static_cast<base::Pair*>(item->getValue());
-            const auto p = static_cast<IAdapter*>(pair->object());
+            const auto p = static_cast<AbstractAdapter*>(pair->object());
             p->processOutputs(outData, this);
             item = item->getNext();
          }
@@ -88,18 +88,18 @@ void IoDevice::processOutputAdapters(const base::IIoData* const outData)
 }
 
 // read list of adapters
-bool IoDevice::setSlotAdapters(base::IPairStream* const list)
+bool IoDevice::setSlotAdapters(base::PairStream* const list)
 {
    bool ok{true};
 
    if (list != nullptr) {
       // check to make sure all objects on the list are I/O adapters
       int cnt{};
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr) {
          cnt++;
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         ok = pair->object()->isClassType(typeid(IAdapter));
+         ok = pair->object()->isClassType(typeid(AbstractAdapter));
          if (ok) {
 //            static_cast<AbstractIoAdapter*>(pair->object())->container(this);
          } else {

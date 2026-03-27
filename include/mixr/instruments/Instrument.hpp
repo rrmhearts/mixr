@@ -1,11 +1,11 @@
 
-#ifndef __mixr_instruments_Instrument_HPP__
-#define __mixr_instruments_Instrument_HPP__
+#ifndef __mixr_instruments_Instrument_H__
+#define __mixr_instruments_Instrument_H__
 
 #include "mixr/graphics/Graphic.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class INumber; class Table1; }
+namespace base { class Table1; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -39,25 +39,25 @@ public:
     virtual bool setAllowValPass(const bool newVP);
     virtual bool setInstVal(const double newPos);
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
     void updateData(const double dt = 0.0) override;
 
 protected:
     // event functions
-    bool onUpdateInstVal(const base::INumber* const);
+    bool onUpdateInstVal(const base::Number* const);
 
 private:
     // member variables
-    const base::Table1* myTable{};    // holds our scaling data
-    double instVal{};                 // our instrument value
-    double preScaleInstVal{};         // our pre-scaled instrument value (before linear interpolation)
-    bool allowPassing{true};          // do we pass our instrument value down to our components?
+    const base::Table1* myTable {};    // holds our scaling data
+    double instVal {};                 // our instrument value
+    double preScaleInstVal {};         // our pre-scaled instrument value (before linear interpolation)
+    bool allowPassing {true};          // do we pass our instrument value down to our components?
 
 private:
     // slot table helper methods
     bool setSlotScalingTable(const base::Table1* const);
-    bool setSlotInstVal(const base::INumber* const);
-    bool setSlotAllowValPass(const base::Boolean* const);
+    bool setSlotInstVal(const base::Number* const);
+    bool setSlotAllowValPass(const base::Number* const);
 };
 
 }

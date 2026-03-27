@@ -1,8 +1,6 @@
 
 #include "mixr/instruments/gauges/Tape.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/util/math_utils.hpp"
 #include <iostream>
 
@@ -13,9 +11,9 @@ IMPLEMENT_SUBCLASS(Tape, "Tape")
 EMPTY_DELETEDATA(Tape)
 
 BEGIN_SLOTTABLE(Tape)
-    "range",            // 1) Total range (in qty) of the scale
+    "range",            // 1) Total range (in units) of the scale
     "height",           // 2) Height of the total amount of clipped area you have
-    "increment",        // 3) How much spaced (qty) between each number?
+    "increment",        // 3) How much spaced (units) between each number?
     "vertical",         // 4) do we show negative numbers?
     "maximum",          // 5) Maximum value before we don't display anymore
     "minimum",          // 6) minimum value before we don't display anymore
@@ -24,13 +22,13 @@ BEGIN_SLOTTABLE(Tape)
 END_SLOTTABLE(Tape)
 
 BEGIN_SLOT_MAP(Tape)
-    ON_SLOT(1, setSlotRange,     base::Integer)
-    ON_SLOT(2, setSlotHeight,    base::INumber)
-    ON_SLOT(3, setSlotIncrement, base::Integer)
-    ON_SLOT(4, setSlotVertical,  base::Boolean)
-    ON_SLOT(5, setSlotMaxNum,    base::INumber)
-    ON_SLOT(6, setSlotMinNum,    base::INumber)
-    ON_SLOT(7, setSlotConvert,   base::Boolean)
+    ON_SLOT(1, setSlotRange,     base::Number)
+    ON_SLOT(2, setSlotHeight,    base::Number)
+    ON_SLOT(3, setSlotIncrement, base::Number)
+    ON_SLOT(4, setSlotVertical,  base::Number)
+    ON_SLOT(5, setSlotMaxNum,    base::Number)
+    ON_SLOT(6, setSlotMinNum,    base::Number)
+    ON_SLOT(7, setSlotConvert,   base::Number)
 END_SLOT_MAP()
 
 Tape::Tape()
@@ -79,53 +77,54 @@ void Tape::copyData(const Tape& org, const bool)
     convert = org.convert;
 }
 
+// SLOT Functions
 //------------------------------------------------------------------------------
 // setSlotRange() - set the range of our data
 //------------------------------------------------------------------------------
-bool Tape::setSlotRange(const base::Integer* const x)
+bool Tape::setSlotRange(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setRange(x->asInt());
+    bool ok = false;
+    if (x != nullptr) ok = setRange(x->getInt());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotHeight() - set the height of our viewable tape area
 //------------------------------------------------------------------------------
-bool Tape::setSlotHeight(const base::INumber* const x)
+bool Tape::setSlotHeight(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setHeight(x->asDouble());
+    bool ok = false;
+    if (x != nullptr) ok = setHeight(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotIncrement() - increment of our tape
 //------------------------------------------------------------------------------
-bool Tape::setSlotIncrement(const base::Integer* const x)
+bool Tape::setSlotIncrement(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setIncrement(x->asInt());
+    bool ok = false;
+    if (x != nullptr) ok = setIncrement(x->getInt());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotVertical() - vertical or horizontal tape
 //------------------------------------------------------------------------------
-bool Tape::setSlotVertical(const base::Boolean* const x)
+bool Tape::setSlotVertical(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setVertical(x->asBool());
+    bool ok = false;
+    if (x != nullptr) ok = setVertical(x->getBoolean());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotMaxNum() - set the tape's maximum value
 //------------------------------------------------------------------------------
-bool Tape::setSlotMaxNum(const base::INumber* const x)
+bool Tape::setSlotMaxNum(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setMaxNumber(x->asDouble());
+    bool ok = false;
+    if (x != nullptr) ok = setMaxNumber(x->getReal());
     return ok;
 }
 
@@ -133,20 +132,20 @@ bool Tape::setSlotMaxNum(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // setSlotMinNum() - set the tape's minimum value
 //------------------------------------------------------------------------------
-bool Tape::setSlotMinNum(const base::INumber* const x)
+bool Tape::setSlotMinNum(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setMinNumber(x->asDouble());
+    bool ok = false;
+    if (x != nullptr) ok = setMinNumber(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
-// setSlotConvert() - convert to degrees instead of qty?  (for circular tapes)
+// setSlotConvert() - conver to degrees instead of units?  (for circular tapes)
 //------------------------------------------------------------------------------
-bool Tape::setSlotConvert(const base::Boolean* const x)
+bool Tape::setSlotConvert(const base::Number* const x)
 {
-    bool ok{};
-    if (x != nullptr) ok = setConvert(x->asBool());
+    bool ok = false;
+    if (x != nullptr) ok = setConvert(x->getBoolean());
     return ok;
 }
 
@@ -159,7 +158,7 @@ void Tape::updateData(const double dt)
    BaseClass::updateData(dt);
 
     // std::cout << "INSTRUMENT VALUE = " << getInstValue() << std::endl;
-    double x{getInstValue()};
+    double x = getInstValue();
 
     // we take our range, add another for the 0, and then add 2 more for fillers
     int perRange = static_cast<int>(range / increment) + 3;
@@ -224,9 +223,9 @@ void Tape::updateData(const double dt)
     send("number%dhunds", SET_VISIBILITY, numberValsHundsVis.data(), numberValsHundsVisSD.data(), MAX_NUMBERS);
     send("number%dthous", SET_VISIBILITY, numberValsThousVis.data(), numberValsThousVisSD.data(), MAX_NUMBERS);
 
-    double qtyOfHeightPerRange = height/range;
+    double unitsOfHeightPerRange = height/range;
     double newVal = (nearest * increment) - x;
-    newVal *= qtyOfHeightPerRange;
+    newVal *= unitsOfHeightPerRange;
         //std::cout << "NEW VALUE = " << newVal << std::endl;
 
 

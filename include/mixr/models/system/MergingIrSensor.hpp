@@ -1,16 +1,16 @@
 
-#ifndef __mixr_models_common_MergingIrSensor_HPP__
-#define __mixr_models_common_MergingIrSensor_HPP__
+#ifndef __mixr_models_MergingIrSensor_H__
+#define __mixr_models_MergingIrSensor_H__
 
 #include "mixr/models/system/IrSensor.hpp"
 
 namespace mixr {
-namespace base { class Integer; class INumber; class String; class IAngle; }
+namespace base { class Integer; class Number; class String; }
 namespace models {
 class IrSeeker;
 class IrQueryMsg;
 class Player;
-class ITrackMgr;
+class TrackManager;
 
 //------------------------------------------------------------------------------
 // Class: MergingIrSensor
@@ -48,10 +48,8 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotAzimuthBin(const base::INumber* const);     // Sets the Azimuth Bin
-   bool setSlotAzimuthBin(const base::IAngle* const);
-   bool setSlotElevationBin(const base::INumber* const);   // Sets the Elevation Bin
-   bool setSlotElevationBin(const base::IAngle* const);
+   bool setSlotAzimuthBin(const base::Number* const);     // Sets the Azimuth Bin
+   bool setSlotElevationBin(const base::Number* const);   // Sets the Elevation Bin
 };
 
 }

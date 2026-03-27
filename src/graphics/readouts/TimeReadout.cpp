@@ -31,22 +31,22 @@ void TimeReadout::copyData(const TimeReadout& org, const bool)
 
 //------------------------------------------------------------------------------
 // input mode function --
-//   filterInputEvent() -- Filter input events using a template character (x)
+//   filterInputEvent() -- Filter input events using a template character (tc)
 //------------------------------------------------------------------------------
-char TimeReadout::filterInputEvent(const int event, const char x)
+char TimeReadout::filterInputEvent(const int event, const int tc)
 {
-   const char tc = static_cast<int>(x);
    if (tc == '0' || tc == 'H' || tc == 'M' || tc == 'S') {
       // Default numeric keys
-      if ( event >= '0' && event <= '9' ) {
+      if ( event >= '0' && event <= '9' )
          return char(event);
-      } else {
+      else
          return '\0';
-      }
-   } else {
+   }
+   else {
       return BaseClass::filterInputEvent(event,tc);
    }
 }
+
 
 //------------------------------------------------------------------------------
 // getInputValue() -- returns the readout as a numeric value
@@ -58,8 +58,8 @@ double TimeReadout::getInputValue() const
    // copy string to buffer with correct sign character
    const std::size_t CBUFLOCAL_LEN {100};
    char cbuf[CBUFLOCAL_LEN] {};
-   const char* p {this->str.c_str()};
-   base::utStrcpy(cbuf, CBUFLOCAL_LEN, p);
+   const char* p {*this};
+   base::utStrcpy(cbuf,CBUFLOCAL_LEN,p);
    if (cbuf[0] == plusChar)  cbuf[0] = '+';
    if (cbuf[0] == minusChar) cbuf[0] = '-';
 

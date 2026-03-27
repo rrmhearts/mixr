@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments">
+      <UniqueIdentifier>{D31AC089-BF3F-0F0A-E88A-F499D40E0E28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\adi">
+      <UniqueIdentifier>{10BC424F-FC76-32FB-A52E-AB4591C87C8B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\buttons">
+      <UniqueIdentifier>{D1C30CE1-BD14-F822-E678-E6E4D2288B8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\dials">
+      <UniqueIdentifier>{CFF31A2B-BB19-E591-A45F-6A5D90240A5E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\eadi3d">
+      <UniqueIdentifier>{CC623F90-3846-4ED0-4149-7C0CADAB1421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\engines">
+      <UniqueIdentifier>{8B11B6B6-7762-A1F8-A0C6-8FBA8C763462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\gauges">
+      <UniqueIdentifier>{7E04F394-EAE7-01D5-F3EA-2F115F4DC825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\landinggear">
+      <UniqueIdentifier>{3EB1C3F5-2A98-85ED-D3E8-EB0ABFAEFE53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\instruments\maps">
+      <UniqueIdentifier>{33C7A037-9FDF-8761-688C-17FBD4631CFB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments">
+      <UniqueIdentifier>{C83CD834-34C8-45F9-3DD9-C8EDA9E3A1F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\adi">
+      <UniqueIdentifier>{85D0D42C-F131-B23A-7A9F-F8ECE6FFE8F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\buttons">
+      <UniqueIdentifier>{C60ACEA9-3242-1641-3B4C-7A64A7023D3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\dials">
+      <UniqueIdentifier>{84F983B5-F065-3FB0-B959-D70D25856118}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\eadi3d">
+      <UniqueIdentifier>{211FC967-0D19-F2B9-F685-88CAE21E5826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\engines">
+      <UniqueIdentifier>{8058777F-EC8F-BF16-F599-233A6150E60F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\gauges">
+      <UniqueIdentifier>{D3C07C6C-BFBA-A5BE-A827-3CCF94C00B2B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\landinggear">
+      <UniqueIdentifier>{B36A093B-1F78-3721-A85E-330C146B03D8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\instruments\maps">
+      <UniqueIdentifier>{486A75C7-34F9-FE90-DD17-138CC9850F37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\instruments\Instrument.hpp">
+      <Filter>include\mixr\instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\adi\Adi.hpp">
+      <Filter>include\mixr\instruments\adi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\adi\GhostHorizon.hpp">
+      <Filter>include\mixr\instruments\adi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Button.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Knob.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\PushButton.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\RotarySwitch.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\SolenoidButton.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\SolenoidSwitch.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Switch.hpp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\AltitudeDial.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\AnalogDial.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialArcSegment.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialPointer.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialTickMarks.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\dials\GMeterDial.hpp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DFont.hpp">
+      <Filter>include\mixr\instruments\eadi3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DObjects.hpp">
+      <Filter>include\mixr\instruments\eadi3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DPage.hpp">
+      <Filter>include\mixr\instruments\eadi3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\IrisGLCompat.hpp">
+      <Filter>include\mixr\instruments\eadi3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\engines\EngPage.hpp">
+      <Filter>include\mixr\instruments\engines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\factory.hpp">
+      <Filter>include\mixr\instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\AnalogGauge.hpp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\AoaIndexer.hpp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\GaugeSlider.hpp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\Tape.hpp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\TickMarks.hpp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\landinggear\LandingGear.hpp">
+      <Filter>include\mixr\instruments\landinggear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\landinggear\LandingLight.hpp">
+      <Filter>include\mixr\instruments\landinggear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\maps\BearingPointer.hpp">
+      <Filter>include\mixr\instruments\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\instruments\maps\CompassRose.hpp">
+      <Filter>include\mixr\instruments\maps</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\instruments\Instrument.cpp">
+      <Filter>src\instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\adi\Adi.cpp">
+      <Filter>src\instruments\adi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\adi\GhostHorizon.cpp">
+      <Filter>src\instruments\adi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\Button.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\Knob.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\PushButton.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\RotarySwitch.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\SolenoidButton.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\SolenoidSwitch.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\buttons\Switch.cpp">
+      <Filter>src\instruments\buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\AltitudeDial.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\AnalogDial.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\DialArcSegment.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\DialPointer.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\DialTickMarks.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\dials\GMeterDial.cpp">
+      <Filter>src\instruments\dials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DFont.cpp">
+      <Filter>src\instruments\eadi3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DObjects.cpp">
+      <Filter>src\instruments\eadi3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DPage.cpp">
+      <Filter>src\instruments\eadi3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\eadi3d\IrisGLCompat.cpp">
+      <Filter>src\instruments\eadi3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\eadi3d\makeTheFont.cpp">
+      <Filter>src\instruments\eadi3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\engines\EngPage.cpp">
+      <Filter>src\instruments\engines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\factory.cpp">
+      <Filter>src\instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\gauges\AnalogGauge.cpp">
+      <Filter>src\instruments\gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\gauges\AoaIndexer.cpp">
+      <Filter>src\instruments\gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\gauges\GaugeSlider.cpp">
+      <Filter>src\instruments\gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\gauges\Tape.cpp">
+      <Filter>src\instruments\gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\gauges\TickMarks.cpp">
+      <Filter>src\instruments\gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\landinggear\LandingGear.cpp">
+      <Filter>src\instruments\landinggear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\landinggear\LandingLight.cpp">
+      <Filter>src\instruments\landinggear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\maps\BearingPointer.cpp">
+      <Filter>src\instruments\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\instruments\maps\CompassRose.cpp">
+      <Filter>src\instruments\maps</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\mixr\instruments\adi\adi.epp">
+      <Filter>include\mixr\instruments\adi</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\adi\adi2.epp">
+      <Filter>include\mixr\instruments\adi</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\buttons\buttons.epp">
+      <Filter>include\mixr\instruments\buttons</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\altTape.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\altitudedial.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\cas.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\enginedial.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\ftitdial.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\gmeter.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\hsi.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\nozzle.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\oilpressure.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\rpm.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\dials\speedbrake.epp">
+      <Filter>include\mixr\instruments\dials</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\eadi3d\eadi3DPage.epp">
+      <Filter>include\mixr\instruments\eadi3d</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\engines\engpage.epp">
+      <Filter>include\mixr\instruments\engines</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\gauges\digaoagauge.epp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\gauges\gauge.epp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\gauges\vvi.epp">
+      <Filter>include\mixr\instruments\gauges</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\landinggear\landinggear.epp">
+      <Filter>include\mixr\instruments\landinggear</Filter>
+    </None>
+    <None Include="..\..\include\mixr\instruments\maps\mappage.epp">
+      <Filter>include\mixr\instruments\maps</Filter>
+    </None>
+  </ItemGroup>
+</Project>

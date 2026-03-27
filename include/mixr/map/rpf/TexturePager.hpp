@@ -1,19 +1,19 @@
 
-#ifndef __mixr_map_rpf_TexturePager_HPP__
-#define __mixr_map_rpf_TexturePager_HPP__
+#ifndef __mixr_map_rpf_TexturePager_H__
+#define __mixr_map_rpf_TexturePager_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 #include "TextureTable.hpp"
 
 namespace mixr {
-namespace base { class IList; }
+namespace base { class List; }
 namespace rpf {
 class CadrgMap;
 class CadrgTocEntry;
 
 // ------------------------------------------------------------------------------
 // Class: TexturePager
-//
+// 
 // Description: holds the texture tables and gets "paged" through the textures, freeing,
 // re-using, and loading new textures in the table as needed.  This is driven
 // by the MapDrawer class.
@@ -47,13 +47,13 @@ class CadrgTocEntry;
 // don't have one (not reused).
 //      void TexturePager::loadNewTextures()
 //
-// flushTextures() - Clear out the textures and put them back on the stack.
+// flushTextures() - Clear out the textures and put them back on the stack. 
 //      void TexturePager::flushTextures()
 //
 // ------------------------------------------------------------------------------
-class TexturePager : public base::IObject
+class TexturePager : public base::Object
 {
-    DECLARE_SUBCLASS(TexturePager, base::IObject)
+    DECLARE_SUBCLASS(TexturePager, base::Object)
 
 public:
     TexturePager();
@@ -77,7 +77,7 @@ private:
     void reuseTextures();
     void loadNewTextures();
 
-    base::IList* stack {};
+    base::List* stack {};
 
     TextureTable table;
     int maxTableSize {};

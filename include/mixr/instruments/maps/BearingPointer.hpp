@@ -1,11 +1,11 @@
 
-#ifndef __mixr_instruments_BearingPointer_HPP__
-#define __mixr_instruments_BearingPointer_HPP__
+#ifndef __mixr_instruments_BearingPointer_H__
+#define __mixr_instruments_BearingPointer_H__
 
 #include "mixr/instruments/maps/CompassRose.hpp"
 
 namespace mixr {
-namespace base { class IAngle; class INumber; }
+namespace base { class Angle; class Number; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -41,13 +41,13 @@ public:
     void draw() override;
 
     void updateData(const double dt = 0) override;
-    bool event(const int key, base::IObject* const obj = nullptr) override;
+    bool event(const int key, base::Object* const obj = nullptr) override;
 
 private:
     // event handlers
-    bool onUpdateRadBearingPointer(const base::IAngle* const);
-    bool onUpdateRadBearingPointer(const base::INumber* const);
-    bool onUpdateDegBearingPointer(const base::INumber* const);
+    bool onUpdateRadBearingPointer(const base::Angle* const);
+    bool onUpdateRadBearingPointer(const base::Number* const);
+    bool onUpdateDegBearingPointer(const base::Number* const);
 
     double bearing {};     // used for bearing pointer, or if anyone else needs it for calculations (radians)
     double myRotation {};  // how much we are going to rotate the compass

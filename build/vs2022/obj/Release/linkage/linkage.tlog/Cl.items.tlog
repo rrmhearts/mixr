@@ -1,0 +1,17 @@
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\IoData.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\IoData.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\IoDevice.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\IoDevice.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\IoHandler.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\IoHandler.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\IoPeriodicThread.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\IoPeriodicThread.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\MockDevice.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\MockDevice.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\AbstractAdapter.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AbstractAdapter.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\Ai2DiSwitch.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\Ai2DiSwitch.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\AnalogInput.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AnalogInput.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\AnalogOutput.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AnalogOutput.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\DiscreteInput.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\DiscreteInput.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\adapters\DiscreteOutput.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\DiscreteOutput.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\factory.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\factory.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\generators\AbstractGenerator.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AbstractGenerator.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\generators\AnalogInputFixed.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AnalogInputFixed.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\generators\AnalogSignalGen.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\AnalogSignalGen.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\generators\DiscreteInputFixed.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\DiscreteInputFixed.obj
+C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\src\linkage\platform\UsbJoystick_msvc.cpp;C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\build\vs2022\obj\Release\linkage\UsbJoystick_msvc.obj

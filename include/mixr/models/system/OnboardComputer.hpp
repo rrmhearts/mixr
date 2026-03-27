@@ -1,17 +1,18 @@
 
-#ifndef __mixr_models_common_OnboardComputer_HPP__
-#define __mixr_models_common_OnboardComputer_HPP__
+#ifndef __mixr_models_OnboardComputer_H__
+#define __mixr_models_OnboardComputer_H__
 
-#include "mixr/models/system/ISystem.hpp"
+#include "mixr/models/system/System.hpp"
 
 namespace mixr {
    namespace base {
       class PairStream;
    }
 namespace models {
-class IAction;
-class ITrack;
-class ITrackMgr;
+
+class Action;
+class Track;
+class TrackManager;
 
 //------------------------------------------------------------------------------
 // Class: OnboardComputer
@@ -29,38 +30,38 @@ class ITrackMgr;
 //
 // Factory name: OnboardComputer
 //------------------------------------------------------------------------------
-class OnboardComputer : public ISystem
+class OnboardComputer : public System
 {
-    DECLARE_SUBCLASS(OnboardComputer, ISystem)
+    DECLARE_SUBCLASS(OnboardComputer, System)
 
 public:
    OnboardComputer();
 
    // Track managers
-   virtual ITrackMgr* getTrackManagerByType(const std::type_info& type);
-   virtual const ITrackMgr* getTrackManagerByType(const std::type_info& type) const;
-   virtual ITrackMgr* getTrackManagerByName(const char* const name);
-   virtual const ITrackMgr* getTrackManagerByName(const char* const) const;
+   virtual TrackManager* getTrackManagerByType(const std::type_info& type);
+   virtual const TrackManager* getTrackManagerByType(const std::type_info& type) const;
+   virtual TrackManager* getTrackManagerByName(const char* const name);
+   virtual const TrackManager* getTrackManagerByName(const char* const) const;
 
    // Air to Air functions
-   virtual ITrack* getNextTarget();                                    // Get the target track
-   virtual int getShootList(ITrack* tlist[], const int max);
-   virtual int getShootList(const ITrack* tlist[], const int max) const;
+   virtual Track* getNextTarget();                                      // Get the target track
+   virtual int getShootList(Track* tlist[], const int max);
+   virtual int getShootList(const Track* tlist[], const int max) const;
    virtual void updateShootList(const bool step = false);              // Updates the shoot list
-   virtual bool requestNextToShoot(const ITrack* const nts);           // Request a track to shoot next
+   virtual bool requestNextToShoot(const Track* const nts);            // Request a track to shoot next
 
    // Trigger an action
-   virtual void triggerAction(IAction* const act);
+   virtual void triggerAction(Action* const act);
 
    // Legacy function (will be removed in a future major release)
-   virtual int getShootList(base::safe_ptr<ITrack>* const tlist, const int max);
-   virtual int getShootList(base::safe_ptr<const ITrack>* const tlist, const int max) const;
+   virtual int getShootList(base::safe_ptr<Track>* const tlist, const int max);
+   virtual int getShootList(base::safe_ptr<const Track>* const tlist, const int max) const;
 
    void reset() override;
    void updateData(const double dt = 0.0) override;
 
 protected:
-   virtual void setNextToShoot(ITrack* const p);
+   virtual void setNextToShoot(Track* const p);
 
    // Manage the active action
    virtual void actionManager(const double dt);
@@ -70,8 +71,8 @@ protected:
    bool shutdownNotification() override;
 
 private:
-   base::safe_ptr<IAction> action; // Current steerpoint action
-   ITrack* nextToShoot {};          // Next to shoot track
+   base::safe_ptr<Action> action;  // Current steerpoint action
+   Track* nextToShoot {};          // Next to shoot track
 };
 
 }

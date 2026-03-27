@@ -1,14 +1,14 @@
 
-#ifndef __mixr_models_common_Route_HPP__
-#define __mixr_models_common_Route_HPP__
+#ifndef __mixr_models_Route_H__
+#define __mixr_models_Route_H__
 
-#include "mixr/base/IComponent.hpp"
+#include "mixr/base/Component.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class Identifier; class Integer; class ILength; class NauticalMiles;
-                 class INumber; class Pair; class IPairStream; }
+namespace base { class Identifier; class Distance; class NauticalMiles;
+                 class Number; class Pair; class PairStream; }
 namespace models {
-class INavigation;
+class Navigation;
 class Steerpoint;
 
 //------------------------------------------------------------------------------
@@ -30,21 +30,21 @@ class Steerpoint;
 //
 // Factory name: Route
 // Slots:
-//    to                <base::Integer>     ! Initial "TO" steerpoint by steerpoint index number (default: 0)
+//    to                <base::Number>      ! Initial "TO" steerpoint by steerpoint index number (default: 0)
 //                      <base::Identifier>  ! or by steerpoint name (default: 0)
 //
-//    autoSequence      <base::Boolean>     ! Auto sequence flag (default: true)
+//    autoSequence      <base::Number>      ! Auto sequence flag (default: true)
 //
-//    autoSeqDistance   <base::ILength>     ! Distance to auto sequence by distance unit
-//                      <base::INumber>     ! or by nautical miles (default: 2.0NM)
+//    autoSeqDistance   <base::Distance>    ! Distance to auto sequence by distance unit
+//                      <base::Number>      ! or by nautical miles (default: 2.0NM)
 //
 //    wrap              <base::Boolean>     ! Route wrap flag (wrap back to the beginning when past the end)
-//                                          ! (default: true)
+//                                           ! (default: true)
 //
 //------------------------------------------------------------------------------
-class Route : public base::IComponent
+class Route : public base::Component
 {
-   DECLARE_SUBCLASS(Route, base::IComponent)
+   DECLARE_SUBCLASS(Route, base::Component)
 
 public:
    Route();
@@ -100,7 +100,7 @@ public:
    virtual bool deleteSteerpoint(Steerpoint* const sp);
 
    // Replace all of our steerpoints and sets our 'to' steerpoint to 'newStptIdx'
-   virtual bool replaceAllSteerpoints(base::IPairStream* const newSteerpointList, unsigned int newStptIdx = 1);
+   virtual bool replaceAllSteerpoints(base::PairStream* const newSteerpointList, unsigned int newStptIdx = 1);
 
    // clears out all of our steerpoints
    virtual bool deleteAllSteerpoints();
@@ -109,21 +109,21 @@ public:
    virtual void triggerAction();
 
    void updateData(const double dt = 0.0) override;
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
    void reset() override;
 
 protected:
     // Compute nav steering data for each steerpoint.
-    virtual void computeSteerpointData(const double dt, const INavigation* const nav);
+    virtual void computeSteerpointData(const double dt, const Navigation* const nav);
 
     // Auto Sequence through Steerpoints
-    virtual void autoSequencer(const double dt, const  INavigation* const nav);
+    virtual void autoSequencer(const double dt, const  Navigation* const nav);
 
     void processComponents(
-         base::IPairStream* const list,              // Source list of components
+         base::PairStream* const list,              // Source list of components
          const std::type_info& filter,              // Type filter
          base::Pair* const add = nullptr,           // Optional pair to add
-         base::IComponent* const remove = nullptr   // Optional subcomponent to remove
+         base::Component* const remove = nullptr    // Optional subcomponent to remove
        ) override;
 
 private:
@@ -132,22 +132,22 @@ private:
    const base::Pair* findSteerpointImp(const unsigned int idx) const;
    const Steerpoint* getSteerpointImp() const;
 
-   base::safe_ptr<base::Pair>         to;                   // "To" Steerpoint pair [ name steerpoint ]
-   base::safe_ptr<const base::Identifier> initToStptName;   // Name of the initial "to" steerpoint
-   unsigned int initToStptIdx {};                           // Index of the initial "to" steerpoint
-   unsigned int stptIdx {};                                 // Steerpoint index [ 1 ... n ] in list
-   double       autoSeqDistNM {2.0};                        // Distance to auto sequence (NM)
-   bool         autoSeq {true};                             // Auto sequence of steerpoint
-   bool         wrap {true};                                // Wrap around route when inc or dec 'to' steerpoint
+   base::safe_ptr<base::Pair>         to;               // "To" Steerpoint pair [ name steerpoint ]
+   base::safe_ptr<const base::String> initToStptName;   // Name of the initial "to" steerpoint
+   unsigned int initToStptIdx {};                       // Index of the initial "to" steerpoint
+   unsigned int stptIdx {};                             // Steerpoint index [ 1 ... n ] in list
+   double       autoSeqDistNM {2.0};                    // Distance to auto sequence (NM)
+   bool         autoSeq {true};                         // Auto sequence of steerpoint
+   bool         wrap {true};                            // Wrap around route when inc or dec 'to' steerpoint
 
 private:
    // slot table helper methods
    bool setSlotTo(const base::Identifier* const);
-   bool setSlotTo(const base::Integer* const);
-   bool setSlotAutoSequence(const base::Boolean* const);
-   bool setSlotAutoSeqDistance(const base::ILength* const);
-   bool setSlotAutoSeqDistance(const base::INumber* const);
-   bool setSlotWrap(const base::Boolean* const);
+   bool setSlotTo(const base::Number* const);
+   bool setSlotAutoSequence(const base::Number* const);
+   bool setSlotAutoSeqDistance(const base::Distance* const);
+   bool setSlotAutoSeqDistance(const base::Number* const);
+   bool setSlotWrap(const base::Number* const);
 };
 
 inline Steerpoint* Route::getSteerpoint()

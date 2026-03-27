@@ -1,6 +1,7 @@
 
 #include "mixr/graphics/BmpTexture.hpp"
 #include "mixr/graphics/Display.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Identifier.hpp"
 #include "mixr/base/String.hpp"
 #include "mixr/base/util/str_utils.hpp"
@@ -100,13 +101,17 @@ bool BmpTexture::writeFile()
 // setSlotTexturePath() -- sets the path to the textures directory
 bool BmpTexture::setSlotTexturePath(const base::String* const s)
 {
-   return setTexturePath((*s).c_str());
+   if (s != nullptr) setTexturePath(*s);
+   else setTexturePath(nullptr);
+   return true;
 }
 
 // setSlotTextureFileName() -- sets the texture file name
 bool BmpTexture::setSlotTextureFileName(const base::String* const s)
 {
-   return setTextureFileName((*s).c_str());
+   if (s != nullptr) setTextureFileName(*s);
+   else setTextureFileName(nullptr);
+   return true;
 }
 
 }

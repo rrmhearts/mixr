@@ -1,19 +1,15 @@
 
-#ifndef __mixr_models_common_MultiActorAgent_HPP__
-#define __mixr_models_common_MultiActorAgent_HPP__
+#ifndef __mixr_models_MultiActorAgent_H__
+#define __mixr_models_MultiActorAgent_H__
 
-#include "mixr/base/IComponent.hpp"
-#include "mixr/base/Identifier.hpp"
-
+#include "mixr/base/Component.hpp"
 #include <array>
-#include <string>
 
 namespace mixr {
 namespace base {
-class Identifier;
-namespace ubf { class IBehavior; class IState; }
+namespace ubf { class AbstractBehavior; class AbstractState; }
 }
-namespace simulation { class IStation; }
+namespace simulation { class Station; }
 namespace models {
 class WorldModel;
 
@@ -30,11 +26,11 @@ class WorldModel;
 // Factory name: MultiActorAgent
 // Slots:
 //    state       <State>           ! state
-//    agentList   <IPairStream>     ! behavior pairstream
+//    agentList   <PairStream>      ! behavior pairstream
 //------------------------------------------------------------------------------
-class MultiActorAgent : public base::IComponent
+class MultiActorAgent : public base::Component
 {
-   DECLARE_SUBCLASS(MultiActorAgent, base::IComponent)
+   DECLARE_SUBCLASS(MultiActorAgent, base::Component)
 
 public:
    MultiActorAgent();
@@ -46,42 +42,42 @@ protected:
    // generic controller
    virtual void controller(const double dt = 0.0);
 
-   void setState(base::ubf::IState* const);
-   base::ubf::IState* getState() const                { return state; }
+   void setState(base::ubf::AbstractState* const);
+   base::ubf::AbstractState* getState() const                { return state; }
 
-   void setActor(base::IComponent* c);
-   base::IComponent* getActor()                        { return actor;}
+   void setActor(base::Component* c);
+   base::Component* getActor()                               { return actor;}
 
-   simulation::IStation* getStation();
+   simulation::Station* getStation();
    WorldModel* getWorldModel();
 
    struct AgentItem
    {
-      std::string actorName;
-      base::safe_ptr<base::ubf::IBehavior> behavior;
-      base::safe_ptr<base::IComponent> actor;
+      base::safe_ptr<base::String> actorName;
+      base::safe_ptr<base::ubf::AbstractBehavior> behavior;
+      base::safe_ptr<base::Component> actor;
    };
 
-   static const int MAX_AGENTS{10};
+   static const unsigned int MAX_AGENTS{10};
    bool clearAgentList();
-   bool addAgent(const std::string& name, base::ubf::IBehavior* const);
+   bool addAgent( base::String* name, base::ubf::AbstractBehavior* const b);
 
 private:
-   base::IComponent* actor{};
-   base::ubf::IState* state{};
-   simulation::IStation* myStation{};
+   base::Component* actor {};
+   base::ubf::AbstractState* state {};
+   simulation::Station* myStation {};
 
    // agent/behavior list
-   unsigned int nAgents{};          // Number of input behavior/agent pairs
+   unsigned int nAgents {};          // Number of input behavior/agent pairs
    std::array<AgentItem, MAX_AGENTS> agentList;
 
 private:
    // slot table helper methods
-   bool setSlotState(base::ubf::IState* const);
-   bool setSlotAgentList(base::IPairStream* const);
+   bool setSlotState(base::ubf::AbstractState* const);
+   bool setSlotAgentList(base::PairStream* const);
 };
 
-inline void MultiActorAgent::setActor(base::IComponent* c) { actor=c; }
+inline void MultiActorAgent::setActor(base::Component* c) { actor=c; }
 
 }
 }

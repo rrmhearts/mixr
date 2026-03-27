@@ -1,12 +1,11 @@
 
 #include "mixr/models/player/ground/GroundVehicle.hpp"
 
-#include "mixr/base/Identifier.hpp"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Times.hpp"
 
 #include <cmath>
 
@@ -29,17 +28,16 @@ END_SLOTTABLE(GroundVehicle)
 
 BEGIN_SLOT_MAP(GroundVehicle)
     ON_SLOT(1, setSlotCommandedPosition, base::Identifier)
-    ON_SLOT(2, setSlotLauncherDownAngle, base::IAngle)
-    ON_SLOT(3, setSlotLauncherUpAngle,   base::IAngle)
-    ON_SLOT(4, setSlotLauncherMoveTime,  base::ITime)
+    ON_SLOT(2, setSlotLauncherDownAngle, base::Angle)
+    ON_SLOT(3, setSlotLauncherUpAngle,   base::Angle)
+    ON_SLOT(4, setSlotLauncherMoveTime,  base::Time)
 END_SLOT_MAP()
 
 GroundVehicle::GroundVehicle()
 {
-   STANDARD_CONSTRUCTOR()
-   static base::String generic("GenericGroundVehicle");
-   setType_old(&generic);
-   setType("GenericGroundVehicle");
+    STANDARD_CONSTRUCTOR()
+    static base::String generic("GenericGroundVehicle");
+    setType(&generic);
 
    lnchrDownAngle = DEFAULT_LAUNCHER_DOWN_ANGLE;
    lnchrUpAngle   = DEFAULT_LAUNCHER_UP_ANGLE;
@@ -210,33 +208,33 @@ bool GroundVehicle::setSlotCommandedPosition(const base::Identifier* const msg)
 }
 
 // launcherDownAngle: Min (down) Launcher angle (base::Angle)
-bool GroundVehicle::setSlotLauncherDownAngle(const base::IAngle* const msg)
+bool GroundVehicle::setSlotLauncherDownAngle(const base::Angle* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      lnchrDownAngle = msg->getValueInRadians();
+      lnchrDownAngle = static_cast<double>(base::Radians::convertStatic( *msg ));
       ok = true;
    }
    return ok;
 }
 
 // launcherUpAngle: Max (up) Launcher angle (base::Angle)
-bool GroundVehicle::setSlotLauncherUpAngle(const base::IAngle* const msg)
+bool GroundVehicle::setSlotLauncherUpAngle(const base::Angle* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      lnchrUpAngle = msg->getValueInRadians();
+      lnchrUpAngle = static_cast<double>(base::Radians::convertStatic( *msg ));
       ok = true;
    }
    return ok;
 }
 
 // launcherMoveTime: Max time to move between 'down' and 'up' positions (base::Time)
-bool GroundVehicle::setSlotLauncherMoveTime(const base::ITime* const x)
+bool GroundVehicle::setSlotLauncherMoveTime(const base::Time* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      lnchrMoveTime = x->getValueInSeconds();
+   if (msg != nullptr) {
+      lnchrMoveTime = base::Seconds::convertStatic( *msg );
       ok = true;
    }
    return ok;

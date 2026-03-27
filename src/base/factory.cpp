@@ -1,17 +1,44 @@
 
 #include "mixr/base/factory.hpp"
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/base/FileReader.hpp"
 #include "mixr/base/Statistic.hpp"
+#include "mixr/base/Transforms.hpp"
+#include "mixr/base/Timers.hpp"
+#include "mixr/base/LatLon.hpp"
 
-#include "mixr/base/Latitude.hpp"
-#include "mixr/base/Longitude.hpp"
-// other
-#include "mixr/base/EarthModel.hpp"
+// Functors
+#include "mixr/base/functors/Func1.hpp"
+#include "mixr/base/functors/Func2.hpp"
+#include "mixr/base/functors/Func3.hpp"
+#include "mixr/base/functors/Func4.hpp"
+#include "mixr/base/functors/Func5.hpp"
+#include "mixr/base/functors/Polynomial.hpp"
+#include "mixr/base/functors/Table1.hpp"
+#include "mixr/base/functors/Table2.hpp"
+#include "mixr/base/functors/Table3.hpp"
+#include "mixr/base/functors/Table4.hpp"
+#include "mixr/base/functors/Table5.hpp"
 
-// colors
+// Numbers
+#include "mixr/base/numeric/Boolean.hpp"
+#include "mixr/base/numeric/Complex.hpp"
+#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Float.hpp"
+#include "mixr/base/numeric/Operators.hpp"
+
+// Network handlers
+#include "mixr/base/network/TcpHandler.hpp"
+#include "mixr/base/network/TcpClient.hpp"
+#include "mixr/base/network/TcpServerMultiple.hpp"
+#include "mixr/base/network/TcpServerSingle.hpp"
+#include "mixr/base/network/UdpBroadcastHandler.hpp"
+#include "mixr/base/network/UdpMulticastHandler.hpp"
+#include "mixr/base/network/UdpUnicastHandler.hpp"
+
+// Colors
 #include "mixr/base/colors/Cie.hpp"
 #include "mixr/base/colors/Cmy.hpp"
 #include "mixr/base/colors/Hls.hpp"
@@ -21,93 +48,42 @@
 #include "mixr/base/colors/Rgba.hpp"
 #include "mixr/base/colors/Yiq.hpp"
 
-// linear system
-#include "mixr/base/linearsystem/FirstOrderTf.hpp"
-#include "mixr/base/linearsystem/LagFilter.hpp"
-#include "mixr/base/linearsystem/Limit.hpp"
-#include "mixr/base/linearsystem/Limit01.hpp"
-#include "mixr/base/linearsystem/Limit11.hpp"
-#include "mixr/base/linearsystem/LimitFunc.hpp"
-#include "mixr/base/linearsystem/LowpassFilter.hpp"
-#include "mixr/base/linearsystem/SaH.hpp"
-#include "mixr/base/linearsystem/SecondOrderTf.hpp"
-#include "mixr/base/linearsystem/Sz1.hpp"
-#include "mixr/base/linearsystem/Sz2.hpp"
+// Units
+#include "mixr/base/units/AngularVelocity.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Areas.hpp"
+#include "mixr/base/units/Decibel.hpp"
+#include "mixr/base/units/Distances.hpp"
+#include "mixr/base/units/Energies.hpp"
+#include "mixr/base/units/Forces.hpp"
+#include "mixr/base/units/Frequencies.hpp"
+#include "mixr/base/units/LinearVelocity.hpp"
+#include "mixr/base/units/Masses.hpp"
+#include "mixr/base/units/Powers.hpp"
+#include "mixr/base/units/Times.hpp"
 
-// network handlers
-#include "mixr/base/network/TcpClient.hpp"
-#include "mixr/base/network/TcpServerMultiple.hpp"
-#include "mixr/base/network/TcpServerSingle.hpp"
-#include "mixr/base/network/UdpBroadcastHandler.hpp"
-#include "mixr/base/network/UdpMulticastHandler.hpp"
-#include "mixr/base/network/UdpUnicastHandler.hpp"
-
-// numeric classes and operators
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Complex.hpp"
-#include "mixr/base/numeric/Decibel.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/Float.hpp"
-#include "mixr/base/numeric/operators/Add.hpp"
-#include "mixr/base/numeric/operators/Divide.hpp"
-#include "mixr/base/numeric/operators/Multiply.hpp"
-#include "mixr/base/numeric/operators/Subtract.hpp"
-
-// relation classes (functions and tables)
-#include "mixr/base/relations/Func1.hpp"
-#include "mixr/base/relations/Func2.hpp"
-#include "mixr/base/relations/Func3.hpp"
-#include "mixr/base/relations/Func4.hpp"
-#include "mixr/base/relations/Func5.hpp"
-#include "mixr/base/relations/Polynomial.hpp"
-#include "mixr/base/relations/Table1.hpp"
-#include "mixr/base/relations/Table2.hpp"
-#include "mixr/base/relations/Table3.hpp"
-#include "mixr/base/relations/Table4.hpp"
-#include "mixr/base/relations/Table5.hpp"
-
-// timers
-#include "mixr/base/timers/UpTimer.hpp"
-#include "mixr/base/timers/DownTimer.hpp"
-
-// transformations
-#include "mixr/base/transformations/Translation.hpp"
-#include "mixr/base/transformations/Rotation.hpp"
-#include "mixr/base/transformations/Scale.hpp"
+// Others
+#include "mixr/base/EarthModel.hpp"
 
 // ubf
 #include "mixr/base/ubf/Agent.hpp"
 #include "mixr/base/ubf/Arbiter.hpp"
-
-// qty
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/areas.hpp"
-#include "mixr/base/qty/energies.hpp"
-#include "mixr/base/qty/forces.hpp"
-#include "mixr/base/qty/frequencies.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/masses.hpp"
-#include "mixr/base/qty/powers.hpp"
-#include "mixr/base/qty/times.hpp"
 
 #include <string>
 
 namespace mixr {
 namespace base {
 
-IObject* factory(const std::string& name)
+Object* factory(const std::string& name)
 {
-    IObject* obj{};
+    Object* obj {};
 
-    // numeric types
-    if ( name == Boolean::getFactoryName() ) {
-        obj = new Boolean();
+    // Numbers
+    if ( name == Number::getFactoryName() ) {
+        obj = new Number();
     }
     else if ( name == Complex::getFactoryName() ) {
         obj = new Complex();
-    }
-    else if ( name == Decibel::getFactoryName() ) {
-        obj = new Decibel();
     }
     else if ( name == Integer::getFactoryName() ) {
         obj = new Integer();
@@ -115,29 +91,29 @@ IObject* factory(const std::string& name)
     else if ( name == Float::getFactoryName() ) {
         obj = new Float();
     }
-    // numeric operators
+    else if ( name == Boolean::getFactoryName() ) {
+        obj = new Boolean();
+    }
+    else if ( name == Decibel::getFactoryName() ) {
+        obj = new Decibel();
+    }
+    else if ( name == LatLon::getFactoryName() ) {
+        obj = new LatLon();
+    }
     else if ( name == Add::getFactoryName() ) {
         obj = new Add();
-    }
-    else if ( name == Divide::getFactoryName() ) {
-        obj = new Divide();
-    }
-    else if ( name == Multiply::getFactoryName() ) {
-        obj = new Multiply();
     }
     else if ( name == Subtract::getFactoryName() ) {
         obj = new Subtract();
     }
-
-    // lat/long positional types
-    else if ( name == Latitude::getFactoryName() ) {
-        obj = new Latitude();
+    else if ( name == Multiply::getFactoryName() ) {
+        obj = new Multiply();
     }
-    else if ( name == Longitude::getFactoryName() ) {
-        obj = new Longitude();
+    else if ( name == Divide::getFactoryName() ) {
+        obj = new Divide();
     }
 
-    // utilities
+    // Components
     else if ( name == FileReader::getFactoryName() ) {
         obj = new FileReader();
     }
@@ -145,7 +121,7 @@ IObject* factory(const std::string& name)
         obj = new Statistic();
     }
 
-    // transformations
+    // Transformations
     else if ( name == Translation::getFactoryName() ) {
         obj = new Translation();
     }
@@ -156,42 +132,7 @@ IObject* factory(const std::string& name)
         obj = new Scale();
     }
 
-    // linear system
-    else if ( name == FirstOrderTf::getFactoryName() ) {
-        obj = new FirstOrderTf();
-    }
-    else if ( name == LagFilter::getFactoryName() ) {
-        obj = new LagFilter();
-    }
-    else if ( name == Limit::getFactoryName() ) {
-        obj = new Limit();
-    }
-    else if ( name == Limit01::getFactoryName() ) {
-        obj = new Limit01();
-    }
-    else if ( name == Limit11::getFactoryName() ) {
-        obj = new Limit11();
-    }
-    else if ( name == LimitFunc::getFactoryName() ) {
-        obj = new LimitFunc();
-    }
-    else if ( name == LowpassFilter::getFactoryName() ) {
-        obj = new LowpassFilter();
-    }
-    else if ( name == SaH::getFactoryName() ) {
-        obj = new SaH();
-    }
-    else if ( name == SecondOrderTf::getFactoryName() ) {
-        obj = new SecondOrderTf();
-    }
-    else if ( name == Sz1::getFactoryName() ) {
-        obj = new Sz1();
-    }
-    else if ( name == Sz2::getFactoryName() ) {
-        obj = new Sz2();
-    }
-
-    // relations
+    // Functors
     else if ( name == Func1::getFactoryName() ) {
         obj = new Func1();
     }
@@ -226,7 +167,7 @@ IObject* factory(const std::string& name)
         obj = new Table5();
     }
 
-    // timers
+    // Timers
     else if ( name == UpTimer::getFactoryName() ) {
         obj = new UpTimer();
     }
@@ -234,7 +175,7 @@ IObject* factory(const std::string& name)
         obj = new DownTimer();
     }
 
-    // qty: angles
+    // Units: Angles
     else if ( name == Degrees::getFactoryName() ) {
         obj = new Degrees();
     }
@@ -245,7 +186,7 @@ IObject* factory(const std::string& name)
         obj = new Semicircles();
     }
 
-    // qty: areas
+    // Units: Areas
     else if ( name == SquareMeters::getFactoryName() ) {
         obj = new SquareMeters();
     }
@@ -274,7 +215,7 @@ IObject* factory(const std::string& name)
         obj = new DecibelSquareMeters();
     }
 
-    // qty: length
+    // Units: Distances
     else if ( name == Meters::getFactoryName() ) {
         obj = new Meters();
     }
@@ -303,7 +244,7 @@ IObject* factory(const std::string& name)
         obj = new StatuteMiles();
     }
 
-    // qty: energies
+    // Units: Energies
     else if ( name == KiloWattHours::getFactoryName() ) {
         obj = new KiloWattHours();
     }
@@ -320,7 +261,7 @@ IObject* factory(const std::string& name)
         obj = new Joules();
     }
 
-    // qty: forces
+    // Units: Forces
     else if ( name == Newtons::getFactoryName() ) {
         obj = new Newtons();
     }
@@ -334,7 +275,7 @@ IObject* factory(const std::string& name)
         obj = new PoundForces();
     }
 
-    // qty: frequencies
+    // Units: Frequencies
     else if ( name == Hertz::getFactoryName() ) {
         obj = new Hertz();
     }
@@ -351,7 +292,7 @@ IObject* factory(const std::string& name)
         obj = new TeraHertz();
     }
 
-    // qty: masses
+    // Units: Masses
     else if ( name == Grams::getFactoryName() ) {
         obj = new Grams();
     }
@@ -362,7 +303,7 @@ IObject* factory(const std::string& name)
         obj = new Slugs();
     }
 
-    // qty: powers
+    // Units: Powers
     else if ( name == KiloWatts::getFactoryName() ) {
         obj = new KiloWatts();
     }
@@ -382,7 +323,7 @@ IObject* factory(const std::string& name)
         obj = new DecibelMilliWatts();
     }
 
-    // qty: time
+    // Units: Time
     else if ( name == Seconds::getFactoryName() ) {
         obj = new Seconds();
     }
@@ -405,7 +346,18 @@ IObject* factory(const std::string& name)
         obj = new Days();
     }
 
-    // colors
+    // Units: Velocities
+    else if ( name == AngularVelocity::getFactoryName() ) {
+        obj = new AngularVelocity();
+    }
+    else if ( name == LinearVelocity::getFactoryName() ) {
+        obj = new LinearVelocity();
+    }
+
+    // Colors
+    else if ( name == Color::getFactoryName() ) {
+        obj = new Color();
+    }
     else if ( name == Cie::getFactoryName() ) {
         obj = new Cie();
     }
@@ -431,7 +383,7 @@ IObject* factory(const std::string& name)
         obj = new Yiq();
     }
 
-    // network handlers
+    // Network handlers
     else if ( name == TcpClient::getFactoryName() ) {
         obj = new TcpClient();
     }
@@ -451,12 +403,12 @@ IObject* factory(const std::string& name)
         obj = new UdpUnicastHandler();
     }
 
-    // earth models
+    // Earth models
     else if ( name == EarthModel::getFactoryName() ) {
         obj = new EarthModel();
     }
 
-    // ubf
+    // Ubf
     else if ( name == ubf::Agent::getFactoryName() ) {
         obj = new ubf::Agent();
     }

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_Ship_HPP__
-#define __mixr_models_common_Ship_HPP__
+#ifndef __mixr_models_Ship_H__
+#define __mixr_models_Ship_H__
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 namespace mixr {
 namespace models {
@@ -12,9 +12,9 @@ namespace models {
 // Description: Generic ship model
 // Factory name: Ship
 //------------------------------------------------------------------------------
-class Ship : public IPlayer
+class Ship : public Player
 {
-    DECLARE_SUBCLASS(Ship, IPlayer)
+    DECLARE_SUBCLASS(Ship, Player)
 
 public:
     Ship();

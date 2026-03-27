@@ -1,8 +1,7 @@
 
 #include "mixr/instruments/maps/BearingPointer.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/units/Angles.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -20,9 +19,9 @@ BEGIN_SLOT_MAP(BearingPointer)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(BearingPointer)
-    ON_EVENT_OBJ(UPDATE_VALUE7,onUpdateRadBearingPointer, base::IAngle)    // Sets bearing to this base::Angle
-    ON_EVENT_OBJ(UPDATE_VALUE7,onUpdateRadBearingPointer, base::INumber)   // Sets bearing to this angle in radians
-    ON_EVENT_OBJ(UPDATE_VALUE8, onUpdateDegBearingPointer, base::INumber)  // Sets bearing to this angle in degrees
+    ON_EVENT_OBJ(UPDATE_VALUE7,onUpdateRadBearingPointer, base::Angle)    // Sets bearing to this base::Angle
+    ON_EVENT_OBJ(UPDATE_VALUE7,onUpdateRadBearingPointer, base::Number)   // Sets bearing to this angle in radians
+    ON_EVENT_OBJ(UPDATE_VALUE8, onUpdateDegBearingPointer, base::Number)  // Sets bearing to this angle in degrees
 END_EVENT_HANDLER()
 
 BearingPointer::BearingPointer()
@@ -64,11 +63,11 @@ void BearingPointer::draw()
 //------------------------------------------------------------------------------
 //  onUpdateRadBearingPointer() - update bearing angle
 //------------------------------------------------------------------------------
-bool BearingPointer::onUpdateRadBearingPointer(const base::IAngle* const x)
+bool BearingPointer::onUpdateRadBearingPointer(const base::Angle* const msg)
 {
     bool ok = false;
-    if (x != nullptr) {
-        setBearingRad(x->getValueInRadians());
+    if (msg != nullptr) {
+        setBearingRad( static_cast<double>(base::Radians::convertStatic( *msg )) );
         ok = true;
     }
     return ok;
@@ -77,11 +76,11 @@ bool BearingPointer::onUpdateRadBearingPointer(const base::IAngle* const x)
 //------------------------------------------------------------------------------
 //  onUpdateRadBearingPointer() - update bearing angle by number
 //------------------------------------------------------------------------------
-bool BearingPointer::onUpdateRadBearingPointer(const base::INumber* const msg)
+bool BearingPointer::onUpdateRadBearingPointer(const base::Number* const msg)
 {
     bool ok = false;
     if (msg != nullptr) {
-        setBearingRad(msg->asDouble());  // radians
+        setBearingRad(msg->getReal());  // radians
         ok = true;
     }
     return ok;
@@ -90,11 +89,11 @@ bool BearingPointer::onUpdateRadBearingPointer(const base::INumber* const msg)
 //------------------------------------------------------------------------------
 //  onUpdateDegBearingPointer() - update bearing angle (degrees)
 //------------------------------------------------------------------------------
-bool BearingPointer::onUpdateDegBearingPointer(const base::INumber* const msg)
+bool BearingPointer::onUpdateDegBearingPointer(const base::Number* const msg)
 {
     bool ok = false;
     if (msg != nullptr) {
-        setBearingDeg(msg->asDouble());  // degrees
+        setBearingDeg(msg->getReal());  // degrees
         ok = true;
     }
     return ok;

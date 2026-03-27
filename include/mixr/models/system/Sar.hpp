@@ -1,27 +1,27 @@
 
-#ifndef __mixr_models_Sar_HPP__
-#define __mixr_models_Sar_HPP__
+#ifndef __mixr_models_Sar_H__
+#define __mixr_models_Sar_H__
 
-#include "mixr/models/system/IRadar.hpp"
+#include "mixr/models/system/Radar.hpp"
 #include "mixr/base/osg/Vec3d"
 
 namespace mixr {
-namespace base { class Integer; class Pair; class IPairStream; }
+namespace base { class Pair; class PairStream; }
 namespace models {
 class Image;
 
 //------------------------------------------------------------------------------
 // Class: Sar
 //
-// Description: Concrete SAR class
+// Description: Generic SAR
 // Factory name: Sar
 // Slots:
-//    chipSize      <base::Integer>      ! Chip size (pixels) (default: 0)
+//    chipSize      <base::Number>      ! Chip size (pixels) (default: 0)
 //
 //------------------------------------------------------------------------------
-class Sar final: public IRadar
+class Sar : public Radar
 {
-    DECLARE_SUBCLASS(Sar, IRadar)
+    DECLARE_SUBCLASS(Sar, Radar)
 
 public:
    Sar();
@@ -30,7 +30,7 @@ public:
    virtual bool isSystemReady() const;
 
    // Returns a list of all images (prereferenced)
-   virtual base::IPairStream* getImages();
+   virtual base::PairStream* getImages();
 
    // Returns the most recent image (prereferenced)
    virtual const Image* getImage() const;
@@ -82,7 +82,7 @@ protected:
    double timer {};                 // SAR timer
 
 private:
-   base::IPairStream* imgList {};   // List of SAR images
+   base::PairStream* imgList {};    // List of SAR images
 
    int          nextId {1};         // Next image ID
    double       stareLatitude {};   // Degrees
@@ -98,7 +98,7 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotChipSize(const base::Integer* const);
+   bool setSlotChipSize(const base::Number* const);
 };
 
 }

@@ -29,18 +29,16 @@
 #include "mixr/base/network/UdpBroadcastHandler.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
 
 #include <cstdio>
 #include <cstring>
-#include <string>
 
 namespace mixr {
 namespace base {
 
 IMPLEMENT_SUBCLASS(UdpBroadcastHandler, "UdpBroadcastHandler")
-EMPTY_DELETEDATA(UdpBroadcastHandler)
 
 BEGIN_SLOTTABLE(UdpBroadcastHandler)
     "networkMask",       // 1) Host Net Mask   "255.255.255.255"
@@ -58,7 +56,20 @@ UdpBroadcastHandler::UdpBroadcastHandler()
 void UdpBroadcastHandler::copyData(const UdpBroadcastHandler& org, const bool)
 {
     BaseClass::copyData(org);
-    networkMask = org.networkMask;
+
+    if (networkMask != nullptr) delete[] networkMask;
+    networkMask = nullptr;
+    if (org.networkMask != nullptr) {
+        const std::size_t len {std::strlen(org.networkMask)};
+        networkMask = new char[len+1];
+        utStrcpy(networkMask,(len+1),org.networkMask);
+    }
+}
+
+void UdpBroadcastHandler::deleteData()
+{
+    if (networkMask != nullptr) delete[] networkMask;
+    networkMask = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -115,10 +126,10 @@ bool UdpBroadcastHandler::bindSocket()
     // ---
     if (ok) {
         ok = false;
-        if (!networkMask.empty()) {
+        if (networkMask != nullptr) {
             // User defined broadcast address
             const uint32_t localNetAddr{getLocalAddr()};
-            const uint32_t localNetMask{::inet_addr(networkMask.c_str())};
+            const uint32_t localNetMask{::inet_addr(networkMask)};
             if (localNetAddr != INADDR_NONE && localNetMask != INADDR_NONE) {
                const uint32_t localNet{localNetAddr & localNetMask};
                const uint32_t ba{localNet | ~localNetMask};
@@ -169,10 +180,14 @@ bool UdpBroadcastHandler::bindSocket()
 //------------------------------------------------------------------------------
 
 // networkMask: Host Net Mask   "255.255.255.255"
-bool UdpBroadcastHandler::setSlotNetworkMask(const String* const x)
+bool UdpBroadcastHandler::setSlotNetworkMask(const String* const msg)
 {
-    networkMask = x->c_str();
-    return true;
+    bool ok{};
+    if (msg != nullptr) {
+        networkMask = msg->getCopyString();
+        ok = true;
+    }
+    return ok;
 }
 
 }

@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2983320E-1525-5DE4-FEDF-7038EA20E434}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>models</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Release\models\</IntDir>
+    <TargetName>mixr_models</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Debug\models\</IntDir>
+    <TargetName>mixr_models_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;..\..\..\mixr-3rdparty\include\JSBSim;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi /Ot %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;..\..\..\mixr-3rdparty\include\JSBSim;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\models\Actions.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\AircraftIrSignature.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Designator.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Emission.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Image.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\IrQueryMsg.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\IrShapes.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\IrSignature.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Message.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\MultiActorAgent.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\SensorMsg.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Signatures.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\SimAgent.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\SynchronizedState.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\TargetData.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Tdb.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\Track.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\WorldModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\AerodynamicsModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\DynamicsModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\JSBSimModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\LaeroModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\RacModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\dynamics\SpaceDynamicsModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\environment\AbstractAtmosphere.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\environment\IrAtmosphere.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\environment\IrAtmosphere1.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\factory.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Bullseye.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Gps.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Ins.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Navigation.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Route.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\navigation\Steerpoint.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\Building.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\LifeForm.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\Player.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\Player.inl" />
+    <ClInclude Include="..\..\include\mixr\models\player\Ship.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\air\AirVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\air\Aircraft.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\air\Helicopter.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\air\UnmannedAirVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Chaff.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Decoy.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Effect.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Flare.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\ArmoredVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\Artillery.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStation.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStationRadar.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStationUav.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\SamVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\Tank.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\ground\WheeledVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\space\BoosterSpaceVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\space\MannedSpaceVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\space\SpaceVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\space\UnmannedSpaceVehicle.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Aam.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\AbstractWeapon.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Agm.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Bomb.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Bullet.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Missile.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Sam.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\sensor\Gmti.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\sensor\Stt.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\sensor\Tws.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Antenna.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Autopilot.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\AvionicsPod.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\CollisionDetect.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\CommRadio.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Datalink.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\ExternalStore.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\FuelTank.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Gimbal.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Guns.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Iff.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\IrSeeker.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\IrSensor.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\IrSystem.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Jammer.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\MergingIrSensor.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\OnboardComputer.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Pilot.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Radar.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Radio.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\RfSensor.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\RfSystem.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Rwr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Sar.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\ScanGimbal.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\SensorMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\SimpleStoresMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\StabilizingGimbal.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\Stores.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\StoresMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\System.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirAngleOnlyTrkMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirAngleOnlyTrkMgrPT.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirTrkMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AngleOnlyTrackManager.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\GmtiTrkMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\RwrTrkMgr.hpp" />
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\TrackManager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\models\Actions.cpp" />
+    <ClCompile Include="..\..\src\models\AircraftIrSignature.cpp" />
+    <ClCompile Include="..\..\src\models\Designator.cpp" />
+    <ClCompile Include="..\..\src\models\Emission.cpp" />
+    <ClCompile Include="..\..\src\models\Image.cpp" />
+    <ClCompile Include="..\..\src\models\IrQueryMsg.cpp" />
+    <ClCompile Include="..\..\src\models\IrShapes.cpp" />
+    <ClCompile Include="..\..\src\models\IrSignature.cpp" />
+    <ClCompile Include="..\..\src\models\Message.cpp" />
+    <ClCompile Include="..\..\src\models\MultiActorAgent.cpp" />
+    <ClCompile Include="..\..\src\models\SensorMsg.cpp" />
+    <ClCompile Include="..\..\src\models\Signatures.cpp" />
+    <ClCompile Include="..\..\src\models\SimAgent.cpp" />
+    <ClCompile Include="..\..\src\models\SynchronizedState.cpp" />
+    <ClCompile Include="..\..\src\models\TargetData.cpp" />
+    <ClCompile Include="..\..\src\models\Tdb.cpp" />
+    <ClCompile Include="..\..\src\models\Track.cpp" />
+    <ClCompile Include="..\..\src\models\WorldModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\AerodynamicsModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\DynamicsModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\JSBSimModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\LaeroModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\RacModel.cpp" />
+    <ClCompile Include="..\..\src\models\dynamics\SpaceDynamicsModel.cpp" />
+    <ClCompile Include="..\..\src\models\environment\AbstractAtmosphere.cpp" />
+    <ClCompile Include="..\..\src\models\environment\IrAtmosphere.cpp" />
+    <ClCompile Include="..\..\src\models\environment\IrAtmosphere1.cpp" />
+    <ClCompile Include="..\..\src\models\factory.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Bullseye.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Gps.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Ins.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Navigation.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Route.cpp" />
+    <ClCompile Include="..\..\src\models\navigation\Steerpoint.cpp" />
+    <ClCompile Include="..\..\src\models\player\Building.cpp" />
+    <ClCompile Include="..\..\src\models\player\LifeForm.cpp" />
+    <ClCompile Include="..\..\src\models\player\Player.cpp" />
+    <ClCompile Include="..\..\src\models\player\Ship.cpp" />
+    <ClCompile Include="..\..\src\models\player\air\AirVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\air\Aircraft.cpp" />
+    <ClCompile Include="..\..\src\models\player\air\Helicopter.cpp" />
+    <ClCompile Include="..\..\src\models\player\air\UnmannedAirVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\effect\Chaff.cpp" />
+    <ClCompile Include="..\..\src\models\player\effect\Decoy.cpp" />
+    <ClCompile Include="..\..\src\models\player\effect\Effect.cpp" />
+    <ClCompile Include="..\..\src\models\player\effect\Flare.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\ArmoredVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\Artillery.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\GroundStation.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\GroundStationRadar.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\GroundStationUav.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\GroundVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\SamVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\Tank.cpp" />
+    <ClCompile Include="..\..\src\models\player\ground\WheeledVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\space\BoosterSpaceVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\space\MannedSpaceVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\space\SpaceVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\space\UnmannedSpaceVehicle.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Aam.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\AbstractWeapon.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Agm.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Bomb.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Bullet.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Missile.cpp" />
+    <ClCompile Include="..\..\src\models\player\weapon\Sam.cpp" />
+    <ClCompile Include="..\..\src\models\sensor\Gmti.cpp" />
+    <ClCompile Include="..\..\src\models\sensor\Stt.cpp" />
+    <ClCompile Include="..\..\src\models\sensor\Tws.cpp" />
+    <ClCompile Include="..\..\src\models\system\Antenna.cpp" />
+    <ClCompile Include="..\..\src\models\system\Autopilot.cpp" />
+    <ClCompile Include="..\..\src\models\system\AvionicsPod.cpp" />
+    <ClCompile Include="..\..\src\models\system\CollisionDetect.cpp" />
+    <ClCompile Include="..\..\src\models\system\CommRadio.cpp" />
+    <ClCompile Include="..\..\src\models\system\Datalink.cpp" />
+    <ClCompile Include="..\..\src\models\system\ExternalStore.cpp" />
+    <ClCompile Include="..\..\src\models\system\FuelTank.cpp" />
+    <ClCompile Include="..\..\src\models\system\Gimbal.cpp" />
+    <ClCompile Include="..\..\src\models\system\Guns.cpp" />
+    <ClCompile Include="..\..\src\models\system\Iff.cpp" />
+    <ClCompile Include="..\..\src\models\system\IrSeeker.cpp" />
+    <ClCompile Include="..\..\src\models\system\IrSensor.cpp" />
+    <ClCompile Include="..\..\src\models\system\IrSystem.cpp" />
+    <ClCompile Include="..\..\src\models\system\Jammer.cpp" />
+    <ClCompile Include="..\..\src\models\system\MergingIrSensor.cpp" />
+    <ClCompile Include="..\..\src\models\system\OnboardComputer.cpp" />
+    <ClCompile Include="..\..\src\models\system\Pilot.cpp" />
+    <ClCompile Include="..\..\src\models\system\Radar.cpp" />
+    <ClCompile Include="..\..\src\models\system\Radio.cpp" />
+    <ClCompile Include="..\..\src\models\system\RfSensor.cpp" />
+    <ClCompile Include="..\..\src\models\system\RfSystem.cpp" />
+    <ClCompile Include="..\..\src\models\system\Rwr.cpp" />
+    <ClCompile Include="..\..\src\models\system\Sar.cpp" />
+    <ClCompile Include="..\..\src\models\system\ScanGimbal.cpp" />
+    <ClCompile Include="..\..\src\models\system\SensorMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\SimpleStoresMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\StabilizingGimbal.cpp" />
+    <ClCompile Include="..\..\src\models\system\Stores.cpp" />
+    <ClCompile Include="..\..\src\models\system\StoresMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\System.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirAngleOnlyTrkMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirAngleOnlyTrkMgrPT.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirTrkMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\AngleOnlyTrackManager.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\GmtiTrkMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\RwrTrkMgr.cpp" />
+    <ClCompile Include="..\..\src\models\system\trackmanager\TrackManager.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

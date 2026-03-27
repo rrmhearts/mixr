@@ -15,7 +15,6 @@
 #include "cigicl/CigiSensorRespV3.h"
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 //------------------------------------------------------------------------------
@@ -88,6 +87,5 @@ void SignalProcessor::OnSensorResp(CigiBasePacket* packet)
    if (p != nullptr) p->sensorResp( dynamic_cast<CigiSensorRespV3*> (packet) );
 }
 
-}
 }
 }

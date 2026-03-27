@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\interop">
+      <UniqueIdentifier>{C8FEECFF-B48D-76C9-5DAC-8AC4491A876F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\interop\dis">
+      <UniqueIdentifier>{F79F7A18-E3C4-C998-0C10-AF28F893C8B6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\interop">
+      <UniqueIdentifier>{3D6EA0A8-A923-199E-3218-13759ECC0FA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\interop\dis">
+      <UniqueIdentifier>{ECC192C3-584D-0088-615E-837CCD685C88}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\interop\dis\EmissionPduHandler.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\NetIO.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\Nib.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\Ntm.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\enums.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\factory.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\pdu.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\interop\dis\structs.hpp">
+      <Filter>include\mixr\interop\dis</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\interop\dis\EmissionPduHandler.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\NetIO.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\NetIO_entity_state.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\NetIO_munition_detonation.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\NetIO_weapon_fire.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Nib.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Nib_entity_state.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Nib_iff.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Nib_munition_detonation.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Nib_weapon_fire.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\Ntm.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\interop\dis\factory.cpp">
+      <Filter>src\interop\dis</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,10 +1,8 @@
 
 #include "mixr/graphics/Shapes.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/numeric/Number.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/graphics/ColorGradient.hpp"
 #include <GL/glu.h>
 
@@ -24,13 +22,13 @@ BEGIN_SLOTTABLE(Circle)
 END_SLOTTABLE(Circle)
 
 BEGIN_SLOT_MAP(Circle)
-    ON_SLOT(1, setSlotRadius, base::INumber)
-    ON_SLOT(2, setSlotFilled, base::Boolean)
-    ON_SLOT(3, setSlotSlices, base::Integer)
+    ON_SLOT(1, setSlotRadius, base::Number)
+    ON_SLOT(2, setSlotFilled, base::Number)
+    ON_SLOT(3, setSlotSlices, base::Number)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(Circle)
-    ON_EVENT_OBJ(UPDATE_VALUE, updateRadius, base::INumber)
+    ON_EVENT_OBJ(UPDATE_VALUE, updateRadius, base::Number)
 END_EVENT_HANDLER()
 
 Circle::Circle()
@@ -47,10 +45,10 @@ void Circle::copyData(const Circle& org, const bool)
 }
 
 // Update the circle's radius
-bool Circle::updateRadius(const base::INumber* const x)
+bool Circle::updateRadius(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setRadius(x->asDouble());
+    if (x != nullptr) ok = setRadius(x->getReal());
     return ok;
 }
 
@@ -71,24 +69,24 @@ void Circle::drawFunc()
 }
 
 // Set slot functions
-bool Circle::setSlotRadius(const base::INumber* const x)
+bool Circle::setSlotRadius(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setRadius(x->asDouble());
+    if (x != nullptr) ok = setRadius(x->getReal());
     return ok;
 }
 
-bool Circle::setSlotFilled(const base::Boolean* const x)
+bool Circle::setSlotFilled(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setFilled(x->asBool());
+    if (x != nullptr) ok = setFilled(x->getBoolean());
     return ok;
 }
 
-bool Circle::setSlotSlices(const base::Integer* const x)
+bool Circle::setSlotSlices(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setSlices(x->asInt());
+    if (x != nullptr) ok = setSlices(x->getInt());
     return ok;
 }
 
@@ -103,7 +101,7 @@ BEGIN_SLOTTABLE(OcclusionCircle)
 END_SLOTTABLE(OcclusionCircle)
 
 BEGIN_SLOT_MAP(OcclusionCircle)
-    ON_SLOT(1, setSlotOuterRadius, base::INumber)
+    ON_SLOT(1, setSlotOuterRadius, base::Number)
 END_SLOT_MAP()
 
 OcclusionCircle::OcclusionCircle()
@@ -136,10 +134,10 @@ void OcclusionCircle::drawFunc()
 }
 
 // Set slot functions
-bool OcclusionCircle::setSlotOuterRadius(const base::INumber* const x)
+bool OcclusionCircle::setSlotOuterRadius(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setOuterRadius(x->asDouble());
+    if (x != nullptr) ok = setOuterRadius(x->getReal());
     return ok;
 }
 
@@ -157,9 +155,9 @@ BEGIN_SLOTTABLE(Arc)
 END_SLOTTABLE(Arc)
 
 BEGIN_SLOT_MAP(Arc)
-    ON_SLOT(1, setSlotStartAngle, base::INumber)
-    ON_SLOT(2, setSlotArcLength, base::INumber)
-    ON_SLOT(3, setSlotIsConnected, base::Boolean)
+    ON_SLOT(1, setSlotStartAngle, base::Number)
+    ON_SLOT(2, setSlotArcLength, base::Number)
+    ON_SLOT(3, setSlotIsConnected, base::Number)
 END_SLOT_MAP()
 
 Arc::Arc()
@@ -197,24 +195,24 @@ void Arc::drawFunc()
 }
 
 // Set slot functions
-bool Arc::setSlotStartAngle(const base::INumber* const x)
+bool Arc::setSlotStartAngle(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setStartAngle(x->asDouble());
+    if (x != nullptr) ok = setStartAngle(x->getReal());
     return ok;
 }
 
-bool Arc::setSlotArcLength(const base::INumber* const x)
+bool Arc::setSlotArcLength(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setArcLength(x->asDouble());
+    if (x != nullptr) ok = setArcLength(x->getReal());
     return ok;
 }
 
-bool Arc::setSlotIsConnected(const base::Boolean* const x)
+bool Arc::setSlotIsConnected(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setIsConnected(x->asBool());
+    if (x != nullptr) ok = setIsConnected(x->getBoolean());
     return ok;
 }
 
@@ -230,7 +228,7 @@ BEGIN_SLOTTABLE(OcclusionArc)
 END_SLOTTABLE(OcclusionArc)
 
 BEGIN_SLOT_MAP(OcclusionArc)
-    ON_SLOT(1, setSlotOuterRadius, base::INumber)
+    ON_SLOT(1, setSlotOuterRadius, base::Number)
 END_SLOT_MAP()
 
 OcclusionArc::OcclusionArc()
@@ -265,10 +263,10 @@ void OcclusionArc::drawFunc()
 }
 
 // Set slot functions
-bool OcclusionArc::setSlotOuterRadius(const base::INumber* const x)
+bool OcclusionArc::setSlotOuterRadius(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setOuterRadius(x->asDouble());
+    if (x != nullptr) ok = setOuterRadius(x->getReal());
     return ok;
 }
 
@@ -333,7 +331,7 @@ BEGIN_SLOTTABLE(Line)
 END_SLOTTABLE(Line)
 
 BEGIN_SLOT_MAP(Line)
-    ON_SLOT(1, setSlotSegments, base::Boolean)
+    ON_SLOT(1, setSlotSegments, base::Number)
 END_SLOT_MAP()
 
 Line::Line()
@@ -375,10 +373,10 @@ void Line::drawFunc()
 }
 
 // Set slot functions
-bool Line::setSlotSegments(const base::Boolean* const x)
+bool Line::setSlotSegments(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setSegments(x->asBool());
+    if (x != nullptr) ok = setSegments(x->getBoolean());
     return ok;
 }
 
@@ -393,7 +391,7 @@ BEGIN_SLOTTABLE(Quad)
 END_SLOTTABLE(Quad)
 
 BEGIN_SLOT_MAP(Quad)
-    ON_SLOT(1, setSlotStrip, base::Boolean)
+    ON_SLOT(1, setSlotStrip, base::Number)
 END_SLOT_MAP()
 
 Quad::Quad()
@@ -408,11 +406,11 @@ void Quad::copyData(const Quad& org, const bool)
     strip = org.strip;
 }
 
-bool Quad::setSlotStrip(const base::Boolean* const x)
+bool Quad::setSlotStrip(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
-        ok = setStrip(x->asBool());
+        ok = setStrip(x->getBoolean());
     }
     return ok;
 }
@@ -467,7 +465,7 @@ void Quad::drawFunc()
 
                 for (unsigned int i = 0; i < nv; i++) {
                     if (colGradient != nullptr) {
-                        base::IColor* col = colGradient->getColorByIdx(i+1);
+                        base::Color* col = colGradient->getColorByIdx(i+1);
                         if (col != nullptr)
                             glColor4f(static_cast<GLfloat>(col->red()),
                                       static_cast<GLfloat>(col->green()),
@@ -497,7 +495,7 @@ BEGIN_SLOTTABLE(Triangle)
 END_SLOTTABLE(Triangle)
 
 BEGIN_SLOT_MAP(Triangle)
-    ON_SLOT(1, setSlotFan, base::Boolean)
+    ON_SLOT(1, setSlotFan, base::Number)
 END_SLOT_MAP()
 
 Triangle::Triangle()
@@ -512,11 +510,11 @@ void Triangle::copyData(const Triangle& org, const bool)
     fan = org.fan;
 }
 
-bool Triangle::setSlotFan(const base::Boolean* const x)
+bool Triangle::setSlotFan(const base::Number* const x)
 {
     bool ok {};
     if (x != nullptr) {
-        ok = setFan(x->asBool());
+        ok = setFan(x->getBoolean());
     }
     return ok;
 }
@@ -572,7 +570,7 @@ void Triangle::drawFunc()
 
                 for (unsigned int i = 0; i < nv; i++) {
                     if (colGradient != nullptr) {
-                        base::IColor* col = colGradient->getColorByIdx(i+1);
+                        base::Color* col = colGradient->getColorByIdx(i+1);
                         if (col != nullptr)
                             glColor4f(static_cast<GLfloat>(col->red()),
                                       static_cast<GLfloat>(col->green()),

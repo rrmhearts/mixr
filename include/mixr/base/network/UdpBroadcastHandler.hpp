@@ -1,50 +1,50 @@
 
-#ifndef __mixr_base_UdpBroadcastHandler_HPP__
-#define __mixr_base_UdpBroadcastHandler_HPP__
+#ifndef __mixr_base_UdpBroadcastHandler_H__
+#define __mixr_base_UdpBroadcastHandler_H__
 
-#include "mixr/base/network/IPosixHandler.hpp"
-
-#include <string>
+#include "mixr/base/network/PosixHandler.hpp"
 
 namespace mixr {
 namespace base {
+
 class String;
 class Number;
 
 //------------------------------------------------------------------------------
 // Class: UdpBroadcastHandler
+//
 // Description: UDP broadcast network handler
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: UdpBroadcastHandler
-// Slots:
-//       networkMask  <String>    ! host network mask  (e.g., "255.255.255.255")
 //
-// Example:
+// Slots:
+//       networkMask  <String>    ! Host Net Mask   "255.255.255.255"
+//
+// Input File Example:
 //
 //        ( UdpBroadcastHandler
 //           localIpAddress: "224.0.0.251"  // Local host IP address
 //           networkMask: "255.255.255.0"   // Local host Network Mask
 //           port: 2010                     // Destination port
 //           localPort: 2011                // Port to send from
-//           shared: true                   // Shared port
+//           shared: 1                      // Shared port
 //        )
+//
 //------------------------------------------------------------------------------
-class UdpBroadcastHandler final: public IPosixHandler
+class UdpBroadcastHandler : public PosixHandler
 {
-    DECLARE_SUBCLASS(UdpBroadcastHandler, IPosixHandler)
+    DECLARE_SUBCLASS(UdpBroadcastHandler, PosixHandler)
 
 public:
     UdpBroadcastHandler();
 
 protected:
-    bool init() final;
-    bool bindSocket() final;
+    bool init() override;
+    bool bindSocket() override;
 
 private:
-    std::string networkMask;
-
+    char* networkMask {};
+    
 private:
     // slot table helper methods
     bool setSlotNetworkMask(const String* const);

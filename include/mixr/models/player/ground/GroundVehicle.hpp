@@ -1,11 +1,11 @@
 
-#ifndef __mixr_models_common_GroundVehicle_HPP__
-#define __mixr_models_common_GroundVehicle_HPP__
+#ifndef __mixr_models_GroundVehicle_H__
+#define __mixr_models_GroundVehicle_H__
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 namespace mixr {
-namespace base { class IAngle; class Identifier; class ITime; }
+namespace base { class Angle; class Identifier; class Time; }
 namespace models {
 
 //------------------------------------------------------------------------------
@@ -24,9 +24,9 @@ namespace models {
 //   (2) This launcher is a temp solution -- this will be removed.
 //
 //------------------------------------------------------------------------------
-class GroundVehicle : public IPlayer
+class GroundVehicle : public Player
 {
-   DECLARE_SUBCLASS(GroundVehicle, IPlayer)
+   DECLARE_SUBCLASS(GroundVehicle, Player)
 
 public:
    enum LauncherCommand { NONE, DOWN, UP };
@@ -73,9 +73,9 @@ private:
 private:
    // slot table helper methods
    bool setSlotCommandedPosition(const base::Identifier* const);
-   bool setSlotLauncherDownAngle(const base::IAngle* const);
-   bool setSlotLauncherUpAngle(const base::IAngle* const);
-   bool setSlotLauncherMoveTime(const base::ITime* const);
+   bool setSlotLauncherDownAngle(const base::Angle* const);
+   bool setSlotLauncherUpAngle(const base::Angle* const);
+   bool setSlotLauncherMoveTime(const base::Time* const);
 };
 
 }

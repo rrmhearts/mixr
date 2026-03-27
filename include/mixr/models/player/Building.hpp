@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_Building_HPP__
-#define __mixr_models_Building_HPP__
+#ifndef __mixr_models_Building_H__
+#define __mixr_models_Building_H__
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 namespace mixr {
 namespace models {
@@ -12,9 +12,9 @@ namespace models {
 // Description: Generic building
 // Factory name: Building
 //------------------------------------------------------------------------------
-class Building : public IPlayer
+class Building : public Player
 {
-    DECLARE_SUBCLASS(Building, IPlayer)
+    DECLARE_SUBCLASS(Building, Player)
 
 public:
     Building();

@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_IoDevice_HPP__
-#define __mixr_linkage_IoDevice_HPP__
+#ifndef __mixr_linkage_IoDevice_H__
+#define __mixr_linkage_IoDevice_H__
 
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
 #include "mixr/base/safe_ptr.hpp"
 
 namespace mixr {
-namespace base { class IPairStream; class AbstractIoData; }
+namespace base { class PairStream; class AbstractIoData; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -21,35 +21,35 @@ namespace linkage {
 // Slots:
 //    adapters <PairStream>   A list of adapters
 //------------------------------------------------------------------------------
-class IoDevice : public base::IIoDevice
+class IoDevice : public base::AbstractIoDevice
 {
-    DECLARE_SUBCLASS(IoDevice, base::IIoDevice)
+    DECLARE_SUBCLASS(IoDevice, base::AbstractIoDevice)
 
 public:
    IoDevice();
 
 private:
-   void processInputsImpl(const double, base::IIoData* const inData) final {
+   void processInputsImpl(const double, base::AbstractIoData* const inData) final {
       readInputs();
       processInputAdapters(inData);
    }
 
-   void processOutputsImpl(const double, const base::IIoData* const outData) final {
+   void processOutputsImpl(const double, const base::AbstractIoData* const outData) final {
       processOutputAdapters(outData);
       writeOutputs();
    }
 
-   void processInputAdapters(base::IIoData* const);
-   void processOutputAdapters(const base::IIoData* const);
+   void processInputAdapters(base::AbstractIoData* const);
+   void processOutputAdapters(const base::AbstractIoData* const);
 
    virtual void readInputs() = 0;
    virtual void writeOutputs() = 0;
 
-   base::safe_ptr<base::IPairStream> adapters;     // list of adapters
+   base::safe_ptr<base::PairStream> adapters;     // list of adapters
 
 private:
    // slot table helper methods
-   bool setSlotAdapters(base::IPairStream* const);
+   bool setSlotAdapters(base::PairStream* const);
 };
 
 }

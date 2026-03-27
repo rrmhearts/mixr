@@ -1,8 +1,8 @@
 
-#ifndef __mixr_map_vpf_VpfTable_HPP__
-#define __mixr_map_vpf_VpfTable_HPP__
+#ifndef __mixr_map_vpf_VpfTable_H__
+#define __mixr_map_vpf_VpfTable_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include <array>
 
@@ -16,9 +16,9 @@ class VpfRecord;
 // Class: VpfTable
 // Description: Default vector product format table
 // --------------------------------------------------------------
-class VpfTable : public base::IObject
+class VpfTable : public base::Object
 {
-   DECLARE_SUBCLASS(VpfTable, base::IObject)
+   DECLARE_SUBCLASS(VpfTable, base::Object)
 
 public:
     VpfTable();
@@ -76,7 +76,7 @@ public:
 
     // Size of one record (if we are fixed length)
     int getRecordSize()                         { return recordSize; }
-    VpfRecord* getRecord(const int idx);
+    VpfRecord* getRecord(const int idx);             
 
     virtual bool loadTableFromFile(const char* pathname, const char* filename, const int xType = -1);
     static const int MAX_COLUMNS {50};
@@ -86,7 +86,7 @@ public:
 
 private:
     void determineRecordSize();
-    int headerLength {};
+    int headerLength {};   
     char byteOrder {};
     std::array<char, 255> tableDesc {};
     std::array<char, 255> narrTable {};

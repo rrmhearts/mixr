@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_Chaff_HPP__
-#define __mixr_models_common_Chaff_HPP__
+#ifndef __mixr_models_Chaff_H__
+#define __mixr_models_Chaff_H__
 
 #include "mixr/models/player/effect/Effect.hpp"
 

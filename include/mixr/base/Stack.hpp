@@ -1,24 +1,31 @@
 
-#ifndef __mixr_base_Stack_HPP__
-#define __mixr_base_Stack_HPP__
+#ifndef __mixr_base_Stack_H__
+#define __mixr_base_Stack_H__
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 
 namespace mixr {
 namespace base {
 
 //------------------------------------------------------------------------------
 // Class: Stack
-// Description: Concrete class that defines a stack of objects
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
-// Factory name: Stack
-// Slots: none
+// Description: Stacks of objects.
+//
+//
+// Public methods: Base class public methods, plus ...
+//
+//      push(Object* object)
+//          Pushes the 'object' to the top of the stack.
+//
+//      Object* pop()
+//          Pops the object off the top of the stack.  Empty stacks
+//          will return null(0).
+//
 //------------------------------------------------------------------------------
-class Stack final : public IList
+class Stack : public List
 {
-    DECLARE_SUBCLASS(Stack, IList)
+    DECLARE_SUBCLASS(Stack, List)
 
 public:
     Stack();
@@ -26,33 +33,33 @@ public:
     int operator==(const Stack& list) const;
     int operator!=(const Stack& list) const;
 
-    // pushes the 'object' to the top of the stack.
-    void push(IObject* object);
-    // pops the object off the top of the stack.  Empty stack will return nullptr.
-    IObject* pop();
+    void push(Object* object);
+    Object* pop();
 };
 
-inline void Stack::push(IObject* object)
+inline void Stack::push(Object* object)
 {
-    IList::addHead(object);
+    List::addHead(object);
 }
 
-inline IObject* Stack::pop()
+inline Object* Stack::pop()
 {
-    return IList::removeHead();
+    return List::removeHead();
 }
+
 
 inline int Stack::operator==(const Stack& list) const
 {
-    const IList* s1 = this;
-    const IList* s2 = &list;
+    const List* s1 = this;
+    const List* s2 = &list;
     return *s1 == *s2;
 }
 
+
 inline int Stack::operator!=(const Stack& list) const
 {
-    const IList* s1 = this;
-    const IList* s2 = &list;
+    const List* s1 = this;
+    const List* s2 = &list;
     return *s1 != *s2;
 }
 

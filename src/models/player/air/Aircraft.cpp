@@ -13,8 +13,7 @@ Aircraft::Aircraft()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericAircraft");
-    setType_old(&generic);
-    setType("GenericAircraft");
+    setType(&generic);
 }
 
 }

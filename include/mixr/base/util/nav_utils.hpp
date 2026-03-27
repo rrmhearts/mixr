@@ -1,14 +1,14 @@
 
-#ifndef __mixr_base_util_nav_utils_HPP__
-#define __mixr_base_util_nav_utils_HPP__
+#ifndef __mixr_base_util_nav_utils_H__
+#define __mixr_base_util_nav_utils_H__
 
 #include "mixr/base/EarthModel.hpp"
 #include "mixr/base/osg/Vec3d"
 #include "mixr/base/osg/Vec4d"
 #include "mixr/base/osg/Matrixd"
 
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
 #include "mixr/base/util/math_utils.hpp"
 
 namespace mixr {

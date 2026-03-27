@@ -1,6 +1,6 @@
 
 #include "mixr/models/player/weapon/Agm.hpp"
-#include "mixr/models/track/ITrack.hpp"
+#include "mixr/models/Track.hpp"
 
 namespace mixr {
 namespace models {
@@ -16,11 +16,10 @@ const char* Agm::getNickname() const       { return "GenericAgm"; }
 
 Agm::Agm()
 {
-   STANDARD_CONSTRUCTOR()
+    STANDARD_CONSTRUCTOR()
 
-   static base::String generic("AGM");
-   setType_old(&generic);
-   setType("AGM");
+    static base::String generic("AGM");
+    setType(&generic);
 
    // Default guidance & dynamics for generic A/G missile
    // (derived models will override these values)
@@ -40,7 +39,7 @@ Agm::Agm()
 //------------------------------------------------------------------------------
 // calculateVectors() --
 //------------------------------------------------------------------------------
-bool Agm::calculateVectors(const IPlayer* const tgt, const ITrack* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const
+bool Agm::calculateVectors(const Player* const tgt, const Track* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const
 {
    if (isTargetPositionValid()) {
       base::Vec3d p0{getPosition()};
@@ -52,7 +51,7 @@ bool Agm::calculateVectors(const IPlayer* const tgt, const ITrack* const trk, ba
    } else if (trk != nullptr) {
       //los = trk->getPosition();
       //vel = trk->getVelocity();
-      const IPlayer* tgt0{trk->getTarget()};
+      const Player* tgt0{trk->getTarget()};
       base::Vec3d p0{getPosition()};
       if (los != nullptr) *los = tgt0->getPosition() -  p0;
       if (vel != nullptr) *vel = tgt0->getVelocity();

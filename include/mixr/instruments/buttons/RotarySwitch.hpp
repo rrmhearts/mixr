@@ -1,18 +1,17 @@
 
-#ifndef __mixr_instruments_RotarySwitch_HPP__
-#define __mixr_instruments_RotarySwitch_HPP__
+#ifndef __mixr_instruments_RotarySwitch_H__
+#define __mixr_instruments_RotarySwitch_H__
 
 #include "mixr/instruments/buttons/Button.hpp"
 #include <array>
 
 namespace mixr {
-namespace base { class Integer; class IPairStream; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
 // Class:       RotarySwitch
 // Description: Generic multi-position selector switch that knows when it is left or right
-//              mouse clicked and moves to next or previous switch position.
+//                mouse clicked and moves to next or previous switch position.
 //------------------------------------------------------------------------------
 class RotarySwitch : public Button
 {
@@ -38,8 +37,8 @@ private:
    SendData angleSD;       // angle to send to our rotator
 
 private:
-   bool setSlotAngles(const base::IPairStream* const);
-   bool setSlotStartPosition(const base::Integer* const);
+   bool setSlotAngles(const base::PairStream* const);
+   bool setSlotStartPosition(const base::Number* const);
 };
 
 }

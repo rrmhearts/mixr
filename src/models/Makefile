@@ -3,24 +3,21 @@ include ../makedefs
 
 LIB = $(MIXR_LIB_DIR)/libmixr_models.a
 
+CPPFLAGS += -I$(JSBSIM_INC_DIR)
+
 OBJS =  \
-	action/IAction.o \
-	action/ActionCamuflageType.o \
-	action/ActionDecoyRelease.o \
-	action/ActionImagingSar.o \
-	action/ActionWeaponRelease.o \
-	dynamics/IDynamics.o \
-	dynamics/IAeroDynamics.o \
-	dynamics/ISpaceDynamics.o \
-	dynamics/LaeroDynamics.o  \
-	dynamics/RacDynamics.o \
-	environment/IAtmosphere.o \
+	dynamics/AerodynamicsModel.o \
+	dynamics/DynamicsModel.o \
+	dynamics/JSBSimModel.o \
+	dynamics/LaeroModel.o  \
+	dynamics/RacModel.o \
+	dynamics/SpaceDynamicsModel.o \
+	environment/AbstractAtmosphere.o \
 	environment/IrAtmosphere.o \
 	environment/IrAtmosphere1.o \
 	navigation/Bullseye.o \
 	navigation/Gps.o \
 	navigation/Ins.o \
-	navigation/INavigation.o \
 	navigation/Navigation.o \
 	navigation/Route.o \
 	navigation/Steerpoint.o \
@@ -46,7 +43,7 @@ OBJS =  \
 	player/space/SpaceVehicle.o \
 	player/space/UnmannedSpaceVehicle.o \
 	player/weapon/Aam.o \
-	player/weapon/IWeapon.o \
+	player/weapon/AbstractWeapon.o \
 	player/weapon/Agm.o \
 	player/weapon/Bomb.o \
 	player/weapon/Bullet.o \
@@ -54,44 +51,28 @@ OBJS =  \
 	player/weapon/Sam.o \
 	player/Building.o \
 	player/LifeForm.o \
-	player/IPlayer.o \
+	player/Player.o \
 	player/Ship.o \
 	sensor/Gmti.o \
 	sensor/Stt.o \
 	sensor/Tws.o \
-	signature/IIrShapeSignature.o \
-	signature/IIrAircraftSignature.o \
-	signature/IIrSignature.o \
-	signature/IrSignature.o \
-	signature/IrSphereSignature.o \
-	signature/IrBoxSignature.o \
-	signature/IRfSignature.o \
-	signature/IRfDihedralCRSignature.o \
-	signature/IRfPlateSignature.o \
-	signature/RfAzElSignature.o \
-	signature/RfConstantSignature.o \
-	signature/RfDihedralCRSignature.o \
-	signature/RfSphereSignature.o \
-	signature/RfSwitchSignature.o \
-	signature/RfTrihedralCRSignature.o \
 	system/trackmanager/AirAngleOnlyTrkMgr.o \
 	system/trackmanager/AirAngleOnlyTrkMgrPT.o \
 	system/trackmanager/AirTrkMgr.o \
 	system/trackmanager/AngleOnlyTrackManager.o \
 	system/trackmanager/GmtiTrkMgr.o \
 	system/trackmanager/RwrTrkMgr.o \
-	system/trackmanager/ITrackMgr.o \
+	system/trackmanager/TrackManager.o \
 	system/Antenna.o \
 	system/Autopilot.o \
 	system/AvionicsPod.o \
 	system/CollisionDetect.o \
 	system/CommRadio.o \
 	system/Datalink.o \
-	system/IExternalStore.o \
+	system/ExternalStore.o \
 	system/FuelTank.o \
-	system/IGimbal.o \
 	system/Gimbal.o \
-	system/Gun.o \
+	system/Guns.o \
 	system/Iff.o \
 	system/IrSeeker.o \
 	system/IrSensor.o \
@@ -99,37 +80,38 @@ OBJS =  \
 	system/Jammer.o \
 	system/MergingIrSensor.o \
 	system/OnboardComputer.o \
-	system/IPilot.o \
-	system/IRadar.o \
-	system/IRadio.o \
-	system/IRfSensor.o \
-	system/IRfSystem.o \
+	system/Pilot.o \
 	system/Radar.o \
+	system/Radio.o \
+	system/RfSensor.o \
+	system/RfSystem.o \
 	system/Rwr.o \
 	system/Sar.o \
-	system/IScanGimbal.o \
+	system/ScanGimbal.o \
 	system/SensorMgr.o \
-	system/StoresMgr.o \
 	system/SimpleStoresMgr.o \
 	system/StabilizingGimbal.o \
-	system/IStores.o \
-	system/IStoresMgr.o \
-	system/ISystem.o \
+	system/Stores.o \
+	system/StoresMgr.o \
 	system/System.o \
-	track/ITrack.o \
-	track/RfTrack.o \
-	track/IrTrack.o \
+	Actions.o \
+	AircraftIrSignature.o \
 	Designator.o \
+	Emission.o \
 	Image.o \
 	IrQueryMsg.o \
-	ISensorMsg.o \
+	IrShapes.o \
+	IrSignature.o \
 	Message.o \
 	MultiActorAgent.o \
-	RfEmission.o \
+	SensorMsg.o \
+	Signatures.o \
+	SimAgent.o \
 	SimAgent.o \
 	SynchronizedState.o \
 	TargetData.o \
 	Tdb.o \
+	Track.o \
 	WorldModel.o \
 	factory.o
 
@@ -141,7 +123,6 @@ $(LIB) : $(OBJS)
 	ar rs $@ $(OBJS)
 
 clean:
-	-rm -f action/*.o
 	-rm -f dynamics/*.o
 	-rm -f environment/*.o
 	-rm -f navigation/*.o
@@ -152,7 +133,6 @@ clean:
 	-rm -f player/weapon/*.o
 	-rm -f player/*.o
 	-rm -f sensor/*.o
-	-rm -f signature/*.o
 	-rm -f system/trackmanager/*.o
 	-rm -f system/*.o
 	-rm -f *.o

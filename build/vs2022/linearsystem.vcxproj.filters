@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\linearsystem">
+      <UniqueIdentifier>{874F6C4A-F311-A0D4-3CC2-2E61A8C378B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linearsystem">
+      <UniqueIdentifier>{1CB08858-08A9-A7AA-31DB-8C2F1D3387B6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\linearsystem\DiffEquation.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\FirstOrderTf.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\LagFilter.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\Limit.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\Limit01.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\Limit11.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\LimitFunc.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\LowpassFilter.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\SaH.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\ScalerFunc.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\SecondOrderTf.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\Sz1.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linearsystem\Sz2.hpp">
+      <Filter>include\mixr\linearsystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\linearsystem\DiffEquation.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\FirstOrderTf.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\LagFilter.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\Limit.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\Limit01.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\Limit11.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\LimitFunc.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\LowpassFilter.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\SaH.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\ScalerFunc.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\SecondOrderTf.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\Sz1.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linearsystem\Sz2.cpp">
+      <Filter>src\linearsystem</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

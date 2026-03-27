@@ -1,13 +1,13 @@
 
-#ifndef __mixr_graphics_ColorRotary_HPP__
-#define __mixr_graphics_ColorRotary_HPP__
+#ifndef __mixr_graphics_ColorRotary_H__
+#define __mixr_graphics_ColorRotary_H__
 
-#include "mixr/base/colors/IColor.hpp"
+#include "mixr/base/colors/Color.hpp"
 
 #include <array>
 
 namespace mixr {
-namespace base { class IPairStream; }
+namespace base { class PairStream; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
@@ -18,8 +18,8 @@ namespace graphics {
 //
 // Factory name: ColorRotary
 // Slots:
-//      breakcolors: <IPairStream>     // sets colors
-//      breakpoints: <IPairStream>     // sets our breakpoints
+//      breakcolors: <PairStream>     // sets colors
+//      breakpoints: <PairStream>     // sets our breakpoints
 //
 // Example:
 //  ( Graphic
@@ -46,9 +46,9 @@ namespace graphics {
 //       Set our slot values via a pairstream
 //
 //------------------------------------------------------------------------------
-class ColorRotary : public base::IColor
+class ColorRotary : public base::Color
 {
-    DECLARE_SUBCLASS(ColorRotary, base::IColor)
+    DECLARE_SUBCLASS(ColorRotary, base::Color)
 
 public:
     ColorRotary();
@@ -58,14 +58,14 @@ public:
 
 private:
     static const unsigned int MAX_VALUES = 50;
-    base::IPairStream* myColors {};              // our colors (rgba value)
+    base::PairStream* myColors {};               // our colors (rgba value)
     std::array<double, MAX_VALUES> myValues {};  // our values
     unsigned int numVals {};                     // number of values
 
 private:
     // slot table helper methods
-    bool setSlotColors(base::IPairStream* const);
-    bool setSlotValues(const base::IPairStream* const);
+    bool setSlotColors(base::PairStream* const);
+    bool setSlotValues(const base::PairStream* const);
 };
 
 }

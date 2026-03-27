@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ui">
+      <UniqueIdentifier>{259D5800-9128-C6C4-9A39-49B9064422C5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ui\glut">
+      <UniqueIdentifier>{F0711E8B-DC00-A854-851F-BC4F718DB8FA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{7A4F661C-66F1-90F2-4FAC-A4463BED1743}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\glut">
+      <UniqueIdentifier>{65E1D133-D196-4A29-5A8B-4400C63F412D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\ui\glut\GlutDisplay.hpp">
+      <Filter>include\mixr\ui\glut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ui\glut\Shapes3D.hpp">
+      <Filter>include\mixr\ui\glut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ui\glut\factory.hpp">
+      <Filter>include\mixr\ui\glut</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\ui\glut\GlutDisplay.cpp">
+      <Filter>src\ui\glut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\glut\Shapes3D.cpp">
+      <Filter>src\ui\glut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\glut\factory.cpp">
+      <Filter>src\ui\glut</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

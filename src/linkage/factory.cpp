@@ -1,7 +1,7 @@
 
 #include "mixr/linkage/factory.hpp"
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 // adapters
 #include "mixr/linkage/adapters/Ai2DiSwitch.hpp"
@@ -32,9 +32,9 @@
 namespace mixr {
 namespace linkage {
 
-base::IObject* factory(const std::string& name)
+base::Object* factory(const std::string& name)
 {
-    base::IObject* obj {};
+    base::Object* obj {};
 
     // data buffers
     if ( name == IoData::getFactoryName() )                  { obj = new IoData(); }

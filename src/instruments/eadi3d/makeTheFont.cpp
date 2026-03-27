@@ -1,7 +1,7 @@
 
 #include <cstdio>
 
-unsigned int base{0};
+unsigned int base = 0;
 
 #define MR2IN   0.026785714
 #define IN2MR   (1.0 / MR2IN)
@@ -13,10 +13,10 @@ unsigned int base{0};
 #define glEnd() std::printf("{ FONT_END },\n");
 #define glEndList() std::printf("{ FONT_ADVANCE, 6.0, 0.0 },\n\n");
 #else
-bool begin{};
-bool wasbegin{};
-float savex{};
-float savey{};
+bool begin = false;
+bool wasbegin = false;
+float savex = 0.0;
+float savey = 0.0;
 #define glNewList(x, y) std::printf("    {\n        %d,\n", x);
 #define glBegin(x) begin = true;
 #define glVertex2fv(vec) \
@@ -124,6 +124,8 @@ void make_FT_1(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_2(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -229,6 +231,8 @@ void make_FT_3(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_4(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -259,6 +263,8 @@ void make_FT_4(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_5(unsigned int obj)
 {
@@ -311,6 +317,8 @@ void make_FT_5(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_6(unsigned int obj)
 {
@@ -378,6 +386,8 @@ void make_FT_6(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_7(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -402,6 +412,8 @@ void make_FT_7(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_8(unsigned int obj)
 {
@@ -496,6 +508,8 @@ void make_FT_8(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_9(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -557,6 +571,8 @@ void make_FT_9(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_A(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -601,6 +617,8 @@ void make_FT_A(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_B(unsigned int obj)
 {
@@ -673,6 +691,8 @@ void make_FT_B(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_C(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -730,6 +750,8 @@ void make_FT_C(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_D(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -778,6 +800,8 @@ void make_FT_D(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_E(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -819,6 +843,8 @@ void make_FT_E(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_F(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -851,6 +877,8 @@ void make_FT_F(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_G(unsigned int obj)
 {
@@ -915,6 +943,8 @@ void make_FT_G(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_H(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -952,6 +982,8 @@ void make_FT_H(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_I(unsigned int obj)
 {
@@ -991,6 +1023,8 @@ void make_FT_I(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_J(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1024,6 +1058,8 @@ void make_FT_J(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_K(unsigned int obj)
 {
@@ -1066,6 +1102,8 @@ void make_FT_K(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_L(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1095,6 +1133,8 @@ void make_FT_L(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_M(unsigned int obj)
 {
@@ -1127,6 +1167,8 @@ void make_FT_M(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_N(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1154,6 +1196,8 @@ void make_FT_N(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_O(unsigned int obj)
 {
@@ -1198,6 +1242,8 @@ void make_FT_O(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_P(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1240,6 +1286,8 @@ void make_FT_P(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_Q(unsigned int obj)
 {
@@ -1304,6 +1352,8 @@ void make_FT_Q(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_R(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1354,6 +1404,8 @@ void make_FT_R(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_S(unsigned int obj)
 {
@@ -1425,6 +1477,8 @@ void make_FT_S(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_T(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1454,6 +1508,8 @@ void make_FT_T(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_U(unsigned int obj)
 {
@@ -1500,6 +1556,8 @@ void make_FT_U(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_V(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1535,6 +1593,8 @@ void make_FT_V(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_W(unsigned int obj)
 {
@@ -1572,6 +1632,8 @@ void make_FT_W(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_X(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1601,6 +1663,8 @@ void make_FT_X(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_Y(unsigned int obj)
 {
@@ -1634,6 +1698,8 @@ void make_FT_Y(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_Z(unsigned int obj)
 {
@@ -1675,6 +1741,8 @@ void make_FT_Z(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_AST(unsigned int obj)
 {
@@ -1722,6 +1790,8 @@ void make_FT_AST(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_COL(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1752,6 +1822,8 @@ void make_FT_COL(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_COM(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1776,6 +1848,8 @@ void make_FT_COM(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_DEG(unsigned int obj)
 {
@@ -1820,6 +1894,8 @@ void make_FT_DEG(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_EQU(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1850,6 +1926,8 @@ void make_FT_EQU(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_GAP(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1863,6 +1941,8 @@ void make_FT_GAP(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_ID(unsigned int obj)
 {
@@ -1906,6 +1986,8 @@ void make_FT_ID(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_LTS(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1931,6 +2013,8 @@ void make_FT_LTS(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_MIN(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -1952,6 +2036,8 @@ void make_FT_MIN(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_PER(unsigned int obj)
 {
@@ -1980,6 +2066,8 @@ void make_FT_PER(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_PLU(unsigned int obj)
 {
@@ -2011,6 +2099,8 @@ void make_FT_PLU(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_RTS(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -2035,6 +2125,8 @@ void make_FT_RTS(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_SCL(unsigned int obj)
 {
@@ -2069,6 +2161,8 @@ void make_FT_SCL(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_SLH(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -2091,6 +2185,8 @@ void make_FT_SLH(unsigned int obj)
     glEndList();
 }
 
+
+
 void make_FT_SPC(unsigned int obj)
 {
     static float    vec_1[2] =
@@ -2104,6 +2200,8 @@ void make_FT_SPC(unsigned int obj)
 #endif
     glEndList();
 }
+
+
 
 void make_FT_SQ(unsigned int obj)
 {

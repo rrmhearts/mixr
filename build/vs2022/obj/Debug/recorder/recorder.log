@@ -1,0 +1,16 @@
+﻿  DataRecordHandle.cpp
+  DataRecorder.cpp
+  FileReader.cpp
+  FileWriter.cpp
+  InputHandler.cpp
+  NetInput.cpp
+  NetOutput.cpp
+  OutputHandler.cpp
+  PrintHandler.cpp
+  PrintPlayer.cpp
+  PrintSelected.cpp
+  TabPrinter.cpp
+  factory.cpp
+  DataRecord.pb.cc
+  Generating Code...
+  recorder.vcxproj -> C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\lib\mixr_recorder_d.lib

@@ -1,13 +1,9 @@
 
 #include "mixr/base/Pair.hpp"
-//#include "mixr/base/numeric/Integer.hpp"
-//#include "mixr/base/numeric/Float.hpp"
-//#include "mixr/base/numeric/Boolean.hpp"
-
-//#include "mixr/base/Identifier.hpp"
-//#include "mixr/base/String.hpp"
-
-#include <string>
+#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Float.hpp"
+#include "mixr/base/numeric/Boolean.hpp"
+#include "mixr/base/String.hpp"
 
 namespace mixr {
 namespace base {
@@ -15,14 +11,14 @@ namespace base {
 IMPLEMENT_SUBCLASS(Pair, "Pair")
 EMPTY_SLOTTABLE(Pair)
 
-Pair::Pair(const std::string& slot, IObject* object)
+Pair::Pair(const char* slot, Object* object)
 {
     STANDARD_CONSTRUCTOR()
 
-    // set the slot name (already ref() in 'new' constructor)
-    slotname = slot;
+    // Set the slot name (already ref() in 'new' constructor)
+    slotname = new Identifier(slot);
 
-    // set the object & ref()
+    // Set the object & ref()
     if (object != nullptr) {
         obj = object;
         obj->ref();
@@ -33,22 +29,37 @@ void Pair::copyData(const Pair& pair1, const bool)
 {
     BaseClass::copyData(pair1);
 
+    // unref() any old data
+    if (slotname != nullptr) {
+       slotname->unref();
+    }
+
     if (obj != nullptr) {
        obj->unref();
     }
 
-    slotname = pair1.slotname;
+    // Copy slotname (already ref() by constructor in clone())
+    if (pair1.slotname != nullptr) {
+       slotname = static_cast<Identifier*>(pair1.slotname->clone());
+    }
+    else {
+       slotname = nullptr;
+    }
 
     // Copy the object (already ref() by constructor in clone())
     if (pair1.obj != nullptr) {
       obj = pair1.obj->clone();
-    } else {
+    }
+    else {
        obj = nullptr;
     }
 }
 
 void Pair::deleteData()
 {
+    if (slotname != nullptr) slotname->unref();
+    slotname = nullptr;
+
     if (obj != nullptr) obj->unref();
     obj = nullptr;
 }
@@ -58,9 +69,9 @@ void Pair::deleteData()
 //------------------------------------------------------------------------------
 bool Pair::isValid() const
 {
-    if (!IObject::isValid()) return false;
-    if (!slotname.empty() || obj == nullptr) return false;
-    return obj->isValid();
+    if (!Object::isValid()) return false;
+    if (slotname == nullptr || obj == nullptr) return false;
+    return slotname->isValid() && obj->isValid();
 }
 
 }

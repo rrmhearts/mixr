@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{20C7417A-8CA6-C015-95BE-4BEC011D2777}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>linkage</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Release\linkage\</IntDir>
+    <TargetName>mixr_linkage</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Debug\linkage\</IntDir>
+    <TargetName>mixr_linkage_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi /Ot %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\linkage\IoData.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\IoDevice.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\IoHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\MockDevice.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AbstractAdapter.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\Ai2DiSwitch.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AnalogInput.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AnalogOutput.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\DiscreteInput.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\DiscreteOutput.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\factory.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AbstractGenerator.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AnalogInputFixed.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AnalogSignalGen.hpp" />
+    <ClInclude Include="..\..\include\mixr\linkage\generators\DiscreteInputFixed.hpp" />
+    <ClInclude Include="..\..\src\linkage\IoPeriodicThread.hpp" />
+    <ClInclude Include="..\..\src\linkage\platform\UsbJoystick_msvc.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\linkage\IoData.cpp" />
+    <ClCompile Include="..\..\src\linkage\IoDevice.cpp" />
+    <ClCompile Include="..\..\src\linkage\IoHandler.cpp" />
+    <ClCompile Include="..\..\src\linkage\IoPeriodicThread.cpp" />
+    <ClCompile Include="..\..\src\linkage\MockDevice.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\AbstractAdapter.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\Ai2DiSwitch.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\AnalogInput.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\AnalogOutput.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\DiscreteInput.cpp" />
+    <ClCompile Include="..\..\src\linkage\adapters\DiscreteOutput.cpp" />
+    <ClCompile Include="..\..\src\linkage\factory.cpp" />
+    <ClCompile Include="..\..\src\linkage\generators\AbstractGenerator.cpp" />
+    <ClCompile Include="..\..\src\linkage\generators\AnalogInputFixed.cpp" />
+    <ClCompile Include="..\..\src\linkage\generators\AnalogSignalGen.cpp" />
+    <ClCompile Include="..\..\src\linkage\generators\DiscreteInputFixed.cpp" />
+    <ClCompile Include="..\..\src\linkage\platform\UsbJoystick_msvc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\linkage\Makefile" />
+    <None Include="..\..\src\linkage\platform\readme.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

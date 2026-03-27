@@ -155,22 +155,22 @@ bool CadrgFile::checkForMap(const char* dir)
     string->catStr("A.TOC");
 
     #if defined(WIN32)
-        toc.open(string->c_str(), std::ios::in | std::ios::binary);
+        toc.open(*string, std::ios::in | std::ios::binary);
     #else
-        toc.open(string->c_str(), std::ios::in);
+        toc.open(*string, std::ios::in);
     #endif
 
     // We didn't make it, so either we have a bad location, or the filename is lower case.  Let's try lowercase.
     if (toc.fail()) {
         // Clear out our input stream
         toc.clear();
-        string->clear();
+        string->empty();
         string->setStr(dir);
         string->catStr("a.toc");
         #if defined(WIN32)
-            toc.open(string->c_str(), std::ios::in | std::ios::binary);
+            toc.open(*string, std::ios::in | std::ios::binary);
         #else
-            toc.open(string->c_str(), std::ios::in);
+            toc.open(*string, std::ios::in);
         #endif
         // if we succeed, return true
         if (!toc.fail()) ok = true;
@@ -237,22 +237,22 @@ bool CadrgFile::initialize(const char* dir)
     string->catStr("A.TOC");
 
     #if defined(WIN32)
-        toc.open(string->c_str(), std::ios::in | std::ios::binary);
+        toc.open(*string, std::ios::in | std::ios::binary);
     #else
-        toc.open(string->c_str(), std::ios::in);
+        toc.open(*string, std::ios::in);
     #endif
 
     // We didn't make it, so either we have a bad location, or the filename is lower case.  Let's try lowercase.
     if (toc.fail()) {
         // Clear out our input stream
         toc.clear();
-        string->clear();
+        string->empty();
         string->setStr(dir);
         string->catStr("a.toc");
         #if defined(WIN32)
-            toc.open(string->c_str(), std::ios::in | std::ios::binary);
+            toc.open(*string, std::ios::in | std::ios::binary);
         #else
-            toc.open(string->c_str(), std::ios::in);
+            toc.open(*string, std::ios::in);
         #endif
         // If we still failed again, we know it's the directory that is misspelled or doesn't exist, so we print an error
         // and return.
@@ -345,20 +345,19 @@ bool CadrgFile::initialize(const char* dir)
     // GO through and find the physical locations in the file of each one of our locations we need (see above).
     parseLocations(toc, locations, 4);
 
-// the code below makes no sense, physicalIdx is an unsigned int, and ~0 => -1 (ddh)
-//    if (locations[0].physicalIdx == ~0) {
-//        std::cout << "Can't find the LOC_BOUNDARY_SECTION_SUBHEADER in the TOC!" << std::endl;
-//        return false;
-//    } else if (locations[1].physicalIdx == ~0) {
-//        std::cout << "Can't find the LOC_BOUNDARY_RECTANGLE_TABLE in the TOC!" << std::endl;
-//        return false;
-//    } else if (locations[2].physicalIdx == ~0) {
-//        std::cout << "Can't find the LOC_FRAME_FILE_INDEX_SUBHEADER in the TOC!" << std::endl;
-//        return false;
-//    } else if (locations[3].physicalIdx == ~0) {
-//        std::cout << "Can't find the LOC_FRAME_FILE_INDEX_SUBSECTION in the TOC!" << std::endl;
-//        return false;
-//    }
+    if (locations[0].physicalIdx == ~0) {
+        std::cout << "Can't find the LOC_BOUNDARY_SECTION_SUBHEADER in the TOC!" << std::endl;
+        return false;
+    } else if (locations[1].physicalIdx == ~0) {
+        std::cout << "Can't find the LOC_BOUNDARY_RECTANGLE_TABLE in the TOC!" << std::endl;
+        return false;
+    } else if (locations[2].physicalIdx == ~0) {
+        std::cout << "Can't find the LOC_FRAME_FILE_INDEX_SUBHEADER in the TOC!" << std::endl;
+        return false;
+    } else if (locations[3].physicalIdx == ~0) {
+        std::cout << "Can't find the LOC_FRAME_FILE_INDEX_SUBSECTION in the TOC!" << std::endl;
+        return false;
+    }
 
     // Our first location is the boundary rectangle section, which lays out the coverage area
     // Seek to the physical offset of the boundary rectangle section subheader
@@ -653,7 +652,7 @@ bool CadrgFile::initialize(const char* dir)
 //--------------------------------------------------------------------------
 const char* CadrgFile::getDirectory()
 {
-    if (originalDir != nullptr) return originalDir->c_str();
+    if (originalDir != nullptr) return originalDir->getString();
     else return "";
 }
 

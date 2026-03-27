@@ -27,16 +27,14 @@ OctalReadout::OctalReadout()
 // input mode function --
 //   filterInputEvent() -- Filter input events using a template character (tc)
 //------------------------------------------------------------------------------
-char OctalReadout::filterInputEvent(const int event, const char x)
+char OctalReadout::filterInputEvent(const int event, const int tc)
 {
-   const char tc = static_cast<int>(x);
    if (tc == '0' || tc == '#') {
       // Default numeric keys
-      if ( event >= '0' && event <= '7' ) {
+      if ( event >= '0' && event <= '7' )
          return static_cast<char>(event);
-      } else {
+      else
          return '\0';
-      }
    } else {
       return BaseClass::filterInputEvent(event,tc);
    }
@@ -52,7 +50,7 @@ double OctalReadout::getInputValue() const
    // copy string to buffer with correct sign character
    const std::size_t CBUFLOCAL_LEN {100};
    char cbuf[CBUFLOCAL_LEN] {};
-   const char* p {this->str.c_str()};
+   const char* p {*this};
    base::utStrcpy(cbuf, CBUFLOCAL_LEN, p);
    if (cbuf[0] == plusChar)  cbuf[0] = '+';
    if (cbuf[0] == minusChar) cbuf[0] = '-';

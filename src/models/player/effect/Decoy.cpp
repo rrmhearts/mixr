@@ -19,8 +19,7 @@ Decoy::Decoy()
     STANDARD_CONSTRUCTOR()
 
     static base::String generic("Decoy");
-    setType_old(&generic);
-    setType("Decoy");
+    setType(&generic);
 }
 
 }

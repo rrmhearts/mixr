@@ -13,8 +13,7 @@ GroundStationRadar::GroundStationRadar()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GroundStationRadar");
-    setType_old(&generic);
-    setType("GroundStationRadar");
+    setType(&generic);
 }
 
 }

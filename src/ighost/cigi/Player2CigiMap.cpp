@@ -1,14 +1,12 @@
 
 #include "mixr/ighost/cigi/Player2CigiMap.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 #include "mixr/base/Identifier.hpp"
-#include "mixr/base/String.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 IMPLEMENT_SUBCLASS(Player2CigiMap, "Player2CigiMap")
@@ -22,7 +20,7 @@ END_SLOTTABLE(Player2CigiMap)
 BEGIN_SLOT_MAP(Player2CigiMap)
     ON_SLOT(1, setSlotRefFactoryName, base::Identifier)
     ON_SLOT(2, setSlotRefTypeName,    base::String)
-    ON_SLOT(3, setSlotEntityId,       base::Integer)
+    ON_SLOT(3, setSlotEntityId,       base::Number)
 END_SLOT_MAP()
 
 Player2CigiMap::Player2CigiMap()
@@ -58,11 +56,11 @@ bool Player2CigiMap::setEntityId(const int id)
 }
 
 // Sets the IG entity type number
-bool Player2CigiMap::setSlotEntityId(const base::Integer* const x)
+bool Player2CigiMap::setSlotEntityId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int i{x->asInt()};
+   if (msg != nullptr) {
+      const int i{msg->getInt()};
       if (i >= 0) {
          ok = setEntityId(i);
       }
@@ -71,28 +69,28 @@ bool Player2CigiMap::setSlotEntityId(const base::Integer* const x)
 }
 
 // Sets the player's factory name
-bool Player2CigiMap::setSlotRefFactoryName(const base::Identifier* const x)
+bool Player2CigiMap::setSlotRefFactoryName(const base::Identifier* const msg)
 {
-   refFactoryName = x;
+   refFactoryName = msg;
    return true;
 }
 
 // Sets the player's type name
-bool Player2CigiMap::setSlotRefTypeName(const base::String* const x)
+bool Player2CigiMap::setSlotRefTypeName(const base::String* const msg)
 {
-   refTypeName = x;
+   refTypeName = msg;
    return true;
 }
 
 //------------------------------------------------------------------------------
 // isMatchingPlayerType() -- Returns true if the factory & type names match
 //------------------------------------------------------------------------------
-bool Player2CigiMap::isMatchingPlayerType(const models::IPlayer* const p) const
+bool Player2CigiMap::isMatchingPlayerType(const models::Player* const p) const
 {
    bool match{};
    if (p != nullptr && refFactoryName != nullptr) {
       // first match the factory name --
-      if (p->isFactoryName( (*refFactoryName).c_str() ) ) {
+      if (p->isFactoryName( *refFactoryName ) ) {
 
          // The factory names match!
 
@@ -100,11 +98,11 @@ bool Player2CigiMap::isMatchingPlayerType(const models::IPlayer* const p) const
          match = true;
 
          // Do we have both type names?
-         const base::String* ptype{p->getType_old()};
+         const base::String* ptype{p->getType()};
          if ( refTypeName != nullptr && ptype != nullptr) {
 
             // Then compare at most the length of our reference type name ...
-            match = std::strncmp( ptype->c_str(), refTypeName->c_str(), refTypeName->len() ) == 0;
+            match = std::strncmp( ptype->getString(), refTypeName->getString(), refTypeName->len() ) == 0;
 
          }
       }
@@ -112,6 +110,5 @@ bool Player2CigiMap::isMatchingPlayerType(const models::IPlayer* const p) const
    return match;
 }
 
-}
 }
 }

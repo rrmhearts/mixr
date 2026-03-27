@@ -5,11 +5,9 @@
 #include <string>
 
 namespace mixr {
-namespace base { class IObject; }
-namespace ighost {
+namespace base { class Object; }
 namespace pov {
-base::IObject* factory(const std::string&);
-}
+base::Object* factory(const std::string&);
 }
 }
 

@@ -7,13 +7,13 @@
 #include "mixr/interop/dis/Nib.hpp"
 #include "mixr/interop/dis/pdu.hpp"
 
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
-#include "mixr/base/network/INetHandler.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 
@@ -32,14 +32,14 @@ bool Nib::weaponFireMsgFactory(const double)
     //Simulation* sim = disIO->getSimulation();
 
     // Set the NIB mode so that we don't do this again.
-    setMode(models::IPlayer::Mode::ACTIVE);
+    setMode(models::Player::ACTIVE);
 
     // Our NIB's player is a weapon that just became active
-    const auto mPlayer = static_cast<models::IWeapon*>(getPlayer());
+    const auto mPlayer = static_cast<models::AbstractWeapon*>(getPlayer());
 
     // Ok, we have the weapon, now get the firing and target players
-    models::IPlayer* tPlayer {mPlayer->getTargetPlayer()};
-    models::IPlayer* fPlayer {mPlayer->getLaunchVehicle()};
+    models::Player* tPlayer {mPlayer->getTargetPlayer()};
+    models::Player* fPlayer {mPlayer->getLaunchVehicle()};
     if (fPlayer == nullptr) return false;
 
     // ---
@@ -154,7 +154,7 @@ bool Nib::weaponFireMsgFactory(const double)
     //std::cout << "," << pdu.munitionID.simulationID.siteIdentification;
     //std::cout << ")" << std::endl;
 
-    if (base::INetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
+    if (base::NetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
     ok = disIO->sendData(reinterpret_cast<char*>(&pdu),sizeof(pdu));
 
     return ok;

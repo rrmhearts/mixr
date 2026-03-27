@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_GroundStation_HPP__
-#define __mixr_models_common_GroundStation_HPP__
+#ifndef __mixr_models_GroundStation_H__
+#define __mixr_models_GroundStation_H__
 
 #include "mixr/models/player/ground/GroundVehicle.hpp"
 

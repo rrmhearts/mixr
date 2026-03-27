@@ -1,7 +1,6 @@
 
 #include "mixr/instruments/dials/DialArcSegment.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <iostream>
 
 #include <GL/glu.h>
@@ -20,9 +19,9 @@ BEGIN_SLOTTABLE(DialArcSegment)
 END_SLOTTABLE(DialArcSegment)
 
 BEGIN_SLOT_MAP(DialArcSegment)
-    ON_SLOT(1, setSlotIsDynamic,   base::Boolean)
-    ON_SLOT(2, setSlotOuterRadius, base::INumber)
-    ON_SLOT(3, setSlotFilled,      base::Boolean)
+    ON_SLOT(1, setSlotIsDynamic,   base::Number)
+    ON_SLOT(2, setSlotOuterRadius, base::Number)
+    ON_SLOT(3, setSlotFilled,      base::Number)
 END_SLOT_MAP()
 
 DialArcSegment::DialArcSegment()
@@ -43,19 +42,19 @@ void DialArcSegment::copyData(const DialArcSegment& org, const bool)
 //------------------------------------------------------------------------------
 // setSlotIsDyanmic()
 //------------------------------------------------------------------------------
-bool DialArcSegment::setSlotIsDynamic(const base::Boolean* const newD)
+bool DialArcSegment::setSlotIsDynamic(const base::Number* const newD)
 {
     bool ok = false;
-    if (newD != nullptr) ok = setIsDynamic(newD->asBool());
+    if (newD != nullptr) ok = setIsDynamic(newD->getBoolean());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotOuterRadius() - sets the OUTER dial radius
 //------------------------------------------------------------------------------
-bool DialArcSegment::setSlotOuterRadius(const base::INumber* const x)
+bool DialArcSegment::setSlotOuterRadius(const base::Number* const x)
 {
     if (x != nullptr) {
-        return setOuterRadius(x->asDouble());
+        return setOuterRadius(x->getFloat());
     }
     return false;
 }
@@ -63,10 +62,10 @@ bool DialArcSegment::setSlotOuterRadius(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // setSlotFilled() - is our segment filled or not?
 //------------------------------------------------------------------------------
-bool DialArcSegment::setSlotFilled(const base::Boolean* const x)
+bool DialArcSegment::setSlotFilled(const base::Number* const x)
 {
     if (x != nullptr) {
-        return setFilled(x->asBool());
+        return setFilled(x->getBoolean());
     }
     return false;
 }
@@ -128,13 +127,13 @@ void DialArcSegment::drawFunc()
 //------------------------------------------------------------------------------
 // onUpdateRadius() - event function to update our radius value
 //------------------------------------------------------------------------------
-bool DialArcSegment::onUpdateRadius(const base::INumber* const x)
+bool DialArcSegment::onUpdateRadius(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         // first determine our ratio from inner to outer radius
         double diff = outerRadius - getRadius();
-        ok = setRadius(x->asDouble());
+        ok = setRadius(x->getReal());
         outerRadius = getRadius() + diff;
     }
     return ok;

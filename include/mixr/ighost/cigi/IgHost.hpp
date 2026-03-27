@@ -1,17 +1,14 @@
 
-#ifndef __mixr_ighost_cigi3_IgHost_HPP__
-#define __mixr_ighost_cigi3_IgHost_HPP__
+#ifndef __mixr_ighost_cigi_IgHost_H__
+#define __mixr_ighost_cigi_IgHost_H__
 
-#include "mixr/simulation/IIgHost.hpp"
-
+#include "mixr/simulation/AbstractIgHost.hpp"
 #include <array>
-#include <string>
 
 namespace mixr {
-namespace base { class Identifier; class Integer; class ILength; class INumber; class IPairStream; }
-namespace simulation { class IPlayer; }
-namespace models { class IPlayer; }
-namespace ighost {
+namespace base { class Distance; class Identifier; class Number; class PairStream; class String; }
+namespace simulation { class AbstractPlayer; }
+namespace models { class Player; }
 namespace cigi {
 class CigiModel;
 class Player2CigiMap;
@@ -22,26 +19,26 @@ class Player2CigiMap;
 //
 // Factory name: BaseIgHost
 // Slots:
-//    maxRange       <ILength>      ! Max range of visual system (default: 20000.0)
-//    maxRange       <INumber>      ! Max range of visual system (meters)
+//    maxRange       <Distance>     ! Max range of visual system (default: 20000.0)
+//    maxRange       <Number>       ! Max range of visual system (meters)
 //
-//    maxModels      <Integer>      ! Max number of active, in-range player/models (default: 0)
+//    maxModels      <Number>       ! Max number of active, in-range player/models (default: 0)
 //
-//    maxElevations  <Integer>      ! Max number of player terrain elevation requests (default: 0)
+//    maxElevations  <Number>       ! Max number of player terrain elevation requests (default: 0)
 //
-//    typeMap        <IPairStream>  ! IG's system model type IDs (list of TypeMapper objects) (default: 0)
+//    typeMap        <PairStream>   ! IG's system model type IDs (list of TypeMapper objects) (default: 0)
 //
 //------------------------------------------------------------------------------
-class IgHost : public simulation::IIgHost
+class IgHost : public simulation::AbstractIgHost
 {
-   DECLARE_SUBCLASS(IgHost, simulation::IIgHost)
+   DECLARE_SUBCLASS(IgHost, simulation::AbstractIgHost)
 
 public:
    IgHost();
 
    // sets our ownship and player list pointers, used by Station class
-   void setOwnship(simulation::IPlayer* const) final;
-   void setPlayerList(base::IPairStream* const) final;      // Sets the player list that we're to use to generate player/models
+   void setOwnship(simulation::AbstractPlayer* const) final;
+   void setPlayerList(base::PairStream* const) final;      // Sets the player list that we're to use to generate player/models
 
    void reset() override;
 
@@ -55,16 +52,16 @@ protected:
    int getMaxModels() const                              { return maxModels; }      // Max number of active, in-range player/models
    int getMaxElevations() const                          { return maxElevations; }  // Max number of terrain elevation requests
 
-   const models::IPlayer* getOwnship() const             { return ownship; }        // Our ownship -- the player that we're following
+   const models::Player* getOwnship() const              { return ownship; }        // Our ownship -- the player that we're following
 
    // computes the range (meters) from our ownship to this player.
-   double computeRangeToPlayer(const models::IPlayer* const) const;
+   double computeRangeToPlayer(const models::Player* const) const;
 
    // find a player's model object in table 'type' by the player IDs
-   CigiModel* findModel(const int playerID, const std::string& federateName, const TableType type);
+   CigiModel* findModel(const int playerID, const base::String* const federateName, const TableType type);
 
    // find a player's model object in table 'type' using a pointer to the player
-   CigiModel* findModel(const simulation::IPlayer* const player, const TableType type);
+   CigiModel* findModel(const simulation::AbstractPlayer* const player, const TableType type);
 
    // add a player's model object to table 'type'
    bool addModelToList(CigiModel* const model, const TableType type);
@@ -111,8 +108,8 @@ private:
    void clearIgModelTypes();                            // Clear the IG model types table
    void mapPlayerList2ModelTable();                     // Map the player list to the model table
    void mapPlayers2ElevTable();                         // Map player list to terrain elevation table
-   CigiModel* newModelEntry(models::IPlayer* const ip); // Create a new model entry for this player & return the table index
-   CigiModel* newElevEntry(models::IPlayer* const ip);  // Create a new elevation entry for this player & return the table index
+   CigiModel* newModelEntry(models::Player* const ip);  // Create a new model entry for this player & return the table index
+   CigiModel* newElevEntry(models::Player* const ip);   // Create a new elevation entry for this player & return the table index
 
    // Parameters
    double maxRange{20000.0};                            // Max range of visual system  (meters) (default: 20km)
@@ -120,8 +117,8 @@ private:
    int maxElevations{};                                 // Max number of terrain elevation requests (default: no requests)
 
    // Simulation inputs
-   models::IPlayer* ownship{};                          // Current ownship
-   base::IPairStream* playerList{};                     // Current player list
+   models::Player* ownship{};                           // Current ownship
+   base::PairStream* playerList{};                      // Current player list
    bool rstReq{};                                       // Reset request flag
 
    // Model table
@@ -134,10 +131,10 @@ private:
 
    // Model quick lookup key
    struct ModelKey {
-      ModelKey(const int pid, const std::string& federateName);
+      ModelKey(const int pid, const base::String* const federateName);
       // IgModel IDs  -- Comparisons in this order --
-      int playerID{};                                // Player ID
-      std::string fName;                             // Federate name
+         int playerID;                                    // Player ID
+         base::safe_ptr<const base::String> fName;        // Federate name
    };
 
    // IG model type table
@@ -150,14 +147,13 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotMaxRange(const base::ILength* const);       // Sets the max range (Length)
-   bool setSlotMaxRange(const base::INumber* const);        // Sets the max range (meters)
-   bool setSlotMaxModels(const base::Integer* const);      // Sets the max number of active, in-range player/models
-   bool setSlotMaxElevations(const base::Integer* const);  // Sets the max number of player terrain elevation requests
-   bool setSlotTypeMap(const base::IPairStream* const);     // Sets the list of IG model type IDs (TypeMapper objects)
+   bool setSlotMaxRange(const base::Distance* const);     // Sets the max range (Distance) slot
+   bool setSlotMaxRange(const base::Number* const);       // Sets the max range (meters) slot
+   bool setSlotMaxModels(const base::Number* const);      // Sets the max number of active, in-range player/models slot
+   bool setSlotMaxElevations(const base::Number* const);  // Sets the max number of player terrain elevation requests slot
+   bool setSlotTypeMap(const base::PairStream* const);    // Sets the list of IG model type IDs (TypeMapper objects)
 };
 
-}
 }
 }
 

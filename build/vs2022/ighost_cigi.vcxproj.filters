@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ighost">
+      <UniqueIdentifier>{F57D156C-61DF-F279-EA4C-392C56AD2939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ighost\cigi">
+      <UniqueIdentifier>{A0141615-8C39-6595-B584-4A25A10864B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\ighost\cigi\session">
+      <UniqueIdentifier>{13FB2A3A-FF4B-167C-28B0-043E1460A9E5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ighost">
+      <UniqueIdentifier>{CA52AE61-B60A-F0AE-1F12-C90A0BE98A9F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ighost\cigi">
+      <UniqueIdentifier>{95362EC0-01C2-9B84-0AD3-1E7976DDF784}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ighost\cigi\session">
+      <UniqueIdentifier>{0842EC02-7479-349A-7D83-98BDE9395B93}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\CigiHost.hpp">
+      <Filter>include\mixr\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\CigiModel.hpp">
+      <Filter>include\mixr\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\IgHost.hpp">
+      <Filter>include\mixr\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\Player2CigiMap.hpp">
+      <Filter>include\mixr\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\factory.hpp">
+      <Filter>include\mixr\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\ighost\cigi\session\HostSession.hpp">
+      <Filter>include\mixr\ighost\cigi\session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ighost\cigi\IgThread.hpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ighost\cigi\session\SignalProcessor.hpp">
+      <Filter>src\ighost\cigi\session</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\ighost\cigi\CigiHost.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\CigiModel.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\IgHost.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\IgThread.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\Player2CigiMap.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\factory.cpp">
+      <Filter>src\ighost\cigi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\session\HostSession.cpp">
+      <Filter>src\ighost\cigi\session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ighost\cigi\session\SignalProcessor.cpp">
+      <Filter>src\ighost\cigi\session</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

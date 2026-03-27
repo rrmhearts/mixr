@@ -1,8 +1,7 @@
 #include "mixr/instruments/gauges/AoaIndexer.hpp"
 
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/units/Angles.hpp"
 #include <GL/glu.h>
 
 namespace mixr {
@@ -20,12 +19,12 @@ BEGIN_SLOTTABLE(AoAIndexer)
 END_SLOTTABLE(AoAIndexer)
 
 BEGIN_SLOT_MAP(AoAIndexer)
-    ON_SLOT(1, setSlotAoaRedMax,    base::INumber)
-    ON_SLOT(2, setSlotAoaRedMin,    base::INumber)
-    ON_SLOT(3, setSlotAoaGreenMax,  base::INumber)
-    ON_SLOT(4, setSlotAoaGreenMin,  base::INumber)
-    ON_SLOT(5, setSlotAoaYellowMax, base::INumber)
-    ON_SLOT(6, setSlotAoaYellowMin, base::INumber)
+    ON_SLOT(1, setSlotAoaRedMax,    base::Number)
+    ON_SLOT(2, setSlotAoaRedMin,    base::Number)
+    ON_SLOT(3, setSlotAoaGreenMax,  base::Number)
+    ON_SLOT(4, setSlotAoaGreenMin,  base::Number)
+    ON_SLOT(5, setSlotAoaYellowMax, base::Number)
+    ON_SLOT(6, setSlotAoaYellowMin, base::Number)
 END_SLOT_MAP()
 
 AoAIndexer::AoAIndexer()
@@ -65,7 +64,7 @@ void AoAIndexer::deleteData()
 void AoAIndexer::drawFunc()
 {
     // if we have components, we are going to check for a ROTARY
-    base::IPairStream* subcomponents = getComponents();
+    base::PairStream* subcomponents = getComponents();
     if (subcomponents != nullptr) {
       subcomponents->unref();
       subcomponents = nullptr;
@@ -251,55 +250,55 @@ void AoAIndexer::updateData(const double dt)
 //------------------------------------------------------------------------------
 // setSlotAoaRedMax()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaRedMax(const base::INumber* const newRMax)
+bool AoAIndexer::setSlotAoaRedMax(const base::Number* const newRMax)
 {
     bool ok = false;
-    if (newRMax != nullptr) ok = setAoaRedMax(newRMax->asDouble());
+    if (newRMax != nullptr) ok = setAoaRedMax(newRMax->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotAoaRedMin()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaRedMin(const base::INumber* const newRMin)
+bool AoAIndexer::setSlotAoaRedMin(const base::Number* const newRMin)
 {
     bool ok = false;
-    if (newRMin != nullptr) ok = setAoaRedMin(newRMin->asDouble());
+    if (newRMin != nullptr) ok = setAoaRedMin(newRMin->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotAoaYellowMax()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaYellowMax(const base::INumber* const newYMax)
+bool AoAIndexer::setSlotAoaYellowMax(const base::Number* const newYMax)
 {
     bool ok = false;
-    if (newYMax != nullptr) ok = setAoaYellowMax(newYMax->asDouble());
+    if (newYMax != nullptr) ok = setAoaYellowMax(newYMax->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotAoaYellowMin()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaYellowMin(const base::INumber* const newYMin)
+bool AoAIndexer::setSlotAoaYellowMin(const base::Number* const newYMin)
 {
     bool ok = false;
-    if (newYMin != nullptr) ok = setAoaYellowMin(newYMin->asDouble());
+    if (newYMin != nullptr) ok = setAoaYellowMin(newYMin->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotAoaGreenMax()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaGreenMax(const base::INumber* const newGMax)
+bool AoAIndexer::setSlotAoaGreenMax(const base::Number* const newGMax)
 {
     bool ok = false;
-    if (newGMax != nullptr) ok = setAoaGreenMax(newGMax->asDouble());
+    if (newGMax != nullptr) ok = setAoaGreenMax(newGMax->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotAoaGreenMin()
 //------------------------------------------------------------------------------
-bool AoAIndexer::setSlotAoaGreenMin(const base::INumber* const newGMin)
+bool AoAIndexer::setSlotAoaGreenMin(const base::Number* const newGMin)
 {
     bool ok = false;
-    if (newGMin != nullptr) ok = setAoaGreenMin(newGMin->asDouble());
+    if (newGMin != nullptr) ok = setAoaGreenMin(newGMin->getReal());
     return ok;
 }
 

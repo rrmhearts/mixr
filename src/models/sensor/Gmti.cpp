@@ -1,13 +1,14 @@
 
 #include "mixr/models/sensor/Gmti.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/RfEmission.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
+#include "mixr/models/Emission.hpp"
 
 #include "mixr/base/numeric/Integer.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include <cmath>
 
@@ -22,7 +23,7 @@ BEGIN_SLOTTABLE(Gmti)
 END_SLOTTABLE(Gmti)
 
 BEGIN_SLOT_MAP(Gmti)
-    ON_SLOT(1, setSlotPoi, base::IList)
+    ON_SLOT(1, setSlotPoi, base::List)
 END_SLOT_MAP()
 
 Gmti::Gmti()
@@ -53,9 +54,9 @@ void Gmti::dynamics(const double dt)
         // rotate to ownship heading
         double sinHdg{getOwnship()->getSinHeading()};
         double cosHdg{getOwnship()->getCosHeading()};
-        double x{dpoi[models::IPlayer::INORTH] * cosHdg + dpoi[models::IPlayer::IEAST] * sinHdg};
-        double y{-dpoi[models::IPlayer::INORTH] * sinHdg + dpoi[models::IPlayer::IEAST] * cosHdg};
-        double z{dpoi[models::IPlayer::IDOWN]};
+        double x{dpoi[models::Player::INORTH] * cosHdg + dpoi[models::Player::IEAST] * sinHdg};
+        double y{-dpoi[models::Player::INORTH] * sinHdg + dpoi[models::Player::IEAST] * cosHdg};
+        double z{dpoi[models::Player::IDOWN]};
 
         // Compute az & el to POI
         double grng{std::sqrt(x*x + y*y)};
@@ -105,11 +106,11 @@ void Gmti::setPoi(const base::Vec3d& newPoi)
 //------------------------------------------------------------------------------
 // setSlotPoi:  Set Slot POI Vector [ north east down ]
 //------------------------------------------------------------------------------
-bool Gmti::setSlotPoi(base::IList* const numList)
+bool Gmti::setSlotPoi(base::List* const numList)
 {
     bool ok{};
     double values[3]{};
-    const std::size_t n{numList->getNumberList(values, 3)};
+    const unsigned int n{numList->getNumberList(values, 3)};
     if (n == 3) {
         setPoi(values[0], values[1], values[2]);
         ok = true;

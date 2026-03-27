@@ -1,19 +1,19 @@
 
-#ifndef __mixr_models_common_Stt_HPP__
-#define __mixr_models_common_Stt_HPP__
+#ifndef __mixr_models_Stt_H__
+#define __mixr_models_Stt_H__
 
-#include "mixr/models/system/IRadar.hpp"
+#include "mixr/models/system/Radar.hpp"
 
 namespace mixr {
 namespace models {
 
 //------------------------------------------------------------------------------
 // Class: Stt
-// Description: Concrete Simple, Single-Target-Track Mode Radar
+// Description: Simple, Single-Target-Track Mode Radar
 //------------------------------------------------------------------------------
-class Stt : public IRadar
+class Stt : public Radar
 {
-    DECLARE_SUBCLASS(Stt, IRadar)
+    DECLARE_SUBCLASS(Stt, Radar)
 
 public:
     Stt();

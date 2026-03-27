@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\terrain">
+      <UniqueIdentifier>{3CD49139-2863-1B03-D181-2FFEBDEF2BA9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\terrain\ded">
+      <UniqueIdentifier>{D80EB59A-C433-041B-ED7E-E9AAD9020339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\terrain\dted">
+      <UniqueIdentifier>{2C2A57F1-98EC-8A7B-E19C-19084D9E6359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\terrain\srtm">
+      <UniqueIdentifier>{515D5FF1-BD1F-937B-06D0-210872D16B59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\terrain">
+      <UniqueIdentifier>{B14345E2-1DF9-BDD7-A6ED-B7AE12A2B4DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\terrain\ded">
+      <UniqueIdentifier>{CD30CD45-39BC-3A0A-42CD-BDFEAED7960A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\terrain\dted">
+      <UniqueIdentifier>{C18A73FF-AD83-9251-D6B5-77D6C20D725D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\terrain\srtm">
+      <UniqueIdentifier>{E6BD7BFF-D2B6-9A51-FBE8-7FD6E7407A5D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\terrain\DataFile.hpp">
+      <Filter>include\mixr\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\QuadMap.hpp">
+      <Filter>include\mixr\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\Terrain.hpp">
+      <Filter>include\mixr\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\ded\DedFile.hpp">
+      <Filter>include\mixr\terrain\ded</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\dted\DtedFile.hpp">
+      <Filter>include\mixr\terrain\dted</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\factory.hpp">
+      <Filter>include\mixr\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\terrain\srtm\SrtmHgtFile.hpp">
+      <Filter>include\mixr\terrain\srtm</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\terrain\DataFile.cpp">
+      <Filter>src\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\QuadMap.cpp">
+      <Filter>src\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\Terrain.cpp">
+      <Filter>src\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\ded\DedFile.cpp">
+      <Filter>src\terrain\ded</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\dted\DtedFile.cpp">
+      <Filter>src\terrain\dted</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\factory.cpp">
+      <Filter>src\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\terrain\srtm\SrtmHgtFile.cpp">
+      <Filter>src\terrain\srtm</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

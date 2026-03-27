@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\linkage">
+      <UniqueIdentifier>{C257C8DA-AEE6-51A4-5705-669F4373624A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\linkage\adapters">
+      <UniqueIdentifier>{05CC1607-71E4-FD30-3A91-8DCAA66892CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\linkage\generators">
+      <UniqueIdentifier>{CB4F5B60-3733-6AA0-4036-98DCAC9830F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linkage">
+      <UniqueIdentifier>{37C77B83-A37C-F478-2C71-EE4F9825EB7C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linkage\adapters">
+      <UniqueIdentifier>{1A6FEB96-06FE-7460-AF1C-895B9B8A8506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linkage\generators">
+      <UniqueIdentifier>{200CE537-0C06-0E8A-F572-A49AE10B74F6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linkage\platform">
+      <UniqueIdentifier>{8BADD9D6-773C-63A0-205B-779B0CC97346}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\linkage\IoData.hpp">
+      <Filter>include\mixr\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\IoDevice.hpp">
+      <Filter>include\mixr\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\IoHandler.hpp">
+      <Filter>include\mixr\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\MockDevice.hpp">
+      <Filter>include\mixr\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AbstractAdapter.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\Ai2DiSwitch.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AnalogInput.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\AnalogOutput.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\DiscreteInput.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\adapters\DiscreteOutput.hpp">
+      <Filter>include\mixr\linkage\adapters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\factory.hpp">
+      <Filter>include\mixr\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AbstractGenerator.hpp">
+      <Filter>include\mixr\linkage\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AnalogInputFixed.hpp">
+      <Filter>include\mixr\linkage\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\generators\AnalogSignalGen.hpp">
+      <Filter>include\mixr\linkage\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\linkage\generators\DiscreteInputFixed.hpp">
+      <Filter>include\mixr\linkage\generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\linkage\IoPeriodicThread.hpp">
+      <Filter>src\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\linkage\platform\UsbJoystick_msvc.hpp">
+      <Filter>src\linkage\platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\linkage\IoData.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\IoDevice.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\IoHandler.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\IoPeriodicThread.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\MockDevice.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\AbstractAdapter.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\Ai2DiSwitch.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\AnalogInput.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\AnalogOutput.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\DiscreteInput.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\adapters\DiscreteOutput.cpp">
+      <Filter>src\linkage\adapters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\factory.cpp">
+      <Filter>src\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\generators\AbstractGenerator.cpp">
+      <Filter>src\linkage\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\generators\AnalogInputFixed.cpp">
+      <Filter>src\linkage\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\generators\AnalogSignalGen.cpp">
+      <Filter>src\linkage\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\generators\DiscreteInputFixed.cpp">
+      <Filter>src\linkage\generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\linkage\platform\UsbJoystick_msvc.cpp">
+      <Filter>src\linkage\platform</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\linkage\Makefile">
+      <Filter>src\linkage</Filter>
+    </None>
+    <None Include="..\..\src\linkage\platform\readme.txt">
+      <Filter>src\linkage\platform</Filter>
+    </None>
+  </ItemGroup>
+</Project>

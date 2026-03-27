@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_GmtiTrkMgr_HPP__
-#define __mixr_models_common_GmtiTrkMgr_HPP__
+#ifndef __mixr_models_GmtiTrkMgr_H__
+#define __mixr_models_GmtiTrkMgr_H__
 
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 
 namespace mixr {
 namespace models {
@@ -14,9 +14,9 @@ namespace models {
 // Factory name: GmtiTrkMgr
 //
 //------------------------------------------------------------------------------
-class GmtiTrkMgr : public ITrackMgr
+class GmtiTrkMgr : public TrackManager
 {
-   DECLARE_SUBCLASS(GmtiTrkMgr, ITrackMgr)
+   DECLARE_SUBCLASS(GmtiTrkMgr, TrackManager)
 
 public:
    GmtiTrkMgr();

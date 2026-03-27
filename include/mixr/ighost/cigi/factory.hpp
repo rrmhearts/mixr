@@ -1,15 +1,13 @@
 
-#ifndef __mixr_ighost_cigi3_factory_HPP__
-#define __mixr_ighost_cigi3_factory_HPP__
+#ifndef __mixr_ighost_cigi_factory_H__
+#define __mixr_ighost_cigi_factory_H__
 
 #include <string>
 
 namespace mixr {
-namespace base { class IObject; }
-namespace ighost {
+namespace base { class Object; }
 namespace cigi {
-base::IObject* factory(const std::string&);
-}
+base::Object* factory(const std::string&);
 }
 }
 

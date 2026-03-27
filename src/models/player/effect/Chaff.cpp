@@ -19,8 +19,7 @@ Chaff::Chaff()
     STANDARD_CONSTRUCTOR()
 
     static base::String generic("Chaff");
-    setType_old(&generic);
-    setType("Chaff");
+    setType(&generic);
 }
 
 }

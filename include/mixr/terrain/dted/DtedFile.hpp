@@ -1,11 +1,11 @@
 
-#ifndef __mixr_terrain_DtedFile_HPP__
-#define __mixr_terrain_DtedFile_HPP__
+#ifndef __mixr_terrain_DtedFile_H__
+#define __mixr_terrain_DtedFile_H__
 
 #include "../DataFile.hpp"
 
 namespace mixr {
-namespace base { class Boolean; }
+namespace base { class Number; }
 namespace terrain {
 
 //------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotVerifyChecksum(const base::Boolean* const);
+   bool setSlotVerifyChecksum(const base::Number* const);
 };
 
 

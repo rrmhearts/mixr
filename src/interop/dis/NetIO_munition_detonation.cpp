@@ -7,14 +7,15 @@
 #include "mixr/interop/dis/Nib.hpp"
 #include "mixr/interop/dis/pdu.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 #include "mixr/models/WorldModel.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace dis {
@@ -45,9 +46,9 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
    // ---
    // 1) Find the target player
    // ---
-   models::IPlayer* tPlayer {};
+   models::Player* tPlayer {};
    if (tPlayerId != 0 && tSiteId != 0 && tApplicationId != 0) {
-      interop::INib* tNib {findDisNib(tPlayerId, tSiteId, tApplicationId, OUTPUT_NIB)};
+      interop::Nib* tNib {findDisNib(tPlayerId, tSiteId, tApplicationId, OUTPUT_NIB)};
       if (tNib != nullptr) {
          tPlayer = tNib->getPlayer();
       }
@@ -55,20 +56,20 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
    //std::cout << "Net kill(2) tPlayer = " << tPlayer << std::endl;
 
    // ---
-   // 2) Find the firing player and munitions proxy players
+   // 2) Find the firing player and munitions (networked) IPlayers
    // ---
-   models::IPlayer* fPlayer {};
+   models::Player* fPlayer {};
    if (fPlayerId != 0 && fSiteId != 0 && fApplicationId != 0) {
-      interop::INib* fNib {findDisNib(fPlayerId, fSiteId, fApplicationId, INPUT_NIB)};
+      interop::Nib* fNib {findDisNib(fPlayerId, fSiteId, fApplicationId, INPUT_NIB)};
       if (fNib != nullptr) {
          fPlayer = fNib->getPlayer();
       } else {
-         base::safe_ptr<base::IPairStream> players( getSimulation()->getPlayers() );
-         fPlayer = dynamic_cast<models::IPlayer*>(getSimulation()->findPlayer(fPlayerId));   // added DDH
+         base::safe_ptr<base::PairStream> players( getSimulation()->getPlayers() );
+         fPlayer = dynamic_cast<models::Player*>(getSimulation()->findPlayer(fPlayerId));   // added DDH
       }
    }
 
-   interop::INib* mNib {};
+   interop::Nib* mNib {};
    if (mPlayerId != 0 && mSiteId != 0 && mApplicationId != 0) {
       mNib = findDisNib(mPlayerId, mSiteId, mApplicationId, INPUT_NIB);
    }
@@ -78,7 +79,7 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
    // ---
    // 3) Update the data of the munition's NIB and player
    // ---
-   models::IWeapon* mPlayer {};
+   models::AbstractWeapon* mPlayer {};
    if (mNib != nullptr) {
 
       // ---
@@ -102,7 +103,7 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
 
       // (re)initialize the dead reckoning function
       mNib->resetDeadReckoning(
-         interop::INib::STATIC_DRM,
+         interop::Nib::STATIC_DRM,
          geocPos,
          geocVel,
          geocAcc,
@@ -110,14 +111,14 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
          arates);
 
       // Set the NIB's mode to DETONATED
-      mNib->setMode(models::IPlayer::Mode::DETONATED);
+      mNib->setMode(models::Player::DETONATED);
 
       // Find the munition player and set its mode, location and target position
-      mPlayer = dynamic_cast<models::IWeapon*>(mNib->getPlayer());
+      mPlayer = dynamic_cast<models::AbstractWeapon*>(mNib->getPlayer());
       if (mPlayer != nullptr) {
 
          // Munition's mode
-         mPlayer->setMode(models::IPlayer::Mode::DETONATED);
+         mPlayer->setMode(models::Player::DETONATED);
 
          // munition's position, velocity and acceleration at the time of the detonation
          mPlayer->setGeocPosition(geocPos);
@@ -125,7 +126,7 @@ void NetIO::processDetonationPDU(const DetonationPDU* const pdu)
          mPlayer->setGeocAcceleration(geocAcc);
 
          // detonation results
-         mPlayer->setDetonationResults(models::IWeapon::Detonation(pdu->detonationResult));
+         mPlayer->setDetonationResults(models::AbstractWeapon::Detonation(pdu->detonationResult));
 
          // Munition's target player and the location of detonation relative to target
          mPlayer->setTargetPlayer(tPlayer,false);

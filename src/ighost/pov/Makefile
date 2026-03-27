@@ -5,7 +5,6 @@ LIB = $(MIXR_LIB_DIR)/libmixr_ighost_pov.a
 
 OBJS =  \
 	PovHost.o \
-	swap_endian.o \
 	factory.o
 
 .PHONY: all clean

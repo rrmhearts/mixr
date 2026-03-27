@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_AirAngleOnlyTrkMgrPT_HPP__
-#define __mixr_models_common_AirAngleOnlyTrkMgrPT_HPP__
+#ifndef __mixr_models_AirAngleOnlyTrkMgrPT_H__
+#define __mixr_models_AirAngleOnlyTrkMgrPT_H__
 
 #include "mixr/models/system/trackmanager/AirAngleOnlyTrkMgr.hpp"
 

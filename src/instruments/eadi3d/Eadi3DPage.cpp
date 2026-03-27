@@ -2,7 +2,7 @@
 #include "mixr/instruments/eadi3d/Eadi3DPage.hpp"
 #include "mixr/base/Pair.hpp"
 #include "mixr/graphics/Display.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 // setup local variables and static variables
 #define RADIUS_180  1.625                   /* 180 in view */
@@ -24,26 +24,26 @@ EMPTY_SLOTTABLE(Eadi3DPage)
 EMPTY_DELETEDATA(Eadi3DPage)
 
 BEGIN_EVENT_HANDLER(Eadi3DPage)
-    ON_EVENT_OBJ(USER_EVENTS+100, onEventSetAltitude,           base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+101, onEventSetAirspeed,           base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+102, onEventSetHeading,            base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+103, onEventSetAOA,                base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+104, onEventSetVVI,                base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+105, onEventSetPitch,              base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+106, onEventSetRoll,               base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+107, onEventSetMach,               base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+108, onEventSetGLoad,              base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+109, onEventSetLandingMode,        base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+110, onEventSetPitchSteeringCmd,   base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+111, onEventSetRollSteeringCmd,    base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+112, onEventSetPitchSteeringValid, base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+113, onEventSetRollSteeringValid,  base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+114, onEventSetGlideslopeDev,      base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+115, onEventSetLocalizerDev,       base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+116, onEventSetTurnRate,           base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+117, onEventSetSlipInd,            base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+118, onEventSetGlideslopeValid,    base::INumber)
-    ON_EVENT_OBJ(USER_EVENTS+119, onEventSetLocalizerValid,     base::INumber)
+    ON_EVENT_OBJ(USER_EVENTS+100, onEventSetAltitude,           base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+101, onEventSetAirspeed,           base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+102, onEventSetHeading,            base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+103, onEventSetAOA,                base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+104, onEventSetVVI,                base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+105, onEventSetPitch,              base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+106, onEventSetRoll,               base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+107, onEventSetMach,               base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+108, onEventSetGLoad,              base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+109, onEventSetLandingMode,        base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+110, onEventSetPitchSteeringCmd,   base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+111, onEventSetRollSteeringCmd,    base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+112, onEventSetPitchSteeringValid, base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+113, onEventSetRollSteeringValid,  base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+114, onEventSetGlideslopeDev,      base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+115, onEventSetLocalizerDev,       base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+116, onEventSetTurnRate,           base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+117, onEventSetSlipInd,            base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+118, onEventSetGlideslopeValid,    base::Number)
+    ON_EVENT_OBJ(USER_EVENTS+119, onEventSetLocalizerValid,     base::Number)
 END_EVENT_HANDLER()
 
 Eadi3DPage::Eadi3DPage() : radius(RADIUS_180), eadiObjs(RADIUS_180)
@@ -82,12 +82,12 @@ void Eadi3DPage::copyData(const Eadi3DPage& org, const bool)
 //------------------------------------------------------------------------------
 // onEventSetAltitude() - set altitude
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetAltitude(const base::INumber* const x)
+bool Eadi3DPage::onEventSetAltitude(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        altitudeFT = x->asDouble();
+        altitudeFT = x->getReal();
     }
     return ok;
 }
@@ -95,12 +95,12 @@ bool Eadi3DPage::onEventSetAltitude(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetAirspeed() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetAirspeed(const base::INumber* const x)
+bool Eadi3DPage::onEventSetAirspeed(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        airspeedKTS = x->asDouble();
+        airspeedKTS = x->getReal();
     }
     return ok;
 }
@@ -108,12 +108,12 @@ bool Eadi3DPage::onEventSetAirspeed(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetHeading() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetHeading(const base::INumber* const x)
+bool Eadi3DPage::onEventSetHeading(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        headingDEG = x->asDouble();
+        headingDEG = x->getReal();
     }
     return ok;
 }
@@ -121,12 +121,12 @@ bool Eadi3DPage::onEventSetHeading(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetAOA() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetAOA(const base::INumber* const x)
+bool Eadi3DPage::onEventSetAOA(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        aoaDEG = x->asDouble();
+        aoaDEG = x->getReal();
     }
     return ok;
 }
@@ -134,12 +134,12 @@ bool Eadi3DPage::onEventSetAOA(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetMach() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetMach(const base::INumber* const x)
+bool Eadi3DPage::onEventSetMach(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        machNo = x->asDouble();
+        machNo = x->getReal();
     }
     return ok;
 }
@@ -147,12 +147,12 @@ bool Eadi3DPage::onEventSetMach(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetVVI() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetVVI(const base::INumber* const x)
+bool Eadi3DPage::onEventSetVVI(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        vviFPM = x->asDouble();
+        vviFPM = x->getReal();
     }
     return ok;
 }
@@ -160,12 +160,12 @@ bool Eadi3DPage::onEventSetVVI(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetPitch() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetPitch(const base::INumber* const x)
+bool Eadi3DPage::onEventSetPitch(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        pitchDEG = x->asDouble();
+        pitchDEG = x->getReal();
     }
     return ok;
 }
@@ -173,12 +173,12 @@ bool Eadi3DPage::onEventSetPitch(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetRoll() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetRoll(const base::INumber* const x)
+bool Eadi3DPage::onEventSetRoll(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        rollDEG = x->asDouble();
+        rollDEG = x->getReal();
     }
     return ok;
 }
@@ -186,12 +186,12 @@ bool Eadi3DPage::onEventSetRoll(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetGLoad() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetGLoad(const base::INumber* const x)
+bool Eadi3DPage::onEventSetGLoad(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        Gload = x->asDouble();
+        Gload = x->getReal();
     }
     return ok;
 }
@@ -199,12 +199,12 @@ bool Eadi3DPage::onEventSetGLoad(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetLandingMode() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetLandingMode(const base::INumber* const x)
+bool Eadi3DPage::onEventSetLandingMode(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        landingMode = x->asDouble() != 0.0;
+        landingMode = x->getReal() != 0.0;
     }
     return ok;
 }
@@ -212,12 +212,12 @@ bool Eadi3DPage::onEventSetLandingMode(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetPitchSteeringCmd() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetPitchSteeringCmd(const base::INumber* const x)
+bool Eadi3DPage::onEventSetPitchSteeringCmd(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        pitchSteeringCmd = x->asDouble();
+        pitchSteeringCmd = x->getReal();
     }
     return ok;
 }
@@ -225,12 +225,12 @@ bool Eadi3DPage::onEventSetPitchSteeringCmd(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetRollSteeringCmd() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetRollSteeringCmd(const base::INumber* const x)
+bool Eadi3DPage::onEventSetRollSteeringCmd(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        rollSteeringCmd = x->asDouble();
+        rollSteeringCmd = x->getReal();
     }
     return ok;
 }
@@ -238,12 +238,12 @@ bool Eadi3DPage::onEventSetRollSteeringCmd(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetPitchSteeringValid() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetPitchSteeringValid(const base::INumber* const x)
+bool Eadi3DPage::onEventSetPitchSteeringValid(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        pitchSteeringValid = x->asDouble() != 0.0;
+        pitchSteeringValid = x->getReal() != 0.0;
     }
     return ok;
 }
@@ -251,12 +251,12 @@ bool Eadi3DPage::onEventSetPitchSteeringValid(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetRollSteeringValid() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetRollSteeringValid(const base::INumber* const x)
+bool Eadi3DPage::onEventSetRollSteeringValid(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        rollSteeringValid = x->asDouble() != 0.0;
+        rollSteeringValid = x->getReal() != 0.0;
     }
     return ok;
 }
@@ -264,12 +264,12 @@ bool Eadi3DPage::onEventSetRollSteeringValid(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetGlideslopeDev() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetGlideslopeDev(const base::INumber* const x)
+bool Eadi3DPage::onEventSetGlideslopeDev(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        glideslopeDevDOTS = x->asDouble();
+        glideslopeDevDOTS = x->getReal();
     }
     return ok;
 }
@@ -277,12 +277,12 @@ bool Eadi3DPage::onEventSetGlideslopeDev(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetLocalizerDev() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetLocalizerDev(const base::INumber* const x)
+bool Eadi3DPage::onEventSetLocalizerDev(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        localizerDevDOTS = x->asDouble();
+        localizerDevDOTS = x->getReal();
     }
     return ok;
 }
@@ -290,12 +290,12 @@ bool Eadi3DPage::onEventSetLocalizerDev(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetTurnRate() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetTurnRate(const base::INumber* const x)
+bool Eadi3DPage::onEventSetTurnRate(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        turnRateDOTS = x->asDouble();
+        turnRateDOTS = x->getReal();
     }
     return ok;
 }
@@ -303,12 +303,12 @@ bool Eadi3DPage::onEventSetTurnRate(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetSlipInd() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetSlipInd(const base::INumber* const x)
+bool Eadi3DPage::onEventSetSlipInd(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        slipIndDOTS = x->asDouble();
+        slipIndDOTS = x->getReal();
     }
     return ok;
 }
@@ -316,12 +316,12 @@ bool Eadi3DPage::onEventSetSlipInd(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetGlideslopeValid() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetGlideslopeValid(const base::INumber* const x)
+bool Eadi3DPage::onEventSetGlideslopeValid(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        glideslopeDevValid = x->asDouble() != 0;
+        glideslopeDevValid = x->getReal() != 0;
     }
     return ok;
 }
@@ -329,12 +329,12 @@ bool Eadi3DPage::onEventSetGlideslopeValid(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // onEventSetLocalizerValid() -
 //------------------------------------------------------------------------------
-bool Eadi3DPage::onEventSetLocalizerValid(const base::INumber* const x)
+bool Eadi3DPage::onEventSetLocalizerValid(const base::Number* const x)
 {
     bool ok = false;
     if (x != nullptr) {
         ok = true;
-        localizerDevValid = x->asDouble() != 0.0;
+        localizerDevValid = x->getReal() != 0.0;
     }
     return ok;
 }
@@ -350,12 +350,12 @@ void Eadi3DPage::draw()
 
         eadiObjs.makeObjects();
 
-        GLsizei vpWidth{};
-        GLsizei vpHeight{};
+        GLsizei vpWidth;
+        GLsizei vpHeight;
         dsp->getViewportSize(&vpWidth, &vpHeight);
         double ratio = static_cast<double>(vpWidth) / static_cast<double>(vpHeight);
 
-        bool depthTest{};
+        bool depthTest = false;
         if (glIsEnabled(GL_DEPTH_TEST))
             depthTest = true;
 
@@ -376,7 +376,7 @@ void Eadi3DPage::draw()
         const char* airSpeedType = "C";
         scales(glideslopeDevDOTS, localizerDevDOTS, turnRateDOTS, slipIndDOTS, glideslopeDevValid, localizerDevValid, landingMode);
         windows(airspeedKTS, altitudeFT, aoaDEG, machNo, vviFPM, airSpeedType, Gload);
-        double hdgCmd{};
+        double hdgCmd = 0.0;
         heading(headingDEG, hdgCmd);
 
         glMatrixMode(GL_PROJECTION);
@@ -397,10 +397,10 @@ void Eadi3DPage::draw()
 //------------------------------------------------------------------------------
 void Eadi3DPage::globeBall(double pitch, double roll, double pitchCmd, double rollCmd, bool psValid, bool rcValid, bool landMode)
 {
-    static double fdPscV1[2] = {-0.5833f, 0.0f};
-    static double fdPscV2[2] = { 0.5833f, 0.0f};
-    static double fdBscV1[2] = { 0.0f,   -0.5833f};
-    static double fdBscV2[2] = { 0.0f,    0.5833f};
+    static double    fdPscV1[2] = {-0.5833f, 0.0f};
+    static double    fdPscV2[2] = {0.5833f, 0.0f};
+    static double    fdBscV1[2] = {0.0f, -0.5833f};
+    static double    fdBscV2[2] = {0.0f, 0.5833f};
 
     glLineWidth(1.0);
 
@@ -419,8 +419,8 @@ void Eadi3DPage::globeBall(double pitch, double roll, double pitchCmd, double ro
             if (pitch >= 0.0) lcColor3v(SKY);
             else lcColor3v(GROUND);
     glRotated(90.0, 1.0, 0.0, 0.0);
-    // arcf(0.,0.,radius,180.0,0);
-    eadiObjs.irisgl.circf(0., 0., static_cast<float>(radius));
+            /* arcf(0.,0.,radius,180.0,0); */
+            eadiObjs.irisgl.circf(0., 0., static_cast<float>(radius));
     glPopMatrix();
     eadiObjs.drawObj(Eadi3DObjects::GLOBE);
     glPopMatrix();
@@ -432,21 +432,22 @@ void Eadi3DPage::globeBall(double pitch, double roll, double pitchCmd, double ro
     lcColor3v(WHITE);
     eadiObjs.irisgl.circ(0., 0., 1.625);
 
-    glPushMatrix();    // ground pointer
+    glPushMatrix();    /* ground pointer */
     glRotated(static_cast<GLdouble>(roll), 0.0, 0.0, 1.0);
     glTranslated(0.0, -1.625, 0.0);
     eadiObjs.drawObj(Eadi3DObjects::GROUND_POINTER_2);
     glPopMatrix();
 
+
     lcColor3v(BLACK);
-    // lcColor3v(WHITE);   * temp
+    /* lcColor3v(WHITE);   * temp */
     glLineWidth(4.0);
-    eadiObjs.drawObj(Eadi3DObjects::AC_REF);    // aircraft reference symbol
+    eadiObjs.drawObj(Eadi3DObjects::AC_REF);    /* aircraft reference symbol */
     glLineWidth(2.0);
 
     if (landMode) {
         if (psValid) {
-            const double x{pitchCmd / 30.0 * 1.625};   // pitch fd command
+            double x = static_cast<double>(pitchCmd / 30.0 * 1.625);   /* pitch fd command */
             glPushMatrix();
             glTranslated(0.0, static_cast<GLdouble>(x), 0.0);
             glBegin(GL_LINES);
@@ -456,7 +457,7 @@ void Eadi3DPage::globeBall(double pitch, double roll, double pitchCmd, double ro
             glPopMatrix();
         }
         if (rcValid) {
-            const double x{rollCmd / 30.0 * 1.625};    // roll fd command
+            double x = static_cast<double>(rollCmd / 30.0 * 1.625);    /* roll fd command */
             glPushMatrix();
             glTranslated(static_cast<GLdouble>(x), 0.0, 0.0);
             glBegin(GL_LINES);
@@ -483,7 +484,7 @@ void Eadi3DPage::scales(double gsDev, double locDev, double turnRate, double sli
         eadiObjs.drawObj(Eadi3DObjects::GLIDESLOPE);
 
         if (gsValid) {
-            const double x{gsDev / 2.0};
+            double x = static_cast<double>(gsDev / 2.0);
             glPushMatrix();
             glTranslated(-2.0, static_cast<GLdouble>(x), 0.);
             eadiObjs.drawObj(Eadi3DObjects::GS_TEXT1);
@@ -495,7 +496,7 @@ void Eadi3DPage::scales(double gsDev, double locDev, double turnRate, double sli
         eadiObjs.drawObj(Eadi3DObjects::LOCALIZER);
 
         if (locValid) {
-            const double x{locDev / 2.0};
+            double x = static_cast<double>(locDev / 2.0);
             glPushMatrix();
             glTranslated(static_cast<GLdouble>(x), 2.0, 0.);
             eadiObjs.drawObj(Eadi3DObjects::LOC_TEXT1);
@@ -506,14 +507,14 @@ void Eadi3DPage::scales(double gsDev, double locDev, double turnRate, double sli
     glLineWidth(2.0);
     lcColor3v(WHITE);
 
-    double x{turnRate / 2.0 * 0.8125};
+    double x = static_cast<double>(turnRate / 2.0 * 0.8125);
 
     glPushMatrix();
     glTranslated(static_cast<GLdouble>(x), -2.125, 0.);
     eadiObjs.drawObj(Eadi3DObjects::UP_TRIANGLE);
     glPopMatrix();
 
-    x = slipInd / 2.0 * 0.40625;
+    x = static_cast<double>(slipInd / 2. * 0.40625);
     glPushMatrix();
     glTranslated(static_cast<GLdouble>(x), -2.4375, 0.);
     eadiObjs.drawObj(Eadi3DObjects::SLIP_BALL);
@@ -527,11 +528,11 @@ void Eadi3DPage::scales(double gsDev, double locDev, double turnRate, double sli
 //------------------------------------------------------------------------------
 void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double vvi, const char* airSpeedType, double gload)
 {
-    double a{cas};
+    double a = cas;
     if (a > 9999.) a = 9999.;
-    if (a < 0.0) a = 0.0;
+    if (a < 0.) a = 0.;
 
-    int airC[4]{};
+    int airC[4];
     airC[0] = static_cast<int>(a) / 1000;
     a -= static_cast<double>(airC[0] * 1000);
 
@@ -548,10 +549,10 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     }
 
     a = alt;
-    if (a > 99999.0) a = 99999.0;
-    if (a < 0.0) a = 0.0;
+    if (a > 99999.) a = 99999.;
+    if (a < 0.) a = 0.;
 
-    int altC[5]{};
+    int altC[5];
     altC[0] = static_cast<int>(a) / 10000;
     a -= static_cast<double>(altC[0] * 10000);
 
@@ -568,7 +569,7 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     }
 
     a = static_cast<double>(aoa * 10.0);
-    int aoaC[4]{};
+    int aoaC[4];
     if (a < 0) {
         a = -a;
         aoaC[0] = Eadi3DObjects::PUNC05;
@@ -594,7 +595,7 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     }
 
     a = static_cast<double>(mach * 100.0);
-    int machC[3]{};
+    int machC[3];
     if (a < 0) {
         a = 0.0;
     }
@@ -609,7 +610,7 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
 
     machC[2] = static_cast<int>(a);
     a = static_cast<double>(gload * 10.0);
-    int gloadC[2]{};
+    int gloadC[2];
 
     if (a < 0) a = 0.0;
     if (a > 99.) a = 99.;
@@ -620,7 +621,7 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     gloadC[1] = static_cast<int>(a);
 
     a = vvi;
-    int vviC[5]{};
+    int vviC[5];
     if (a < 0) {
         a = -a;
         vviC[0] = Eadi3DObjects::PUNC05;
@@ -654,7 +655,7 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     lcColor3v(WHITE);
     glLineWidth(2.0);
 
-    // cas
+    /* cas */
     glPushMatrix();
     glTranslated(-2.4375, 1.59375, 0.);
         if (airSpeedType != nullptr) {
@@ -665,110 +666,110 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
     glPopMatrix();
 
     glPushMatrix();
-        glTranslated(-2.4375, 1.59375, 0.0);
-        glTranslated(0.2404, 0.0, 0.0);
+    glTranslated(-2.4375, 1.59375, 0.0);
+    glTranslated(0.2404, 0.0, 0.0);
         if (airC[0] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) airC[0]);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (airC[1] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) airC[1]);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (airC[2] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) airC[2]);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) airC[3]);
     glPopMatrix();
 
-    // alt
+    /* alt */
     glPushMatrix();
-        glTranslated(1.3625, 1.59375, 0.0);
-        glTranslated(0.2404, 0.0, 0.0);
+    glTranslated(1.3625, 1.59375, 0.0);
+    glTranslated(0.2404, 0.0, 0.0);
         if (altC[0] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) altC[0]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (altC[1] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) altC[1]);
 
-        glTranslated(0.16, 0.03125, 0.0);
-        glScaled(.666667, .666667, 1.0);
+    glTranslated(0.16, 0.03125, 0.0);
+    glScaled(.666667, .666667, 1.0);
 
         if (altC[2] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) altC[2]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (altC[3] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) altC[3]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) altC[4]);
     glPopMatrix();
 
-    // aoa
+    /* aoa */
     glPushMatrix();
-        glTranslated(-2.3000, 1.34375, 0.0);
-        glTranslated(0.1900, 0.03125, 0.0);
-        glScaled(.666667, .666667, 1.0);
+    glTranslated(-2.3000, 1.34375, 0.0);
+    glTranslated(0.1900, 0.03125, 0.0);
+    glScaled(.666667, .666667, 1.0);
 
         if (aoaC[0] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) aoaC[0]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (aoaC[1] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) aoaC[1]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
 
         if (aoaC[2] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) aoaC[2]);
 
-        glTranslated(0.16, 0.0, 0.0);
-        eadiObjs.drawObj(Eadi3DObjects::PUNC06);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
+    eadiObjs.drawObj(Eadi3DObjects::PUNC06);
+    glTranslated(0.16, 0.0, 0.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) aoaC[3]);
     glPopMatrix();
 
-    // mach
+    /* mach */
     glPushMatrix();
-        glTranslated(-2.3000, 1.09375, 0.0);
-        glTranslated(0.2800, 0.03125, 0.0);
-        glScaled(.666667, .666667, 1.0);
+    glTranslated(-2.3000, 1.09375, 0.0);
+    glTranslated(0.2800, 0.03125, 0.0);
+    glScaled(.666667, .666667, 1.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) machC[0]);
-        glTranslated(0.16, 0.0, 0.0);
-        eadiObjs.drawObj(Eadi3DObjects::PUNC06);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
+    eadiObjs.drawObj(Eadi3DObjects::PUNC06);
+    glTranslated(0.16, 0.0, 0.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) machC[1]);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) machC[2]);
     glPopMatrix();
 
-    // G
+    /* G */
     glPushMatrix();
-        glTranslated(-2.3000, 0.84375, 0.0);
-        glTranslated(0.3600, 0.03125, 0.0);
-        glScaled(.666667, .666667, 1.0);
+    glTranslated(-2.3000, 0.84375, 0.0);
+    glTranslated(0.3600, 0.03125, 0.0);
+    glScaled(.666667, .666667, 1.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) gloadC[0]);
-        glTranslated(0.16, 0.0, 0.0);
-        eadiObjs.drawObj(Eadi3DObjects::PUNC06);
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
+    eadiObjs.drawObj(Eadi3DObjects::PUNC06);
+    glTranslated(0.16, 0.0, 0.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) gloadC[1]);
     glPopMatrix();
 
-    // vvi
+    /* vvi */
     glPushMatrix();
-        glTranslated(1.3625, 1.34375, 0.0);
-        glTranslated(0.1607, 0.0, 0.0);
-        glTranslated(0.1900, 0.03125, 0.0);
-        glScaled(.666667, .666667, 1.0);
+    glTranslated(1.3625, 1.34375, 0.0);
+    glTranslated(0.1607, 0.0, 0.0);
+    glTranslated(0.1900, 0.03125, 0.0);
+    glScaled(.666667, .666667, 1.0);
         if (vviC[0] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) vviC[0]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
         if (vviC[1] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) vviC[1]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
         if (vviC[2] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) vviC[2]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
         if (vviC[3] != -1) eadiObjs.drawObj((Eadi3DObjects::EadiObj) vviC[3]);
 
-        glTranslated(0.16, 0.0, 0.0);
+    glTranslated(0.16, 0.0, 0.0);
         eadiObjs.drawObj((Eadi3DObjects::EadiObj) vviC[4]);
     glPopMatrix();
 
@@ -780,10 +781,11 @@ void Eadi3DPage::windows(double cas, double alt, double aoa, double mach, double
 //------------------------------------------------------------------------------
 void Eadi3DPage::heading(double hdg, double hdgCmd)
 {
-    static double baseLineV1[2] = {-1.6f, 2.1875f};   // base line
+    static double baseLineV1[2] = {-1.6f, 2.1875f};   /* base line */
     static double baseLineV2[2] = {1.6f, 2.1875f};
-    static double refTicV1[2] = {0.0f, 2.1875f};      // reference tic
+    static double refTicV1[2] = {0.0f, 2.1875f};      /* reference tic */
     static double refTicV2[2] = {0.0f, 2.125f};
+
 
     glLineWidth(2.0);
     lcColor3v(BLACK);
@@ -792,14 +794,14 @@ void Eadi3DPage::heading(double hdg, double hdgCmd)
     lcColor3v(WHITE);
 
     if (hdg < 0.0) hdg += 360.0;
-    double x{hdg / 10.0};
-    int i{static_cast<int>(x)};
+    double x = static_cast<double>(hdg / 10.0);
+    int i = static_cast<int>(x);
     x = static_cast<double>(i) - x;
 
-    int ihu[4]{};
-    int ihl[4]{};
+    int ihu[4];
+    int ihl[4];
     for (int j = 0; j < 4; j++) {
-        int ih{i + j - 1};
+        int ih = i + j - 1;
         if (ih <= 0) ih += 36;
         if (ih > 36) ih -= 36;
 
@@ -810,8 +812,8 @@ void Eadi3DPage::heading(double hdg, double hdgCmd)
     glPushMatrix();
 
     glBegin(GL_LINES);
-        lcVertex2v(baseLineV1);
-        lcVertex2v(baseLineV2);
+            lcVertex2v(baseLineV1);
+            lcVertex2v(baseLineV2);
     glEnd();
 
     glTranslated(static_cast<GLdouble>(x), 0.0, 0.0);
@@ -988,7 +990,7 @@ void Eadi3DPage::setLandingMode(const bool landMode)
 //------------------------------------------------------------------------------
 void Eadi3DPage::setPitchSteeringCmd(const double pitchCmd)
 {
-    pitchSteeringCmd = pitchCmd;
+     pitchSteeringCmd = pitchCmd;
 }
 
 //------------------------------------------------------------------------------
@@ -1004,7 +1006,7 @@ void Eadi3DPage::setRollSteeringCmd(const double rollCmd)
 //------------------------------------------------------------------------------
 void Eadi3DPage::setPitchSteeringValid(const bool psValid)
 {
-    pitchSteeringValid = psValid;
+     pitchSteeringValid = psValid;
 }
 
 //------------------------------------------------------------------------------

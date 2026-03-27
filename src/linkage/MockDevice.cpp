@@ -1,11 +1,11 @@
 
 #include "mixr/linkage/MockDevice.hpp"
 
-#include "mixr/linkage/generators/IGenerator.hpp"
+#include "mixr/linkage/generators/AbstractGenerator.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace linkage {
@@ -18,7 +18,7 @@ BEGIN_SLOTTABLE(MockDevice)
 END_SLOTTABLE(MockDevice)
 
 BEGIN_SLOT_MAP(MockDevice)
-   ON_SLOT(1, setSlotGenerators,  base::IPairStream)
+   ON_SLOT(1, setSlotGenerators,  base::PairStream)
 END_SLOT_MAP()
 
 MockDevice::MockDevice()
@@ -34,7 +34,7 @@ void MockDevice::copyData(const MockDevice& org, const bool)
    // copy the list of generators
    // ---
    if (org.generators != nullptr) {
-      const auto copy = static_cast<base::IPairStream*>(org.generators->clone());
+      const auto copy = static_cast<base::PairStream*>(org.generators->clone());
       setSlotGenerators(copy);
       copy->unref();
    }
@@ -42,14 +42,14 @@ void MockDevice::copyData(const MockDevice& org, const bool)
 }
 
 // Process device input channels
-void MockDevice::processInputsImpl(const double dt, base::IIoData* const inData)
+void MockDevice::processInputsImpl(const double dt, base::AbstractIoData* const inData)
 {
    // process any input generators
    if (generators != nullptr) {
-      base::IList::Item* item{generators->getFirstItem()};
+      base::List::Item* item{generators->getFirstItem()};
       while (item != nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         const auto p = static_cast<IGenerator*>(pair->object());
+         const auto p = static_cast<AbstractGenerator*>(pair->object());
          p->processInputs(dt, inData);
          item = item->getNext();
       }
@@ -57,23 +57,23 @@ void MockDevice::processInputsImpl(const double dt, base::IIoData* const inData)
 }
 
 // read in list of generators
-bool MockDevice::setSlotGenerators(base::IPairStream* const list)
+bool MockDevice::setSlotGenerators(base::PairStream* const list)
 {
    bool ok{true};
 
    if (list != nullptr) {
       // check to make sure all objects on the list are I/O adapters
       int cnt{};
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr) {
          cnt++;
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         ok = pair->object()->isClassType(typeid(IGenerator));
+         ok = pair->object()->isClassType(typeid(AbstractGenerator));
          if (ok) {
 //            static_cast<AbstractIoAdapter*>(pair->object())->container(this);
          } else {
             std::cerr << "MockIoDevice::setSlotGenerators(): Item number " << cnt;
-            std::cerr << " on the list is a non-IGenerator component!" << std::endl;
+            std::cerr << " on the list is a non-AbstractGenerator component!" << std::endl;
          }
          item = item->getNext();
       }

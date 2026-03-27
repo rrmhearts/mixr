@@ -1,8 +1,8 @@
 
-#ifndef __mixr_graphics_Graphic_HPP__
-#define __mixr_graphics_Graphic_HPP__
+#ifndef __mixr_graphics_Graphic_H__
+#define __mixr_graphics_Graphic_H__
 
-#include "mixr/base/IComponent.hpp"
+#include "mixr/base/Component.hpp"
 #include "mixr/base/osg/Vec2d"
 #include "mixr/base/osg/Vec3d"
 #include "mixr/base/osg/Vec4d"
@@ -12,7 +12,7 @@
 #include <GL/gl.h>
 
 namespace mixr {
-namespace base { class Boolean; class IColor; class Identifier; class Integer; class INumber; class ITransform; class IPairStream; }
+namespace base { class Color; class Identifier; class Transform; }
 namespace graphics {
 class Display;
 class Material;
@@ -32,7 +32,7 @@ class Material;
 
 //------------------------------------------------------------------------------
 // Class:       Graphic
-// Base class:  Object -> IComponent -> Graphic
+// Base class:  Object -> Component -> Graphic
 //
 // Description: Base class for the graphic objects.  Provides list of vertices,
 //              transformation matrix, color, linewidth, etc.
@@ -42,37 +42,38 @@ class Material;
 // Slots:
 //    color              <Color>        ! Color (default: 0)
 //    color              <Identifier>   ! Color by name (default: 0)
-//    linewidth          <INumber>      ! Linewidth (default: 0.0f)
-//    flashRate          <INumber>      ! Flash rate (default: 0.0f)
-//    transform          <IPairStream>  ! List of coordinate transformations (default: 0)
-//    transform          <ITransform>   ! Single coordinate transformation (default: 0)
-//    vertices           <IPairStream>  ! List of 3D Coordinates (World coord) (default: 0)
-//    normals            <IPairStream>  ! List of 3D Vectors of normals at each vertex
-//    texCoord           <IPairStream>  ! List of 2D Texture Coordinates (default: 0)
-//    noDisplayList      <INumber>      ! Flag: True to disable display list
-//                                      !     (default: false)
-//    subcomponentsFirst <Boolean>      ! Flag: Draw component graphics first
+//    linewidth          <Number>       ! Linewidth (default: 0.0f)
+//    flashRate          <Number>       ! Flash rate (default: 0.0f)
+//    transform          <PairStream>   ! List of coordinate transformations (default: 0)
+//    transform          <Transform>    ! Single coordinate transformation (default: 0)
+//    vertices           <PairStream>   ! List of 3D Coordinates (World coord) (default: 0)
+//    normals            <PairStream>   ! List of 3D Vectors of normals at each vertex
+//    texCoord           <PairStream>   ! List of 2D Texture Coordinates (default: 0)
+//    noDisplayList      <Number>       ! Flag: True to disable display list
+//                                      !     (default false)
+//    subcomponentsFirst <Number>       ! Flag: Draw component graphics first
 //                                      ! (default: draw own graphics first)
-//    selectName         <Integer>      ! GL Select Buffer name (default: 0)
+//    selectName         <Number>       ! GL Select Buffer name
+//                                      ! (see glPushName())  (unsigned integer) (default: 0)
 //    texture            <Identifier>   ! Texture name (default: 0)
-//    scissorX           <INumber>      ! Left edge of the scissor box (World coord) (default: 0)
-//    scissorY           <INumber>      ! Bottom edge of the scissor box (World coord) (default: 0)
-//    scissorWidth       <INumber>      ! How far over do we scissor (World coord) (default: 0)
-//    scissorHeight      <INumber>      ! How far up do we scissor (World coord) (default: 0)
-//    stipple            <Boolean>      ! Line stippling flag - only used for line, lineloop, and circle when not filled.
-//    stippleFactor      <INumber>      ! Line stipple factor, specifies a multiplier for each bit in line stipple pattern (default: 1)
-//    stipplePattern     <Integer>      ! Specifies a 16 bit Line stipple pattern; range 0x0000 (0) .. 0xFFFF (65535) (default: 0xFFFF)
-//    visible            <Boolean>      ! Visibility flag
-//    mask               <Boolean>      ! Color Masking
-//    material           <INumber>      ! Sets the current material
-//    translateLight     <INumber>      ! Translate our current light to a new position (BEFORE DRAWING)
+//    scissorX           <Number>       ! Left edge of the scissor box (World coord) (default: 0)
+//    scissorY           <Number>       ! Bottom edge of the scissor box (World coord) (default: 0)
+//    scissorWidth       <Number>       ! How far over do we scissor (World coord) (default: 0)
+//    scissorHeight      <Number>       ! How far up do we scissor (World coord) (default: 0)
+//    stipple            <Number>       ! Line stippling flag - only used for line, lineloop, and circle when not filled.
+//    stippleFactor      <Number>       ! Line stipple factor, specifies a multiplier for each bit in line stipple pattern (default: 1)
+//    stipplePattern     <Number>       ! Specifies a 16 bit Line stipple pattern; range 0x0000 (0) .. 0xFFFF (65535) (default: 0xFFFF)
+//    visible            <Number>       ! Visibility flag
+//    mask               <Number>       ! Color Masking
+//    material           <Number>       ! Sets the current material
+//    translateLight     <Number>       ! Translate our current light to a new position (BEFORE DRAWING)
 //
 // Events:
 //    SET_COLOR         (Color)         ! Sets color
 //    SET_COLOR         (Identifier)    ! Sets color by name
-//    SET_LINEWIDTH     (INumber)       ! Sets line width
-//    SET_FLASHRATE     (INumber)       ! Sets flash rate
-//    SET_VISIBILITY    (INumber)       ! Sets visibility flag
+//    SET_LINEWIDTH     (Number)        ! Sets line width
+//    SET_FLASHRATE     (Number)        ! Sets flash rate
+//    SET_VISIBILITY    (Number)        ! Sets visibility flag
 //
 // Public methods: Base class public methods, plus ...
 //
@@ -104,7 +105,7 @@ class Material;
 //          Gets/Sets the object's color attribute.  Argument types can be Color
 //          or Identifier.  The Identifier argument provides a color name that is
 //          used to lookup the Color from the color table.
-//      setColor(INumber* num)
+//      setColor(Number* num)
 //          Sets a color rotary object, based on the value passed in.. see graphics/ColorRotary.hpp for
 //          how to set up a list of colors and breakpoints.
 //
@@ -207,7 +208,7 @@ class Material;
 //
 ////Select (Pick) functions
 //      GLuint getSelectName()
-//      setSelectName(GLuint)
+//      setSelectName(GLuint v)
 //          Gets/Sets the SELECT name (see glPushName()) and (set) returns true.
 //
 //    Pair* findBySelectName(GLuint name)
@@ -221,9 +222,9 @@ class Material;
 //      lower than this, so there is no confusion in the pick() routine.
 //
 //------------------------------------------------------------------------------
-class Graphic : public base::IComponent
+class Graphic : public base::Component
 {
-   DECLARE_SUBCLASS(Graphic, base::IComponent)
+   DECLARE_SUBCLASS(Graphic, base::Component)
 
 public:
    Graphic();
@@ -251,19 +252,19 @@ public:
    bool setLineWidth(const GLfloat v);                                     // Sets the line width attribute.
 
    // Color functions
-   base::IColor* getColor()                                  { return color; }
-   const base::IColor* getColor() const                      { return color; }
-   const base::Identifier* getColorName() const              { return colorName; }
-   virtual bool setColor(const base::IColor* const);
-   virtual bool setColor(const base::Identifier* const);
-   virtual bool setColor(const base::INumber* const);
+   base::Color* getColor()                                  { return color; }
+   const base::Color* getColor() const                      { return color; }
+   const base::Identifier* getColorName() const             { return colorName; }
+   virtual bool setColor(const base::Color* const msg);
+   virtual bool setColor(const base::Identifier* const msg);
+   virtual bool setColor(const base::Number* const msg);
 
    // material functions
-   const base::Identifier* getMaterialName() const   { return materialName; } // returns a pointer to our material name
+   const base::Identifier* getMaterialName() const { return materialName; } // returns a pointer to our material name
    graphics::Material* getMaterial()                 { return materialObj; }  // returns our material object!
    const graphics::Material* getMaterial() const     { return materialObj; }
-   virtual bool setMaterial(const base::Identifier* const);
-   virtual bool setMaterial(const graphics::Material* const);
+   virtual bool setMaterial(const base::Identifier* const msg);
+   virtual bool setMaterial(const graphics::Material* const msg);
 
    // Flash rate functions
    bool flashOn() const;
@@ -297,10 +298,10 @@ public:
    // Texture functions
    bool hasTexture() const                          { return (texture != 0); }
    GLuint getTexture() const                        { return texture; }
-   bool setTextureName(const char*);
+   bool setTextureName(const char* newName);
 
    // Set the GL texture id (Make sure you create a texture before you call this function!)
-   virtual bool setTexture(const GLuint);
+   virtual bool setTexture(const GLuint newTex);
 
    // Standard line width
    GLfloat getStdLineWidth();
@@ -311,18 +312,18 @@ public:
    double getScissorWidth() const                   { return scissorY; }
    double getScissorY() const                       { return scissorWidth; }
    double getScissorHeight() const                  { return scissorHeight; }
-   bool setScissorX(const double);
-   bool setScissorWidth(const double);
-   bool setScissorY(const double);
-   bool setScissorHeight(const double);
+   bool setScissorX(const double newX);
+   bool setScissorWidth(const double newWidth);
+   bool setScissorY(const double newY);
+   bool setScissorHeight(const double newHeight);
 
    // Line stippling functions
    bool isStippling()                               { return stipple; }
    GLuint getStippleFactor()                        { return stippleFactor; }
    GLushort getStipplePattern()                     { return stipplePattern; }
-   bool setStippling(const bool);
-   bool setStippleFactor(const GLuint);
-   bool setStipplePattern(const GLushort);
+   bool setStippling(const bool x);
+   bool setStippleFactor(const GLuint x);
+   bool setStipplePattern(const GLushort x);
 
    // Light functions
    bool setLightPosition(const double x, const double y, const double z = 1, const double w = 0);
@@ -332,8 +333,8 @@ public:
 
    // Select (pick) functions
    GLuint getSelectName() const                     { return selName; }
-   bool setSelectName(const GLuint);
-   virtual base::Pair* findBySelectName(const GLuint);
+   bool setSelectName(const GLuint v);
+   virtual base::Pair* findBySelectName(const GLuint name);
 
    // Subcomponent graphics
    bool isPostDrawComponents() const                { return postDraw; }
@@ -378,11 +379,11 @@ public:
    static void lcTexCoord4v(const double* v)    { glTexCoord4dv(v); }
 
 
-   bool event(const int event, IObject* const obj = nullptr) override;
+   bool event(const int event, Object* const obj = nullptr) override;
 
 public:
    // Exceptions
-   class ExpInvalidDisplayPtr : public IObject::Exception {
+   class ExpInvalidDisplayPtr : public Object::Exception {
       public:
          ExpInvalidDisplayPtr() : Exception() {}
          const char* getDescription() const override    { return "display(): display/screen pointer is not set"; }
@@ -391,16 +392,16 @@ public:
 protected:
 
    // event handlers
-   virtual bool onSetTextureId(const base::Integer* const);
-   virtual bool onSetLineWidthEvent(const base::INumber* const);
-   virtual bool onSetFlashRateEvent(const base::INumber* const);
-   virtual bool onSetVisibilityEvent(const base::Boolean* const);
+   virtual bool onSetTextureId(const base::Number* const);
+   virtual bool onSetLineWidthEvent(const base::Number* const);
+   virtual bool onSetFlashRateEvent(const base::Number* const);
+   virtual bool onSetVisibilityEvent(const base::Number* const);
 
    void processComponents(                          // Process our subcomponent list (which should be other Graphics)
-        base::IPairStream* const list,               // Source list of components
+        base::PairStream* const list,               // Source list of components
         const std::type_info& filter,               // Type filter
         base::Pair* const add = nullptr,            // Optional pair to add
-        base::IComponent* const remove = nullptr    // Optional subcomponent to remove
+        base::Component* const remove = nullptr     // Optional subcomponent to remove
    ) override;
 
 private:
@@ -408,7 +409,7 @@ private:
    void setupMatrix();
    void setupMaterial();
 
-   base::IPairStream* transforms {}; // transformations
+   base::PairStream* transforms {};  // transformations
    base::Matrixd m;                  // transformation matrix
    base::Matrixd m1;                 // saved 'm'
    bool haveMatrix {};               // Have a transformation matrix flag
@@ -424,7 +425,7 @@ private:
    GLuint  selName {};       // Select name
    double  fRate {};         // Flash rate
 
-   base::IColor* color {};           // Color
+   base::Color* color {};            // Color
    base::Identifier* colorName {};   // Color name (if from color table)
 
    base::Vec3d* vertices {};         // Vertices
@@ -461,29 +462,29 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotColor(const base::IColor* const);
+   bool setSlotColor(const base::Color* const);
    bool setSlotColor(const base::Identifier* const);
-   bool setSlotFlashRate(const base::INumber* const);
-   bool setSlotLineWidth(const base::INumber* const);
-   bool setSlotSelectName(const base::INumber* const);
-   bool setSlotTransformList(base::IPairStream*);      // Set the transformation list
-   bool setSlotSingleTransform(base::ITransform* const);
-   bool setSlotNoDisplayList(const base::Boolean* const);
-   bool setSlotSubcomponentsFirst(const base::Boolean* const);
-   bool setSlotVertices(const base::IPairStream* const);
-   bool setSlotNormals(const base::IPairStream* const);
-   bool setSlotTexCoord(const base::IPairStream* const);
-   bool setSlotMask(const base::Boolean* const);
+   bool setSlotFlashRate(const base::Number* const);
+   bool setSlotLineWidth(const base::Number* const);
+   bool setSlotSelectName(const base::Number* const);
+   bool setSlotTransformList(base::PairStream*);      // Set the transformation list
+   bool setSlotSingleTransform(base::Transform* const);
+   bool setSlotNoDisplayList(const base::Number* const);
+   bool setSlotSubcomponentsFirst(const base::Number* const);
+   bool setSlotVertices(const base::PairStream* const);
+   bool setSlotNormals(const base::PairStream* const);
+   bool setSlotTexCoord(const base::PairStream* const);
+   bool setSlotMask(const base::Number* const);
    bool setSlotTextureName(base::Identifier*);
-   bool setSlotScissorX(const base::INumber* const);
-   bool setSlotScissorY(const base::INumber* const);
-   bool setSlotScissorWidth(const base::INumber* const);
-   bool setSlotScissorHeight(const base::INumber* const);
-   bool setSlotStippling(const base::Boolean* const);
-   bool setSlotStippleFactor(const base::Integer* const);
-   bool setSlotStipplePattern(const base::Integer* const);
-   bool setSlotVisibility(const base::Boolean* const);
-   bool setSlotTranslateLight(base::IPairStream* const);
+   bool setSlotScissorX(const base::Number* const);
+   bool setSlotScissorY(const base::Number* const);
+   bool setSlotScissorWidth(const base::Number* const);
+   bool setSlotScissorHeight(const base::Number* const);
+   bool setSlotStippling(const base::Number* const);
+   bool setSlotStippleFactor(const base::Number* const);
+   bool setSlotStipplePattern(const base::Number* const);
+   bool setSlotVisibility(const base::Number* const);
+   bool setSlotTranslateLight(base::PairStream* const);
 };
 
 inline GLuint Graphic::getNewSelectName()

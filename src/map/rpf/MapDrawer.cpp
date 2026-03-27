@@ -3,12 +3,11 @@
 #include "mixr/map/rpf/CadrgMap.hpp"
 #include "mixr/map/rpf/TexturePager.hpp"
 #include "mixr/map/rpf/CadrgTocEntry.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
 #include "mixr/graphics/Display.hpp"
 #include "mixr/graphics/Texture.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <cmath>
 
@@ -24,9 +23,9 @@ BEGIN_SLOTTABLE(MapDrawer)
 END_SLOTTABLE(MapDrawer)
 
 BEGIN_SLOT_MAP(MapDrawer)
-    ON_SLOT(1, setSlotMapIntensity, base::INumber)
-    ON_SLOT(2, setSlotDrawGridMode, base::Boolean)
-    ON_SLOT(3, setSlotShowMap,      base::Boolean)
+    ON_SLOT(1, setSlotMapIntensity, base::Number)
+    ON_SLOT(2, setSlotDrawGridMode, base::Number)
+    ON_SLOT(3, setSlotShowMap,      base::Number)
 END_SLOT_MAP()
 
 MapDrawer::MapDrawer()
@@ -95,33 +94,33 @@ void MapDrawer::deleteData()
 //------------------------------------------------------------------------------
 // setSlotMapIntensity() -
 //------------------------------------------------------------------------------
-bool MapDrawer::setSlotMapIntensity(const base::INumber* const x)
+bool MapDrawer::setSlotMapIntensity(const base::Number* const x)
 {
     bool ok {};
     if (x != nullptr)
-        ok = setMapIntensity(x->asDouble());
+        ok = setMapIntensity(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotDrawGridMode() -
 //------------------------------------------------------------------------------
-bool MapDrawer::setSlotDrawGridMode(const base::Boolean* const x)
+bool MapDrawer::setSlotDrawGridMode(const base::Number* const x)
 {
    bool ok {};
    if (x != nullptr)
-      ok = setDrawGridMode(x->asBool());
+      ok = setDrawGridMode(x->getBoolean());
    return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotShowMap() -
 //------------------------------------------------------------------------------
-bool MapDrawer::setSlotShowMap(const base::Boolean* const x)
+bool MapDrawer::setSlotShowMap(const base::Number* const x)
 {
    bool ok {};
    if (x != nullptr)
-      ok = setShowMap(x->asBool());
+      ok = setShowMap(x->getBoolean());
    return ok;
 }
 

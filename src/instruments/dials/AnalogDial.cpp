@@ -1,8 +1,6 @@
 
 #include "mixr/instruments/dials/AnalogDial.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <GL/glu.h>
 #include <iostream>
 
@@ -13,7 +11,7 @@ IMPLEMENT_SUBCLASS(AnalogDial, "AnalogDial")
 EMPTY_DELETEDATA(AnalogDial)
 
 BEGIN_EVENT_HANDLER(AnalogDial)
-    ON_EVENT_OBJ(UPDATE_VALUE, onUpdateRadius, base::INumber)
+    ON_EVENT_OBJ(UPDATE_VALUE, onUpdateRadius, base::Number)
 END_EVENT_HANDLER()
 
 BEGIN_SLOTTABLE(AnalogDial)
@@ -25,11 +23,11 @@ BEGIN_SLOTTABLE(AnalogDial)
 END_SLOTTABLE(AnalogDial)
 
 BEGIN_SLOT_MAP(AnalogDial)
-    ON_SLOT(1, setSlotOriginAngle, base::INumber)
-    ON_SLOT(2, setSlotSweepAngle,  base::INumber)
-    ON_SLOT(3, setSlotRadius,      base::INumber)
-    ON_SLOT(4, setSlotMobile,      base::Boolean)
-    ON_SLOT(5, setSlotSlices,      base::Integer)
+    ON_SLOT(1, setSlotOriginAngle, base::Number)
+    ON_SLOT(2, setSlotSweepAngle,  base::Number)
+    ON_SLOT(3, setSlotRadius,      base::Number)
+    ON_SLOT(4, setSlotMobile,      base::Number)
+    ON_SLOT(5, setSlotSlices,      base::Number)
 END_SLOT_MAP()
 
 AnalogDial::AnalogDial()
@@ -78,10 +76,10 @@ void AnalogDial::drawFunc()
 //------------------------------------------------------------------------------
 // onUpdateRadius() - adjust our radius
 //------------------------------------------------------------------------------
-bool AnalogDial::onUpdateRadius(const base::INumber* const x)
+bool AnalogDial::onUpdateRadius(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setRadius(x->asDouble());
+    if (x != nullptr) ok = setRadius(x->getReal());
     return ok;
 }
 
@@ -89,11 +87,11 @@ bool AnalogDial::onUpdateRadius(const base::INumber* const x)
 //------------------------------------------------------------------------------
 // setSlotOriginAngle() --
 //------------------------------------------------------------------------------
-bool AnalogDial::setSlotOriginAngle(const base::INumber* newAngle)
+bool AnalogDial::setSlotOriginAngle(const base::Number* newAngle)
 {
     bool ok = false;
     if (newAngle != nullptr) {
-        ok = setOriginAngle(newAngle->asDouble());
+        ok = setOriginAngle(newAngle->getReal());
     }
     return ok;
 }
@@ -101,38 +99,38 @@ bool AnalogDial::setSlotOriginAngle(const base::INumber* newAngle)
 //------------------------------------------------------------------------------
 // setSlotSweepAngle() --
 //------------------------------------------------------------------------------
-bool AnalogDial::setSlotSweepAngle(const base::INumber* newSweepAngle)
+bool AnalogDial::setSlotSweepAngle(const base::Number* newSweepAngle)
 {
     bool ok = false;
-    if (newSweepAngle != nullptr) ok = setSweepAngle(newSweepAngle->asDouble());
+    if (newSweepAngle != nullptr) ok = setSweepAngle(newSweepAngle->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotradius() -- sets our background radius of the "dial"
 //------------------------------------------------------------------------------
-bool AnalogDial::setSlotRadius(const base::INumber* newR)
+bool AnalogDial::setSlotRadius(const base::Number* newR)
 {
     bool ok = false;
-    if (newR != nullptr) ok = setRadius(newR->asDouble());
+    if (newR != nullptr) ok = setRadius(newR->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotMobile() -- allows us to rotate around our dial
 //------------------------------------------------------------------------------
-bool AnalogDial::setSlotMobile(const base::Boolean* newM)
+bool AnalogDial::setSlotMobile(const base::Number* newM)
 {
     bool ok = false;
-    if (newM != nullptr) ok = setMobile(newM->asBool());
+    if (newM != nullptr) ok = setMobile(newM->getBoolean());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotSlices() -- how many slices to use?
 //------------------------------------------------------------------------------
-bool AnalogDial::setSlotSlices(const base::Integer* const x)
+bool AnalogDial::setSlotSlices(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setSlices(x->asInt());
+    if (x != nullptr) ok = setSlices(x->getInt());
     return ok;
 }
 

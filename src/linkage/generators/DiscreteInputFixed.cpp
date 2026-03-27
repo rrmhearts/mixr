@@ -1,12 +1,12 @@
 
 #include "mixr/linkage/generators/DiscreteInputFixed.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/Identifier.hpp"
+#include "mixr/base/String.hpp"
 
 #include <cmath>
 #include <string>
@@ -20,12 +20,12 @@ EMPTY_DELETEDATA(DiscreteInputFixed)
 
 BEGIN_SLOTTABLE(DiscreteInputFixed)
     "di",         // 1) Discrete channel index
-    "signal",     // 2) Type identifier { on, off }
+    "signal",     // 2) Signal type { ON, OFF }
 END_SLOTTABLE(DiscreteInputFixed)
 
 BEGIN_SLOT_MAP(DiscreteInputFixed)
-   ON_SLOT( 1, setSlotChannel, base::Integer)
-   ON_SLOT( 2, setSlotSignal,  base::Identifier)
+   ON_SLOT( 1, setSlotChannel,   base::Number)
+   ON_SLOT( 2, setSlotSignal,    base::String)
 END_SLOT_MAP()
 
 DiscreteInputFixed::DiscreteInputFixed()
@@ -39,7 +39,7 @@ void DiscreteInputFixed::copyData(const DiscreteInputFixed& org, const bool)
    signal = org.signal;
 }
 
-void DiscreteInputFixed::processInputsImpl(const double dt, base::IIoData* const inData)
+void DiscreteInputFixed::processInputsImpl(const double dt, base::AbstractIoData* const inData)
 {
    // Send the value to the input data buffer
    if (inData != nullptr) {
@@ -54,11 +54,11 @@ void DiscreteInputFixed::processInputsImpl(const double dt, base::IIoData* const
 // Slot Functions
 //------------------------------------------------------------------------------
 
-bool DiscreteInputFixed::setSlotChannel(const base::Integer* const msg)
+bool DiscreteInputFixed::setSlotChannel(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const int v = msg->asInt();
+      const int v = msg->getInt();
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -66,12 +66,13 @@ bool DiscreteInputFixed::setSlotChannel(const base::Integer* const msg)
    return ok;
 }
 
-bool DiscreteInputFixed::setSlotSignal(const base::Identifier* const x)
+// signal: Signal type { ON, OFF }
+bool DiscreteInputFixed::setSlotSignal(const base::String* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
+   if (msg != nullptr) {
 
-      std::string signalType(x->c_str());
+      std::string signalType(msg->getString());
       // convert to lowercase
       std::transform(signalType.begin(), signalType.end(), signalType.begin(), ::tolower);
       // set the type
@@ -79,8 +80,8 @@ bool DiscreteInputFixed::setSlotSignal(const base::Identifier* const x)
       else if (signalType == "off")   ok = setSignalType(Signal::OFF);
 
       if (!ok && isMessageEnabled(MSG_ERROR)) {
-         std::cerr << "DiscreteInputFixed::setSlotSignal(): Invalid signal type: " << signalType;
-         std::cerr << ", use: { on, off }" << std::endl;
+         std::cerr << "DiscreteSignalGen::setSlotSignal(): Invalid signal type: " << signalType;
+         std::cerr << ", use: { ON, OFF }" << std::endl;
       }
 
    }

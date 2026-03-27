@@ -1,17 +1,17 @@
 
-#ifndef __mixr_base_Pair_HPP__
-#define __mixr_base_Pair_HPP__
+#ifndef __mixr_base_Pair_H__
+#define __mixr_base_Pair_H__
 
-#include "mixr/base/IObject.hpp"
-
-#include <string>
+#include "mixr/base/Object.hpp"
+#include "mixr/base/Identifier.hpp"
 
 namespace mixr {
 namespace base {
 
 //------------------------------------------------------------------------------
 // Class: Pair
-// Description: Slot pair (or named object); i.e., a std::string name/Object pair.
+//
+// Description: Slot pair (or named object); i.e., an Identifier/Object pair.
 //
 //    Used to set object attributes, i.e., 'slots' (see Object::setSlotByName()).
 //
@@ -19,34 +19,31 @@ namespace base {
 //    and since objects can be in more than one Pair, it can have more than one
 //    name (aliases).
 //
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
-// Factory name: Pair
-// Slots: none
-// Notes: EDL syntax (an Identifier followed by a colon then Object)
+// EDL file syntax:
 //      ident: <object>
+//
 //------------------------------------------------------------------------------
-class Pair : public IObject
+class Pair : public Object
 {
-   DECLARE_SUBCLASS(Pair, IObject)
+   DECLARE_SUBCLASS(Pair, Object)
 
 public:
    // Constructor: the slot name and object pointer are both required!
    // -- the object is ref() by this constructor.
-   Pair(const std::string& slot, IObject* object);
+   Pair(const char* slot, Object* object);
 
-   std::string& slot()              { return slotname; } // The slot name
-   const std::string& slot() const  { return slotname; } // The slot name (const version)
+   Identifier* slot()               { return slotname; } // The slot name
+   const Identifier* slot() const   { return slotname; } // The slot name (const version)
 
-   IObject* object()                { return obj; }      // The object
-   const IObject* object() const    { return obj; }      // The object (const version)
+   Object* object()                 { return obj; }      // The object
+   const Object* object() const     { return obj; }      // The object (const version)
 
    bool isValid() const override;
 
 private:
-   std::string slotname;     // Slot name
-   IObject* obj{};           // Object
+   Identifier* slotname {};   // Slot name
+   Object* obj {};            // Object
 };
 
 }

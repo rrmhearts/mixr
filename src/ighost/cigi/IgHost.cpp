@@ -4,26 +4,24 @@
 #include "mixr/ighost/cigi/Player2CigiMap.hpp"
 #include "mixr/ighost/cigi/CigiModel.hpp"
 
-#include "mixr/simulation/IPlayer.hpp"
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/simulation/AbstractPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
-#include "mixr/simulation/INib.hpp"
+#include "mixr/simulation/AbstractNib.hpp"
 
 #include "mixr/base/Identifier.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/osg/Vec3d"
-#include "mixr/base/qty/lengths.hpp"
+#include "mixr/base/units/Distances.hpp"
 
 #include <cstring>
 #include <cmath>
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 IMPLEMENT_ABSTRACT_SUBCLASS(IgHost, "BaseIgHost")
@@ -36,11 +34,11 @@ BEGIN_SLOTTABLE(IgHost)
 END_SLOTTABLE(IgHost)
 
 BEGIN_SLOT_MAP(IgHost)
-   ON_SLOT(1, setSlotMaxRange,      base::ILength)
-   ON_SLOT(1, setSlotMaxRange,      base::INumber)
-   ON_SLOT(2, setSlotMaxModels,     base::Integer)
-   ON_SLOT(3, setSlotMaxElevations, base::Integer)
-   ON_SLOT(4, setSlotTypeMap,       base::IPairStream)
+   ON_SLOT(1, setSlotMaxRange,      base::Distance)
+   ON_SLOT(1, setSlotMaxRange,      base::Number)
+   ON_SLOT(2, setSlotMaxModels,     base::Number)
+   ON_SLOT(3, setSlotMaxElevations, base::Number)
+   ON_SLOT(4, setSlotTypeMap,       base::PairStream)
 END_SLOT_MAP()
 
 IgHost::IgHost()
@@ -188,14 +186,14 @@ void IgHost::mapPlayerList2ModelTable()
    //   -- As models are removed, the table above the model is shifted down.
    //   -- We're also clearing the model's 'checked' flag
    // ---
-   for (int i{getModelTableSize()}; i > 0; --i) {
+   for (int i = getModelTableSize(); i > 0; --i) {
       if ( modelTbl[i-1]->isState(CigiModel::State::CLEARED) ) {
          // Deleting this model
          //std::cout << "IgHost::mapPlayerList2ModelTable() cleanup: model = " << modelTbl[i] << std::endl;
          removeModelFromList( (i-1), TableType::MODEL);
       }
    }
-   for (int i{}; i < getModelTableSize(); i++) {
+   for (int i = 0; i < getModelTableSize(); i++) {
       modelTbl[i]->setCheckedFlag(false);
    }
 
@@ -205,24 +203,24 @@ void IgHost::mapPlayerList2ModelTable()
       // ---
       // Find players that are alive and within range of the visual system ...
       // ---
-      base::IList::Item* item{playerList->getFirstItem()};
+      base::List::Item* item{playerList->getFirstItem()};
       while (item != nullptr) {
 
          // Get a pointer to the player, 'p'
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         const auto p = static_cast<models::IPlayer*>(pair->object());
+         const auto p = static_cast<models::Player*>(pair->object());
 
          bool dummy{};
-         const auto wpn = dynamic_cast<const models::IWeapon*>( p );
+         const auto wpn = dynamic_cast<const models::AbstractWeapon*>( p );
          if (wpn != nullptr) dummy = wpn->isDummy();
 
          if ( p != getOwnship() && !dummy ) {
 
             // Find the player's model entry (if any)
-            CigiModel* model{findModel(p, TableType::MODEL)};
+            CigiModel* model = findModel(p, TableType::MODEL);
 
             // Check if in-range
-            bool inRange{computeRangeToPlayer(p) <= maxRange};
+            bool inRange {computeRangeToPlayer(p) <= maxRange};
 
             // Check if this player is alive and within range.
             if (p->isActive() && inRange) {
@@ -259,7 +257,7 @@ void IgHost::mapPlayerList2ModelTable()
    // ---
    // Any models not checked needs to be removed
    // ---
-   for (int i{}; i < getModelTableSize(); i++) {
+   for (int i = 0; i < getModelTableSize(); i++) {
       if ( modelTbl[i]->isNotChecked() ) {
          // Request removal;
          // (note: the IG system specific code now has one frame to cleanup its own code
@@ -276,7 +274,7 @@ void IgHost::mapPlayerList2ModelTable()
 void IgHost::mapPlayers2ElevTable()
 {
    // Set all entries as unchecked
-   for (int i{}; i < getElevationTableSize(); i++) {
+   for (int i = 0; i < getElevationTableSize(); i++) {
       hotTbl[i]->setCheckedFlag(false);
    }
 
@@ -286,12 +284,12 @@ void IgHost::mapPlayers2ElevTable()
       // ---
       // Find players that are alive and require terrain elevation from the visual system ...
       // ---
-      base::IList::Item* item{playerList->getFirstItem()};
+      base::List::Item* item{playerList->getFirstItem()};
       while (item != nullptr) {
 
          // Get a pointer to the player, 'p'
          base::Pair* pair {static_cast<base::Pair*>(item->getValue())};
-         models::IPlayer* p {static_cast<models::IPlayer*>(pair->object())};
+         models::Player* p {static_cast<models::Player*>(pair->object())};
 
          // Check if this player is alive and within range.
          if ( p->isActive() && p->isTerrainElevationRequired() ) {
@@ -325,7 +323,7 @@ void IgHost::mapPlayers2ElevTable()
    // Remove unmatched model entries; their players are inactive or no longer
    // require terrain elevation
    // ---
-   for (int i{getElevationTableSize()}; i > 0; --i) {
+   for (int i = getElevationTableSize(); i > 0; --i) {
       if ( hotTbl[i-1]->isNotChecked() ) {
          // Deleting this entry
          removeModelFromList( (i-1), TableType::HOT);
@@ -336,7 +334,7 @@ void IgHost::mapPlayers2ElevTable()
 //------------------------------------------------------------------------------
 // computeRangeToPlayer() -- Calculate range from ownship to player
 //------------------------------------------------------------------------------
-double IgHost::computeRangeToPlayer(const models::IPlayer* const ip) const
+double IgHost::computeRangeToPlayer(const models::Player* const ip) const
 {
     double rng{maxRange*2.0 + 1.0};  // Default is out-of-range
     if (ownship != nullptr) {
@@ -350,7 +348,7 @@ double IgHost::computeRangeToPlayer(const models::IPlayer* const ip) const
 // newModelEntry() -- Generates a new model entry for this player.
 //                    Returns a pointer to the new entry, else zero(0)
 //------------------------------------------------------------------------------
-CigiModel* IgHost::newModelEntry(models::IPlayer* const ip)
+CigiModel* IgHost::newModelEntry(models::Player* const ip)
 {
    CigiModel* model{};
 
@@ -372,7 +370,7 @@ CigiModel* IgHost::newModelEntry(models::IPlayer* const ip)
 // newElevEntry() -- Generates a new elevation entry for this player
 //                    Returns a pointer to the new entry, else zero(0)
 //------------------------------------------------------------------------------
-CigiModel* IgHost::newElevEntry(models::IPlayer* const ip)
+CigiModel* IgHost::newElevEntry(models::Player* const ip)
 {
    CigiModel* model{};
 
@@ -391,9 +389,9 @@ CigiModel* IgHost::newElevEntry(models::IPlayer* const ip)
 }
 
 // sets our ownship pointer, which is used by the Station class
-void IgHost::setOwnship(simulation::IPlayer* const p)
+void IgHost::setOwnship(simulation::AbstractPlayer* const p)
 {
-   models::IPlayer* const player{dynamic_cast<models::IPlayer* const>(p)};
+   models::Player* const player = dynamic_cast<models::Player* const>(p);
 
     // nothing's changed, just return
     if (player == ownship) return;
@@ -408,7 +406,7 @@ void IgHost::setOwnship(simulation::IPlayer* const p)
 //------------------------------------------------------------------------------
 // setPlayerList() -- Sets our player list pointer
 //------------------------------------------------------------------------------
-void IgHost::setPlayerList(base::IPairStream* const newPlayerList)
+void IgHost::setPlayerList(base::PairStream* const newPlayerList)
 {
     // nothing's changed, just return
     if (playerList == newPlayerList) return;
@@ -525,7 +523,7 @@ void IgHost::removeModelFromList(const int idx, const TableType type)
 
       // Shift down all items above this index by one position
       int n1{n - 1};
-      for (int i{idx}; i < n1; i++) {
+      for (int i = idx; i < n1; i++) {
          tbl[i] = tbl[i+1];
       }
 
@@ -552,7 +550,7 @@ void IgHost::removeModelFromList(CigiModel* const model, const TableType type)
 
    int found{-1};
    // Find the model
-   for (int i{}; i < n && found < 0; i++) {
+   for (int i = 0; i < n && found < 0; i++) {
       if (model == tbl[i]) found = i;
    }
 
@@ -561,7 +559,7 @@ void IgHost::removeModelFromList(CigiModel* const model, const TableType type)
 
       // Shift down all items above this model by one position
       int n1{n - 1};
-      for (int i{found}; i < n1; i++) {
+      for (int i = found; i < n1; i++) {
          tbl[i] = tbl[i+1];
       }
 
@@ -580,7 +578,7 @@ void IgHost::removeModelFromList(CigiModel* const model, const TableType type)
 //------------------------------------------------------------------------------
 // findModel() -- find the model that matches ALL IDs.
 //------------------------------------------------------------------------------
-CigiModel* IgHost::findModel(const int playerID, const std::string& federateName, const TableType type)
+CigiModel* IgHost::findModel(const int playerID, const base::String* const federateName, const TableType type)
 {
    // Define the key
    ModelKey key(playerID, federateName);
@@ -597,15 +595,15 @@ CigiModel* IgHost::findModel(const int playerID, const std::string& federateName
    return found;
 }
 
-CigiModel* IgHost::findModel(const simulation::IPlayer* const player, const TableType type)
+CigiModel* IgHost::findModel(const simulation::AbstractPlayer* const player, const TableType type)
 {
    CigiModel* found{};
    if (player != nullptr) {
       // Get the player's IDs
-      std::string fName;
-      if (player->isProxyPlayer()) {
+      const base::String* fName{};
+      if (player->isNetworkedPlayer()) {
          // If networked, used original IDs
-         const simulation::INib* pNib{player->getNib()};
+         const simulation::AbstractNib* pNib{player->getNib()};
          fName = pNib->getFederateName();
       }
       // Now find the model using the player's IDs
@@ -636,25 +634,34 @@ int IgHost::compareKey2Model(const void* key, const void* model)
 
    if (result == 0) {
       // If they're the same playr IDs, compare the federate names
-      if (pKey->fName.empty() && !pModel->getFederateName().empty()) {
-         result = -1;
-      } else if (!pKey->fName.empty() && pModel->getFederateName().empty()) {
-         result = +1;
-      } else if (!pKey->fName.empty() && !pModel->getFederateName().empty()) {
-         result = std::strcmp( pKey->fName.c_str(), pModel->getFederateName().c_str() );
+      const base::String* pKeyFedName{pKey->fName};
+      const base::String* pModelFedName{pModel->getFederateName()};
+
+      if (pKeyFedName == nullptr && pModelFedName != nullptr) result = -1;
+
+      else if (pKeyFedName != nullptr && pModelFedName == nullptr) result = +1;
+
+      else if (pKeyFedName != nullptr && pModelFedName != nullptr) {
+         result = std::strcmp(*pKeyFedName, *pModelFedName);
       }
    }
 
    return result;
 }
 
-bool IgHost::setSlotMaxRange(const base::ILength* const x)
+//------------------------------------------------------------------------------
+// Set Slot Functions
+//------------------------------------------------------------------------------
+
+// setSlotMaxRange() -- sets the maxRange slot
+bool IgHost::setSlotMaxRange(const base::Distance* const msg)
 {
     bool ok{};
 
-    if (x != nullptr) {
-        // we need our length in meters
-        ok = setMaxRange(x->getValueInMeters());
+    if (msg != nullptr) {
+        // We have a distance which we can convert to meters
+        const double rng{base::Meters::convertStatic(*msg)};
+        ok = setMaxRange( rng );
     }
 
     if (!ok) {
@@ -664,13 +671,14 @@ bool IgHost::setSlotMaxRange(const base::ILength* const x)
     return ok;
 }
 
-bool IgHost::setSlotMaxRange(const base::INumber* const x)
+// setSlotMaxRange() -- sets the maxRange slot
+bool IgHost::setSlotMaxRange(const base::Number* const msg)
 {
     bool ok{};
 
-    if (x != nullptr) {
+    if (msg != nullptr) {
         // We have a simple number, which should be meters!
-        ok = setMaxRange(x->asDouble());
+        ok = setMaxRange(msg->getReal());
     }
 
     if (!ok) {
@@ -681,11 +689,11 @@ bool IgHost::setSlotMaxRange(const base::INumber* const x)
 }
 
 // setSlotMaxModels() -- sets the max number of models slot
-bool IgHost::setSlotMaxModels(const base::Integer* const x)
+bool IgHost::setSlotMaxModels(const base::Number* const num)
 {
     bool ok{};
-    if (x != nullptr) {
-        const int n{x->asInt()};
+    if (num != nullptr) {
+        const int n{num->getInt()};
         if (n >= 0) {
              ok = setMaxModels(n);
         }
@@ -696,11 +704,11 @@ bool IgHost::setSlotMaxModels(const base::Integer* const x)
     return ok;
 }
 
-bool IgHost::setSlotMaxElevations(const base::Integer* const x)
+bool IgHost::setSlotMaxElevations(const base::Number* const num)
 {
     bool ok{};
-    if (x != nullptr) {
-        const int n{x->asInt()};
+    if (num != nullptr) {
+        const int n{num->getInt()};
         if (n >= 0) {
              ok = setMaxElevations(n);
         }
@@ -712,16 +720,16 @@ bool IgHost::setSlotMaxElevations(const base::Integer* const x)
 }
 
 // Sets the list of IG model type IDs (TypeMapper objects)
-bool IgHost::setSlotTypeMap(const base::IPairStream* const x)
+bool IgHost::setSlotTypeMap(const base::PairStream* const msg)
 {
     bool ok{};
-    if (x != nullptr) {
+    if (msg != nullptr) {
        // First clear the old table
        clearIgModelTypes();
 
        // Now scan the pair stream and put all Otm objects
        // into the table.
-       const base::IList::Item* item{x->getFirstItem()};
+       const base::List::Item* item{msg->getFirstItem()};
        while (item != nullptr && nIgModelTypes < MAX_MODELS_TYPES) {
           const auto pair = static_cast<const base::Pair*>(item->getValue());
           const auto igType = dynamic_cast<const Player2CigiMap*>( pair->object() );
@@ -741,12 +749,11 @@ bool IgHost::setSlotTypeMap(const base::IPairStream* const x)
 //==============================================================================
 // IgModel::ModelKey class
 //==============================================================================
-IgHost::ModelKey::ModelKey(const int pid, const std::string& federateName)
+IgHost::ModelKey::ModelKey(const int pid, const base::String* const federateName)
 {
    playerID = pid;
    fName = federateName;
 }
 
-}
 }
 }

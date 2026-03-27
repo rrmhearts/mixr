@@ -1,14 +1,15 @@
 
 #include "mixr/models/player/weapon/Missile.hpp"
 
-#include "mixr/models/track/ITrack.hpp"
+#include "mixr/models/Track.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IDataRecorder.hpp"
+#include "mixr/simulation/AbstractDataRecorder.hpp"
 
-#include "mixr/base/IList.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/numeric/Number.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/osg/Matrixd"
 
 #include <cmath>
@@ -30,14 +31,14 @@ BEGIN_SLOTTABLE(Missile)
 END_SLOTTABLE(Missile)
 
 BEGIN_SLOT_MAP(Missile)
-   ON_SLOT(1, setSlotVpMin, base::INumber)
-   ON_SLOT(2, setSlotVpMax, base::INumber)
-   ON_SLOT(3, setSlotVpMaxG, base::INumber)
-   ON_SLOT(4, setSlotMaxG, base::INumber)
-   ON_SLOT(5, setSlotMaxAccel, base::INumber)
-   ON_SLOT(6, setSlotCmdPitch, base::INumber)
-   ON_SLOT(7, setSlotCmdHeading, base::INumber)
-   ON_SLOT(8, setSlotCmdVelocity, base::INumber)
+   ON_SLOT(1, setSlotVpMin, base::Number)
+   ON_SLOT(2, setSlotVpMax, base::Number)
+   ON_SLOT(3, setSlotVpMaxG, base::Number)
+   ON_SLOT(4, setSlotMaxG, base::Number)
+   ON_SLOT(5, setSlotMaxAccel, base::Number)
+   ON_SLOT(6, setSlotCmdPitch, base::Number)
+   ON_SLOT(7, setSlotCmdHeading, base::Number)
+   ON_SLOT(8, setSlotCmdVelocity, base::Number)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(Missile)
@@ -52,8 +53,7 @@ Missile::Missile()
    STANDARD_CONSTRUCTOR()
 
    static base::String generic("GenericMissile");
-   setType_old(&generic);
-   setType("GenericMissile");
+   setType(&generic);
 
    setMaxTOF(60.0);
    setLethalRange(30.0f);
@@ -138,12 +138,12 @@ void Missile::atReleaseInit()
 //------------------------------------------------------------------------------
 // calculateVectors() --
 //------------------------------------------------------------------------------
-bool Missile::calculateVectors(const IPlayer* const tgt, const ITrack* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const
+bool Missile::calculateVectors(const Player* const tgt, const Track* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const
 {
    if (trk != nullptr) {
       //los = trk->getPosition();
       //vel = trk->getVelocity();
-      const IPlayer* tgt0 = trk->getTarget();
+      const Player* tgt0 = trk->getTarget();
       base::Vec3d p0 = getPosition();
       if (los != nullptr) *los = tgt0->getPosition() - p0;
       if (vel != nullptr) *vel = tgt0->getVelocity();
@@ -166,81 +166,81 @@ bool Missile::calculateVectors(const IPlayer* const tgt, const ITrack* const trk
 //------------------------------------------------------------------------------
 // Slot functions
 //------------------------------------------------------------------------------
-bool Missile::setSlotVpMin(const base::INumber* const msg)
+bool Missile::setSlotVpMin(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      setVpMin(msg->asDouble());
+      setVpMin(msg->getReal());
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotVpMax(const base::INumber* const msg)
+bool Missile::setSlotVpMax(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      setVpMax(msg->asDouble());
+      setVpMax(msg->getReal());
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotVpMaxG(const base::INumber* const msg)
+bool Missile::setSlotVpMaxG(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      setVpMaxG(msg->asDouble());
+      setVpMaxG(msg->getReal());
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotMaxG(const base::INumber* const msg)
+bool Missile::setSlotMaxG(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      setMaxG(msg->asDouble());
+      setMaxG(msg->getReal());
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotMaxAccel(const base::INumber* const msg)
+bool Missile::setSlotMaxAccel(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      setMaxAccel(msg->asDouble());
+      setMaxAccel(msg->getReal());
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotCmdPitch(const base::INumber* const msg)
+bool Missile::setSlotCmdPitch(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      cmdPitch = msg->asDouble();
+      cmdPitch = msg->getReal();
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotCmdHeading(const base::INumber* const msg)
+bool Missile::setSlotCmdHeading(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      cmdHeading = msg->asDouble();
+      cmdHeading = msg->getReal();
       ok = true;
    }
    return ok;
 }
 
-bool Missile::setSlotCmdVelocity(const base::INumber* const msg)
+bool Missile::setSlotCmdVelocity(const base::Number* const msg)
 {
    bool ok = false;
    if (msg != nullptr) {
-      cmdVelocity = msg->asDouble();
+      cmdVelocity = msg->getReal();
       ok = true;
    }
    return ok;
@@ -248,7 +248,7 @@ bool Missile::setSlotCmdVelocity(const base::INumber* const msg)
 
 
 // setTargetPlayer() -- sets a pointer to the target player
-bool Missile::setTargetPlayer(IPlayer* const tgt, const bool pt)
+bool Missile::setTargetPlayer(Player* const tgt, const bool pt)
 {
    // if our tgt has changed, reset ground truth vals for weaponGuidance's fuzing logic
    if (tgt != nullptr && tgt != getTargetPlayer()) {
@@ -259,7 +259,7 @@ bool Missile::setTargetPlayer(IPlayer* const tgt, const bool pt)
 }
 
 // setTargetTrack() -- sets a pointer to the target track
-bool Missile::setTargetTrack(ITrack* const trk, const bool pt)
+bool Missile::setTargetTrack(Track* const trk, const bool pt)
 {
    // if our track has changed, reset ground truth vals for weaponGuidance's fuzing logic
    if (trk != nullptr && trk != getTargetTrack()) {
@@ -285,8 +285,8 @@ void Missile::weaponGuidance(const double dt)
    // If the target's already dead,
    //    then don't go away mad, just go away.
    // ---
-   const IPlayer* tgt = getTargetPlayer();
-   const ITrack* trk = getTargetTrack();
+   const Player* tgt = getTargetPlayer();
+   const Track* trk = getTargetTrack();
    if (trk != nullptr) tgt = trk->getTarget();
 
    if (tgt != nullptr && !tgt->isActive()) return;
@@ -411,8 +411,8 @@ void Missile::weaponGuidance(const double dt)
 
                // We've detonated
                missed = false;
-               setMode(Mode::DETONATED);
-               setDetonationResults( Detonation::ENTITY_IMPACT );
+               setMode(DETONATED);
+               setDetonationResults( DETONATE_ENTITY_IMPACT );
 
                // compute location of the detonation relative to the target
                base::Vec3d p0n = -p0;
@@ -430,7 +430,7 @@ void Missile::weaponGuidance(const double dt)
 
                BEGIN_RECORD_DATA_SAMPLE( getWorldModel()->getDataRecorder(), REID_WEAPON_DETONATION )
                   SAMPLE_3_OBJECTS( this, getLaunchVehicle(), getTargetPlayer() )
-                  SAMPLE_2_VALUES( static_cast<int>(Detonation::ENTITY_IMPACT), detRange )
+                  SAMPLE_2_VALUES( DETONATE_ENTITY_IMPACT, detRange )
                END_RECORD_DATA_SAMPLE()
 
             }
@@ -439,8 +439,8 @@ void Missile::weaponGuidance(const double dt)
          // Did we miss the target?
          if (missed) {
             // We've detonated ...
-            setMode(Mode::DETONATED);
-            setDetonationResults( Detonation::DETONATION );
+            setMode(DETONATED);
+            setDetonationResults( DETONATE_DETONATION );
 
             // because we've just missed the target
             setTargetPlayer(nullptr,false);
@@ -454,7 +454,7 @@ void Missile::weaponGuidance(const double dt)
 
             BEGIN_RECORD_DATA_SAMPLE( getWorldModel()->getDataRecorder(), REID_WEAPON_DETONATION )
                SAMPLE_3_OBJECTS( this, getLaunchVehicle(), getTargetPlayer() )
-               SAMPLE_2_VALUES( static_cast<int>(Detonation::DETONATION), detRange )
+               SAMPLE_2_VALUES( DETONATE_DETONATION, detRange )
             END_RECORD_DATA_SAMPLE()
 
          }

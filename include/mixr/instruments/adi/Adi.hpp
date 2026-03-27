@@ -1,13 +1,13 @@
 
-#ifndef __mixr_instruments_Adi_HPP__
-#define __mixr_instruments_Adi_HPP__
+#ifndef __mixr_instruments_Adi_H__
+#define __mixr_instruments_Adi_H__
 
 #include "mixr/instruments/Instrument.hpp"
 
-#include "mixr/base/qty/util/angle_utils.hpp"
+#include "mixr/base/units/angle_utils.hpp"
 
 namespace mixr {
-namespace base { class INumber; class IAngle; }
+namespace base { class Number; class Angle; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ namespace instruments {
 // Inputs for the send command:
 //      UPDATE_INSTRUMENTS = updates pitch (this overrides the instrument function, because
 //      we want to drive the ADI towards pitch, not have real time pitch, always in degrees)
-//      UPDATE_VALUE  = updates roll (degrees)
+//      UPDATE_VALUE = updates roll (degrees)
 //      UPDATE_VALUE2 = updates roll (radians)
 //      UPDATE_VALUE3 = updates max rate (degrees/second)
 //------------------------------------------------------------------------------
@@ -45,28 +45,28 @@ public:
 
     void draw() override;
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
     void updateData(const double dt = 0) override;
 
 private:
     // event function
-    bool onUpdatePitchAdi(const base::INumber* const);
-    bool onUpdateRollDegAdi(const base::INumber* const);
-    bool onUpdateRollRadAdi(const base::INumber* const);
-    bool onUpdateMaxRateAdi(const base::INumber* const);
+    bool onUpdatePitchAdi(const base::Number* const);
+    bool onUpdateRollDegAdi(const base::Number* const);
+    bool onUpdateRollRadAdi(const base::Number* const);
+    bool onUpdateMaxRateAdi(const base::Number* const);
 
-    double pitch{};         // actual pitch (degrees)
-    double scaledPitch{};   // our pitch value (inches)
-    double curTheta{};      // our current pitch value (degrees)
-    double curPhi{};        // our current roll value (radians)
-    double roll{};          // our roll value (radians)
-    double maxRate{500.0};  // maximum mechanical rate at which the adi can move pitch or roll
-                            // default set high degrees/second (for instantaneous movement)
+    double pitch {};         // actual pitch (degrees)
+    double scaledPitch {};   // our pitch value (inches)
+    double curTheta {};      // our current pitch value (degrees)
+    double curPhi {};        // our current roll value (radians)
+    double roll {};          // our roll value (radians)
+    double maxRate {500.0};  // maximum mechanical rate at which the adi can move pitch or roll
+                             // default set high degrees/second (for instantaneous movement)
 
 private:
     // slot table helper methods
-    bool setSlotMaxRate(const base::IAngle* const);
-    bool setSlotMaxRate(const base::INumber* const);
+    bool setSlotMaxRate(const base::Angle* const);
+    bool setSlotMaxRate(const base::Number* const);
 };
 
 }

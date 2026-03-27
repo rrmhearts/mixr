@@ -1,6 +1,6 @@
 
-#ifndef __mixr_base_util_navDR_utils_HPP__
-#define __mixr_base_util_navDR_utils_HPP__
+#ifndef __mixr_base_util_navDR_utils_H__
+#define __mixr_base_util_navDR_utils_H__
 
 #include "mixr/base/osg/Vec3d"
 #include "mixr/base/osg/Vec4d"
@@ -12,7 +12,7 @@ namespace base {
 namespace navDR {
 
 // Standard dead reckoning model codes [ 0 .. 9 ]
-enum class DeadReckoning { 
+enum DeadReckoning { 
    OTHER_DRM,        // User defined (i.e., virtual function dynamicsOther())
    STATIC_DRM,       // No dead reckoning 
    FPW_DRM,          // World, No rotation, 1st order linear 
@@ -30,7 +30,7 @@ enum class DeadReckoning {
 //--------------------------------------------------------------------------
 bool deadReckoning(
       const double dT,          // IN: time increment (secs)
-      const DeadReckoning,      // IN: dead reckoning codes
+      const unsigned int drNum, // IN: dead reckoning codes
       const Vec3d& p0,          // IN: Position vector @ T=0 (meters) (ECEF)
       const Vec3d& v0,          // IN: Velocity vector @ T=0 (m/sec)  (ECEF or Body based on 'drNum')
       const Vec3d& a0,          // IN: Acceleration vector @ T=0 ((m/sec)/sec) (ECEF or Body based on 'drNum')

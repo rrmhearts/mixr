@@ -1,38 +1,39 @@
 
-#ifndef __mixr_base_ubf_Agent_HPP__
-#define __mixr_base_ubf_Agent_HPP__
+#ifndef __mixr_base_ubf_Agent_H__
+#define __mixr_base_ubf_Agent_H__
 
-#include "mixr/base/IComponent.hpp"
+#include "mixr/base/Component.hpp"
 
 namespace mixr {
 namespace base {
 namespace ubf {
-class IBehavior;
-class IState;
-class IAction;
+class AbstractBehavior;
+class AbstractState;
+class AbstractAction;
 
 //------------------------------------------------------------------------------
 // Class: Agent
+//
 // Description: Generic agent class to control a component in the simulation - the agent's "actor"
 //              It manages a component (the "actor") with a behavior (either a player, or
 //              a player's component)
-//------------------------------------------------------------------------------
-// Factory name: IAgent
-//------------------------------------------------------------------------------
-// Slots:
-//    state       <IState>     ! The agent's state object
-//    behavior    <IBehavior>  ! behavior
-//------------------------------------------------------------------------------
+//
 // Notes:
 // 1) Use 'Agent' to update the behavior framework via updateData() and use
 //    'AgentTC' to update the behavior framework using updateTC().
 //
 // 2) The updateData() and updateTC() calls are only processed by this Agent
 //    class and are not passed to the rest of the behavior framework.
+//
+//
+// Factory name: UbfAgent
+// Slots:
+//    state       <AbstractState>     ! The agent's state object
+//    behavior    <AbstractBehavior>  ! behavior
 //------------------------------------------------------------------------------
-class Agent : public base::IComponent
+class Agent : public base::Component
 {
-   DECLARE_SUBCLASS(Agent, base::IComponent)
+   DECLARE_SUBCLASS(Agent, base::Component)
 
 public:
    Agent();
@@ -44,30 +45,30 @@ protected:
    // generic controller
    virtual void controller(const double dt = 0.0);
 
-   IBehavior* getBehavior() const          { return behavior; }
-   void setBehavior(IBehavior* const);
+   AbstractBehavior* getBehavior() const          { return behavior; }
+   void setBehavior(AbstractBehavior* const);
 
-   IState* getState() const                { return state; }
-   void setState(IState* const);
+   AbstractState* getState() const                { return state; }
+   void setState(AbstractState* const);
 
    virtual void initActor();
 
-   base::IComponent* getActor();
-   void setActor(base::IComponent* const myActor);
+   base::Component* getActor();
+   void setActor(base::Component* const myActor);
 
 private:
-   IBehavior* behavior{};
-   IState* state{};
-   safe_ptr<base::IComponent> myActor;
+   AbstractBehavior* behavior{};
+   AbstractState* state{};
+   safe_ptr<base::Component> myActor;
 
 private:
    // slot table helper methods
-   bool setSlotBehavior(IBehavior* const);
-   bool setSlotState(IState* const);
+   bool setSlotBehavior(AbstractBehavior* const);
+   bool setSlotState(AbstractState* const);
 };
 
-inline void Agent::setActor(base::IComponent* const actor)      { myActor = actor; return; }
-inline base::IComponent* Agent::getActor()                      { return myActor; }
+inline void Agent::setActor(base::Component* const actor)      { myActor = actor; return; }
+inline base::Component* Agent::getActor()                      { return myActor; }
 
 
 //------------------------------------------------------------------------------

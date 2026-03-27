@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_factory_HPP__
-#define __mixr_linkage_factory_HPP__
+#ifndef __mixr_linkage_factory_H__
+#define __mixr_linkage_factory_H__
 
 #include <string>
 
 namespace mixr {
-namespace base { class IObject; }
+namespace base { class Object; }
 namespace linkage {
-base::IObject* factory(const std::string&);
+base::Object* factory(const std::string&);
 }
 }
 

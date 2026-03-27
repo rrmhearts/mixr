@@ -1,6 +1,6 @@
 
-#ifndef __mixr_graphics_MfdPage_HPP__
-#define __mixr_graphics_MfdPage_HPP__
+#ifndef __mixr_graphics_MfdPage_H__
+#define __mixr_graphics_MfdPage_H__
 
 #include "mixr/graphics/Page.hpp"
 
@@ -10,15 +10,11 @@ namespace graphics {
 // -------------------------------------------------------------------------------
 // Class: MfdPage
 //
-// Description: Base class page for Multi Function Display (MFD) derived pages that
-// wish to have Option Select Buttons (OSB) hits automatically recognized and used.
-// This class sets up event handlers for 40 OSB hits (similar to a 10 x 10 bezel
-// display).
-//
-// Any event that is passed with the OSB hits will call the respective function,
-// and derived classes may override the function to perform specific actions.
-//------------------------------------------------------------------------------
-// EDL Interface:
+// Description: Base class page for any derived page that wishes to have OSB hits
+// automatically recognized and used.  This sets up 40 OSB hits, similar to a 10 x
+// 10 bezel display.  Then any event that is passed with the OSB hits will call
+// the respective function, and derived classes may override the function and
+// do specific actions.
 //
 // Factory name: MfdPage
 // -------------------------------------------------------------------------------
@@ -27,9 +23,9 @@ class MfdPage : public graphics::Page
     DECLARE_SUBCLASS(MfdPage, graphics::Page)
 
 public:
-    MfdPage()       { STANDARD_CONSTRUCTOR() }
+    MfdPage();
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // ---

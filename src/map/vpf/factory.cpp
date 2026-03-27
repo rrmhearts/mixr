@@ -1,5 +1,5 @@
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/map/vpf/factory.hpp"
 
@@ -20,9 +20,9 @@
 namespace mixr {
 namespace vpf {
 
-base::IObject* factory(const std::string& name)
+base::Object* factory(const std::string& name)
 {
-    base::IObject* obj {};
+    base::Object* obj {};
 
     // Feature Class
     if ( name == VMap0FeatureClass::getFactoryName() )              { obj = new VMap0FeatureClass(); }

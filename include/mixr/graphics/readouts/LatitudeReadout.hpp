@@ -1,6 +1,6 @@
 
-#ifndef __mixr_graphics_LatitudeReadout_HPP__
-#define __mixr_graphics_LatitudeReadout_HPP__
+#ifndef __mixr_graphics_LatitudeReadout_H__
+#define __mixr_graphics_LatitudeReadout_H__
 
 #include "DirectionReadout.hpp"
 
@@ -9,12 +9,9 @@ namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: LatitudeReadout
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: LatitudeReadout
-// Slots: none
-//------------------------------------------------------------------------------
+//
 // Notes:
 //    1) see the 'DirectionReadout' notes
 //    2) The '+ char is replaced with 'N', and the '-' char is replaced with 'S'
@@ -33,13 +30,13 @@ namespace graphics {
 //    0D@MM'SS.S+    //  ... and with the '+' or '-' character as a suffix
 //
 //------------------------------------------------------------------------------
-class LatitudeReadout final: public DirectionReadout
+class LatitudeReadout : public DirectionReadout
 {
     DECLARE_SUBCLASS(LatitudeReadout, DirectionReadout)
 
 public:
     LatitudeReadout();
-    char filterInputEvent(const int event, const char) final;
+    char filterInputEvent(const int event, const int tc) override;
 protected:
    //virtual void makeText();
 };

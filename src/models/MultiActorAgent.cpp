@@ -1,17 +1,17 @@
 
 #include "mixr/models/MultiActorAgent.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IStation.hpp"
+#include "mixr/simulation/Station.hpp"
 
-#include "mixr/base/ubf/IAction.hpp"
-#include "mixr/base/ubf/IBehavior.hpp"
-#include "mixr/base/ubf/IState.hpp"
+#include "mixr/base/ubf/AbstractAction.hpp"
+#include "mixr/base/ubf/AbstractBehavior.hpp"
+#include "mixr/base/ubf/AbstractState.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
 
 namespace mixr {
@@ -26,8 +26,8 @@ BEGIN_SLOTTABLE(MultiActorAgent)
 END_SLOTTABLE(MultiActorAgent)
 
 BEGIN_SLOT_MAP(MultiActorAgent)
-   ON_SLOT(1, setSlotState,     base::ubf::IState)
-   ON_SLOT(2, setSlotAgentList, base::IPairStream)
+   ON_SLOT(1, setSlotState,     base::ubf::AbstractState)
+   ON_SLOT(2, setSlotAgentList, base::PairStream)
 END_SLOT_MAP()
 
 MultiActorAgent::MultiActorAgent()
@@ -48,7 +48,7 @@ void MultiActorAgent::reset()
    if (sim != nullptr) {
       // convert component names to component ptrs, for all behaviors in the list
       for (unsigned int i=0; i<nAgents; i++) {
-         base::IComponent* c{sim->findPlayerByName(agentList[i].actorName.c_str())};
+         base::Component* c{sim->findPlayerByName(agentList[i].actorName->getString())};
          if (c != nullptr) {
             agentList[i].actor = c;
             // send reset to each
@@ -81,13 +81,13 @@ void MultiActorAgent::controller(const double dt)
          if (agentList[i].actor != nullptr) {
 
             setActor(agentList[i].actor);
-            base::ubf::IBehavior* behavior{agentList[i].behavior};
+            base::ubf::AbstractBehavior* behavior{agentList[i].behavior};
 
             // update ubf state
             getState()->updateState(agentList[i].actor);
 
             // generate an action
-            base::ubf::IAction* action{behavior->genAction(getState(), dt)};
+            base::ubf::AbstractAction* action{behavior->genAction(getState(), dt)};
             if (action) { // allow possibility of no action returned
                action->execute(getActor());
                action->unref();
@@ -98,7 +98,7 @@ void MultiActorAgent::controller(const double dt)
    }
 }
 
-void MultiActorAgent::setState(base::ubf::IState* const x)
+void MultiActorAgent::setState(base::ubf::AbstractState* const x)
 {
    if (x == nullptr)
       return;
@@ -112,10 +112,10 @@ void MultiActorAgent::setState(base::ubf::IState* const x)
    p->unref();
 }
 
-simulation::IStation* MultiActorAgent::getStation()
+simulation::Station* MultiActorAgent::getStation()
 {
    if ( myStation == nullptr ) {
-      const auto s = dynamic_cast<simulation::IStation*>(findContainerByType(typeid(simulation::IStation)));
+      const auto s = dynamic_cast<simulation::Station*>(findContainerByType(typeid(simulation::Station)));
       if (s != nullptr) {
          myStation = s;
       }
@@ -126,7 +126,7 @@ simulation::IStation* MultiActorAgent::getStation()
 WorldModel* MultiActorAgent::getWorldModel()
 {
    WorldModel* sim{};
-   simulation::IStation* s{getStation()};
+   simulation::Station* s{getStation()};
    if (s != nullptr) {
       sim = dynamic_cast<WorldModel*>(s->getSimulation());
    }
@@ -139,7 +139,7 @@ bool MultiActorAgent::clearAgentList()
    // Clear our agent list
    while (nAgents > 0) {
       nAgents--;
-      agentList[nAgents].actorName.clear();
+      agentList[nAgents].actorName = nullptr;
       agentList[nAgents].behavior = nullptr;
       agentList[nAgents].actor = nullptr;
    }
@@ -147,7 +147,7 @@ bool MultiActorAgent::clearAgentList()
 }
 
 // Adds an item to the input entity type table
-bool MultiActorAgent::addAgent(const std::string& name, base::ubf::IBehavior* const b)
+bool MultiActorAgent::addAgent(base::String* name, base::ubf::AbstractBehavior* const b)
 {
    bool ok{};
    if (nAgents < MAX_AGENTS) {
@@ -166,7 +166,7 @@ bool MultiActorAgent::addAgent(const std::string& name, base::ubf::IBehavior* co
 //------------------------------------------------------------------------------
 
 // Sets the state object for this agent
-bool MultiActorAgent::setSlotState(base::ubf::IState* const state)
+bool MultiActorAgent::setSlotState(base::ubf::AbstractState* const state)
 {
    bool ok{};
    if (state != nullptr) {
@@ -177,7 +177,7 @@ bool MultiActorAgent::setSlotState(base::ubf::IState* const state)
 }
 
 // Sets the actor/behavior list
-bool MultiActorAgent::setSlotAgentList(base::IPairStream* const msg)
+bool MultiActorAgent::setSlotAgentList(base::PairStream* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
@@ -185,11 +185,11 @@ bool MultiActorAgent::setSlotAgentList(base::IPairStream* const msg)
        clearAgentList();
 
        // Now scan the pair stream and put all Ntm objects into the table.
-       base::IList::Item* item{msg->getFirstItem()};
+       base::List::Item* item{msg->getFirstItem()};
        while (item != nullptr) {
           const auto pair = static_cast<base::Pair*>(item->getValue());
           //std::cerr << "MultiActorAgent::setSlotagentList: slot: " << *pair->slot() << std::endl;
-          const auto b = dynamic_cast<base::ubf::IBehavior*>( pair->object() );
+          const auto b = dynamic_cast<base::ubf::AbstractBehavior*>( pair->object() );
           if (b != nullptr) {
              // We have an  object, so put it in the table
              addAgent(pair->slot(), b);

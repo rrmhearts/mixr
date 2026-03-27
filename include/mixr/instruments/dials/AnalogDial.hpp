@@ -1,11 +1,10 @@
 
-#ifndef __mixr_instruments_AnalogDial_HPP__
-#define __mixr_instruments_AnalogDial_HPP__
+#ifndef __mixr_instruments_AnalogDial_H__
+#define __mixr_instruments_AnalogDial_H__
 
 #include "mixr/instruments/Instrument.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class Integer; class INumber; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -42,11 +41,11 @@ public:
 
     void drawFunc() override;
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // event function
-    virtual bool onUpdateRadius(const base::INumber* const);
+    virtual bool onUpdateRadius(const base::Number* const);
 
 private:
     double originAngle {};     // angle we start drawing ticks from (degrees, default is 0)
@@ -58,11 +57,11 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotOriginAngle(const base::INumber* const);
-    bool setSlotMobile(const base::Boolean* const);
-    bool setSlotSweepAngle(const base::INumber* const);
-    bool setSlotRadius(const base::INumber* const);
-    bool setSlotSlices(const base::Integer* const);
+    bool setSlotOriginAngle(const base::Number* const);
+    bool setSlotMobile(const base::Number* const);
+    bool setSlotSweepAngle(const base::Number* const);
+    bool setSlotRadius(const base::Number* const);
+    bool setSlotSlices(const base::Number* const);
 };
 
 }

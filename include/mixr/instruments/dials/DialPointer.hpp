@@ -1,6 +1,6 @@
 
-#ifndef __mixr_instruments_DialPointer_HPP__
-#define __mixr_instruments_DialPointer_HPP__
+#ifndef __mixr_instruments_DialPointer_H__
+#define __mixr_instruments_DialPointer_H__
 
 #include "mixr/instruments/dials/AnalogDial.hpp"
 

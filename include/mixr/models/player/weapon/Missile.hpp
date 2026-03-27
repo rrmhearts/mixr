@@ -1,14 +1,14 @@
 
-#ifndef __mixr_models_common_Missile_HPP__
-#define __mixr_models_common_Missile_HPP__
+#ifndef __mixr_models_Missile_H__
+#define __mixr_models_Missile_H__
 
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
 namespace mixr {
-namespace base { class INumber; }
+namespace base { class Number; }
 namespace models {
-class IPlayer;
-class ITrack;
+class Player;
+class Track;
 
 //------------------------------------------------------------------------------
 // Class: Missile
@@ -16,19 +16,19 @@ class ITrack;
 //
 // Factory name: Missile
 // Slots:
-//   minSpeed     <INumber>  ! Minimum Velocity (m/s)  (default: 0.0)
-//   maxSpeed     <INumber>  ! Maximum Velocity (m/s)  (default: 800.0)
-//   speedMaxG    <INumber>  ! Velocity we reach max G (default: 800.0)
-//   maxg         <INumber>  ! Max G's (at "speedMaxG" or above) (default: 4.0)
-//   maxAccel     <INumber>  ! Maximum Acceleration (m/s/s) (default: 50.0)
-//   cmdPitch     <INumber>  ! Command Pitch (rad) (default: 0.0)
-//   cmdHeading   <INumber>  ! Command Heading (rad) (default: 0.0)
-//   cmdSpeed     <INumber>  ! Command speed (m/s) (default: 0.0)
+//   minSpeed     <Number>  ! Minimum Velocity (m/s)  (default: 0.0)
+//   maxSpeed     <Number>  ! Maximum Velocity (m/s)  (default: 800.0)
+//   speedMaxG    <Number>  ! Velocity we reach max G (default: 800.0)
+//   maxg         <Number>  ! Max G's (at "speedMaxG" or above) (default: 4.0)
+//   maxAccel     <Number>  ! Maximum Acceleration (m/s/s) (default: 50.0)
+//   cmdPitch     <Number>  ! Command Pitch (rad) (default: 0.0)
+//   cmdHeading   <Number>  ! Command Heading (rad) (default: 0.0)
+//   cmdSpeed     <Number>  ! Command speed (m/s) (default: 0.0)
 //
 //------------------------------------------------------------------------------
-class Missile : public IWeapon
+class Missile : public AbstractWeapon
 {
-    DECLARE_SUBCLASS(Missile, IWeapon)
+    DECLARE_SUBCLASS(Missile, AbstractWeapon)
 
 public:
     Missile();
@@ -56,28 +56,28 @@ public:
     virtual void setCmdPitchD(const double x)  { cmdPitch   = x * static_cast<double>(base::angle::D2RCC); }
     virtual void setCmdHdgD(const double x)    { cmdHeading = x * static_cast<double>(base::angle::D2RCC); }
 
-    bool setTargetTrack(ITrack* const trk, const bool posTrkEnb) override;
-    bool setTargetPlayer(IPlayer* const tgt, const bool posTrkEnb) override;
+    bool setTargetTrack(Track* const trk, const bool posTrkEnb) override;
+    bool setTargetPlayer(Player* const tgt, const bool posTrkEnb) override;
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
     void reset() override;
 
 protected:
-   virtual bool setSlotVpMin(const base::INumber* const msg);
-   virtual bool setSlotVpMax(const base::INumber* const msg);
-   virtual bool setSlotVpMaxG(const base::INumber* const msg);
-   virtual bool setSlotMaxG(const base::INumber* const msg);
-   virtual bool setSlotMaxAccel(const base::INumber* const msg);
-   virtual bool setSlotCmdPitch(const base::INumber* const msg);
-   virtual bool setSlotCmdHeading(const base::INumber* const msg);
-   virtual bool setSlotCmdVelocity(const base::INumber* const msg);
+   virtual bool setSlotVpMin(const base::Number* const msg);
+   virtual bool setSlotVpMax(const base::Number* const msg);
+   virtual bool setSlotVpMaxG(const base::Number* const msg);
+   virtual bool setSlotMaxG(const base::Number* const msg);
+   virtual bool setSlotMaxAccel(const base::Number* const msg);
+   virtual bool setSlotCmdPitch(const base::Number* const msg);
+   virtual bool setSlotCmdHeading(const base::Number* const msg);
+   virtual bool setSlotCmdVelocity(const base::Number* const msg);
 
    // Weapon interface
    void weaponGuidance(const double dt) override;
    void weaponDynamics(const double dt) override;
 
 private:
-    virtual bool calculateVectors(const IPlayer* const tgt, const ITrack* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const;
+    virtual bool calculateVectors(const Player* const tgt, const Track* const trk, base::Vec3d* const los, base::Vec3d* const vel, base::Vec3d* const posx) const;
 
    // ---
    // Default guidance & dynamics parameters

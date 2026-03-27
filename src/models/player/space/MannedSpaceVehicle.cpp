@@ -13,8 +13,7 @@ MannedSpaceVehicle::MannedSpaceVehicle()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericMannedSpaceVehicle");
-    setType_old(&generic);
-    setType("GenericMannedSpaceVehicle");
+    setType(&generic);
 }
 
 }

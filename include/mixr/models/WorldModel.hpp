@@ -1,14 +1,13 @@
 
-#ifndef __mixr_models_common_WorldModel_HPP__
-#define __mixr_models_common_WorldModel_HPP__
+#ifndef __mixr_models_WorldModel_H__
+#define __mixr_models_WorldModel_H__
 
-#include "mixr/simulation/ISimulation.hpp"
+#include "mixr/simulation/Simulation.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class Identifier; class Latitude; class ILength; class Longitude; class INumber; }
-namespace terrain { class ITerrain; }
+namespace terrain { class Terrain; }
 namespace models {
-class IAtmosphere;
+class AbstractAtmosphere;
 
 //------------------------------------------------------------------------------
 // Class: WorldModel
@@ -21,13 +20,13 @@ class IAtmosphere;
 //
 // Slots --
 //
-//    latitude       <base::Latitude>         ! Reference (gaming area) latitude (default: 0.0)
-//                   <base::INumber>          ! Reference (gaming area) latitude (deg)
+//    latitude       <base::LatLon>           ! Reference (gaming area) latitude (default: 0.0)
+//                   <base::Number>           ! Reference (gaming area) latitude (deg)
 //
-//    longitude      <base::Longitude>        ! reference (gaming area) longitude (default 0.0)
-//                   <base::INumber>          ! reference (gaming area) longitude (deg)
+//    longitude      <base::LatLon>           ! reference (gaming area) longitude (default 0.0)
+//                   <base::Number>           ! reference (gaming area) longitude (deg)
 //
-//    gamingAreaRange <base::ILength>         ! Max valid range of the simulation's gaming area or zero for unlimited
+//    gamingAreaRange <base::Distance>        ! Max valid range of the simulation's gaming area or zero for unlimited
 //                                            ! default: zero -- unlimited range
 //
 //    earthModel     <base::EarthModel>       ! Earth model for geodetic lat/lon (default is WGS-84)
@@ -41,8 +40,8 @@ class IAtmosphere;
 //                                            ! or zero to use current year (default: 0)
 //
 //
-//    terrain        <terrain:ITerrain>       ! Terrain elevation database (default: nullptr)
-//    atmosphere     <IAtmosphere>            ! Atmosphere
+//    terrain        <terrain:Terrain>        ! Terrain elevation database (default: nullptr)
+//    atmosphere     <Atmosphere>             ! Atmosphere
 //
 
 // Gaming area reference point:
@@ -79,10 +78,11 @@ class IAtmosphere;
 //    At shutdown, the parent object must send a SHUTDOWN_EVENT event to
 //    this object, environments and other components.
 //
+
 //------------------------------------------------------------------------------
-class WorldModel : public simulation::ISimulation
+class WorldModel : public simulation::Simulation
 {
-    DECLARE_SUBCLASS(WorldModel, simulation::ISimulation)
+    DECLARE_SUBCLASS(WorldModel, simulation::Simulation)
 
 public:
     WorldModel();
@@ -108,9 +108,9 @@ public:
 
 
     // environmental interface
-    const terrain::ITerrain* getTerrain() const;           // returns the terrain elevation database
-    IAtmosphere* getAtmosphere();                          // returns the atmosphere model
-    const IAtmosphere* getAtmosphere() const;              // returns the atmosphere model (const version)
+    const terrain::Terrain* getTerrain() const;            // returns the terrain elevation database
+    AbstractAtmosphere* getAtmosphere();                   // returns the atmosphere model
+    const AbstractAtmosphere* getAtmosphere() const;       // returns the atmosphere model (const version)
 
     void reset() override;
 
@@ -118,19 +118,19 @@ protected:
     virtual bool setEarthModel(const base::EarthModel* const msg); // Sets our earth model
     virtual bool setGamingAreaUseEarthModel(const bool flg);
 
-    virtual bool setRefLatitude(const double);      // Sets Ref latitude
-    virtual bool setRefLongitude(const double);     // Sets Ref longitude
-    virtual bool setMaxRefRange(const double);      // Sets the max range (meters) of the gaming area or zero if there's no limit.
+    virtual bool setRefLatitude(const double v);      // Sets Ref latitude
+    virtual bool setRefLongitude(const double v);     // Sets Ref longitude
+    virtual bool setMaxRefRange(const double v);      // Sets the max range (meters) of the gaming area or zero if there's no limit.
 
    // environmental interface
-    terrain::ITerrain* getTerrain();                       // returns the terrain elevation database
+    terrain::Terrain* getTerrain();                        // returns the terrain elevation database
     bool shutdownNotification() override;
 
 private:
    void initData();
 
    // Our Earth Model, or default to using base::EarthModel::wgs84 if zero
-   const base::EarthModel* em{};
+   const base::EarthModel* em {};
 
    double refLat {};          // Reference (center of gaming area) latitude (deg)
    double refLon {};          // Reference (center of gaming area) longitude (deg)
@@ -144,24 +144,24 @@ private:
                               //       ecef = wm; * earthNED
                               //       earthNED  = ecef * wm;
 
-   IAtmosphere* atmosphere {};
-   terrain::ITerrain* terrain {};
+   AbstractAtmosphere* atmosphere {};
+   terrain::Terrain* terrain {};
 
 private:
    // slot table helper methods
-   bool setSlotRefLatitude(const base::Latitude* const);
-   bool setSlotRefLatitude(const base::INumber* const);
-   bool setSlotRefLongitude(const base::Longitude* const);
-   bool setSlotRefLongitude(const base::INumber* const);
+   bool setSlotRefLatitude(const base::LatLon* const);
+   bool setSlotRefLatitude(const base::Number* const);
+   bool setSlotRefLongitude(const base::LatLon* const);
+   bool setSlotRefLongitude(const base::Number* const);
 
-   bool setSlotGamingAreaRange(const base::ILength* const);
+   bool setSlotGamingAreaRange(const base::Distance* const);
    bool setSlotEarthModel(const base::EarthModel* const);
-   bool setSlotEarthModel(const base::Identifier* const);
-   bool setSlotGamingAreaEarthModel(const base::Boolean* const);
+   bool setSlotEarthModel(const base::String* const);
+   bool setSlotGamingAreaEarthModel(const base::Number* const);
 
    // environmental interface
-   bool setSlotTerrain(terrain::ITerrain* const);
-   bool setSlotAtmosphere(IAtmosphere* const);
+   bool setSlotTerrain(terrain::Terrain* const);
+   bool setSlotAtmosphere(AbstractAtmosphere* const);
 };
 
 }

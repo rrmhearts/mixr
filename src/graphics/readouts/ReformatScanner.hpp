@@ -1,11 +1,11 @@
 
-#ifndef __mixr_graphics_ReformatScanner_HPP__
-#define __mixr_graphics_ReformatScanner_HPP__
+#ifndef __mixr_graphics_ReformatScanner_H__
+#define __mixr_graphics_ReformatScanner_H__
 
 #ifndef __FLEX_LEXER_H
 #undef yyFlexLexer
 #define yyFlexLexer rfFlexLexer
-#include "FlexLexer.h"
+#include "mixr/base/util/FlexLexer.h"
 #endif
 
 #include "mixr/graphics/readouts/TimeReadout.hpp"
@@ -30,11 +30,11 @@ public:
 
    const char* getFormat() const            { return dataType != DataType::invalid ? format : nullptr; }
 
-   DataType convertNumber(const char*);       // called by NumericReadout
-   DataType convertOctal(const char*);        // called by OctalReadout
-   DataType convertHex(const char*);          // called by HexReadout
-   TimeMode convertTime(const char*);         // called by TimeReadout
-   DirMode convertDirection(const char*);     // called by DirectionReadout
+   DataType convertNumber(const char*);                       // called by NumericReadout
+   DataType convertOctal(const char*);                        // called by OctalReadout
+   DataType convertHex(const char*);                          // called by HexReadout
+   TimeReadout::TimeMode convertTime(const char*);            // called by TimeReadout
+   DirectionReadout::DirMode convertDirection(const char*);   // called by DirectionReadout
 
    bool isPostSign()                        { return postSign; }
 
@@ -44,8 +44,8 @@ protected:
 
    int processInteger(const char* text, const int len);
    int processFloat(const char* text, const int len);
-   int processTime(const TimeMode tm, const char* text, const int len);
-   int processDirection(const DirMode dm, const char* text, const int len);
+   int processTime(const TimeReadout::TimeMode tm, const char* text, const int len);
+   int processDirection(const DirectionReadout::DirMode dm, const char* text, const int len);
 
    int formatError(const char* text);
 

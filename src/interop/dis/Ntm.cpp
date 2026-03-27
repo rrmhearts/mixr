@@ -3,7 +3,7 @@
 #include "mixr/interop/dis/Nib.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 
@@ -17,7 +17,7 @@ BEGIN_SLOTTABLE(Ntm)
 END_SLOTTABLE(Ntm)
 
 BEGIN_SLOT_MAP(Ntm)
-    ON_SLOT(1, setSlotDisEntityType, base::IList)
+    ON_SLOT(1, setSlotDisEntityType, base::List)
 END_SLOT_MAP()
 
 Ntm::Ntm()
@@ -41,7 +41,7 @@ void Ntm::copyData(const Ntm& org, const bool)
 //------------------------------------------------------------------------------
 // This function will copy our DIS type codes to the target NIB, 'targetNib', object.
 //------------------------------------------------------------------------------
-bool Ntm::copyEntityType(interop::INib* const targetNib) const
+bool Ntm::copyEntityType(interop::Nib* const targetNib) const
 {
    bool ok {};
    const auto tgtNib = dynamic_cast<Nib*>(targetNib);
@@ -83,7 +83,7 @@ bool Ntm::setEntityType(
 //------------------------------------------------------------------------------
 // Set DIS entity type enumerations
 //------------------------------------------------------------------------------
-bool Ntm::setSlotDisEntityType(const base::IList* const msg)
+bool Ntm::setSlotDisEntityType(const base::List* const msg)
 {
    bool ok {};
    if (msg != nullptr) {

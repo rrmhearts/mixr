@@ -1,11 +1,10 @@
 
 #include "mixr/linkage/generators/AnalogInputFixed.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
 namespace mixr {
 namespace linkage {
@@ -19,8 +18,8 @@ BEGIN_SLOTTABLE(AnalogInputFixed)
 END_SLOTTABLE(AnalogInputFixed)
 
 BEGIN_SLOT_MAP(AnalogInputFixed)
-   ON_SLOT( 1, setSlotChannel, base::Integer)
-   ON_SLOT( 2, setSlotValue,   base::INumber)
+   ON_SLOT( 1, setSlotChannel,   base::Number)
+   ON_SLOT( 2, setSlotValue,     base::Number)
 END_SLOT_MAP()
 
 AnalogInputFixed::AnalogInputFixed()
@@ -35,7 +34,7 @@ void AnalogInputFixed::copyData(const AnalogInputFixed& org, const bool)
    value = org.value;
 }
 
-void AnalogInputFixed::processInputsImpl(const double dt, base::IIoData* const inData)
+void AnalogInputFixed::processInputsImpl(const double dt, base::AbstractIoData* const inData)
 {
    // set the value in the input data buffer
    if (inData != nullptr) {
@@ -43,11 +42,11 @@ void AnalogInputFixed::processInputsImpl(const double dt, base::IIoData* const i
    }
 }
 
-bool AnalogInputFixed::setSlotChannel(const base::Integer* const msg)
+bool AnalogInputFixed::setSlotChannel(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const int v = msg->asInt();
+      const int v = msg->getInt();
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -55,11 +54,11 @@ bool AnalogInputFixed::setSlotChannel(const base::Integer* const msg)
    return ok;
 }
 
-bool AnalogInputFixed::setSlotValue(const base::INumber* const msg)
+bool AnalogInputFixed::setSlotValue(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setValue(msg->asDouble());
+      ok = setValue(msg->getDouble());
    }
    return ok;
 }

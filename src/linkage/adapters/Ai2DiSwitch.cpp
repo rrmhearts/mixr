@@ -1,12 +1,10 @@
 
 #include "mixr/linkage/adapters/Ai2DiSwitch.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <iostream>
 
@@ -17,17 +15,17 @@ IMPLEMENT_SUBCLASS(Ai2DiSwitch, "Ai2DiSwitch")
 EMPTY_DELETEDATA(Ai2DiSwitch)
 
 BEGIN_SLOTTABLE(Ai2DiSwitch)
-    "di",         // 1) Discrete Input location (IIoData's DI channel)
+    "di",         // 1) Discrete Input location (AbstractIoData's DI channel)
     "channel",    // 2) Device's AI channel number
     "level",      // 3) Level to switch DI (default: 0)
     "inverted"    // 4) Inverted bit flag (default: false)
 END_SLOTTABLE(Ai2DiSwitch)
 
 BEGIN_SLOT_MAP(Ai2DiSwitch)
-    ON_SLOT( 1, setSlotLocation, base::Integer)
-    ON_SLOT( 2, setSlotChannel,  base::Integer)
-    ON_SLOT( 3, setSlotLevel,    base::INumber)
-    ON_SLOT( 4, setSlotInverted, base::Boolean)
+    ON_SLOT( 1, setSlotLocation, base::Number)
+    ON_SLOT( 2, setSlotChannel,  base::Number)
+    ON_SLOT( 3, setSlotLevel,    base::Number)
+    ON_SLOT( 4, setSlotInverted, base::Number)
 END_SLOT_MAP()
 
 Ai2DiSwitch::Ai2DiSwitch()
@@ -45,7 +43,7 @@ void Ai2DiSwitch::copyData(const Ai2DiSwitch& org, const bool)
    invert = org.invert;
 }
 
-void Ai2DiSwitch::processInputsImpl(const base::IIoDevice* const device, base::IIoData* const inData)
+void Ai2DiSwitch::processInputsImpl(const base::AbstractIoDevice* const device, base::AbstractIoData* const inData)
 {
    // Default is our initial value
    double vin {};
@@ -64,11 +62,11 @@ void Ai2DiSwitch::processInputsImpl(const base::IIoDevice* const device, base::I
 }
 
 // location: Input array index (location)
-bool Ai2DiSwitch::setSlotLocation(const base::Integer* const msg)
+bool Ai2DiSwitch::setSlotLocation(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setLocation(v);
       }
@@ -77,11 +75,11 @@ bool Ai2DiSwitch::setSlotLocation(const base::Integer* const msg)
 }
 
 // channel: Device's AI channel number
-bool Ai2DiSwitch::setSlotChannel(const base::Integer* const msg)
+bool Ai2DiSwitch::setSlotChannel(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -90,21 +88,21 @@ bool Ai2DiSwitch::setSlotChannel(const base::Integer* const msg)
 }
 
 // level: Level to switch DI (default: 0)
-bool Ai2DiSwitch::setSlotLevel(const base::INumber* const msg)
+bool Ai2DiSwitch::setSlotLevel(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setLevel( msg->asDouble() );
+      ok = setLevel( msg->getReal() );
    }
    return ok;
 }
 
 // invert: Inverted bit flag (default: false)
-bool Ai2DiSwitch::setSlotInverted(const base::Boolean* const msg)
+bool Ai2DiSwitch::setSlotInverted(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setInvertFlag( msg->asBool() );
+      ok = setInvertFlag( msg->getBoolean() );
    }
    return ok;
 }

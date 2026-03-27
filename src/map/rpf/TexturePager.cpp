@@ -225,7 +225,7 @@ void TexturePager::loadNewTextures()
                     graphics::Texture* texObj {table.getTexture(r, c)};
                     if (texObj == nullptr && map->isValidFrame(r + row, c + col, this)) {
                         if (stack != nullptr) {
-                            base::IList::Item* item {stack->getFirstItem()};
+                            base::List::Item* item {stack->getFirstItem()};
                             if (item != nullptr) {
                                 const auto obj = dynamic_cast<graphics::Texture*>(item->getValue());
                                 if (obj != nullptr) {

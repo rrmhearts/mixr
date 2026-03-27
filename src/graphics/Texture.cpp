@@ -1,8 +1,7 @@
 
 #include "mixr/graphics/Texture.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Identifier.hpp"
 
 namespace mixr {
@@ -27,14 +26,14 @@ BEGIN_SLOTTABLE(Texture)
 END_SLOTTABLE(Texture)
 
 BEGIN_SLOT_MAP(Texture)
-    ON_SLOT(1,  setSlotWidth,      base::Integer)
-    ON_SLOT(2,  setSlotHeight,     base::Integer)
-    ON_SLOT(3,  setSlotRedScale,   base::INumber)
-    ON_SLOT(4,  setSlotRedBias,    base::INumber)
-    ON_SLOT(5,  setSlotGreenScale, base::INumber)
-    ON_SLOT(6,  setSlotGreenBias,  base::INumber)
-    ON_SLOT(7,  setSlotBlueScale,  base::INumber)
-    ON_SLOT(8,  setSlotBlueBias,   base::INumber)
+    ON_SLOT(1,  setSlotWidth,      base::Number)
+    ON_SLOT(2,  setSlotHeight,     base::Number)
+    ON_SLOT(3,  setSlotRedScale,   base::Number)
+    ON_SLOT(4,  setSlotRedBias,    base::Number)
+    ON_SLOT(5,  setSlotGreenScale, base::Number)
+    ON_SLOT(6,  setSlotGreenBias,  base::Number)
+    ON_SLOT(7,  setSlotBlueScale,  base::Number)
+    ON_SLOT(8,  setSlotBlueBias,   base::Number)
     ON_SLOT(9,  setSlotWrapS,      base::Identifier)
     ON_SLOT(10, setSlotWrapT,      base::Identifier)
     ON_SLOT(11, setSlotMagFilter,  base::Identifier)
@@ -297,80 +296,80 @@ bool Texture::setMinFilter(const int v)
 //------------------------------------------------------------------------------
 // setSlotWidth() - sets our width slot
 //------------------------------------------------------------------------------
-bool Texture::setSlotWidth(const base::Integer* const size)
+bool Texture::setSlotWidth(const base::Number* const size)
 {
     bool ok = false;
-    if (size != nullptr) ok = setWidth(size->asInt());
+    if (size != nullptr) ok = setWidth(size->getInt());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotHeight() - sets our height slot
 //------------------------------------------------------------------------------
-bool Texture::setSlotHeight(const base::Integer* const size)
+bool Texture::setSlotHeight(const base::Number* const size)
 {
     bool ok = false;
-    if (size != nullptr) ok = setHeight(size->asInt());
+    if (size != nullptr) ok = setHeight(size->getInt());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotRedScale() - sets the red scale
 //------------------------------------------------------------------------------
-bool Texture::setSlotRedScale(const base::INumber* const s)
+bool Texture::setSlotRedScale(const base::Number* const s)
 {
     bool ok = false;
-    if (s != nullptr) ok = setRedScale(static_cast<GLfloat>(s->asDouble()));
+    if (s != nullptr) ok = setRedScale(static_cast<GLfloat>(s->getReal()));
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotRedBias() - sets the red bias
 //------------------------------------------------------------------------------
-bool Texture::setSlotRedBias(const base::INumber* const b)
+bool Texture::setSlotRedBias(const base::Number* const b)
 {
     bool ok = false;
-    if (b != nullptr) ok = setRedBias(static_cast<GLfloat>(b->asDouble()));
+    if (b != nullptr) ok = setRedBias(static_cast<GLfloat>(b->getReal()));
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotGreenScale() - sets the blue scale
 //------------------------------------------------------------------------------
-bool Texture::setSlotGreenScale(const base::INumber* const s)
+bool Texture::setSlotGreenScale(const base::Number* const s)
 {
     bool ok = false;
-    if (s != nullptr) ok = setGreenScale(static_cast<GLfloat>(s->asDouble()));
+    if (s != nullptr) ok = setGreenScale(static_cast<GLfloat>(s->getReal()));
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotGreenBias() - sets the green bias
 //------------------------------------------------------------------------------
-bool Texture::setSlotGreenBias(const base::INumber* const b)
+bool Texture::setSlotGreenBias(const base::Number* const b)
 {
     bool ok = false;
-    if (b != nullptr) ok = setGreenBias(static_cast<GLfloat>(b->asDouble()));
+    if (b != nullptr) ok = setGreenBias(static_cast<GLfloat>(b->getReal()));
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotBlueScale() - sets the blue scale
 //------------------------------------------------------------------------------
-bool Texture::setSlotBlueScale(const base::INumber* const s)
+bool Texture::setSlotBlueScale(const base::Number* const s)
 {
     bool ok = false;
-    if (s != nullptr) ok = setBlueScale(static_cast<GLfloat>(s->asDouble()));
+    if (s != nullptr) ok = setBlueScale(static_cast<GLfloat>(s->getReal()));
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotBlueBias() - sets the blue bias
 //------------------------------------------------------------------------------
-bool Texture::setSlotBlueBias(const base::INumber* const b)
+bool Texture::setSlotBlueBias(const base::Number* const b)
 {
     bool ok = false;
-    if (b != nullptr) ok = setBlueBias(static_cast<GLfloat>(b->asDouble()));
+    if (b != nullptr) ok = setBlueBias(static_cast<GLfloat>(b->getReal()));
     return ok;
 }
 

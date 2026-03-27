@@ -1,11 +1,10 @@
 
-#ifndef __mixr_instruments_DialArcSegment_HPP__
-#define __mixr_instruments_DialArcSegment_HPP__
+#ifndef __mixr_instruments_DialArcSegment_H__
+#define __mixr_instruments_DialArcSegment_H__
 
 #include "mixr/instruments/dials/AnalogDial.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class INumber; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -32,7 +31,7 @@ public:
     void updateData(const double dt = 0.0) override;
 
 protected:
-    bool onUpdateRadius(const base::INumber* const) override;
+    bool onUpdateRadius(const base::Number* const) override;
 
 private:
     bool isDynamic {};          // are we setting sweep angle based on value?
@@ -41,9 +40,9 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotIsDynamic(const base::Boolean* const);
-    bool setSlotOuterRadius(const base::INumber* const);
-    bool setSlotFilled(const base::Boolean* const);
+    bool setSlotIsDynamic(const base::Number* const);
+    bool setSlotOuterRadius(const base::Number* const);
+    bool setSlotFilled(const base::Number* const);
 };
 
 }

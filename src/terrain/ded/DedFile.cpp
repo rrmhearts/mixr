@@ -1,6 +1,6 @@
 
 #include "mixr/terrain/ded/DedFile.hpp"
-#include "mixr/base/network/INetHandler.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/util/str_utils.hpp"
 
 #include <fstream>
@@ -153,7 +153,7 @@ bool DedFile::isDataLoaded() const
 bool DedFile::loadData()
 {
    std::string filename;
-   const char* p{getPathname()};
+   const char* p {getPathname()};
    if (p != nullptr) {
       filename += p;
       filename += '/';
@@ -196,7 +196,7 @@ bool DedFile::getFileHeaders( std::istream& in )
    // Read file header
    stdhdr = new DedStdHdr();
    in.read( reinterpret_cast<char*>(stdhdr), sizeof(DedStdHdr) );
-   if (in.fail() || in.gcount() < static_cast<std::streamsize>(sizeof(DedStdHdr))) {
+   if (in.fail() || in.gcount() < sizeof(DedStdHdr)) {
       if (isMessageEnabled(MSG_ERROR)) {
          std::cerr << "DedFile::getFileHeaders: invalid standard header.";
       }
@@ -257,7 +257,7 @@ bool DedFile::getFileHeaders( std::istream& in )
          // Read file header
          fstat = new DedStats();
          in.read( reinterpret_cast<char*>(fstat), sizeof(DedStats) );
-         if (in.fail() || in.gcount() < static_cast<std::streamsize>(sizeof(DedStats))) {
+         if (in.fail() || in.gcount() < sizeof(DedStats)) {
             if (isMessageEnabled(MSG_ERROR)) {
                std::cerr << "DedFile::getFileHeaders: invalid statistics header.";
             }
@@ -269,11 +269,11 @@ bool DedFile::getFileHeaders( std::istream& in )
                // Byte-swap
                uint32_t lTemp{};
                int16_t sTemp{};
-               base::INetHandler::fromNetOrder(&lTemp, fstat->ncell);
+               base::NetHandler::fromNetOrder(&lTemp, fstat->ncell);
                fstat->ncell = lTemp;
-               base::INetHandler::fromNetOrder(&sTemp, fstat->maxz);
+               base::NetHandler::fromNetOrder(&sTemp, fstat->maxz);
                fstat->maxz = sTemp;
-               base::INetHandler::fromNetOrder(&sTemp, fstat->minz);
+               base::NetHandler::fromNetOrder(&sTemp, fstat->minz);
                fstat->minz = sTemp;
             }
 
@@ -295,7 +295,7 @@ bool DedFile::getFileHeaders( std::istream& in )
             for (unsigned int i = 0; i < fstat->ncell && ok; i++) {
                cells[i] = new DedCellHdr();
                in.read( reinterpret_cast<char*>(cells[i]), sizeof(DedCellHdr) );
-               if (in.fail() || in.gcount() < static_cast<std::streamsize>(sizeof(DedCellHdr))) {
+               if (in.fail() || in.gcount() < sizeof(DedCellHdr)) {
                    if (isMessageEnabled(MSG_ERROR)) {
                        std::cerr << "DedFile::getFileHeaders: invalid cell headers.";
                        std::cerr << " in.fail:" << in.fail() << " in.gcount:" << in.gcount() << " < size?:" << sizeof(DedCellHdr) << std::endl;
@@ -306,26 +306,26 @@ bool DedFile::getFileHeaders( std::istream& in )
                // Byte-swap
                if (ok) {
                   float fTemp{};
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->latstart);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->latstart);
                   cells[i]->latstart = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->latend);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->latend);
                   cells[i]->latend = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->longstart);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->longstart);
                   cells[i]->longstart = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->longend);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->longend);
                   cells[i]->longend = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->deltalat);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->deltalat);
                   cells[i]->deltalat = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->deltalong);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->deltalong);
                   cells[i]->deltalong = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->nptlat);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->nptlat);
                   cells[i]->nptlat = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->nptlong);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->nptlong);
                   cells[i]->nptlong = fTemp;
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->deltax);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->deltax);
                   cells[i]->deltax = fTemp;
 
-                  base::INetHandler::fromNetOrder(&fTemp, cells[i]->deltay);
+                  base::NetHandler::fromNetOrder(&fTemp, cells[i]->deltay);
                   cells[i]->deltay = fTemp;
 
                   #ifdef PRINT
@@ -418,7 +418,7 @@ bool DedFile::getData( std::istream& in )
             // Successful: Byte-swap
             short sTemp{};
             for (unsigned int j = 0; j < N; j++ ) {
-               base::INetHandler::fromNetOrder(&sTemp, columns[i][j]);
+               base::NetHandler::fromNetOrder(&sTemp, columns[i][j]);
                columns[i][j] = sTemp;
 
                // Check for min/max

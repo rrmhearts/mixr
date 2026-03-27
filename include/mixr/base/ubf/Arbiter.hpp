@@ -1,60 +1,59 @@
 
-#ifndef __mixr_base_ubf_Arbiter_HPP__
-#define __mixr_base_ubf_Arbiter_HPP__
+#ifndef __mixr_base_ubf_Arbiter_H__
+#define __mixr_base_ubf_Arbiter_H__
 
-#include "IBehavior.hpp"
+#include "AbstractBehavior.hpp"
 
 namespace mixr {
 namespace base {
-class IList;
-class IPairStream;
+class List;
 
 namespace ubf {
-class IState;
-class IAction;
+class AbstractState;
+class AbstractAction;
 
 //------------------------------------------------------------------------------
 // Class: Arbiter
+//
 // Description:
 //    A meta-behavior that generates a "complex action" based on the actions
 //    generated our list of behaviors.
-//------------------------------------------------------------------------------
-// Factory name: Arbiter
-//------------------------------------------------------------------------------
+//
+// Note:
+//    The default is to select the Action with the highest vote value.
+//
+// Factory name: UbfArbiter
 // Slots:
 //    behaviors   <PairStream>      ! List of behaviors
 //------------------------------------------------------------------------------
-// Notes:
-//    The default is to select the Action with the highest vote value.
-//------------------------------------------------------------------------------
-class Arbiter : public IBehavior
+class Arbiter : public AbstractBehavior
 {
-   DECLARE_SUBCLASS(Arbiter, IBehavior)
+   DECLARE_SUBCLASS(Arbiter, AbstractBehavior)
 
 public:
    Arbiter();
 
-   IAction* genAction(const IState* const state, const double dt) override;
+   AbstractAction* genAction(const AbstractState* const state, const double dt) override;
 
 protected:
-   base::IList* getBehaviors();
+   base::List* getBehaviors();
 
    // evaluates a list of actions and return an optional "complex action"
    // (default: returns the action with the highest vote value)
-   virtual IAction* genComplexAction(IList* const actionSet);
+   virtual AbstractAction* genComplexAction(List* const actionSet);
 
    // add new behavior to list
-   void addBehavior(IBehavior* const);
+   void addBehavior(AbstractBehavior* const);
 
 private:
-   base::IList* behaviors {};
+   base::List* behaviors {};
 
 private:
    // slot table helper methods
-   bool setSlotBehaviors(base::IPairStream* const);
+   bool setSlotBehaviors(base::PairStream* const);
 };
 
-inline base::IList* Arbiter::getBehaviors()                 { return behaviors; }
+inline base::List* Arbiter::getBehaviors()                 { return behaviors; }
 
 }
 }

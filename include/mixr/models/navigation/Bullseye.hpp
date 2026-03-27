@@ -1,6 +1,6 @@
 
-#ifndef __mixr_models_common_Bullseye_HPP__
-#define __mixr_models_common_Bullseye_HPP__
+#ifndef __mixr_models_Bullseye_H__
+#define __mixr_models_Bullseye_H__
 
 #include "mixr/models/navigation/Steerpoint.hpp"
 

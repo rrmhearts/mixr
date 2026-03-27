@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\graphics">
+      <UniqueIdentifier>{1894612D-8400-1D28-4DF4-B485B91F3F90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\graphics\fonts">
+      <UniqueIdentifier>{7140CD49-DD4D-FB2F-6634-F71AD240C7E6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\graphics\readouts">
+      <UniqueIdentifier>{2E09DE27-1A2F-A88E-0375-2D5AEF39CD5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics">
+      <UniqueIdentifier>{2DF282EC-1955-1291-C2DA-4A47AE1CDE13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\fonts">
+      <UniqueIdentifier>{461A8450-32FE-44A6-9B5E-3FF987612F28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\readouts">
+      <UniqueIdentifier>{E30E47B2-4F7B-02AD-186F-9A0A849A2415}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\graphics\BmpTexture.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Clip3D.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\ColorGradient.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\ColorRotary.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Display.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Graphic.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Image.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\MapPage.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Material.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\MfdPage.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Page.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Polygon.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Readouts.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Rotators.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Scanline.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Shapes.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\SymbolLoader.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Texture.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\Translator.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\factory.hpp">
+      <Filter>include\mixr\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\AbstractFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\AbstractFtglFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\BitmapFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglBitmapFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglExtrdFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglHaloFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglOutlineFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglPixmapFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglPolygonFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglTextureFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\StrokeFont.hpp">
+      <Filter>include\mixr\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\AbstractField.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\AsciiText.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Cursor.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\DirectionReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\HexReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\LatitudeReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\LongitudeReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\NumericReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\OctalReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Rotary.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Rotary2.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\TimeReadout.hpp">
+      <Filter>include\mixr\graphics\readouts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\graphics\readouts\ReformatScanner.hpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\graphics\BmpTexture.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Clip3D.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ColorGradient.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ColorRotary.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Display.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Graphic.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Image.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\MapPage.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Material.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\MfdPage.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Page.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Polygon.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Rotators.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Scanline.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Shapes.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\SymbolLoader.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Texture.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Translator.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\factory.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\AbstractFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\AbstractFtglFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\BitmapFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglBitmapFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglExtrdFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglHaloFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglOutlineFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglPixmapFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglPolygonFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\FtglTextureFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\fonts\StrokeFont.cpp">
+      <Filter>src\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\AbstractField.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\AsciiText.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\Cursor.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\DirectionReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\HexReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\LatitudeReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\LongitudeReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\NumericReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\OctalReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\ReformatScanner.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\Rotary.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\Rotary2.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\readouts\TimeReadout.cpp">
+      <Filter>src\graphics\readouts</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\graphics\readouts\reformat_scanner.l">
+      <Filter>src\graphics\readouts</Filter>
+    </None>
+  </ItemGroup>
+</Project>

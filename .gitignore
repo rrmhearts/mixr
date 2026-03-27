@@ -1,7 +1,13 @@
 # vs directories
 build/obj/
-vs2019/
-vs2022/
+build/**/obj/
+build/**/unsuccessfulbuild
+build/**/.vs/
+build/vs2022/obj/
+build/vs2022/.vs/
+vs2013/
+vs2015/
+vs2017/
 codeblocks/
 codelite/
 .vscode/

@@ -5,53 +5,38 @@
 
    -- Common interoperability code
    project "interop"
-      location ("../" .. _ACTION .. "/projects/%{prj.name}")
       files {
-         "../../include/mixr/interop/**",
-         "../../src/interop/**"
+         "../../include/mixr/interop/common/**.h*",
+         "../../src/interop/common/**.cpp"
       }
-      removefiles {
-         "../../include/mixr/interop/dis/**",
-         "../../src/interop/dis/**",
-         "../../include/mixr/interop/hla/**",
-         "../../src/interop/hla/**"
-      }
-      includedirs { MIXR_IncPath }
       targetname "interop"
 
    -- IEEE DIS interface library
    project "interop_dis"
-      location ("../" .. _ACTION .. "/projects/%{prj.name}")
       files {
-         "../../include/mixr/interop/dis/**",
-         "../../src/interop/dis/**"
+         "../../include/mixr/interop/dis/**.h*",
+         "../../src/interop/dis/**.cpp"
       }
-      includedirs { MIXR_IncPath }
       targetname "interop_dis"
 
-   -- IEEE HLA interface library
+--[[
+   -- IEEE HLA interface library (common code)
    project "interop_hla"
-      location ("../" .. _ACTION .. "/projects/%{prj.name}")
       files {
-         "../../include/mixr/interop/hla/**",
-         "../../src/interop/hla/**"
+         "../../include/mixr/interop/hla/**.h*",
+         "../../src/interop/hla/**.cpp"
       }
-      removefiles {
-         "../../include/mixr/interop/hla/rprfom/**",
-         "../../src/interop/hla/rprfom/**"
-      }
-      includedirs { MIXR_IncPath, MIXR_3rdPartyIncPath }
+      includedirs { HLAIncPath }
       defines { "RTI_USES_STD_FSTREAM" }
       targetname "interop_hla"
 
    -- IEEE HLA interface library for RPR FOM
-   project "interop_hla_rprfom"
-      location ("../" .. _ACTION .. "/projects/%{prj.name}")
+   project "interop_rprfom"
       files {
-         "../../include/mixr/interop/hla/rprfom/**",
-         "../../src/interop/hla/rprfom/**"
+         "../../include/mixr/interop/rprfom/**.h*",
+         "../../src/interop/rprfom/**.cpp"
       }
       includedirs { HLAIncPath }
       defines { "RTI_USES_STD_FSTREAM" }
-      targetname "interop_hla_rprfom"
-
+      targetname "interop_rprfom"
+--]]

@@ -13,8 +13,7 @@ BoosterSpaceVehicle::BoosterSpaceVehicle()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericBoosterSpaceVehicle");
-    setType_old(&generic);
-    setType("GenericBoosterSpaceVehicle");
+    setType(&generic);
 }
 
 }

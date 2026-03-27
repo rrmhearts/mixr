@@ -1,11 +1,10 @@
 
 #include "mixr/linkage/adapters/DiscreteOutput.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <iostream>
 
@@ -16,21 +15,17 @@ IMPLEMENT_SUBCLASS(DiscreteOutput, "DiscreteOutput")
 EMPTY_DELETEDATA(DiscreteOutput)
 
 BEGIN_SLOTTABLE(DiscreteOutput)
-    "do",         // 1) Discrete Output location (IIoData's DO channel)
+    "do",         // 1) Discrete Output location (AbstractIoData's DO channel)
     "port",       // 2) Device port number (default: 0)
     "channel",    // 3) Device channel (bit) number on the port
     "inverted",   // 4) Inverted bit flag (default: false)
-    "value",      // 5) Initial value (default: false)
-    "count"       // 6) Number of DIs to manage starting at 'di' and 'channel'
 END_SLOTTABLE(DiscreteOutput)
 
 BEGIN_SLOT_MAP(DiscreteOutput)
-    ON_SLOT( 1, setSlotLocation, base::Integer)
-    ON_SLOT( 2, setSlotPort,     base::Integer)
-    ON_SLOT( 3, setSlotChannel,  base::Integer)
-    ON_SLOT( 4, setSlotInverted, base::Boolean)
-    ON_SLOT( 5, setSlotValue,    base::Boolean)
-    ON_SLOT( 6, setSlotCount,    base::Integer)
+    ON_SLOT( 1, setSlotLocation, base::Number)
+    ON_SLOT( 2, setSlotPort,     base::Number)
+    ON_SLOT( 3, setSlotChannel,  base::Number)
+    ON_SLOT( 4, setSlotInverted, base::Number)
 END_SLOT_MAP()
 
 DiscreteOutput::DiscreteOutput()
@@ -45,44 +40,33 @@ void DiscreteOutput::copyData(const DiscreteOutput& org, const bool)
    location = org.location;
    port = org.port;
    channel = org.channel;
-   devEnb = org.devEnb;
    invert = org.invert;
-   value = org.value;
-   count = org.count;
 }
 
-void DiscreteOutput::processOutputsImpl(const base::IIoData* const outData, base::IIoDevice* const device)
+void DiscreteOutput::processOutputsImpl(const base::AbstractIoData* const outData, base::AbstractIoDevice* const device)
 {
-   if (device != nullptr && devEnb) {
-      int chan = channel;
-      int loc = location;
-      int n = ((count >= 0) ? count : -count);
+   if (device != nullptr) {
+      bool value{};
 
-      for (int i = 0; i < n; i++) {
-
-         // Get the bit from the cockpit output data handler
-         if (outData != nullptr) {
-            outData->getDiscreteOutput(loc, &value);
-         }
-
-         // Send the bit to the DO card
-         bool value0 = value;
-         if (invert) value0 = !value;
-         device->setDiscreteOutput(value0, chan, port);
-
-         chan++;
-         if (count >= 0) loc++;
-         else loc--;
+      // Get the bit from the cockpit output data handler
+      if (outData != nullptr) {
+         outData->getDiscreteOutput(location, &value);
       }
+
+      // Send the bit to the DO card
+      bool value0 {value};
+      if (invert)
+         value0 = !value;
+      device->setDiscreteOutput(value0, channel, port);
    }
 }
 
 // location: Output array index (location)
-bool DiscreteOutput::setSlotLocation(const base::Integer* const msg)
+bool DiscreteOutput::setSlotLocation(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setLocation(v);
       }
@@ -91,11 +75,11 @@ bool DiscreteOutput::setSlotLocation(const base::Integer* const msg)
 }
 
 // port: DiHandler's port number
-bool DiscreteOutput::setSlotPort(const base::Integer* const msg)
+bool DiscreteOutput::setSlotPort(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setPort(v);
       }
@@ -104,11 +88,11 @@ bool DiscreteOutput::setSlotPort(const base::Integer* const msg)
 }
 
 // channel: DiHandler's channel (bit) number on the port
-bool DiscreteOutput::setSlotChannel(const base::Integer* const msg)
+bool DiscreteOutput::setSlotChannel(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -117,31 +101,11 @@ bool DiscreteOutput::setSlotChannel(const base::Integer* const msg)
 }
 
 // invert: Inverted bit flag (default: false)
-bool DiscreteOutput::setSlotInverted(const base::Boolean* const msg)
+bool DiscreteOutput::setSlotInverted(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      ok = setInvertFlag( msg->asBool() );
-   }
-   return ok;
-}
-
-// value: Initial value (default: false)
-bool DiscreteOutput::setSlotValue(const base::Boolean* const msg)
-{
-   bool ok{};
-   if (msg != nullptr) {
-      ok = setValue( msg->asBool() );
-   }
-   return ok;
-}
-
-// count: number of discrete bits
-bool DiscreteOutput::setSlotCount(const base::Integer* const msg)
-{
-   bool ok{};
-   if (msg != nullptr) {
-      ok = setCount( msg->asInt() );
+      ok = setInvertFlag( msg->getBoolean() );
    }
    return ok;
 }

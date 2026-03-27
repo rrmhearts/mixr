@@ -1,131 +1,155 @@
 
-#ifndef __mixr_graphics_Page_HPP__
-#define __mixr_graphics_Page_HPP__
+#ifndef __mixr_graphics_Page_H__
+#define __mixr_graphics_Page_H__
 
 #include "Graphic.hpp"
 #include "mixr/base/Identifier.hpp"
 
 #include <array>
-#include <string>
 
 namespace mixr {
-namespace base { class Boolean; class Pair; class IPairStream; class String; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: Page
-// Description: Page manages a list of graphic objects and methods to manage
-//              them - this includes subpages and a background page
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
+// Description: Page format. A list of graphic objects and methods to manage
+//              them as a page, also contains subpages and a background page.
 // Factory name: Page
+//
 // Slots:
-//  page                 <Identifier>   ! initial subpage (default: 0)
-//  pages                <IPairStream>  ! subpages (default: 0)
-//  pages                <Page>
-//  pagingEvent          <IPairStream>
-//  subpagesFirst        <Boolean>      ! draw subpages first (default: draw our page graphics first)
-//  focusSlavedToSubpage <Boolean>      ! slave the focus to the subpage (default: true)
-//------------------------------------------------------------------------------
-// Events:
-//  ON_ENTRY      <>        ! sets focus to our subpage, if we have one
-//  ON_EXIT       <>        !
-//  BUTTON_HIT    <String>  ! handle button hits (with button name) as page change requests
-//  ON_ANYKEY     <int>     ! handle keyboard inputs as page change requests
+//  page                 <Identifier>   ! Initial subpage (default: 0)
+//  pages                <PairStream>   ! Subpages (default: 0)
+//  pagingEvent          <Page>         ! Page change event (default: 0)
+//  subpagesFirst        <PairStream>   ! Draw subpages first (default: draw our page graphics first)
+//  focusSlavedToSubpage <Number>       ! Slave the focus to the subpage (default: true)
+//
+// Events
+//  1. ON_ENTRY
+//  2. ON_EXIT
+//  3. BUTTON_HIT
+//  4. ON_ANYKEY
+//
+// Public member functions:
+//  char* subpageName()
+//    Returns cpName.
+//
+//  Page* subpage()
+//    Returns cp.
+//
+//  bool isPostDrawSubpage()
+//    Returns postDraw1
+//
+//  Pair* findSubpageByName(char* slotname)
+//    Returns a member from the slot name given, else 0.
+//
+//  Pair* findSubpageByType(std::type_info& type)
+//    Returns a member of the given type, else 0.
+//
+//  bool isFocusSlavedToSubpage()
+//    Returns true if the focus is slaved to a subpage.
+//
+//  void setFocusSlavedToSubpage(bool f)
+//    Sets focusSlavedToSubpage to f.
+//
+//  bool onButtonHit(String* obhobj)
+//    Handles the button hit as a page change event.
+//
+//  bool onKeyHit(int key)
+//    Handles the keyboard hit as a page change event.
+//
+// Call new sub-page
+//  bool newSubpage(Page* newPage, Page* theCaller, Object* theArg)
+//    Changes subpages by page. Returns true if page was found.
+//
+//  bool newSubpage(char* name, Page* theCaller, Object* theArg)
+//    Changes subpages by name. Returns true if the page was found.
 //------------------------------------------------------------------------------
 class Page : public Graphic
 {
    DECLARE_SUBCLASS(Page, Graphic)
 
 public:
-   Page()                                       { STANDARD_CONSTRUCTOR() }
+   Page();
 
-   const char* subpageName() const              { return cPageName.c_str(); }
-   Page* subpage() const                        { return cPage; }
+   const char* subpageName() const              { return cpName; }
+   Page* subpage() const                        { return cp; }
 
    bool isPostDrawSubpage() const               { return postDraw1; }
 
-   // returns a member from the name given, else nullptr
-   virtual base::Pair* findSubpageByName(const char* const);
-   // returns a member of the given type, else nullptr
-   virtual base::Pair* findSubpageByType(const std::type_info&);
+   virtual base::Pair* findSubpageByName(const char* const slotname);
+   virtual base::Pair* findSubpageByType(const std::type_info& type);
 
-   // returns true if the focus is slaved to a subpage
    bool isFocusSlavedToSubpage() const          { return focusSlavedToSubpage; }
-   void setFocusSlavedToSubpage(const bool x)   { focusSlavedToSubpage = x; }
+   void setFocusSlavedToSubpage(const bool f)   { focusSlavedToSubpage = f; }
 
    // call new sub-page
-   // changes subpages by page, returns true if page was found
-   bool newSubpage(Page* const newPage, Page* theCaller, base::IObject* theArg = nullptr);
-   // changes subpages by name, returns true if the page was found
-   bool newSubpage(const std::string& name, Page* theCaller, base::IObject* theArg = nullptr);
+   bool newSubpage(Page* const newPage, Page* theCaller, base::Object* theArg = nullptr);
+   bool newSubpage(const char* const name, Page* theCaller, base::Object* theArg = nullptr);
 
-   // event handlers
+   // event handler functions
    virtual bool onEntry();
    virtual bool onExit();
-   // handles the button hit as a page change event
-   virtual bool onButtonHit(const base::String* const);
-   // handles the keyboard hit as a page change event
+   virtual bool onButtonHit(const base::String* const obhobj);
    virtual bool onKeyHit(const int key);
 
    void draw() override;
    base::Pair* findBySelectName(const GLuint name) override;
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
 
    void updateTC(const double dt = 0.0) override;
    void updateData(const double dt = 0.0) override;
    void reset() override;
 
 protected:
-   // returns our paging arguments
-   base::IObject* getArgument()              { return pageArg; }
+   // Return our paging arguments
+   base::Object* getArgument()               { return pageArg; }
    const Page* getCaller()                   { return caller; }
 
-   // returns our subpages
-   base::IPairStream* subPages()             { return subpages; }
+   // Return our subpages
+   base::PairStream* subPages()              { return subpages; }
 
-   // manage our (sub)page stack
+   // Manage our (sub)page stack
    bool clearSubpageStack();
-   bool pushSubpage(const std::string& name, Page* theCaller, base::IObject* theArg = nullptr);
-   bool popSubpage(Page* theCaller, base::IObject* theArg = nullptr);
+   bool pushSubpage(const char* const name, Page* theCaller, base::Object* theArg = nullptr);
+   bool popSubpage(Page* theCaller, base::Object* theArg = nullptr);
 
-   // call/push/pop major pages (our container's pages, which we are a member of)
-   bool newPage(Page* const newPage, Page* theCaller, base::IObject* theArg = nullptr);
-   bool newPage(const std::string& name, Page* theCaller, base::IObject* theArg = nullptr);
-   bool pushPage(const std::string& name, Page* theCaller, base::IObject* theArg = nullptr);
-   bool popPage(Page* theCaller, base::IObject* theArg = nullptr);
+   // Call/push/pop major pages (our container's pages, which we are a member of)
+   bool newPage(Page* const newPage, Page* theCaller, base::Object* theArg = nullptr);
+   bool newPage(const char* const name, Page* theCaller, base::Object* theArg = nullptr);
+   bool pushPage(const char* const name, Page* theCaller, base::Object* theArg = nullptr);
+   bool popPage(Page* theCaller, base::Object* theArg = nullptr);
 
 private:
    bool processSubpages();
 
-   Page* cPage{};                       // current subpage
-   std::string cPageName;               // current subpage name
-   Page* nPage{};                       // new subpage (requesting a page change)
+   Page* cp {};                         // Current Subpage
+   base::Identifier cpName;             // Current Subpage Name
+   Page* np {};                         // New subpage (requesting a page change)
 
-   base::IPairStream* subpages {};      // subpages
-   base::IPairStream* pageChgEvents {}; // page change events
+   base::PairStream* subpages {};       // Subpages
+   base::PairStream* pageChgEvents {};  // Page change events
 
-   bool postDraw1 {};                   // post draw component (child) graphic
-   bool focusSlavedToSubpage {true};    // input event focus should follow subpage changes
+   bool postDraw1 {};                   // Post draw component (child) graphic
+   bool focusSlavedToSubpage {true};    // Input event focus should follow subpage changes
 
-   // passed by calling page
-   base::safe_ptr<base::IObject> pageArg;     // paging argument
-   const Page* caller{};                     // calling page
+   // Passed by calling page
+   base::safe_ptr<base::Object> pageArg;     // Paging argument
+   const Page* caller {};                    // Calling page
 
-   // subpage stack
-   static const std::size_t SUBPAGE_STACK_SIZE {50};
+   // Subpage Stack
+   static const int SUBPAGE_STACK_SIZE {50};
    std::array<Page*, SUBPAGE_STACK_SIZE> subpageStack {};
-   std::size_t subpageSP {SUBPAGE_STACK_SIZE};           // stack pointer
+   int subpageSP {SUBPAGE_STACK_SIZE};       // Stack pointer
 
 private:
    // slot table helper methods
    bool setSlotPage(const base::Identifier* const);
-   bool setSlotSubpageStream(base::IPairStream* const);
+   bool setSlotSubpageStream(base::PairStream* const);
    bool setSlotSubpageSingle(Page* const);
-   bool setSlotPagingEvent(base::IPairStream* const);
-   bool setSlotDrawSubpageFirst(const base::Boolean* const);
-   bool setSlotFocusSlavedToSubpage(const base::Boolean* const);
+   bool setSlotPagingEvent(base::PairStream* const);
+   bool setSlotDrawSubpageFirst(const base::Number* const);
+   bool setSlotFocusSlavedToSubpage(const base::Number* const);
 };
 
 }

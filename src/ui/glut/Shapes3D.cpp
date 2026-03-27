@@ -3,8 +3,7 @@
 //------------------------------------------------------------------------------
 #include "mixr/ui/glut/Shapes3D.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -39,6 +38,10 @@ EMPTY_SLOTTABLE(Octahedron)
 IMPLEMENT_SUBCLASS(Teapot, "Teapot")
 EMPTY_SLOTTABLE(Teapot)
 
+//------------------------------------------------------------------------------
+// Slot tables
+//------------------------------------------------------------------------------
+
 // Sphere --
 BEGIN_SLOTTABLE(Sphere)
     "stacks",       // 1: Number of stacks on the circle
@@ -64,20 +67,20 @@ END_SLOTTABLE(Torus)
 //  Map slot tables
 //------------------------------------------------------------------------------
 BEGIN_SLOT_MAP(Sphere)
-    ON_SLOT(1, setSlotStacks, base::Integer)
+    ON_SLOT(1, setSlotStacks, base::Number)
 END_SLOT_MAP()
 
 BEGIN_SLOT_MAP(Cylinder)
-    ON_SLOT(1, setSlotTopRadius, base::INumber)
-    ON_SLOT(2, setSlotHeight,    base::INumber)
+    ON_SLOT(1, setSlotTopRadius, base::Number)
+    ON_SLOT(2, setSlotHeight,    base::Number)
 END_SLOT_MAP()
 
 BEGIN_SLOT_MAP(Cube)
-    ON_SLOT(1, setSlotSize, base::INumber)
+    ON_SLOT(1, setSlotSize, base::Number)
 END_SLOT_MAP()
 
 BEGIN_SLOT_MAP(Torus)
-    ON_SLOT(1, setSlotOuterRadius, base::INumber)
+    ON_SLOT(1, setSlotOuterRadius, base::Number)
 END_SLOT_MAP()
 
 Sphere::Sphere()
@@ -262,48 +265,51 @@ void Teapot::drawFunc()
 }
 
 
-bool Sphere::setSlotStacks(const base::Integer* const x)
+//------------------------------------------------------------------------------
+//  setSlotStacks() -- for Sphere
+//------------------------------------------------------------------------------
+bool Sphere::setSlotStacks(const base::Number* const x)
 {
     bool ok {};
-    if (x != nullptr) ok = setStacks(x->asInt());
+    if (x != nullptr) ok = setStacks(x->getInt());
     return ok;
 }
 //------------------------------------------------------------------------------
 //  setSlotTopRadius() -- for Cylinder
 //------------------------------------------------------------------------------
-bool Cylinder::setSlotTopRadius(const base::INumber* const x)
+bool Cylinder::setSlotTopRadius(const base::Number* const x)
 {
     bool ok {};
-    if (x != nullptr) ok = setTopRadius(x->asDouble());
+    if (x != nullptr) ok = setTopRadius(x->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 //  setSlotHeight() -- for Cylinder
 //------------------------------------------------------------------------------
-bool Cylinder::setSlotHeight(const base::INumber* const x)
+bool Cylinder::setSlotHeight(const base::Number* const x)
 {
     bool ok{};
-    if (x != nullptr) ok = setHeight(x->asDouble());
+    if (x != nullptr) ok = setHeight(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 //  setSlotSize() -- for Cube
 //------------------------------------------------------------------------------
-bool Cube::setSlotSize(const base::INumber* const x)
+bool Cube::setSlotSize(const base::Number* const x)
 {
     bool ok{};
-    if (x != nullptr) ok = setSize(x->asDouble());
+    if (x != nullptr) ok = setSize(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 //  setSlotOuterRadius() -- for Torus
 //------------------------------------------------------------------------------
-bool Torus::setSlotOuterRadius(const base::INumber* const x)
+bool Torus::setSlotOuterRadius(const base::Number* const x)
 {
     bool ok{};
-    if (x != nullptr) ok = setOuterRadius(x->asDouble());
+    if (x != nullptr) ok = setOuterRadius(x->getReal());
     return ok;
 }
 

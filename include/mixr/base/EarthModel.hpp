@@ -1,31 +1,33 @@
 
-#ifndef __mixr_base_EarthModel_HPP__
-#define __mixr_base_EarthModel_HPP__
+#ifndef __mixr_base_EarthModel_H__
+#define __mixr_base_EarthModel_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
 namespace base {
-class ILength;
-class INumber;
+class Distance;
+class Number;
 
 //------------------------------------------------------------------------------
 // Class: EarthModel
-// Description: Concrete class that contains the major axis, minor axis and
-//              flattening terms used to describe an ellipsoidal or a
-//              spherical earth model.
-//------------------------------------------------------------------------------
-// EDL Interface:
+// Description: Contains the major axis, minor axis and flattening terms used to
+//              describe an ellipsoidal or a spherical earth model.
 //
 // Factory name: EarthModel
 // Slots:
-//     a    <ILength>    ! Semi major axis
-//     b    <ILength>    ! Semi minor axis
-//     f    <INumber>    ! Flattening
+//     a    <Distance>  ! Semi major axis
+//     a    <Number>    ! -- in meters
+//
+//     b    <Distance>  ! Semi minor axis
+//     b    <Number>    ! -- in meters
+//
+//     f    <Number>    ! Flattening
+//
 //------------------------------------------------------------------------------
-class EarthModel final: public IObject
+class EarthModel : public Object
 {
-   DECLARE_SUBCLASS(EarthModel, IObject)
+   DECLARE_SUBCLASS(EarthModel, Object)
 
 public:
    // Some pre-defined earth models             -- getEarthModel() by name list
@@ -79,9 +81,12 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotA(const ILength* const);
-   bool setSlotB(const ILength* const);
-   bool setSlotF(const INumber* const);
+   bool setSlotA(const Distance* const);
+   bool setSlotA(const Number* const);
+   bool setSlotB(const Distance* const);
+   bool setSlotB(const Number* const);
+   bool setSlotF(const Number* const);
+
 };
 
 inline double EarthModel::getA() const  { return a; }

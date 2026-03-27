@@ -1,17 +1,17 @@
 
-#ifndef __mixr_linkage_AnalogOutput_HPP__
-#define __mixr_linkage_AnalogOutput_HPP__
+#ifndef __mixr_linkage_AnalogOutput_H__
+#define __mixr_linkage_AnalogOutput_H__
 
-#include "mixr/linkage/adapters/IAdapter.hpp"
+#include "mixr/linkage/adapters/AbstractAdapter.hpp"
 
 namespace mixr {
-namespace base { class IIoData; class IIoDevice; class Integer; class INumber; class Table1; }
+namespace base { class AbstractIoData; class AbstractIoDevice; class Number; class Table1; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
-// Class: AnalogOutput
+// Class:  AnalogOutput
 //
-// Description: Manages an analog output (AO).
+// Description:  Manages an analog output (AO).
 //
 // AO processing:
 //
@@ -26,17 +26,16 @@ namespace linkage {
 //          Vout = f(V1)
 //
 // Slots:
-//      ao           <Integer>   ! Analog Output location (IoData AO's channel)
-//      channel      <Integer>   ! Device channel number
-//      offset       <INumber>   ! Offset value (default: 0.0)
-//      gain         <INumber>   ! Gain value   (default: 1.0)
-//      table        <Table1>    ! Shaping function table (default: none)
-//      value        <INumber>   ! Initial value [ -1.0 ... 1.0 ] (default: 0.0)
+//      ao           <Number>    Analog Output location (IoData AO's channel)
+//      channel      <Number>    Device channel number
+//      offset       <Number>    Offset value (default: 0.0)
+//      gain         <Number>    Gain value   (default: 1.0)
+//      table        <Table1>    Shaping function table (default: none)
 //
 //------------------------------------------------------------------------------
-class AnalogOutput final: public IAdapter
+class AnalogOutput final: public AbstractAdapter
 {
-   DECLARE_SUBCLASS(AnalogOutput, IAdapter)
+   DECLARE_SUBCLASS(AnalogOutput, AbstractAdapter)
 
 public:
    AnalogOutput();
@@ -46,38 +45,31 @@ public:
    int getChannel() const                              { return channel;    }
    double getOffset() const                            { return offset;     }
    double getGain() const                              { return gain;       }
-   double getValue() const                             { return value;      }
    const base::Table1* getTable() const                { return table;      }
 
    bool setLocation(const int x)                       { location = x;  return true; }
-   bool setChannel(const int x)                        { channel = x;   devEnb = true;  return true; }
+   bool setChannel(const int x)                        { channel = x;   return true; }
    bool setOffset(const double x)                      { offset = x;    return true; }
    bool setGain(const double x)                        { gain = x;      return true; }
-   bool setValue(const double x)                       { value = x;     return true; }
    bool setTable(const base::Table1* const);
 
 private:
-   void processInputsImpl(const base::IIoDevice* const device, base::IIoData* const inData) final     {}
-   void processOutputsImpl(const base::IIoData* const outData, base::IIoDevice* const device) final;
+   void processInputsImpl(const base::AbstractIoDevice* const device, base::AbstractIoData* const inData) final     {}
+   void processOutputsImpl(const base::AbstractIoData* const outData, base::AbstractIoDevice* const device) final;
 
-   int location{};               // AbstractIoData analog output channel number
-   int channel{};                // Analog channel number
-   bool devEnb{};                // Device enabled
-   double offset{};              // Offset:  value = gain * (vin - offset)
-   double gain{1.0};             // Gain:    value = gain * (vin - offset)
-   const base::Table1* table{};  // Shaping table
-   double value{0.0};            // Initial value
-
-protected:
-   virtual double convert(const double);
+   int location {};               // AbstractIoData analog output channel number
+   int channel {};                // Analog channel number
+   double offset {};              // Offset:  value = gain * (vin - offset)
+   double gain {1.0};             // Gain:    value = gain * (vin - offset)
+   const base::Table1* table {};  // Shaping table
 
 private:
    // slot table helper methods
-   bool setSlotLocation(const base::Integer* const);
-   bool setSlotChannel(const base::Integer* const);
-   bool setSlotOffset(const base::INumber* const);
-   bool setSlotGain(const base::INumber* const);
-   bool setSlotValue(const base::INumber* const);
+   bool setSlotLocation(const base::Number* const);
+   bool setSlotChannel(const base::Number* const);
+   bool setSlotOffset(const base::Number* const);
+   bool setSlotGain(const base::Number* const);
+   bool setSlotTable(const base::Table1* const x)           {return setTable(x);}
 };
 
 }

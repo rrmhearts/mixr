@@ -1,6 +1,6 @@
 
-#ifndef __mixr_base_MetaObject_HPP__
-#define __mixr_base_MetaObject_HPP__
+#ifndef __mixr_base_MetaObject_H__
+#define __mixr_base_MetaObject_H__
 
 #include <string>
 
@@ -10,20 +10,21 @@ class SlotTable;
 
 //------------------------------------------------------------------------------
 // Class: MetaObject
-// Description: Concrete class that defines attributes and object instances.
-//              This includes its name, slot table, and even the number of them
-//              in existance.
+// Description: MetaObject about class attributes and object instances.  This includes its name,
+//              slot table, and even the number of them in existance
 //------------------------------------------------------------------------------
-class MetaObject final
+class MetaObject
 {
 public:
    MetaObject() = default;
-   MetaObject(const std::string&, const std::string&, const SlotTable* const, const MetaObject* const);
+   MetaObject(const char* const, const char* const, const SlotTable* const, const MetaObject* const);
    MetaObject(const MetaObject&) = delete;
    MetaObject& operator=(const MetaObject&) = delete;
 
-   const std::string& getClassName() const             { return className; }
-   const std::string& getFactoryName() const           { return factoryName; }
+   const char* getClassName() const        { return class_name.c_str(); }
+   const char* getFactoryName() const      { return factory_name.c_str(); }
+//   const std::string& getClassName() const        { return class_name; }
+//   const std::string& getFactoryName() const      { return factory_name; }
 
    const SlotTable* const slottable {};         // pointer to the SlotTable
    const MetaObject* const baseMetaObject {};   // pointer to the base object's MetaObject
@@ -32,8 +33,8 @@ public:
    int tc {};                                   // total number of instances created
 
 private:
-   const std::string className;                 // class name from 'type_info'
-   const std::string factoryName;               // factory name
+   const std::string class_name;                // class name from 'type_info'
+   const std::string factory_name;              // factory name
 };
 
 }

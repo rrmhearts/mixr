@@ -1,12 +1,12 @@
 
-#ifndef __mixr_map_rpf_MapDrawer_HPP__
-#define __mixr_map_rpf_MapDrawer_HPP__
+#ifndef __mixr_map_rpf_MapDrawer_H__
+#define __mixr_map_rpf_MapDrawer_H__
 
 #include "mixr/graphics/MapPage.hpp"
 #include <array>
 
 namespace mixr {
-namespace base { class Boolean; class INumber; class String; }
+namespace base { class Number; class String; }
 namespace rpf {
 class TexturePager;
 class CadrgMap;
@@ -22,13 +22,13 @@ class CadrgMap;
 // Subroutines:
 //
 // setSlotMapIntensity() -
-//      bool MapDrawer::setSlotMapIntensity(const base::INumber* const x)
+//      bool MapDrawer::setSlotMapIntensity(const base::Number* const x)
 //
 // setSlotDrawGridMode() -
-//      bool MapDrawer::setSlotDrawGridMode(const base::INumber* const x)
+//      bool MapDrawer::setSlotDrawGridMode(const base::Number* const x)
 //
 // setSlotShowMap() -
-//      bool MapDrawer::setSlotShowMap(const base::INumber* const x)
+//      bool MapDrawer::setSlotShowMap(const base::Number* const x)
 //
 // setGridSize() - does our initial setup.
 //      bool MapDrawer::setGridSize(const int aGridSize)
@@ -115,9 +115,9 @@ private:
     std::array<float, MAX_PAGERS> originCol {};    // Pixel + texture col of the textures to draw
 
 private:
-   bool setSlotMapIntensity(const base::INumber* const);
-   bool setSlotDrawGridMode(const base::Boolean* const);
-   bool setSlotShowMap(const base::Boolean* const);
+   bool setSlotMapIntensity(const base::Number* const);
+   bool setSlotDrawGridMode(const base::Number* const);
+   bool setSlotShowMap(const base::Number* const);
 };
 
 }

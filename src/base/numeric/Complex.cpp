@@ -1,7 +1,10 @@
 
 #include "mixr/base/numeric/Complex.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 
 namespace mixr {
 namespace base {
@@ -10,13 +13,11 @@ IMPLEMENT_SUBCLASS(Complex, "Complex")
 EMPTY_DELETEDATA(Complex)
 
 BEGIN_SLOTTABLE(Complex)
-   "real",      // 1: real component
-   "imag",      // 2: imaginary component
+   "imag",      // 1: imaginary component
 END_SLOTTABLE(Complex)
 
 BEGIN_SLOT_MAP(Complex)
-   ON_SLOT(1, setSlotReal,      INumber)
-   ON_SLOT(2, setSlotImaginary, INumber)
+   ON_SLOT(1, setSlotImaginary, Number)
 END_SLOT_MAP()
 
 Complex::Complex()
@@ -24,12 +25,12 @@ Complex::Complex()
    STANDARD_CONSTRUCTOR()
 }
 
-Complex::Complex(const double r): value(r)
+Complex::Complex(const double r) : Number(r)
 {
    STANDARD_CONSTRUCTOR()
 }
 
-Complex::Complex(const double r, const double i) : value(r, i)
+Complex::Complex(const double r, const double i) : Number(r), imag(i)
 {
    STANDARD_CONSTRUCTOR()
 }
@@ -37,19 +38,61 @@ Complex::Complex(const double r, const double i) : value(r, i)
 void Complex::copyData(const Complex& org, const bool)
 {
    BaseClass::copyData(org);
-   value = org.value;
+
+   imag = org.imag;
 }
 
-bool Complex::setSlotReal(const INumber* const x)
+//------------------------------------------------------------------------------
+// Output Functions
+//------------------------------------------------------------------------------
+void Complex::showComplex(const int decpnt) const
 {
-    value.real(x->asDouble());
-    return true;
+   std::ios_base::fmtflags oldFmtFlgs =  std::cout.flags();
+   std::streamsize oldprec = std::cout.precision();
+
+   std::cout << std::setprecision(decpnt) << std::setiosflags(std::ios::fixed);
+   std::cout << getReal() << " + j*" << getImag() << std::endl;
+
+   std::cout.setf(oldFmtFlgs);
+   std::cout << std::setprecision(oldprec);
 }
 
-bool Complex::setSlotImaginary(const INumber* const x)
+void Complex::showPhasor(const int decpnt) const
 {
-    value.imag(x->asDouble());
-    return true;
+   std::ios_base::fmtflags oldFmtFlgs =  std::cout.flags();
+   std::streamsize oldprec = std::cout.precision();
+
+   std::cout << std::setprecision(decpnt) << std::setiosflags(std::ios::fixed);
+   std::cout << "<" << this->getMag() << ", " << this->getArg() << ">" << std::endl;
+
+   std::cout.setf(oldFmtFlgs);
+   std::cout << std::setprecision(oldprec);
+}
+
+std::ostream& operator<<(std::ostream& sout, const Complex& z)
+{
+   std::ios_base::fmtflags oldFmtFlgs =  sout.flags();
+   std::streamsize oldprec = sout.precision();
+
+   const int decpnt = 2;
+   sout << std::setprecision(decpnt) << std::setiosflags(std::ios::fixed);
+   sout << z.getReal() << " + j*" << z.getImag();
+
+   sout.setf(oldFmtFlgs);
+   sout << std::setprecision(oldprec);
+
+   return sout;
+}
+
+//------------------------------------------------------------------------------
+// Slot functions
+//------------------------------------------------------------------------------
+bool Complex::setSlotImaginary(const Number* const msg)
+{
+    double value{msg->getDouble()};
+    const bool ok{setImag( value )};
+    if (!ok) std::cerr << "Complex::setSlotImaginary: invalid entry(" << value << ")" << std::endl;
+    return ok;
 }
 
 }

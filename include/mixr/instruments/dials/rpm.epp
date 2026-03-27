@@ -3,7 +3,7 @@
     components: {
         ( Line
             color: black
-            segment: true
+            segment: 1
             linewidth: 3
             vertices: {
                 [ -0.3 0 ] [ 0.3 0 ]
@@ -14,7 +14,7 @@
             color: gray1
             radius: 0.5
             slices: 50
-            filled: true
+            filled: 1
         )
     }
 )
@@ -93,7 +93,7 @@ rpm:
             slices: 100
             radius: 4.1
             color: ( rgb 0.15 0.15 0.15 )
-            filled: true
+            filled: 1
         )
         ( OcclusionCircle
             slices: 100

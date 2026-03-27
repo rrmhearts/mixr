@@ -1,20 +1,18 @@
 
-#ifndef __mixr_ighost_cigi3_IgThread_HPP__
-#define __mixr_ighost_cigi3_IgThread_HPP__
+#ifndef __mixr_ighost_cigi_IgThread_H__
+#define __mixr_ighost_cigi_IgThread_H__
 
-#include "mixr/base/threads/IOneShotThread.hpp"
+#include "mixr/base/threads/OneShotThread.hpp"
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
-class IgThread final : public base::IOneShotThread
+class IgThread final : public base::OneShotThread
 {
-   public: IgThread(base::IComponent* const parent);
+   public: IgThread(base::Component* const parent);
    private: unsigned long userFunc() final;
 };
 
-}
 }
 }
 

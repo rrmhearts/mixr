@@ -1,17 +1,17 @@
 
 #include "mixr/models/player/LifeForm.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/player/weapon/Missile.hpp"
 
-#include "mixr/models/system/IStoresMgr.hpp"
-#include "mixr/models/system/Gun.hpp"
+#include "mixr/models/system/StoresMgr.hpp"
+#include "mixr/models/system/Guns.hpp"
 
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/numeric/Float.hpp"
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/numeric/Number.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/osg/Matrixd"
 
 #include <cmath>
@@ -26,8 +26,7 @@ LifeForm::LifeForm()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("LifeForm");
-    setType_old(&generic);
-    setType("LifeForm");
+    setType(&generic);
 
     setTerrainOffset(1.0);      // default offset from terrain to CG
 }
@@ -91,9 +90,9 @@ void LifeForm::reset()
 
 void LifeForm::fire()
 {
-    const auto hdgObj = new base::Float(getHeadingR());
-    const auto pitchObj = new base::Float(lookAngle * base::angle::D2RCC);
-    IStoresMgr* mgr{getStoresManagement()};
+    const auto hdgObj = new base::Number(getHeadingR());
+    const auto pitchObj = new base::Number(lookAngle * base::angle::D2RCC);
+    StoresMgr* mgr{getStoresManagement()};
     if (mgr != nullptr) {
         if (getWorldModel() != nullptr) {
             if (weaponSel == LF_MISSILE) {
@@ -209,13 +208,13 @@ void LifeForm::look(const double up, const double sdws)
             const double la{lookAngle * static_cast<double>(base::angle::D2RCC)};
             WorldModel* sim{getWorldModel()};
             if (sim != nullptr) {
-                base::IPairStream* players{sim->getPlayers()};
+                base::PairStream* players{sim->getPlayers()};
                 if (players != nullptr) {
-                    base::IList::Item* item{players->getFirstItem()};
+                    base::List::Item* item{players->getFirstItem()};
                     while (item != nullptr && !tgtAquired) {
                         const auto pair = static_cast<base::Pair*>(item->getValue());
                         if (pair != nullptr) {
-                            const auto player = dynamic_cast<IPlayer*>(pair->object());
+                            const auto player = dynamic_cast<Player*>(pair->object());
                             if (player != nullptr && player != this && !player->isMajorType(WEAPON) && !player->isDestroyed()) {
                                 // ok, calculate our position from this guy
                                 tgtPos = player->getPosition();

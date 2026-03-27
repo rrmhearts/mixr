@@ -1,7 +1,7 @@
 
 #include "mixr/models/system/FuelTank.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 namespace mixr {
 namespace models {
@@ -14,8 +14,8 @@ BEGIN_SLOTTABLE(FuelTank)
 END_SLOTTABLE(FuelTank)
 
 BEGIN_SLOT_MAP(FuelTank)
-    ON_SLOT(1, setSlotFuelWt,   base::INumber)
-    ON_SLOT(2, setSlotCapacity, base::INumber)
+    ON_SLOT(1, setSlotFuelWt,   base::Number)
+    ON_SLOT(2, setSlotCapacity, base::Number)
 END_SLOT_MAP()
 
 FuelTank::FuelTank()
@@ -62,18 +62,18 @@ bool   FuelTank::isFuelWtValid() const          { return (fuelWt >= 0 && fuelWt 
 // Slot functions
 //------------------------------------------------------------------------------
 
-bool FuelTank::setSlotFuelWt(const base::INumber* const msg)
+bool FuelTank::setSlotFuelWt(const base::Number* const msg)
 {
     if (msg == nullptr) return false;
-    bool ok{setFuelWt(msg->asDouble())};
+    bool ok{setFuelWt(msg->getReal())};
     if (ok) initFuelWt = getFuelWt();
     return ok;
 }
 
-bool FuelTank::setSlotCapacity(const base::INumber* const msg)
+bool FuelTank::setSlotCapacity(const base::Number* const msg)
 {
     if (msg == nullptr) return false;
-    return setCapacity( msg->asDouble() );
+    return setCapacity( msg->getReal() );
 }
 
 }

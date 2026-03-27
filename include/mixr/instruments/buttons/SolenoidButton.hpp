@@ -1,11 +1,10 @@
 
-#ifndef __mixr_instruments_SolenoidButton_HPP__
-#define __mixr_instruments_SolenoidButton_HPP__
+#ifndef __mixr_instruments_SolenoidButton_H__
+#define __mixr_instruments_SolenoidButton_H__
 
 #include "mixr/instruments/buttons/Button.hpp"
 
 namespace mixr {
-namespace base { class Boolean; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -23,9 +22,9 @@ public:
 
     // The left mouse button has been depressed
     virtual bool onMouseDown();
-    virtual bool onPicked(const base::Boolean* const);
+    virtual bool onPicked(const base::Number* const);
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
     void updateData(const double dt = 0.0) override;
 
 private:

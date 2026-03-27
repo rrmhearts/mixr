@@ -1,11 +1,10 @@
 
-#ifndef __mixr_ui_glut_GlutDisplay_HPP__
-#define __mixr_ui_glut_GlutDisplay_HPP__
+#ifndef __mixr_ui_glut_GlutDisplay_H__
+#define __mixr_ui_glut_GlutDisplay_H__
 
 #include "mixr/graphics/Display.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class Integer; class INumber; }
 namespace glut {
 
 //------------------------------------------------------------------------------
@@ -34,13 +33,13 @@ namespace glut {
 //
 // Factory name: GlutDisplay
 // Slots:
-//    fullScreen        <Boolean>   ! Flag to set full screen mode  -- Main windows only -- (default: false)
-//    idleSleepTime     <Integer>   ! Idle callback sleep time (MS) -- Main windows only -- (default: 40)
-//    resizeSubwindows  <Boolean>   ! Resize our subwindows on a reshape (default: false)
-//    pickWidth         <INumber>   ! Width of the pick area in screen coordinates(default: 10)
-//    pickHeight        <INumber>   ! Height of the pick area in screen coordinates(default: 10)
-//    accumBuff         <Boolean>   ! Enable the accumulation buffer (default: false)
-//    stencilBuff       <Boolean>   ! Enable the stencil buffer (default: false)
+//    fullScreen        (Boolean)   ! Flag to set full screen mode  -- Main windows only -- (default: false)
+//    idleSleepTime     (Number)    ! Idle callback sleep time (MS) -- Main windows only -- (default: 40)
+//    resizeSubwindows  (Boolean)   ! Resize our subwindows on a reshape (default: false)
+//    pickWidth         (Number)    ! Width of the pick area in screen coordinates(default: 10)
+//    pickHeight        (Number)    ! Height of the pick area in screen coordinates(default: 10)
+//    accumBuff         (Boolean)   ! Enable the accumulation buffer (default: false)
+//    stencilBuff       (Boolean)   ! Enable the stencil buffer (default: false)
 //
 // Events:
 //    ESC_KEY     -- calls onEscKey() event handler; see note #2.
@@ -80,8 +79,8 @@ public:
 
    // Gets/sets the idle sleep time in milliseconds.  This is used by
    // the idle time callback, idleCB(), to release the CPU.
-   int getIdleSleepTime() const;
-   virtual bool setIdleSleepTime(const int ms);
+   unsigned int getIdleSleepTime() const;
+   virtual bool setIdleSleepTime(const unsigned int ms);
 
    // Enable/disable resizing of our subwindows.
    virtual bool setResizeWindows(const bool flg);
@@ -100,7 +99,7 @@ public:
    void mouseEvent(const int button, const int state, const int x, const int y) override;
 
    void reset() override;
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
    // Creates a subwindow and returns the window ID (or -1 if failed)
@@ -133,7 +132,7 @@ protected:
    virtual Graphic* findSelected(const GLint hits, const GLuint sbuff[], const int item = 0);
 
 private:
-   static const int MAX_DISPLAYS{500};     // Maximum number of GlutDisplay classes
+   static const int MAX_DISPLAYS = 500;     // Maximum number of GlutDisplay classes
    static const float CLICK_TIME;
 
 private:
@@ -158,8 +157,8 @@ private:
    bool okToResize {};                 // Ok to resize our subwindows (main windows only)
 
    // main window only data
-   bool fullScreenFlg{};               // Full screen flag (main window only)
-   int idleSleepTimeMS{};              // Idle callback sleep time (MS)
+   bool fullScreenFlg {};              // Full screen flag (main window only)
+   unsigned int idleSleepTimeMS {};    // Idle callback sleep time (MS)
 
    // Subwindow only data
    int mainWinId {-1};                 // Main window ID (sub-window only)
@@ -174,13 +173,13 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotFullScreen(const base::Boolean* const);
-   bool setSlotIdleSleepTime(const base::Integer* const);
-   bool setSlotResizeWindows(const base::Boolean* const);
-   bool setSlotPickWidth(const base::INumber* const);
-   bool setSlotPickHeight(const base::INumber* const);
-   bool setSlotAccumBuff(const base::Boolean* const);
-   bool setSlotStencilBuff(const base::Boolean* const);
+   bool setSlotFullScreen(const base::Number* const);
+   bool setSlotIdleSleepTime(const base::Number* const);
+   bool setSlotResizeWindows(const base::Number* const);
+   bool setSlotPickWidth(const base::Number* const);
+   bool setSlotPickHeight(const base::Number* const);
+   bool setSlotAccumBuff(const base::Number* const);
+   bool setSlotStencilBuff(const base::Number* const);
 };
 
 inline int GlutDisplay::getWindowId() const                               { return winId;           }
@@ -190,7 +189,7 @@ inline GLdouble GlutDisplay::getPickWidth() const                         { retu
 inline GLdouble GlutDisplay::getPickHeight() const                        { return pickHeight;      }
 inline bool GlutDisplay::isAccumBuff() const                              { return accumBuff;       }
 inline bool GlutDisplay::isStencilBuff() const                            { return stencilBuff;     }
-inline int GlutDisplay::getIdleSleepTime() const                          { return idleSleepTimeMS; }
+inline unsigned int GlutDisplay::getIdleSleepTime() const                 { return idleSleepTimeMS; }
 inline const base::Vec2d& GlutDisplay::getSubwindowPosition() const       { return swPosition;      }
 inline const base::Vec2d& GlutDisplay::getSubwindowSize() const           { return swSize;          }
 

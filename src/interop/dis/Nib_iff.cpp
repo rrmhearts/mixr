@@ -9,9 +9,9 @@
 
 #include "mixr/models/system/Iff.hpp"
 
-#include "mixr/base/network/INetHandler.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace dis {
@@ -83,7 +83,7 @@ bool Nib::IffManager(const double curExecTime)
          pdu.eventID.eventNumber = disIO->getNewIffEventID();
 
          //pdu.dumpData();
-         if (base::INetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
+         if (base::NetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
          ok = disIO->sendData(reinterpret_cast<char*>(&pdu), sizeof(pdu));
 
          iffLastExecTime = curExecTime;

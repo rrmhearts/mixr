@@ -1,12 +1,13 @@
 
 #include "mixr/terrain/QuadMap.hpp"
 
-#include "mixr/terrain/ITerrain.hpp"
+#include "mixr/terrain/Terrain.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/network/NetHandler.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
 
 namespace mixr {
 namespace terrain {
@@ -62,7 +63,7 @@ unsigned int QuadMap::getNumDataFiles() const
     return numDataFiles;
 }
 
-const ITerrain* QuadMap::getDataFile(const unsigned int i)  const
+const Terrain* QuadMap::getDataFile(const unsigned int i)  const
 {
     if (i < MAX_DATA_FILES) return dataFiles[i];
     else return nullptr;
@@ -145,13 +146,13 @@ void QuadMap::findDataFiles()
 
    // Find the DataFile objects
    {
-      base::IPairStream* subcomponents = getComponents();
+      base::PairStream* subcomponents = getComponents();
       if (subcomponents != nullptr) {
          unsigned int count{};
-         base::IList::Item* item {subcomponents->getFirstItem()};
+         base::List::Item* item {subcomponents->getFirstItem()};
          while (item != nullptr && count < MAX_DATA_FILES) {
             const auto pair = static_cast<base::Pair*>( item->getValue() );
-            const auto dataFile = dynamic_cast<ITerrain*>( pair->object() );
+            const auto dataFile = dynamic_cast<Terrain*>( pair->object() );
             if (dataFile != nullptr && dataFile->isDataLoaded()) {
                dataFile->ref();
                dataFiles[count] = dataFile;
@@ -220,7 +221,7 @@ void QuadMap::findDataFiles()
 // data files it wishes to use, then will also override the
 // find data files so it this data does not get cleared out.
 //------------------------------------------------------------------------------
-bool QuadMap::setDataFile(const unsigned int i, ITerrain* newDF)
+bool QuadMap::setDataFile(const unsigned int i, Terrain* newDF)
 {
     if (i < MAX_DATA_FILES && newDF != nullptr ) {
         if (dataFiles[i] == nullptr) {

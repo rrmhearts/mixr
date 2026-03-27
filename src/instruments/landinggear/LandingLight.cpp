@@ -1,7 +1,7 @@
 
 #include "mixr/instruments/landinggear/LandingLight.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <GL/glu.h>
 #include <iostream>
 
@@ -16,7 +16,7 @@ BEGIN_SLOTTABLE(LandingLight)
 END_SLOTTABLE(LandingLight)
 
 BEGIN_SLOT_MAP(LandingLight)
-    ON_SLOT(1, setSlotLightRadius, base::INumber)
+    ON_SLOT(1, setSlotLightRadius, base::Number)
 END_SLOT_MAP()
 
 LandingLight::LandingLight()
@@ -48,10 +48,10 @@ bool LandingLight::setLightRadius(const double newLR)
 //------------------------------------------------------------------------------
 // setSlotLightRadius() - sets our light radius to be drawn
 //------------------------------------------------------------------------------
-bool LandingLight::setSlotLightRadius(const base::INumber* const newLR)
+bool LandingLight::setSlotLightRadius(const base::Number* const newLR)
 {
-    bool ok{};
-    if (newLR != nullptr) ok = setLightRadius(newLR->asDouble());
+    bool ok = false;
+    if (newLR != nullptr) ok = setLightRadius(newLR->getReal());
     return ok;
 }
 
@@ -62,15 +62,15 @@ void LandingLight::drawFunc()
 {
     // if the user specifies a light radius, then it will draw this way,
     if (lRadius == 0) return;
-    GLfloat currentColor[4]{};
-    GLfloat lw{};
+    GLfloat currentColor[4];
+    GLfloat lw = 0;
     glGetFloatv(GL_CURRENT_COLOR, &currentColor[0]);
     glGetFloatv(GL_LINE_WIDTH, &lw);
 
     // all we need is the gear up value, and we can toggle accordingly
-    double gearUpVal{getGearUpValue()};
-    double gearDownVal{getGearDownValue()};
-    double lastC{gearCurrent};
+    double gearUpVal = getGearUpValue();
+    double gearDownVal = getGearDownValue();
+    double lastC = gearCurrent;
     gearCurrent = getInstValue();
 
     glPushMatrix();
@@ -79,13 +79,14 @@ void LandingLight::drawFunc()
             // going towards the up position (getting closer to 0)
             if (gearCurrent <= gearUpVal) glColor3f(0, 0, 0);
             else glColor3f(0, 1, 0);
-        } else if (lastC < gearCurrent) {
+        }
+        else if (lastC < gearCurrent) {
             // going towards the down position (getting closer to 1)
             if (gearCurrent >= gearDownVal) glColor3f(0, 1, 0);
             else glColor3f(0, 0, 0);
         }
 
-        GLUquadricObj *qobj{gluNewQuadric()};
+        GLUquadricObj *qobj = gluNewQuadric();
         gluDisk(qobj, 0,  lRadius, 1000, 1);
         gluDeleteQuadric(qobj);
     glPopMatrix();
@@ -101,24 +102,25 @@ void LandingLight::updateData(const double dt)
 {
     BaseClass::updateData(dt);
 
-    double gearUpVal{getGearUpValue()};
-    double gearDownVal{getGearDownValue()};
-    double lastC{gearCurrent};
+    double gearUpVal = getGearUpValue();
+    double gearDownVal = getGearDownValue();
+    double lastC = gearCurrent;
     gearCurrent = getInstValue();
 
-    bool upDownFlag{};
+    int x = 0;
     // determine which way we are going
     if (lastC >= gearCurrent) {
         // going towards the up position (getting closer to 0)
-        if (gearCurrent <= gearUpVal) upDownFlag = false;
-        else upDownFlag = true;
-    } else if (lastC < gearCurrent) {
+        if (gearCurrent <= gearUpVal) x = 0;
+        else x = 1;
+    }
+    else if (lastC < gearCurrent) {
         // going towards the down position (getting closer to 1)
-        if (gearCurrent >= gearDownVal) upDownFlag = true;
-        else upDownFlag = false;
+        if (gearCurrent >= gearDownVal) x = 1;
+        else x = 0;
     }
 
-    send("index", SELECT, upDownFlag, selSD);
+    send("index", SELECT, x, selSD);
 }
 
 }

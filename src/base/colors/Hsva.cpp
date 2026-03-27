@@ -1,8 +1,8 @@
 
 #include "mixr/base/colors/Hsva.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/numeric/Float.hpp"
+#include "mixr/base/units/Angles.hpp"
 
 namespace mixr {
 namespace base {
@@ -16,7 +16,7 @@ BEGIN_SLOTTABLE(Hsva)
 END_SLOTTABLE(Hsva)
 
 BEGIN_SLOT_MAP(Hsva)
-    ON_SLOT(1, setSlotAlpha, INumber)
+    ON_SLOT(1, setSlotAlpha, Number)
 END_SLOT_MAP()
 
 Hsva::Hsva(const double h, const double s,
@@ -40,7 +40,7 @@ Hsva::Hsva()
 bool Hsva::colorInterpolate(
       const double value,      // Value
       const double minValue,   // Minimum Value
-      const double maxValue,   // Maximum Value
+      const double maxValue,   // Maximum Value 
       const Hsva& minColor,  // Minimum HSV color
       const Hsva& maxColor   // Minimum HSV color
  )
@@ -60,14 +60,16 @@ bool Hsva::colorInterpolate(
 //------------------------------------------------------------------------------
 // setSlotAlpha() -- set the ALPHA value
 //------------------------------------------------------------------------------
-bool Hsva::setSlotAlpha(const INumber* const x)
+bool Hsva::setSlotAlpha(const Number* const msg)
 {
-   double value{x->asDouble()};
-   bool ok{value >= 0 && value <= 1};
+   if (msg == nullptr) return false;
+   double value = msg->getReal();
+   bool ok = (value >= 0 && value <= 1);
    if (ok) {
       hsv[ALPHA] = value;
       hsv2rgb(color, hsv);
-   } else {
+   }
+   else {
       std::cerr << "Hsva::setAlpha: invalid entry(" << value << "), valid range: 0 to 1" << std::endl;
    }
    return ok;

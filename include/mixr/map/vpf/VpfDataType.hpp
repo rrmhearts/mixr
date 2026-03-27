@@ -1,8 +1,8 @@
 
-#ifndef __mixr_map_vpf_VpfDataType_HPP__
-#define __mixr_map_vpf_VpfDataType_HPP__
+#ifndef __mixr_map_vpf_VpfDataType_H__
+#define __mixr_map_vpf_VpfDataType_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
 namespace base { class String; }
@@ -13,16 +13,16 @@ namespace vpf {
 // Description: Simple object which keeps track of data type, length, and value
 // of our table.
 // -------------------------------------------------------------------------------
-class VpfDataType : public base::IObject
+class VpfDataType : public base::Object
 {
-   DECLARE_SUBCLASS(VpfDataType, base::IObject)
+   DECLARE_SUBCLASS(VpfDataType, base::Object)
 
 public:
     VpfDataType();
 
     enum { LONG_INT, SHORT_INT, CHAR, FIXED_TEXT, VARIABLE_TEXT, FLOAT, DOUBLE, THREE_D_COORD, DATE };
 
-    // Set functions
+    // Set functions 
     virtual void setLength(const int x = -1);
     // Value sets
     virtual void setValue(char* x);

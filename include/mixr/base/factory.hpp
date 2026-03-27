@@ -1,14 +1,14 @@
 
-#ifndef __mixr_base_factory_HPP__
-#define __mixr_base_factory_HPP__
+#ifndef __mixr_base_factory_H__
+#define __mixr_base_factory_H__
 
 #include <string>
 
 namespace mixr {
 namespace base {
 
-class IObject;
-IObject* factory(const std::string&);
+class Object;
+Object* factory(const std::string&);
 }
 }
 

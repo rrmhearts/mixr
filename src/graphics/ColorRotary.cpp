@@ -1,10 +1,10 @@
 
 #include "mixr/graphics/ColorRotary.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Identifier.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/osg/Vec4d"
 
 namespace mixr {
@@ -18,18 +18,18 @@ BEGIN_SLOTTABLE(ColorRotary)
 END_SLOTTABLE(ColorRotary)
 
 BEGIN_SLOT_MAP(ColorRotary)
-    ON_SLOT(1, setSlotColors, base::IPairStream)
-    ON_SLOT(2, setSlotValues, base::IPairStream)
+    ON_SLOT(1, setSlotColors, base::PairStream)
+    ON_SLOT(2, setSlotValues, base::PairStream)
 END_SLOT_MAP()
 
 ColorRotary::ColorRotary()
 {
     STANDARD_CONSTRUCTOR()
     // default gives us no colors, but just makes us black
-    color[IColor::RED] = 0;
-    color[IColor::GREEN] = 0;
-    color[IColor::BLUE] = 0;
-    color[IColor::ALPHA] = getDefaultAlpha();
+    color[Color::RED] = 0;
+    color[Color::GREEN] = 0;
+    color[Color::BLUE] = 0;
+    color[Color::ALPHA] = getDefaultAlpha();
 }
 
 void ColorRotary::copyData(const ColorRotary& org, const bool)
@@ -52,6 +52,47 @@ void ColorRotary::deleteData()
 {
     if (myColors != nullptr) myColors->unref();
     myColors = nullptr;
+}
+
+//------------------------------------------------------------------------------
+// SLOT FUNCTIONS
+//------------------------------------------------------------------------------
+
+// set our slot colors via a PairStream
+bool ColorRotary::setSlotColors(base::PairStream* const newStream)
+{
+    bool ok = false;
+    if (newStream != nullptr) {
+        myColors = newStream;
+        myColors->ref();
+        ok = true;
+    }
+    return ok;
+}
+
+// set our slot values via a pairstream
+bool ColorRotary::setSlotValues(const base::PairStream* const newStream)
+{
+    bool ok = false;
+    numVals = 0;
+    if (newStream != nullptr) {
+        base::PairStream* a = newStream->clone();
+        base::List::Item* item = a->getFirstItem();
+        while (item != nullptr) {
+            const auto pair = static_cast<base::Pair*>(item->getValue());
+            if (pair != nullptr) {
+                const auto n = dynamic_cast<base::Number*>(pair->object());
+                if (n != nullptr) {
+                    myValues[numVals] = n->getReal();
+                    numVals++;
+                }
+            }
+            item = item->getNext();
+        }
+        ok = true;
+        a->unref();
+    }
+    return ok;
 }
 
 //------------------------------------------------------------------------------
@@ -79,7 +120,7 @@ bool ColorRotary::determineColor(const double value)
     if (myColors != nullptr) {
         base::Pair* pair = myColors->getPosition(breakPoint);
         if (pair != nullptr) {
-            const auto listcolor = dynamic_cast<base::IColor*>(pair->object());
+            const auto listcolor = dynamic_cast<base::Color*>(pair->object());
             if (listcolor != nullptr) {
                const auto vec = static_cast<const base::Vec4d*>(listcolor->getRGBA());
                color = *vec;
@@ -88,39 +129,6 @@ bool ColorRotary::determineColor(const double value)
         }
     }
     return ok;
-}
-
-//------------------------------------------------------------------------------
-// slot functions
-//------------------------------------------------------------------------------
-
-// set our slot colors via a PairStream
-bool ColorRotary::setSlotColors(base::IPairStream* const x)
-{
-    myColors = x;
-    myColors->ref();
-    return true;
-}
-
-// set our slot values via a pairstream
-bool ColorRotary::setSlotValues(const base::IPairStream* const x)
-{
-    numVals = 0;
-    base::IPairStream* a = x->clone();
-    base::IList::Item* item = a->getFirstItem();
-    while (item != nullptr) {
-        const auto pair = static_cast<base::Pair*>(item->getValue());
-        if (pair != nullptr) {
-            const auto n = dynamic_cast<base::INumber*>(pair->object());
-            if (n != nullptr) {
-                myValues[numVals] = n->asDouble();
-                numVals++;
-            }
-        }
-        item = item->getNext();
-    }
-    a->unref();
-    return true;
 }
 
 }

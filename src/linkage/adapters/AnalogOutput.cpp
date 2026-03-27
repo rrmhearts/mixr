@@ -1,13 +1,12 @@
 
 #include "mixr/linkage/adapters/AnalogOutput.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/relations/Table1.hpp"
+#include "mixr/base/functors/Table1.hpp"
 
 #include <iostream>
 
@@ -21,17 +20,15 @@ BEGIN_SLOTTABLE(AnalogOutput)
     "channel",    // 2) Device channel number
     "offset",     // 3) Offset value (default: 0.0)
     "gain",       // 4) Gain value   (default: 1.0)
-    "table",      // 5) Shaping function table (default: none)
-    "value"       // 6) Initial value [ -1.0 ... 1.0 ] (default: 0.0)
+    "table"       // 5) Shaping function table (default: none)
 END_SLOTTABLE(AnalogOutput)
 
 BEGIN_SLOT_MAP(AnalogOutput)
-    ON_SLOT( 1, setSlotLocation, base::Integer)
-    ON_SLOT( 2, setSlotChannel,  base::Integer)
-    ON_SLOT( 3, setSlotOffset,   base::INumber)
-    ON_SLOT( 4, setSlotGain,     base::INumber)
-    ON_SLOT( 5, setTable,        base::Table1)
-    ON_SLOT( 6, setSlotValue,    base::INumber)
+    ON_SLOT( 1, setSlotLocation, base::Number)
+    ON_SLOT( 2, setSlotChannel,  base::Number)
+    ON_SLOT( 3, setSlotOffset,   base::Number)
+    ON_SLOT( 4, setSlotGain,     base::Number)
+    ON_SLOT( 5, setSlotTable,    base::Table1)
 END_SLOT_MAP()
 
 AnalogOutput::AnalogOutput()
@@ -45,10 +42,8 @@ void AnalogOutput::copyData(const AnalogOutput& org, const bool)
 
    location = org.location;
    channel = org.channel;
-   devEnb = org.devEnb;
    gain = org.gain;
    offset = org.offset;
-   value = org.value;
    {
       const base::Table1* copy {};
       if (org.table != nullptr) {
@@ -93,45 +88,31 @@ bool AnalogOutput::setTable(const base::Table1* const msg)
     return ok;
 }
 
-void AnalogOutput::processOutputsImpl(const base::IIoData* const outData, base::IIoDevice* const device)
+void AnalogOutput::processOutputsImpl(const base::AbstractIoData* const outData, base::AbstractIoDevice* const device)
 {
-   if (device != nullptr && devEnb) {
-      // Get a value from the cockpit output handler
-      if (outData != nullptr) {
-         outData->getAnalogOutput(location, &value);
-      }
+   double value{};
 
-      // Send the scaled data to the AO card
-      double vout {convert(value)};
+   // Get a value from the cockpit output handler
+   if (outData != nullptr) {
+      outData->getAnalogOutput(location, &value);
+   }
+
+   // Send the scaled data to the AO card
+   if (device != nullptr) {
+      double vout {};
+      if (gain != 0) {
+         vout = (value / gain ) + offset;
+      }
       device->setAnalogOutput(vout, channel);
    }
 }
 
-//------------------------------------------------------------------------------
-// convert the value, as needed
-//------------------------------------------------------------------------------
-double AnalogOutput::convert(const double vin)
-{
-   // Offset & Gain
-   double v2{vin + offset};
-   if (gain != 0) {
-      v2 = (value / gain ) + offset;
-   }
-
-   // Shaping function
-   double v3{v2};
-   if (table != nullptr) v3 = table->lfi(v2);
-
-   // return final value
-   return v3;
-}
-
 // location: Output array index (location)
-bool AnalogOutput::setSlotLocation(const base::Integer* const msg)
+bool AnalogOutput::setSlotLocation(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setLocation(v);
       }
@@ -140,11 +121,11 @@ bool AnalogOutput::setSlotLocation(const base::Integer* const msg)
 }
 
 // channel: AI card's channel number
-bool AnalogOutput::setSlotChannel(const base::Integer* const msg)
+bool AnalogOutput::setSlotChannel(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -153,36 +134,26 @@ bool AnalogOutput::setSlotChannel(const base::Integer* const msg)
 }
 
 // offset: Offset value
-bool AnalogOutput::setSlotOffset(const base::INumber* const msg)
+bool AnalogOutput::setSlotOffset(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      ok = setOffset( msg->asDouble() );
+      ok = setOffset( msg->getFloat() );
    }
    return ok;
 }
 
 // gain: Gain value
-bool AnalogOutput::setSlotGain(const base::INumber* const msg)
+bool AnalogOutput::setSlotGain(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      ok = setGain( msg->asDouble() );
+      ok = setGain( msg->getFloat() );
       if (!ok) {
          if (isMessageEnabled(MSG_ERROR)) {
              std::cerr << "AnalogOutput::setSlotGain(): ERROR -- gain can not be zero." << std::endl;
          }
       }
-   }
-   return ok;
-}
-
-// value: Initial value (default: 0)
-bool AnalogOutput::setSlotValue(const base::INumber* const msg)
-{
-   bool ok{};
-   if (msg != nullptr) {
-      ok = setValue( msg->asDouble() );
    }
    return ok;
 }

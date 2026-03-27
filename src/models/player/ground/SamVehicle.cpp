@@ -2,14 +2,14 @@
 #include "mixr/models/player/ground/SamVehicle.hpp"
 
 #include "mixr/models/player/weapon/Sam.hpp"
-#include "mixr/models/system/IStoresMgr.hpp"
+#include "mixr/models/system/StoresMgr.hpp"
 
-#include "mixr/base/IList.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/osg/Matrixd"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
+#include "mixr/base/units/Times.hpp"
 
 namespace mixr {
 namespace models {
@@ -29,16 +29,15 @@ BEGIN_SLOTTABLE(SamVehicle)
 END_SLOTTABLE(SamVehicle)
 
 BEGIN_SLOT_MAP(SamVehicle)
-    ON_SLOT(1, setSlotMinLaunchRange,    base::ILength)
-    ON_SLOT(2, setSlotMaxLaunchRange,    base::ILength)
+    ON_SLOT(1, setSlotMinLaunchRange,    base::Distance)
+    ON_SLOT(2, setSlotMaxLaunchRange,    base::Distance)
 END_SLOT_MAP()
 
 SamVehicle::SamVehicle()
 {
    STANDARD_CONSTRUCTOR()
    static base::String generic("GenericSamSite");
-   setType_old(&generic);
-   setType("GenericSamSite");
+   setType(&generic);
 
    maxMslRng = DEFAULT_MAX_LAUNCH_RANGE;
    minMslRng = DEFAULT_MIN_LAUNCH_RANGE;
@@ -64,13 +63,13 @@ void SamVehicle::updateData(const double dt)
    // Count the number of available SAM missiles
    // ---
    unsigned int count{};
-   const IStoresMgr* sm{getStoresManagement()};
+   const StoresMgr* sm{getStoresManagement()};
    if (sm != nullptr) {
 
       // We have a stores manager -- but do we have any available SAMs?
-      const base::IPairStream* stores{sm->getStores()};
+      const base::PairStream* stores{sm->getStores()};
       if (stores != nullptr) {
-         const base::IList::Item* item{stores->getFirstItem()};
+         const base::List::Item* item{stores->getFirstItem()};
          while (item != nullptr) {
             const auto pair = static_cast<const base::Pair*>(item->getValue());
             if (pair != nullptr) {
@@ -136,22 +135,22 @@ bool SamVehicle::setMinLaunchRange(const double rng)
 // Slot functions
 //------------------------------------------------------------------------------
 
-// maxLaunchRange: Max launch range
-bool SamVehicle::setSlotMaxLaunchRange(const base::ILength* const x)
+// maxLaunchRange: Max launch range (base::Distance)
+bool SamVehicle::setSlotMaxLaunchRange(const base::Distance* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      ok = setMaxLaunchRange(x->getValueInMeters());
+   if (msg != nullptr) {
+      ok = setMaxLaunchRange( base::Meters::convertStatic( *msg ) );
    }
    return ok;
 }
 
-// minLaunchRange: Min launch range
-bool SamVehicle::setSlotMinLaunchRange(const base::ILength* const x)
+// minLaunchRange: Min launch range (base::Distance)
+bool SamVehicle::setSlotMinLaunchRange(const base::Distance* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      ok = setMinLaunchRange(x->getValueInMeters());
+   if (msg != nullptr) {
+      ok = setMinLaunchRange( base::Meters::convertStatic( *msg ) );
    }
    return ok;
 }

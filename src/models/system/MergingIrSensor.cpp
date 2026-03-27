@@ -1,7 +1,7 @@
 
 #include "mixr/models/system/MergingIrSensor.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/IrSeeker.hpp"
 #include "mixr/models/system/trackmanager/AngleOnlyTrackManager.hpp"
 #include "mixr/models/system/trackmanager/AirAngleOnlyTrkMgrPT.hpp"
@@ -9,9 +9,9 @@
 #include "mixr/models/environment/IrAtmosphere.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/units/Distances.hpp"
+#include "mixr/base/units/Angles.hpp"
 
 namespace mixr {
 namespace models {
@@ -25,10 +25,8 @@ BEGIN_SLOTTABLE(MergingIrSensor)
 END_SLOTTABLE(MergingIrSensor)
 
 BEGIN_SLOT_MAP(MergingIrSensor)
-   ON_SLOT(1, setSlotAzimuthBin,   base::INumber)
-   ON_SLOT(1, setSlotAzimuthBin,   base::IAngle)
-   ON_SLOT(2, setSlotElevationBin, base::INumber)
-   ON_SLOT(2, setSlotElevationBin, base::IAngle)
+   ON_SLOT(1, setSlotAzimuthBin,   base::Number)
+   ON_SLOT(2, setSlotElevationBin, base::Number)
 END_SLOT_MAP()
 
 MergingIrSensor::MergingIrSensor()
@@ -130,8 +128,8 @@ void MergingIrSensor::mergeIrReturns()
 
                     // find current ratio.
                     if (isMessageEnabled(MSG_DEBUG)) {
-                       std::cout << "IrSensor: merging target " <<  nextMsg->getTarget()->getName()
-                                 << " into target " <<currentMsg->getTarget()->getName()  << std::endl;
+                       std::cout << "IrSensor: merging target " <<  nextMsg->getTarget()->getName()->getString()
+                                 << " into target " <<currentMsg->getTarget()->getName()->getString()  << std::endl;
                     }
 
                     if (currentMsg->getSignalToNoiseRatio() >
@@ -252,45 +250,31 @@ bool MergingIrSensor::setElevationBin(const double w)
    return true;
 }
 
-bool MergingIrSensor::setSlotAzimuthBin(const base::INumber* const x)
+bool MergingIrSensor::setSlotAzimuthBin(const base::Number* const msg)
 {
    double value{};
 
-   if (x != nullptr) {
-      value = x->asDouble();
+   const auto a = dynamic_cast<const base::Angle*>(msg);
+   if (a != nullptr) {
+       base::Radians r;
+       value = static_cast<double>(r.convert(*a));
+   } else if (msg != nullptr) {
+      value = msg->getReal();
    }
    setAzimuthBin(value);
    return true;
 }
 
-bool MergingIrSensor::setSlotAzimuthBin(const base::IAngle* const x)
+bool MergingIrSensor::setSlotElevationBin(const base::Number* const msg)
 {
    double value{};
 
-   if (x != nullptr) {
-      value = x->getValueInRadians();
-   }
-   setAzimuthBin(value);
-   return true;
-}
-
-bool MergingIrSensor::setSlotElevationBin(const base::INumber* const x)
-{
-   double value{};
-
-   if (x != nullptr) {
-      value = x->asDouble();
-   }
-   setElevationBin(value);
-   return true;
-}
-
-bool MergingIrSensor::setSlotElevationBin(const base::IAngle* const x)
-{
-   double value{};
-
-   if (x != nullptr) {
-      value = x->getValueInRadians();
+   const auto a = dynamic_cast<const base::Angle*>(msg);
+   if (a != nullptr) {
+       base::Radians r;
+       value = static_cast<double>(r.convert(*a));
+   } else if (msg != nullptr) {
+      value = msg->getReal();
    }
    setElevationBin(value);
    return true;

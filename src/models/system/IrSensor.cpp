@@ -10,7 +10,7 @@
 
 #include "mixr/models/system/IrSensor.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/IrSeeker.hpp"
 #include "mixr/models/system/trackmanager/AngleOnlyTrackManager.hpp"
 #include "mixr/models/system/OnboardComputer.hpp"
@@ -19,12 +19,11 @@
 
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/Identifier.hpp"
 #include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/qty/lengths.hpp"
+
+#include "mixr/base/units/Distances.hpp"
 
 #include <cmath>
-#include <string>
 
 namespace mixr {
 namespace models {
@@ -42,24 +41,21 @@ BEGIN_SLOTTABLE(IrSensor)
    //"azimuthBin",      // 7: azimuthBin
    //"elevationBin",    // 8: elevationBin
    "maximumRange",      // 7: Maximum Range
-   "trackManagerName",  // 8: Name of the requested Track Manager (base::Identifier)
+   "trackManagerName",  // 8: Name of the requested Track Manager (base::String)
 END_SLOTTABLE(IrSensor)
 
 BEGIN_SLOT_MAP(IrSensor)
-   ON_SLOT(1, setSlotLowerWavelength,  base::INumber)
-   ON_SLOT(1, setSlotLowerWavelength,  base::ILength)
-   ON_SLOT(2, setSlotUpperWavelength,  base::INumber)
-   ON_SLOT(2, setSlotUpperWavelength,  base::ILength)
-   ON_SLOT(3, setSlotNEI,              base::INumber)
-   ON_SLOT(4, setSlotThreshold,        base::INumber)
-   ON_SLOT(5, setSlotIFOV,             base::INumber)
-   ON_SLOT(6, setSlotSensorType,       base::Identifier)
-   //ON_SLOT(7, setSlotFieldOfRegard,  base::INumber)
-   //ON_SLOT(7, setSlotAzimuthBin,     base::INumber)
-   //ON_SLOT(8, setSlotElevationBin,   base::INumber)
-   ON_SLOT(7, setSlotMaximumRange,     base::INumber)
-   ON_SLOT(7, setSlotMaximumRange,     base::ILength)
-   ON_SLOT(8, setSlotTrackManagerName, base::Identifier)
+   ON_SLOT(1, setSlotLowerWavelength,  base::Number)
+   ON_SLOT(2, setSlotUpperWavelength,  base::Number)
+   ON_SLOT(3, setSlotNEI,              base::Number)
+   ON_SLOT(4, setSlotThreshold,        base::Number)
+   ON_SLOT(5, setSlotIFOV,             base::Number)
+   ON_SLOT(6, setSlotSensorType,       base::String)
+   //ON_SLOT(7, setSlotFieldOfRegard,  base::Number)
+   //ON_SLOT(7, setSlotAzimuthBin,     base::Number)
+   //ON_SLOT(8, setSlotElevationBin,   base::Number)
+   ON_SLOT(7, setSlotMaximumRange,     base::Number)
+   ON_SLOT(8, setSlotTrackManagerName, base::String)
 END_SLOT_MAP()
 
 IrSensor::IrSensor()
@@ -99,7 +95,15 @@ void IrSensor::copyData(const IrSensor& org, const bool)
    //azimuthBin = org.azimuthBin;
    //elevationBin = org.elevationBin;
    maximumRange = org.maximumRange;
-   tmName = org.tmName;
+
+   if (org.tmName != nullptr) {
+      base::String* copy = org.tmName->clone();
+      setTrackManagerName( copy );
+      copy->unref();
+   }
+   else {
+      setTrackManagerName(nullptr);
+   }
 
    // do not copy data.
    clearTracksAndQueues();
@@ -108,6 +112,7 @@ void IrSensor::copyData(const IrSensor& org, const bool)
 void IrSensor::deleteData()
 {
    setTrackManager(nullptr);
+   setTrackManagerName(nullptr);
    clearTracksAndQueues();
 }
 
@@ -132,20 +137,22 @@ void IrSensor::reset()
    // Do we need to find the track manager?
    // ---
    base::lock(storedMessagesLock);
-   if (getTrackManager() == nullptr && !tmName.empty() && getOwnship() != nullptr) {
+   if (getTrackManager() == nullptr && getTrackManagerName() != nullptr && getOwnship() != nullptr) {
       // We have a name of the track manager, but not the track manager itself
+      const char* name{*getTrackManagerName()};
+
       // Get the named track manager from the onboard computer
       OnboardComputer* obc{getOwnship()->getOnboardComputer()};
       if (obc != nullptr) {
-         setTrackManager( obc->getTrackManagerByName(tmName.c_str()) );
+         setTrackManager( obc->getTrackManagerByName(name) );
       }
 
       if (getTrackManager() == nullptr) {
           // The assigned track manager was not found!
           if (isMessageEnabled(MSG_ERROR)) {
-              std::cerr << "IrSensor::reset() ERROR -- track manager, " << tmName << ", was not found!" << std::endl;
+              std::cerr << "IrSensor::reset() ERROR -- track manager, " << name << ", was not found!" << std::endl;
           }
-         setTrackManagerName("");
+         setTrackManagerName(nullptr);
       }
    }
    base::unlock(storedMessagesLock);
@@ -161,20 +168,22 @@ void IrSensor::updateData(const double dt)
    // ---
    // Do we need to find the track manager?
    // ---
-   if (getTrackManager() == nullptr && !tmName.empty() && getOwnship() != nullptr) {
+   if (getTrackManager() == nullptr && getTrackManagerName() != nullptr && getOwnship() != nullptr) {
       // We have a name of the track manager, but not the track manager itself
+      const char* name{*getTrackManagerName()};
+
       // Get the named track manager from the onboard computer
       OnboardComputer* obc{getOwnship()->getOnboardComputer()};
       if (obc != nullptr) {
-         setTrackManager( obc->getTrackManagerByName(tmName.c_str()) );
+         setTrackManager( obc->getTrackManagerByName(name) );
       }
 
       if (getTrackManager() == nullptr) {
          // The assigned track manager was not found!
          if (isMessageEnabled(MSG_ERROR)) {
-            std::cerr << "IrSensor::reset() ERROR -- track manager, " << tmName << ", was not found!" << std::endl;
+            std::cerr << "IrSensor::reset() ERROR -- track manager, " << name << ", was not found!" << std::endl;
          }
-         setTrackManagerName("");
+         setTrackManagerName(nullptr);
       }
    }
 }
@@ -197,7 +206,7 @@ void IrSensor::transmit(const double dt)
          irQuery->setInstantaneousFieldOfView(getIFOV());
          irQuery->setSendingSensor(this);
          irQuery->setNEI(getNEI());
-         irQuery->setMaxRangeNM(getMaximumRange()* base::length::M2NM);
+         irQuery->setMaxRangeNM(getMaximumRange()* base::distance::M2NM);
          seeker->irRequestSignature(irQuery);
          irQuery->unref();
       } // If irQuery not null
@@ -212,7 +221,7 @@ void IrSensor::transmit(const double dt)
 // this is called by the IrSeeker in the transmit frame, once for each target that returns a query
 bool IrSensor::calculateIrQueryReturn(IrQueryMsg* const msg)
 {
-   IPlayer* ownship{getOwnship()};
+   Player* ownship{getOwnship()};
    IrAtmosphere* atmos{};
    double totalSignal{};
    double totalBackground{};
@@ -252,7 +261,7 @@ bool IrSensor::calculateIrQueryReturn(IrQueryMsg* const msg)
       // If the target is larger than the field of view than it is all of background
       // power in the field of view. Use this as the default value.
 
-     // noiseBlockedByTarget is irradiance, in qty of watts/m^2
+     // noiseBlockedByTarget is irradiance, in units of watts/m^2
 
       double noiseBlockedByTarget{totalBackground * ifov};
 
@@ -280,7 +289,7 @@ bool IrSensor::calculateIrQueryReturn(IrQueryMsg* const msg)
       // Hotspot does not.
 
       if (signalAboveNoise < 0.0 &&
-               (msg->getSendingSensor()->getSensorType() == IrSensor::SensorType::CONTRAST)) {
+               (msg->getSendingSensor()->getSensorType() == IrSensor::CONTRAST)) {
          signalAboveNoise = -signalAboveNoise;
       }
 
@@ -455,9 +464,10 @@ bool IrSensor::setIFOV(const double i)
 
 
 // setSensorType() - Sets the Instantaneous Field of View  (steradians)
-void IrSensor::setSensorType(const SensorType st)
+bool IrSensor::setSensorType(const SensorType st)
 {
    sensorType = st;
+   return true;
 }
 
 // setFieldOfRegard() - Sets the Instantaneous Field of View  (steradians)
@@ -513,24 +523,16 @@ bool IrSensor::setMaximumRange(const double w)
    return true;
 }
 
-bool IrSensor::setSlotMaximumRange(const base::INumber* const x)
+bool IrSensor::setSlotMaximumRange(const base::Number* const msg)
 {
    double value{};
 
-   if (x != nullptr) {
-      value = x->asDouble();
-   }
-
-   setMaximumRange(value);
-   return true;
-}
-
-bool IrSensor::setSlotMaximumRange(const base::ILength* const x)
-{
-   double value{};
-
-   if (x != nullptr) {
-      value = x->getValueInMeters();
+   const auto d = dynamic_cast<const base::Distance*>(msg);
+   if (d != nullptr) {
+       base::Meters m;
+       value = static_cast<double>(m.convert(*d));
+   } else if (msg != nullptr) {
+      value = msg->getReal();
    }
 
    setMaximumRange(value);
@@ -556,31 +558,17 @@ bool IrSensor::setSlotMaximumRange(const base::ILength* const x)
 //}
 
 // setSlotLowerWavelength() - Sets lower wavelength
-bool IrSensor::setSlotLowerWavelength(const base::INumber* const x)
+bool IrSensor::setSlotLowerWavelength(const base::Number* const msg)
 {
    double value{};
    bool ok{};
 
-   if (x != nullptr) {
-      value = x->asDouble();
-   }
-   ok = setLowerWavelength(value);
-
-   if (!ok) {
-      if (isMessageEnabled(MSG_ERROR)) {
-         std::cerr << "IrSensor::setSlotLowerWavelength: Error setting Lower Wavelength!" << std::endl;
-      }
-   }
-   return ok;
-}
-
-bool IrSensor::setSlotLowerWavelength(const base::ILength* const x)
-{
-   double value{};
-   bool ok{};
-
-   if (x != nullptr) {
-      value = x->getValueInMicroMeters();
+   const auto d = dynamic_cast<const base::Distance*>(msg);
+   if (d != nullptr) {
+       base::MicroMeters mm;
+       value = static_cast<double>(mm.convert(*d));
+   } else if (msg != nullptr) {
+      value = msg->getReal();
    }
    ok = setLowerWavelength(value);
 
@@ -593,30 +581,17 @@ bool IrSensor::setSlotLowerWavelength(const base::ILength* const x)
 }
 
 // setSlotUpperWavelength() - Sets upper wavelength
-bool IrSensor::setSlotUpperWavelength(const base::INumber* const x)
+bool IrSensor::setSlotUpperWavelength(const base::Number* const msg)
 {
    bool ok{};
    double value{};
 
-   if (x != nullptr) {
-      value = x->asDouble();
-   }
-   ok = setUpperWavelength(value);
-   if (!ok) {
-      if (isMessageEnabled(MSG_ERROR)) {
-         std::cerr << "IrSensor::setUpperWavelength: Error setting Upper Wavelength!" << std::endl;
-      }
-   }
-   return ok;
-}
-
-bool IrSensor::setSlotUpperWavelength(const base::ILength* const x)
-{
-   bool ok{};
-   double value{};
-
-   if (x != nullptr) {
-      value = x->getValueInMicroMeters();
+   const auto d = dynamic_cast<const base::Distance*>(msg);
+   if (d != nullptr) {
+       base::MicroMeters mm;
+       value = static_cast<double>(mm.convert(*d));
+   } else if (msg != nullptr) {
+      value = msg->getReal();
    }
    ok = setUpperWavelength(value);
    if (!ok) {
@@ -628,11 +603,11 @@ bool IrSensor::setSlotUpperWavelength(const base::ILength* const x)
 }
 
 // setSlotNEI() - Sets Noise Equivalent Irradiance
-bool IrSensor::setSlotNEI(const base::INumber* const msg)
+bool IrSensor::setSlotNEI(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double x{msg->asDouble()};
+      const double x{msg->getReal()};
       ok = setNEI(x);
       if (!ok) {
          if (isMessageEnabled(MSG_ERROR)) {
@@ -644,11 +619,11 @@ bool IrSensor::setSlotNEI(const base::INumber* const msg)
 }
 
 // setSlotThreshold() - Sets Signal to Noise Threshold
-bool IrSensor::setSlotThreshold(const base::INumber* const msg)
+bool IrSensor::setSlotThreshold(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double x{msg->asDouble()};
+      const double x{msg->getReal()};
       ok = setThreshold(x);
       if (!ok) {
          if (isMessageEnabled(MSG_ERROR)) {
@@ -660,11 +635,11 @@ bool IrSensor::setSlotThreshold(const base::INumber* const msg)
 }
 
 // setSlotIFOV() - Sets Instantaneous Field of View
-bool IrSensor::setSlotIFOV(const base::INumber* const msg)
+bool IrSensor::setSlotIFOV(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double x{msg->asDouble()};
+      const double x{msg->getReal()};
       ok = setIFOV(x);
       if (!ok) {
          if (isMessageEnabled(MSG_ERROR)) {
@@ -675,19 +650,18 @@ bool IrSensor::setSlotIFOV(const base::INumber* const msg)
    return ok;
 }
 
-bool IrSensor::setSlotSensorType(const base::Identifier* const msg)
+// setSlotSensorType() -- Sets the Sensor Type
+bool IrSensor::setSlotSensorType(const base::String* const msg)
 {
-   if (msg == nullptr) return false;
+   bool ok{};
 
-   bool ok{true};
-
-   if (*msg == "contrast") setSensorType(SensorType::CONTRAST);
-   else if (*msg == "hotspot") setSensorType(SensorType::HOTSPOT);
-   else ok = false;
-
-   if (!ok) {
-      if (isMessageEnabled(MSG_ERROR)) {
-         std::cerr << "IrSensor::setSlotSensorType: Error setting Sensor Type!" << std::endl;
+   if (msg != nullptr) {
+      if (*msg == "contrast") ok = setSensorType(CONTRAST);
+      else if (*msg == "hot spot") ok = setSensorType(HOTSPOT);
+      if (!ok) {
+         if (isMessageEnabled(MSG_ERROR)) {
+            std::cerr << "IrSensor::setSlotSensorType: Error setting Sensor Type!" << std::endl;
+         }
       }
    }
    return ok;
@@ -711,21 +685,29 @@ bool IrSensor::setSlotSensorType(const base::Identifier* const msg)
 //}
 // setSlotTrackManagerName() -- sets the name of the track manager;
 // we'll lookup the actual track manager in reset() later
-bool IrSensor::setSlotTrackManagerName(base::Identifier* const v)
+bool IrSensor::setSlotTrackManagerName(base::String* const v)
 {
-    return setTrackManagerName(v->asString());
+    return setTrackManagerName(v);
 }
-
-bool IrSensor::setTrackManagerName(const std::string& name)
+//------------------------------------------------------------------------------
+// setTrackManagerName() -- Sets the track manager's name
+//------------------------------------------------------------------------------
+bool IrSensor::setTrackManagerName(base::String* name)
 {
+    if (tmName != nullptr) {
+        tmName->unref();
+    }
     tmName = name;
+    if (tmName != nullptr) {
+        tmName->ref();
+    }
     return true;
 }
 
 //------------------------------------------------------------------------------
 // setTrackManager() -- Sets the track manager
 //------------------------------------------------------------------------------
-bool IrSensor::setTrackManager(ITrackMgr* tm)
+bool IrSensor::setTrackManager(TrackManager* tm)
 {
     if (trackManager != nullptr) {
         trackManager->unref();
@@ -738,19 +720,19 @@ bool IrSensor::setTrackManager(ITrackMgr* tm)
 }
 
 // Returns the requested track manager's name
-const std::string& IrSensor::getTrackManagerName() const
+const base::String* IrSensor::getTrackManagerName() const
 {
    return tmName;
 }
 
 // Returns our current track manager
-ITrackMgr* IrSensor::getTrackManager()
+TrackManager* IrSensor::getTrackManager()
 {
    return trackManager;
 }
 
 // Returns our current track manager (const version)
-const ITrackMgr* IrSensor::getTrackManager() const
+const TrackManager* IrSensor::getTrackManager() const
 {
    return trackManager;
 }

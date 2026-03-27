@@ -19,7 +19,7 @@ gear:
                                 transform: ( Translation 0 1 )
                                 components: {
                                     ( Line
-                                        segment: true
+                                        segment: 1
                                         color: black
                                         vertices: {
                                             [ -0.3 -0.6 ] [ -0.3 0.6 ]
@@ -60,7 +60,7 @@ gear:
                                 transform: ( Translation 0 1 )
                                 components: {
                                     ( Line
-                                        segment: true
+                                        segment: 1
                                         color: black
                                         vertices: {
                                             [ -0.3 -0.6 ] [ -0.3 0.6 ]
@@ -101,7 +101,7 @@ gear:
                                 transform: ( Translation 0 -1 )
                                 components: {
                                     ( Line
-                                        segment: true
+                                        segment: 1
                                         color: black
                                         vertices: {
                                             [ -0.3 -0.6 ] [ -0.3 0.6 ]
@@ -142,7 +142,7 @@ gear:
                                 transform: ( Translation 0 -1 )
                                 components: {
                                     ( Line
-                                        segment: true
+                                        segment: 1
                                         color: black
                                         vertices: {
                                             [ -0.3 -0.6 ] [ -0.3 0.6 ]
@@ -185,25 +185,25 @@ gear:
             ( LandingLight
                 // we only have to give one value, because it toggles on and off if it is below the up value
                 gearUpValue: 0.1
-                gearDownValue: 0.7
+                gearDownValue: 0.8
                 transform: ( Translation 2 1 ) 
                 components: {
                     index:
                     ( Rotary2
                         components: {
-                            // light in 'up' position
+                            // this is our up light
                             ( Circle
                                 radius: 0.23
                                 color: black
                                 slices: 50
-                                filled: true
+                                filled: 1
                             )
-                            // light in 'down' position
+                            // down light
                             ( Circle
                                 radius: 0.23
                                 color: green
                                 slices: 50
-                                filled: true
+                                filled: 1
                             )
 
                         }
@@ -245,14 +245,14 @@ gear:
                                 radius: 0.23
                                 color: black
                                 slices: 50
-                                filled: true
+                                filled: 1
                             )
                             // down light
                             ( Circle
                                 radius: 0.23
                                 color: green
                                 slices: 50
-                                filled: true
+                                filled: 1
                             )
                             
                         }
@@ -318,7 +318,7 @@ gear:
                 }
             )
             ( AsciiText
-                vertical: true
+                vertical: 1
                 color: white
                 transform: { ( Translation -0.05 0.3 ) ( Scale 0.2 ) }
                 text: "WHEELS"

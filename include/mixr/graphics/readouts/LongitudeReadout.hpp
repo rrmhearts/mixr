@@ -1,6 +1,6 @@
 
-#ifndef __mixr_graphics_LongitudeReadout_HPP__
-#define __mixr_graphics_LongitudeReadout_HPP__
+#ifndef __mixr_graphics_LongitudeReadout_H__
+#define __mixr_graphics_LongitudeReadout_H__
 
 #include "DirectionReadout.hpp"
 
@@ -9,12 +9,10 @@ namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: LongitudeReadout
-//------------------------------------------------------------------------------
-// EDL Interface:
+// Base class:  Object > Graphic > Field > NumericReadout > DirectionReadout > LongitudeReadout
 //
 // Factory name: LongitudeReadout
-// Slots: none
-//------------------------------------------------------------------------------
+//
 // Notes:
 //    1) see the 'DirectionReadout' notes
 //    2) The '+ char is replaced with 'E', and the '-' char is replaced with 'W'
@@ -34,12 +32,12 @@ namespace graphics {
 //    0DD@MM'SS.S+    //  ... and with the '+' or '-' character as a suffix
 //
 //------------------------------------------------------------------------------
-class LongitudeReadout final: public DirectionReadout
+class LongitudeReadout : public DirectionReadout
 {
     DECLARE_SUBCLASS(LongitudeReadout, DirectionReadout)
 public:
     LongitudeReadout();
-    char filterInputEvent(const int event, const char) final;
+    char filterInputEvent(const int event, const int tc) override;
 protected:
    //virtual void makeText();
 };

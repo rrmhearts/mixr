@@ -6,16 +6,16 @@
 
 #include "mixr/models/system/StabilizingGimbal.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IList.hpp"
+#include "mixr/base/List.hpp"
 #include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/Decibel.hpp"
+#include "mixr/base/units/Decibel.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Powers.hpp"
 #include "mixr/base/osg/Vec3d"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/powers.hpp"
 
 namespace mixr {
 namespace models {

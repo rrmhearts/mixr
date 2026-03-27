@@ -7,7 +7,7 @@
 
 #include "mixr/ighost/cigi/CigiHost.hpp"
 
-#include "mixr/base/network/INetHandler.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 
 #include "cigicl/CigiBaseSignalProcessing.h"
 
@@ -32,7 +32,6 @@
 #include "cigicl/CigiSensorCtrlV3.h"
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 //------------------------------------------------------------------------------
@@ -50,8 +49,8 @@ BEGIN_SLOTTABLE(HostSession)
 END_SLOTTABLE(HostSession)
 
 BEGIN_SLOT_MAP(HostSession)
-   ON_SLOT(1, setSlotNetInput,  base::INetHandler)
-   ON_SLOT(2, setSlotNetOutput, base::INetHandler)
+   ON_SLOT(1, setSlotNetInput,  base::NetHandler)
+   ON_SLOT(2, setSlotNetOutput, base::NetHandler)
 END_SLOT_MAP()
 
 HostSession::HostSession()
@@ -71,8 +70,6 @@ bool HostSession::initialize(CigiHost* const p)
 
    //session->SetCigiVersion(2);     // CGB only force this if necessary
    // CGBCGB ??? session->SetSynchronous(p->isSyncMode());
-   session->SetCigiVersion(3);
-   session->SetSynchronous(p->isSyncMode());
 
    // setup convenience pointers to message queues
    msgOut = &session->GetOutgoingMsgMgr();
@@ -81,8 +78,7 @@ bool HostSession::initialize(CigiHost* const p)
    // create signal processor object
    sigProcessor.reset(new SignalProcessor(parent));
 
-   msgIn->SetReaderCigiVersion(3,3);
-   //msgIn->SetReaderCigiVersion(2);
+   msgIn->SetReaderCigiVersion(2);
    msgIn->UsingIteration(false);
    msgIn->RegisterSignalProcessor(sigProcessor.get());
 
@@ -93,9 +89,9 @@ bool HostSession::initialize(CigiHost* const p)
       if (networkInitFailed) return false;
    }
 
-//   if (isMessageEnabled(MSG_INFO)) {
+   if (isMessageEnabled(MSG_INFO)) {
       std::cout << "HostSession::initialize(): CIGI host session initialized!" << std::endl;
-//   }
+   }
    return true;
 }
 
@@ -262,18 +258,17 @@ void HostSession::processIgMessages()
    }
 }
 
-bool HostSession::setSlotNetInput(base::INetHandler* const msg)
+bool HostSession::setSlotNetInput(base::NetHandler* const msg)
 {
    netInput = msg;
    return true;
 }
 
-bool HostSession::setSlotNetOutput(base::INetHandler* const msg)
+bool HostSession::setSlotNetOutput(base::NetHandler* const msg)
 {
    netOutput = msg;
    return true;
 }
 
-}
 }
 }

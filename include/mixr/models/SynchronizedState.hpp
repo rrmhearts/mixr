@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_SynchronizedState_HPP__
-#define __mixr_models_SynchronizedState_HPP__
+#ifndef __mixr_models_SynchronizedState_H__
+#define __mixr_models_SynchronizedState_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 #include "mixr/base/osg/Vec3d"
 
 namespace mixr {
@@ -11,11 +11,11 @@ namespace models {
 //------------------------------------------------------------------------------
 // Class: SynchronizedState
 //
-// Description: Concrete - a snapshot of position state at a given time
+// Description: A snapshot of position state at a given time
 //------------------------------------------------------------------------------
-class SynchronizedState final: public base::IObject
+class SynchronizedState : public base::Object
 {
-   DECLARE_SUBCLASS(SynchronizedState, base::IObject)
+   DECLARE_SUBCLASS(SynchronizedState, base::Object)
 
 public:
    SynchronizedState();
@@ -38,7 +38,7 @@ public:
    void setTimeExec(const double d)                                   { timeExec = d; }
    void setTimeUtc(const double d)                                    { timeUtc = d; }
 
-   virtual void clear();         // clear state data
+   virtual void clear();              // clear state data
 
 private:
 

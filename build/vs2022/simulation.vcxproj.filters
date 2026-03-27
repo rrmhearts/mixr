@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\simulation">
+      <UniqueIdentifier>{0C0EFCC0-7845-4458-814F-A87BED056B51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\simulation">
+      <UniqueIdentifier>{6145EDCD-4D13-E1D3-36A7-51FA2214BD38}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractDataRecorder.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractIgHost.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractNetIO.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractNib.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractPlayer.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractPlayer.inl">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\AbstractRecorderComponent.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\Simulation.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\Station.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\dataRecorderTokens.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\factory.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\simulation\recorder_macros.hpp">
+      <Filter>include\mixr\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\simulation\SimulationBgSyncThread.hpp">
+      <Filter>src\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\simulation\SimulationTcSyncThread.hpp">
+      <Filter>src\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\simulation\StationBgPeriodicThread.hpp">
+      <Filter>src\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\simulation\StationNetPeriodicThread.hpp">
+      <Filter>src\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\simulation\StationTcPeriodicThread.hpp">
+      <Filter>src\simulation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\simulation\AbstractDataRecorder.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\AbstractIgHost.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\AbstractNetIO.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\AbstractNib.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\AbstractPlayer.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\AbstractRecorderComponent.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\Simulation.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\SimulationBgSyncThread.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\SimulationTcSyncThread.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\Station.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\StationBgPeriodicThread.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\StationNetPeriodicThread.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\StationTcPeriodicThread.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\simulation\factory.cpp">
+      <Filter>src\simulation</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

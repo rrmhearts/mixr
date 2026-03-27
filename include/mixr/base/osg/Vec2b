@@ -11,8 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#ifndef __mixr_base_osg_Vec2b_HPP__
-#define __mixr_base_osg_Vec2b_HPP__
+#ifndef __mixr_base_osg_Vec2b_H__
+#define __mixr_base_osg_Vec2b_H__
 
 namespace mixr {
 namespace base {
@@ -36,7 +36,7 @@ class Vec2b
         enum { num_components = 2 };
         
         /** Vec member variable. */
-        value_type _v[2]{};
+        value_type _v[2];
 
         /** Constructor that sets all components of the vector to zero */
         Vec2b() { _v[0]=0; _v[1]=0; }

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_graphics_StrokeFont_HPP__
-#define __mixr_graphics_StrokeFont_HPP__
+#ifndef __mixr_graphics_StrokeFont_H__
+#define __mixr_graphics_StrokeFont_H__
 
-#include "IFont.hpp"
+#include "AbstractFont.hpp"
 
 namespace mixr {
 namespace graphics {
@@ -10,27 +10,27 @@ namespace graphics {
 //------------------------------------------------------------------------------
 // Class: StrokeFont
 // Description: Modified version of SGI's stroke font
-//------------------------------------------------------------------------------
-// EDL Interface:
-//
 // Factory name: StrokeFont
-// Slots: none
+//
+// public methods (member functions):
+//      (All of the classes derived from Font have the same public methods.)
+//
+//      static GLenum createStrokeFont(GLuint fontBase)
+//          Produces the stroke font map.
+//
 //------------------------------------------------------------------------------
-class StrokeFont final: public IFont
+class StrokeFont : public AbstractFont
 {
-    DECLARE_SUBCLASS(StrokeFont, IFont)
+    DECLARE_SUBCLASS(StrokeFont, AbstractFont)
 
 public:
     StrokeFont();
 
-    void outputText(const double x, const double y, const char* txt, const int n, const bool vf = false, const bool rf = false) final;
-    void outputText(const char* txt, const int n, const bool vf = false, const bool rf = false) final;
+    void outputText(const double x, const double y, const char* txt, const int n, const bool vf = false, const bool rf = false) override;
+    void outputText(const char* txt, const int n, const bool vf = false, const bool rf = false) override;
+    void loadFont() override;
 
-    // creates the stroke font map
     static GLenum createStrokeFont(GLuint fontBase);
-
-private:
-    void loadFont() final;
 };
 
 }

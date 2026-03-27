@@ -5,9 +5,9 @@
 
 #include "mixr/base/String.hpp"
 
-#include "mixr/simulation/INib.hpp"
+#include "mixr/simulation/AbstractNib.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/player/ground/GroundVehicle.hpp"
 
 #include "cigicl/CigiEntityCtrlV3.h"
@@ -15,7 +15,6 @@
 #include "cigicl/CigiArtPartCtrlV3.h"
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 IMPLEMENT_SUBCLASS(CigiModel, "CigiModel")
@@ -41,14 +40,15 @@ void CigiModel::copyData(const CigiModel& org, const bool)
 
     playerID = org.playerID;
 
-    federateName = org.federateName;
+    const base::String* pp = org.federateName;
+    federateName = pp;
 }
 
 void CigiModel::deleteData()
 {
     setPlayer(nullptr);
 
-   for (int i{}; i < CigiHost::NUM_BUFFERS; i++) {
+   for (int i = 0; i < CigiHost::NUM_BUFFERS; i++) {
       if (parentEC[i]    != nullptr) { delete parentEC[i];    parentEC[i]    = nullptr; }
       if (trailEC[i]     != nullptr) { delete trailEC[i];     trailEC[i]     = nullptr; }
       if (explosionEC[i] != nullptr) { delete explosionEC[i]; explosionEC[i] = nullptr; }
@@ -62,12 +62,12 @@ void CigiModel::deleteData()
 }
 
 // set & ref the player pointer
-void CigiModel::setPlayer(models::IPlayer* const p)
+void CigiModel::setPlayer(models::Player* const p)
 {
    if (player != nullptr) {
       player->unref();
       playerID = 0;
-      federateName.clear();
+      federateName = nullptr;
    }
 
    player = p;
@@ -75,17 +75,17 @@ void CigiModel::setPlayer(models::IPlayer* const p)
    if (player != nullptr) {
       player->ref();
       playerID = player->getID();
-      const simulation::INib* nib = player->getNib();
+      const simulation::AbstractNib* nib = player->getNib();
       if (nib != nullptr) {
          federateName = nib->getFederateName();
       } else {
-         federateName.clear();
+         federateName = nullptr;
       }
    }
 }
 
 // initialize the model
-void CigiModel::initialize(models::IPlayer* const p, const Player2CigiMap** const igModelTable, const int numModels)
+void CigiModel::initialize(models::Player* const p, const Player2CigiMap** const igModelTable, const int numModels)
 {
    isGroundPlayer = p->isClassType(typeid(models::GroundVehicle));
 
@@ -137,6 +137,5 @@ void CigiModel::clear()
    federateName = nullptr;
 }
 
-}
 }
 }

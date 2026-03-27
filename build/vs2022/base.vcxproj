@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8078947C-6CAF-950D-159C-7B1001B2110F}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>base</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Release\base\</IntDir>
+    <TargetName>mixr_base</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Debug\base\</IntDir>
+    <TargetName>mixr_base_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi /Ot %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\base\Component.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\EarthModel.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\FileReader.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Identifier.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\LatLon.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\List.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Locus.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Matrix.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\MetaObject.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\MonitorMetrics.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Object.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Pair.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\PairStream.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Referenced.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\SlotTable.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Stack.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\StateMachine.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Statistic.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\String.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Timers.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Transforms.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\Vectors.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Cie.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Cmy.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Color.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Hls.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Hsv.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Hsva.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Rgb.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Rgba.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\colors\Yiq.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoData.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoDevice.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\edl_parser.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\eventTokens.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\factory.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\FStorage.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Func1.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Func2.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Func3.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Func4.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Func5.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Function.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Polynomial.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table1.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table2.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table3.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table4.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\Table5.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\functors\TableStorage.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\macros.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\NetHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\PosixHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\TcpClient.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\TcpHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\TcpServerMultiple.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\TcpServerSingle.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\UdpBroadcastHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\UdpMulticastHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\network\UdpUnicastHandler.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Boolean.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Complex.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Complex.inl" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Float.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Integer.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Number.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\numeric\Operators.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\osg\osg_math.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\safe_ptr.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\safe_queue.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\safe_stack.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\threads\AbstractThread.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\threads\OneShotThread.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\threads\PeriodicThread.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\threads\SyncThread.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractAction.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractBehavior.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractState.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\ubf\Agent.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\ubf\Arbiter.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Angles.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\AngularVelocity.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Areas.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Decibel.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Density.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Distances.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Energies.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\FlowRate.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Forces.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Frequencies.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\LinearVelocity.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Masses.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Powers.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Times.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\Volumes.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\angle_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\area_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\distance_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\energy_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\force_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\frequency_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\mass_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\power_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\time_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\units\volume_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\FlexLexer.h" />
+    <ClInclude Include="..\..\include\mixr\base\util\atomics.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\constants.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\enum_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\lfi.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\math_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\navDR_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\navDR_utils.inl" />
+    <ClInclude Include="..\..\include\mixr\base\util\nav_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\nav_utils.inl" />
+    <ClInclude Include="..\..\include\mixr\base\util\osg_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_linux.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_mingw.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_msvc.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_linux.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_mingw.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_msvc.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\platform_api.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\str_utils.hpp" />
+    <ClInclude Include="..\..\include\mixr\base\util\system_utils.hpp" />
+    <ClInclude Include="..\..\src\base\edl_parser\EdlParser.hpp" />
+    <ClInclude Include="..\..\src\base\edl_parser\EdlScanner.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\base\Component.cpp" />
+    <ClCompile Include="..\..\src\base\EarthModel.cpp" />
+    <ClCompile Include="..\..\src\base\FileReader.cpp" />
+    <ClCompile Include="..\..\src\base\Identifier.cpp" />
+    <ClCompile Include="..\..\src\base\LatLon.cpp" />
+    <ClCompile Include="..\..\src\base\List.cpp" />
+    <ClCompile Include="..\..\src\base\Locus.cpp" />
+    <ClCompile Include="..\..\src\base\Matrix.cpp" />
+    <ClCompile Include="..\..\src\base\MetaObject.cpp" />
+    <ClCompile Include="..\..\src\base\MonitorMetrics.cpp" />
+    <ClCompile Include="..\..\src\base\Object.cpp" />
+    <ClCompile Include="..\..\src\base\Pair.cpp" />
+    <ClCompile Include="..\..\src\base\PairStream.cpp" />
+    <ClCompile Include="..\..\src\base\SlotTable.cpp" />
+    <ClCompile Include="..\..\src\base\Stack.cpp" />
+    <ClCompile Include="..\..\src\base\StateMachine.cpp" />
+    <ClCompile Include="..\..\src\base\Statistic.cpp" />
+    <ClCompile Include="..\..\src\base\String.cpp" />
+    <ClCompile Include="..\..\src\base\Timers.cpp" />
+    <ClCompile Include="..\..\src\base\Transforms.cpp" />
+    <ClCompile Include="..\..\src\base\Vectors.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Cie.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Cmy.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Color.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Hls.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Hsv.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Hsva.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Rgb.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Rgba.cpp" />
+    <ClCompile Include="..\..\src\base\colors\Yiq.cpp" />
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoData.cpp" />
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoDevice.cpp" />
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoHandler.cpp" />
+    <ClCompile Include="..\..\src\base\edl_parser\EdlParser.cpp" />
+    <ClCompile Include="..\..\src\base\edl_parser\EdlScanner.cpp" />
+    <ClCompile Include="..\..\src\base\factory.cpp" />
+    <ClCompile Include="..\..\src\base\functors\FStorage.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Func1.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Func2.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Func3.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Func4.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Func5.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Function.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Polynomial.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table1.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table2.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table3.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table4.cpp" />
+    <ClCompile Include="..\..\src\base\functors\Table5.cpp" />
+    <ClCompile Include="..\..\src\base\functors\TableStorage.cpp" />
+    <ClCompile Include="..\..\src\base\network\NetHandler.cpp" />
+    <ClCompile Include="..\..\src\base\network\PosixHandler.cpp" />
+    <ClCompile Include="..\..\src\base\network\TcpClient.cpp" />
+    <ClCompile Include="..\..\src\base\network\TcpHandler.cpp" />
+    <ClCompile Include="..\..\src\base\network\TcpServerMultiple.cpp" />
+    <ClCompile Include="..\..\src\base\network\TcpServerSingle.cpp" />
+    <ClCompile Include="..\..\src\base\network\UdpBroadcastHandler.cpp" />
+    <ClCompile Include="..\..\src\base\network\UdpMulticastHandler.cpp" />
+    <ClCompile Include="..\..\src\base\network\UdpUnicastHandler.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Boolean.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Complex.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Float.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Integer.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Number.cpp" />
+    <ClCompile Include="..\..\src\base\numeric\Operators.cpp" />
+    <ClCompile Include="..\..\src\base\osg\MatrixDecomposition.cpp" />
+    <ClCompile Include="..\..\src\base\osg\Matrixd.cpp" />
+    <ClCompile Include="..\..\src\base\osg\Matrixf.cpp" />
+    <ClCompile Include="..\..\src\base\osg\Quat.cpp" />
+    <ClCompile Include="..\..\src\base\osg\math.cpp" />
+    <ClCompile Include="..\..\src\base\threads\AbstractThread.cpp" />
+    <ClCompile Include="..\..\src\base\threads\OneShotThread.cpp" />
+    <ClCompile Include="..\..\src\base\threads\PeriodicThread.cpp" />
+    <ClCompile Include="..\..\src\base\threads\SyncThread.cpp" />
+    <ClCompile Include="..\..\src\base\threads\platform\AbstractThread_msvc.cpp" />
+    <ClCompile Include="..\..\src\base\threads\platform\PeriodicThread_msvc.cpp" />
+    <ClCompile Include="..\..\src\base\threads\platform\SyncThread_msvc.cpp" />
+    <ClCompile Include="..\..\src\base\ubf\AbstractAction.cpp" />
+    <ClCompile Include="..\..\src\base\ubf\AbstractBehavior.cpp" />
+    <ClCompile Include="..\..\src\base\ubf\AbstractState.cpp" />
+    <ClCompile Include="..\..\src\base\ubf\Agent.cpp" />
+    <ClCompile Include="..\..\src\base\ubf\Arbiter.cpp" />
+    <ClCompile Include="..\..\src\base\units\Angles.cpp" />
+    <ClCompile Include="..\..\src\base\units\AngularVelocity.cpp" />
+    <ClCompile Include="..\..\src\base\units\Areas.cpp" />
+    <ClCompile Include="..\..\src\base\units\Decibel.cpp" />
+    <ClCompile Include="..\..\src\base\units\Density.cpp" />
+    <ClCompile Include="..\..\src\base\units\Distances.cpp" />
+    <ClCompile Include="..\..\src\base\units\Energies.cpp" />
+    <ClCompile Include="..\..\src\base\units\FlowRate.cpp" />
+    <ClCompile Include="..\..\src\base\units\Forces.cpp" />
+    <ClCompile Include="..\..\src\base\units\Frequencies.cpp" />
+    <ClCompile Include="..\..\src\base\units\LinearVelocity.cpp" />
+    <ClCompile Include="..\..\src\base\units\Masses.cpp" />
+    <ClCompile Include="..\..\src\base\units\Powers.cpp" />
+    <ClCompile Include="..\..\src\base\units\Times.cpp" />
+    <ClCompile Include="..\..\src\base\units\Volumes.cpp" />
+    <ClCompile Include="..\..\src\base\util\lfi.cpp" />
+    <ClCompile Include="..\..\src\base\util\math_utils.cpp" />
+    <ClCompile Include="..\..\src\base\util\navDR_utils.cpp" />
+    <ClCompile Include="..\..\src\base\util\nav_utils.cpp" />
+    <ClCompile Include="..\..\src\base\util\osg_utils.cpp" />
+    <ClCompile Include="..\..\src\base\util\platform\system_msvc.cpp" />
+    <ClCompile Include="..\..\src\base\util\str_utils.cpp" />
+    <ClCompile Include="..\..\src\base\util\system_utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\mixr\base\eventTokens.epp" />
+    <None Include="..\..\include\mixr\base\osg\BoundingBox" />
+    <None Include="..\..\include\mixr\base\osg\BoundingSphere" />
+    <None Include="..\..\include\mixr\base\osg\Matrixd" />
+    <None Include="..\..\include\mixr\base\osg\Matrixf" />
+    <None Include="..\..\include\mixr\base\osg\Quat" />
+    <None Include="..\..\include\mixr\base\osg\Vec2b" />
+    <None Include="..\..\include\mixr\base\osg\Vec2d" />
+    <None Include="..\..\include\mixr\base\osg\Vec2f" />
+    <None Include="..\..\include\mixr\base\osg\Vec2s" />
+    <None Include="..\..\include\mixr\base\osg\Vec3b" />
+    <None Include="..\..\include\mixr\base\osg\Vec3d" />
+    <None Include="..\..\include\mixr\base\osg\Vec3f" />
+    <None Include="..\..\include\mixr\base\osg\Vec3s" />
+    <None Include="..\..\include\mixr\base\osg\Vec4b" />
+    <None Include="..\..\include\mixr\base\osg\Vec4d" />
+    <None Include="..\..\include\mixr\base\osg\Vec4f" />
+    <None Include="..\..\include\mixr\base\osg\Vec4s" />
+    <None Include="..\..\include\mixr\base\osg\Vec4ub" />
+    <None Include="..\..\src\base\edl_parser\edl_parser.y" />
+    <None Include="..\..\src\base\edl_parser\edl_scanner.l" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

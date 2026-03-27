@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\recorder">
+      <UniqueIdentifier>{7D431E70-E9AF-D96A-B2A3-71C81ECFFBD2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\recorder\protobuf">
+      <UniqueIdentifier>{5DB67541-49DC-3FA8-3222-C5731EE76474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\recorder">
+      <UniqueIdentifier>{92A13F2F-7E04-CFD3-278A-078A13CC9A56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\recorder\protobuf">
+      <UniqueIdentifier>{12BCDECB-7E28-9AC6-471C-3224B347BC2E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\recorder\DataRecordHandle.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\DataRecorder.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\DataRecorder.inl">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\FileReader.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\FileWriter.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\InputHandler.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\NetInput.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\NetOutput.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\OutputHandler.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\PrintHandler.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\PrintPlayer.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\PrintSelected.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\TabPrinter.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\factory.hpp">
+      <Filter>include\mixr\recorder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\recorder\protobuf\DataRecord.pb.h">
+      <Filter>include\mixr\recorder\protobuf</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\recorder\DataRecordHandle.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\DataRecorder.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\FileReader.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\FileWriter.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\InputHandler.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\NetInput.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\NetOutput.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\OutputHandler.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\PrintHandler.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\PrintPlayer.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\PrintSelected.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\TabPrinter.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\factory.cpp">
+      <Filter>src\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\recorder\protobuf\DataRecord.pb.cc">
+      <Filter>src\recorder\protobuf</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\mixr\recorder\protobuf\DataRecord.proto">
+      <Filter>include\mixr\recorder\protobuf</Filter>
+    </None>
+  </ItemGroup>
+</Project>

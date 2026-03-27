@@ -1,12 +1,10 @@
 
-#ifndef __mixr_instruments_DialTickMarks_HPP__
-#define __mixr_instruments_DialTickMarks_HPP__
+#ifndef __mixr_instruments_DialTickMarks_H__
+#define __mixr_instruments_DialTickMarks_H__
 
 #include "mixr/instruments/dials/AnalogDial.hpp"
 
 namespace mixr {
-namespace base { class Integer; class INumber; }
-namespace graphics { class Graphic; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -41,14 +39,14 @@ public:
     void drawFunc() override;
 
 private:
-    double length{1.0};    // tick mark length (if not a graphic)
-    int quantity{1};       // how many tick marks will we have?
-    graphics::Graphic* myGraphic{};  // our graphic (if we choose to use on for a tick mark)
+    double length {1.0};    // tick mark length (if not a graphic)
+    int quantity {1};       // how many tick marks will we have?
+    graphics::Graphic* myGraphic {};  // our graphic (if we choose to use on for a tick mark)
 
 private:
     // slot table helper methods
-    bool setSlotLength(const base::INumber* const);
-    bool setSlotQuantity(const base::Integer* const);
+    bool setSlotLength(const base::Number* const);
+    bool setSlotQuantity(const base::Number* const);
     bool setSlotTickGraphic(const graphics::Graphic* const);
 };
 

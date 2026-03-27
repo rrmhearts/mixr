@@ -1,13 +1,13 @@
 
-#ifndef __mixr_graphics_SymbolLoader_HPP__
-#define __mixr_graphics_SymbolLoader_HPP__
+#ifndef __mixr_graphics_SymbolLoader_H__
+#define __mixr_graphics_SymbolLoader_H__
 
 #include "mixr/graphics/MapPage.hpp"
 
 #include <array>
 
 namespace mixr {
-namespace base { class Boolean; class Degrees; class IPairStream; }
+namespace base { class Degrees; }
 namespace graphics {
 class SlSymbol;
 
@@ -70,9 +70,8 @@ class SlSymbol;
 //
 // Factory name: SymbolLoader
 // Slots:
-//     templates         <IPairStream>  ! List of templates to use for symbols
-//     showOnlyInRange   <Boolean>      ! only show symbols within range (default: true)
-//     interconnect      <Boolean>      ! interconnect the symbols (default: false)
+//     templates         <PairStream>   ! List of templates to use for symbols
+//     showOnlyInRange   <Number>       ! only show symbols within range (default: true)
 //
 //------------------------------------------------------------------------------
 class SymbolLoader : public MapPage
@@ -141,7 +140,7 @@ public:
    virtual bool updateSymbolHeading(const int idx, const double hdg);
 
    // Updates the symbol's value
-   virtual bool updateSymbolValue(const int idx, base::IObject* const value);
+   virtual bool updateSymbolValue(const int idx, base::Object* const value);
 
    // Updates the text of the named AsciiText type subcomponent
    virtual bool updateSymbolText(const int idx, const char* name, const char newString[]);
@@ -156,7 +155,7 @@ public:
    virtual bool setSymbolFlashRate(const int idx, const char* name, const double flashRate);
 
    // Change the color of a symbol (if 'name' == 0) or its subcomponent
-   virtual bool setSymbolColor(const int idx, const char* name, const base::IColor* cobj);
+   virtual bool setSymbolColor(const int idx, const char* name, const base::Color* cobj);
 
    // Change the color of a symbol (if 'name' == 0) or its subcomponent
    virtual bool setSymbolColor(const int idx, const char* name, const base::Identifier* cobj);
@@ -180,29 +179,29 @@ protected:
 private:
    void initData();
 
-   base::IPairStream* templates{};               // holds our pairstream of templates
-   std::array<SlSymbol*, MAX_SYMBOLS> symbols{}; // holds our array of symbols
-   bool showInRangeOnly{true};                   // only show the symbols within our range, else draw all the symbols if false
-   bool interconnect{};                          // Connect our symbols with a line?
+   base::PairStream* templates {};                // holds our pairstream of templates
+   std::array<SlSymbol*, MAX_SYMBOLS> symbols {}; // holds our array of symbols
+   bool showInRangeOnly {true};                   // only show the symbols within our range, else draw all the symbols if false
+   bool interconnect {};                          // Connect our symbols with a line?
 
 private:
    // slot table helper methods
-   bool setSlotTemplates(base::IPairStream*);
-   bool setSlotShowInRangeOnly(const base::Boolean* const);
-   bool setSlotInterconnect(const base::Boolean* const);
+   bool setSlotTemplates(base::PairStream*);
+   bool setSlotShowInRangeOnly(const base::Number* const);
+   bool setSlotInterconnect(const base::Number* const);
 };
 
 //------------------------------------------------------------------------------
 // Class: SlSymbol
 // Description: General symbol used by SymbolLoader
 //------------------------------------------------------------------------------
-class SlSymbol : public base::IObject
+class SlSymbol : public base::Object
 {
-    DECLARE_SUBCLASS(SlSymbol, base::IObject)
+    DECLARE_SUBCLASS(SlSymbol, base::Object)
 
 public:
     // Max size of the symbol's ID
-    static const int MAX_ID_SIZE{8};
+    static const int MAX_ID_SIZE = 8;
 
 public:
    SlSymbol();
@@ -211,7 +210,7 @@ public:
    int getType() const;                      // Type code
    const char* getId() const;                // ID sting
    base::Pair* getSymbolPair() const;        // Graphical component
-   base::IObject* getValue() const;           // Returns user defined data item
+   base::Object* getValue() const;           // Returns user defined data item
 
    bool isPositionLL() const;                // Returns true if using at lat/lon position
    bool isPositionAC() const;                // Returns true if using at aircraft nose/wing position
@@ -230,18 +229,18 @@ public:
    base::Degrees* getHdgAngleObj() const;    // base::Angle object that holds the heading value
    Graphic* getHdgGraphics() const;          // Graphic object named 'hdg' to handle heading rotation
 
-   void setVisible(const bool);              // set our visibility
-   void setLatLonFlag(const bool);           // Sets the lat/lon flag (if true we're using lat/lon, else XY)
-   void setACCoordFlag(const bool);          // Sets the aircraft nose/wing flag (when using this instead of earth coordinates from aircraft)
-   void setScreenFlag(const bool);           // set the manual screen position override flag
-   void setType(const int);                  // Sets the user defined type (must match templates)
-   void setId(const char* const);            // Sets the ID string
-   void setValue(base::IObject* const);      // Sets the user defined value, which is set to the graphical component
+   void setVisible(const bool x);            // set our visibility
+   void setLatLonFlag(const bool flg);       // Sets the lat/lon flag (if true we're using lat/lon, else XY)
+   void setACCoordFlag(const bool flg);      // Sets the aircraft nose/wing flag (when using this instead of earth coordinates from aircraft)
+   void setScreenFlag(const bool flg);       // set the manual screen position override flag
+   void setType(const int t);                // Sets the user defined type (must match templates)
+   void setId(const char* const v);          // Sets the ID string
+   void setValue(base::Object* const v);     // Sets the user defined value, which is set to the graphical component
 
-   void setXPosition(const double);          // Sets the X position ( latitude or NM north/south )
-   void setYPosition(const double);          // Sets the Y position { longitude or NM east/west )
-   void setXScreenPos(const double);         // Sets the X screen pos (inches)
-   void setYScreenPos(const double);         // Sets the Y screen pos (inches) (does not include displacement)
+   void setXPosition(const double v);        // Sets the X position ( latitude or NM north/south )
+   void setYPosition(const double v);        // Sets the Y position { longitude or NM east/west )
+   void setXScreenPos(const double v);       // Sets the X screen pos (inches)
+   void setYScreenPos(const double v);       // Sets the Y screen pos (inches) (does not include displacement)
 
    void setSymbolPair(base::Pair* const p);      // Sets the graphical component
    void setHeadingDeg(const double h);           // Sets the (optional) heading (degrees)
@@ -251,26 +250,26 @@ public:
 private:
    void initData();
 
-   bool visibility{true};     // our symbol's visibility
-   bool llFlg{};              // Position is Lat/lon (not X/Y)
-   bool acFlg{};              // aircraft nose/wing coordinate flag
-   bool scrnFlg{};            // using screen coordinates only
+   bool visibility {true};    // our symbol's visibility
+   bool llFlg {};             // Position is Lat/lon (not X/Y)
+   bool acFlg {};             // aircraft nose/wing coordinate flag
+   bool scrnFlg {};           // using screen coordinates only
 
-   int type{};                // numeric type (for looking up in slottable)
-   char id[MAX_ID_SIZE+1];    // ID (or name)
-   base::IObject* value{} ;   // optional value (sent to the symbol as an UPDATE_VALUE event)
-   base::Pair* pntr{};        // The graphical component
+   int type {};               // numeric type (for looking up in slottable)
+   char id[MAX_ID_SIZE+1];    // ID (or name) sent to the '
+   base::Object* value {};    // optional value (sent to the symbol as an UPDATE_VALUE event)
+   base::Pair* pntr {};       // The graphical component
 
-   double xPos{};             // X position ( latitude or NM north/south )
-   double yPos{};             // Y position { longitude or NM east/west )
+   double xPos {};            // X position ( latitude or NM north/south )
+   double yPos {};            // Y position { longitude or NM east/west )
 
-   double xScreenPos{};       // x position: Screen
-   double yScreenPos{};       // y position: Screen
+   double xScreenPos {};      // x position: Screen
+   double yScreenPos {};      // y position: Screen
 
-   double hdg{};              // symbol heading (degrees)
-   bool hdgValid{};           // Heading valid flag
-   Graphic* phdg{};           // Object named 'hdg' to handle heading rotation
-   base::Degrees* hdgAng{};   // Value sent to the heading 'hdg' object
+   double hdg {};             // symbol heading (degrees)
+   bool hdgValid {};          // Heading valid flag
+   Graphic* phdg {};          // Object named 'hdg' to handle heading rotation
+   base::Degrees* hdgAng {};  // Value sent to the heading 'hdg' object
 };
 
 inline int SymbolLoader::getMaxSymbols() const { return MAX_SYMBOLS; }
@@ -278,9 +277,9 @@ inline bool SymbolLoader::setInterconnect(const bool flg) { interconnect = flg; 
 
 inline SlSymbol* SymbolLoader::getSymbol(const int idx)
 {
-   SlSymbol* p{};
+   SlSymbol* p = nullptr;
    if (idx >= 1 && idx <= MAX_SYMBOLS) {
-      const int i{idx - 1};
+      const int i = (idx - 1);
       if (symbols[i] != nullptr) p = symbols[i];
    }
    return p;
@@ -305,7 +304,7 @@ inline bool SlSymbol::isPositionScreen() const           { return scrnFlg; }
 
 inline int SlSymbol::getType() const                     { return type; }
 inline const char* SlSymbol::getId() const               { return id; }
-inline base::IObject* SlSymbol::getValue() const         { return value; }
+inline base::Object* SlSymbol::getValue() const          { return value; }
 inline base::Pair* SlSymbol::getSymbolPair() const       { return pntr; }
 
 inline double SlSymbol::getXPosition() const             { return xPos; }

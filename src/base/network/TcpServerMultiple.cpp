@@ -26,12 +26,11 @@
     static const int SOCKET_ERROR{-1};
 #endif
 
-#include "mixr/base/network/ITcpHandler.hpp"
 #include "mixr/base/network/TcpServerMultiple.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
 
 #include <cstdio>
@@ -46,7 +45,7 @@ BEGIN_SLOTTABLE(TcpServerMultiple)
 END_SLOTTABLE(TcpServerMultiple)
 
 BEGIN_SLOT_MAP(TcpServerMultiple)
-    ON_SLOT(1, setSlotBacklog, Integer)
+    ON_SLOT(1, setSlotBacklog, Number)
 END_SLOT_MAP()
 
 EMPTY_DELETEDATA(TcpServerMultiple)
@@ -125,7 +124,7 @@ bool TcpServerMultiple::listenForConnections()
 //------------------------------------------------------------------------------
 // listenForConnections() -- puts the socket into listen mode
 //------------------------------------------------------------------------------
-ITcpHandler* TcpServerMultiple::acceptConnection()
+TcpHandler* TcpServerMultiple::acceptConnection()
 {
    struct sockaddr_in clientAddr;
 
@@ -139,9 +138,9 @@ ITcpHandler* TcpServerMultiple::acceptConnection()
    // Since INVALID_SOCKET is defined as -1 for POSIX, ::accept will return
    // INVALID_SOCKET as the error condition (see MSDN help and POSIX man pages
    // for more information).
-   ITcpHandler* newHandler{};
+   TcpHandler* newHandler{};
    if (newSocket != INVALID_SOCKET) {
-      newHandler = new ITcpHandler(newSocket);
+      newHandler = new TcpHandler(newSocket);
 
       // Set blocked or no-wait
       if (noWait) newHandler->setNoWait();
@@ -163,9 +162,13 @@ bool TcpServerMultiple::setBacklog(const unsigned int value)
 //------------------------------------------------------------------------------
 // Slot functions
 //------------------------------------------------------------------------------
-bool TcpServerMultiple::setSlotBacklog(const Integer* const x)
+bool TcpServerMultiple::setSlotBacklog(const Number* const msg)
 {
-   return setBacklog(x->asInt());
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setBacklog(msg->getInt());
+   }
+   return ok;
 }
 
 }

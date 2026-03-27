@@ -1,16 +1,15 @@
 
 #include "mixr/base/ubf/Arbiter.hpp"
-#include "mixr/base/ubf/IAction.hpp"
+#include "mixr/base/ubf/AbstractAction.hpp"
 
-#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace base {
 namespace ubf {
 
-IMPLEMENT_SUBCLASS(Arbiter, "Arbiter")
+IMPLEMENT_SUBCLASS(Arbiter, "UbfArbiter")
 EMPTY_COPYDATA(Arbiter)
 
 BEGIN_SLOTTABLE(Arbiter)
@@ -18,7 +17,7 @@ BEGIN_SLOTTABLE(Arbiter)
 END_SLOTTABLE(Arbiter)
 
 BEGIN_SLOT_MAP(Arbiter)
-   ON_SLOT(1, setSlotBehaviors, base::IPairStream)
+   ON_SLOT(1, setSlotBehaviors, base::PairStream)
 END_SLOT_MAP()
 
 Arbiter::Arbiter()
@@ -36,18 +35,18 @@ void Arbiter::deleteData()
 //------------------------------------------------------------------------------
 // genAction() - generate an action
 //------------------------------------------------------------------------------
-IAction* Arbiter::genAction(const IState* const state, const double dt)
+AbstractAction* Arbiter::genAction(const AbstractState* const state, const double dt)
 {
    // create list for action set
-   const auto actionSet{new base::List()};
+   const auto actionSet = new base::List();
 
    // fill out list of recommended actions by behaviors
-   base::IList::Item* item{behaviors->getFirstItem()};
+   base::List::Item* item{behaviors->getFirstItem()};
    while (item != nullptr) {
       // get a behavior
-      const auto behavior{static_cast<IBehavior*>(item->getValue())};
+      const auto behavior = static_cast<AbstractBehavior*>(item->getValue());
       // generate action, we have reference
-      IAction* action{behavior->genAction(state, dt)};
+      AbstractAction* action{behavior->genAction(state, dt)};
       if (action != nullptr) {
          // add to action set
          actionSet->addTail(action);
@@ -60,7 +59,7 @@ IAction* Arbiter::genAction(const IState* const state, const double dt)
 
    // given the set of recommended actions, the arbiter
    // decides what action to take
-   IAction* complexAction{genComplexAction(actionSet)};
+   AbstractAction* complexAction{genComplexAction(actionSet)};
 
    // done with action set
    actionSet->unref();
@@ -73,17 +72,17 @@ IAction* Arbiter::genAction(const IState* const state, const double dt)
 //------------------------------------------------------------------------------
 // Default: select the action with the highest vote
 //------------------------------------------------------------------------------
-IAction* Arbiter::genComplexAction(base::IList* const actionSet)
+AbstractAction* Arbiter::genComplexAction(base::List* const actionSet)
 {
-   IAction* complexAction{};
+   AbstractAction* complexAction{};
    int maxVote{};
 
    // process entire action set
-   base::IList::Item* item{actionSet->getFirstItem()};
+   base::List::Item* item{actionSet->getFirstItem()};
    while (item != nullptr) {
 
       // Is this action's vote higher than the previous?
-      const auto action = static_cast<IAction*>(item->getValue());
+      const auto action = static_cast<AbstractAction*>(item->getValue());
       if (maxVote==0 || action->getVote() > maxVote) {
 
          // Yes ...
@@ -112,7 +111,7 @@ IAction* Arbiter::genComplexAction(base::IList* const actionSet)
 //------------------------------------------------------------------------------
 // addBehavior() - add a new behavior
 //------------------------------------------------------------------------------
-void Arbiter::addBehavior(IBehavior* const x)
+void Arbiter::addBehavior(AbstractBehavior* const x)
 {
    behaviors->addTail(x);
    x->container(this);
@@ -122,20 +121,20 @@ void Arbiter::addBehavior(IBehavior* const x)
 // Slot functions
 //------------------------------------------------------------------------------
 
-bool Arbiter::setSlotBehaviors(base::IPairStream* const x)
+bool Arbiter::setSlotBehaviors(base::PairStream* const x)
 {
    bool ok{true};
 
    // First, make sure they are all behaviors
    {
-      base::IList::Item* item{x->getFirstItem()};
+      base::List::Item* item{x->getFirstItem()};
       while (item != nullptr && ok) {
-         const auto pair{static_cast<base::Pair*>(item->getValue())};
+         const auto pair = static_cast<base::Pair*>(item->getValue());
          item = item->getNext();
-         const auto b{dynamic_cast<IBehavior*>(pair->object())};
+         const auto b = dynamic_cast<AbstractBehavior*>( pair->object() );
          if (b == nullptr) {
             // Item is NOT a behavior
-            std::cerr << "setSlotBehaviors: slot: " << (*pair).slot() << " is NOT of a Behavior type!" << std::endl;
+            std::cerr << "setSlotBehaviors: slot: " << *pair->slot() << " is NOT of a Behavior type!" << std::endl;
             ok = false;
          }
       }
@@ -143,11 +142,11 @@ bool Arbiter::setSlotBehaviors(base::IPairStream* const x)
 
    // next, add behaviors to our list
    if (ok) {
-      base::IList::Item* item{x->getFirstItem()};
+      base::List::Item* item{x->getFirstItem()};
       while (item != nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          item = item->getNext();
-         const auto b = static_cast<IBehavior*>(pair->object());
+         const auto b = static_cast<AbstractBehavior*>(pair->object());
          addBehavior(b);
       }
    }

@@ -1,6 +1,6 @@
 
 #include "mixr/graphics/ColorGradient.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
 
 namespace mixr {
@@ -13,17 +13,17 @@ BEGIN_SLOTTABLE(ColorGradient)
 END_SLOTTABLE(ColorGradient)
 
 BEGIN_SLOT_MAP(ColorGradient)
-    ON_SLOT(1, setSlotColors, base::IPairStream)
+    ON_SLOT(1, setSlotColors, base::PairStream)
 END_SLOT_MAP()
 
 ColorGradient::ColorGradient()
 {
    STANDARD_CONSTRUCTOR()
    // default gives us no colors, but just makes us black
-   color[IColor::RED] = 0;
-   color[IColor::GREEN] = 0;
-   color[IColor::BLUE] = 0;
-   color[IColor::ALPHA] = getDefaultAlpha();
+   color[Color::RED] = 0;
+   color[Color::GREEN] = 0;
+   color[Color::BLUE] = 0;
+   color[Color::ALPHA] = getDefaultAlpha();
 }
 
 void ColorGradient::copyData(const ColorGradient& org, const bool)
@@ -41,29 +41,31 @@ void ColorGradient::deleteData()
     }
 }
 
-base::IColor* ColorGradient::getColorByIdx(const int idx)
-{
-    base::IColor* fCol{};
-
-    if (myColors != nullptr) {
-        base::Pair* pair = myColors->getPosition(idx);
-        if (pair != nullptr) {
-            fCol = dynamic_cast<base::IColor*>(pair->object());
-        }
-    }
-    return fCol;
-}
-
 // set our slot colors via a pairstream
-bool ColorGradient::setSlotColors(base::IPairStream* const x)
+bool ColorGradient::setSlotColors(base::PairStream* const newStream)
 {
     if (myColors != nullptr) {
         myColors->unref();
         myColors = nullptr;
     }
-    myColors = x;
-    myColors->ref();
+    if (newStream != nullptr) {
+        myColors = newStream;
+        myColors->ref();
+    }
     return true;
+}
+
+base::Color* ColorGradient::getColorByIdx(const int idx)
+{
+    base::Color* fCol = nullptr;
+
+    if (myColors != nullptr) {
+        base::Pair* pair = myColors->getPosition(idx);
+        if (pair != nullptr) {
+            fCol = dynamic_cast<base::Color*>(pair->object());
+        }
+    }
+    return fCol;
 }
 
 }

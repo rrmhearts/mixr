@@ -13,8 +13,7 @@ Tank::Tank()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericTank");
-    setType_old(&generic);
-    setType("GenericTank");
+    setType(&generic);
 }
 
 }

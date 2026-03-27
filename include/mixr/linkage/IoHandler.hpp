@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_IoHandler_HPP__
-#define __mixr_linkage_IoHandler_HPP__
+#ifndef __mixr_linkage_IoHandler_H__
+#define __mixr_linkage_IoHandler_H__
 
-#include "mixr/base/concepts/linkage/IIoHandler.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoHandler.hpp"
 
 #include "mixr/base/safe_ptr.hpp"
 
 namespace mixr {
-namespace base { class IPairStream; class IFrequency; class INumber; class IIoData; }
+namespace base { class PairStream; class Frequency; class Number; class AbstractIoData; }
 namespace linkage {
 class IoPeriodicThread;
 
@@ -47,14 +47,14 @@ class IoPeriodicThread;
 //    ioData      <IoData>       ! Combined input/output data (default: none)
 //    inputData   <IoData>       ! Individual input data (default: none)
 //    outputData  <IoData>       ! Individual output data (default: none)
-//    devices     <IPairStream>  ! List of I/O devices (AbstractIoDevice objects) (default: none)
+//    devices     <PairStream>   ! List of I/O devices (AbstractIoDevice objects) (default: none)
 //    rate        <Frequency>    ! Optional thread's update rate (default: 50hz)
 //    priority    <Number>       ! Optional thread's priority: lowest(0.0) to highest(1.0)  (default: 0.5 )
 //
 //------------------------------------------------------------------------------
-class IoHandler : public base::IIoHandler
+class IoHandler : public base::AbstractIoHandler
 {
-   DECLARE_SUBCLASS(IoHandler, base::IIoHandler)
+   DECLARE_SUBCLASS(IoHandler, base::AbstractIoHandler)
 
 public:
    IoHandler();
@@ -71,15 +71,15 @@ protected:
 
 private:
    // return state of asynchronous periodic i/o processing
-   bool async() override                                      { return periodicThread != nullptr; }
+   bool async() override                                             { return periodicThread != nullptr; }
 
    // return input data buffer implementation
-   base::IIoData* getInputDataImpl() override                 { return inData; }
-   const base::IIoData* getInputDataImpl() const override     { return inData; }
+   base::AbstractIoData* getInputDataImpl() override                 { return inData; }
+   const base::AbstractIoData* getInputDataImpl() const override     { return inData; }
 
    // return output data buffer implementation
-   base::IIoData* getOutputDataImpl() override                { return outData; }
-   const base::IIoData* getOutputDataImpl() const override    { return outData; }
+   base::AbstractIoData* getOutputDataImpl() override                { return outData; }
+   const base::AbstractIoData* getOutputDataImpl() const override    { return outData; }
 
    // create thread(s) to process i/o asynchronous
    void startAsyncProcessingImpl() override;
@@ -89,9 +89,9 @@ private:
    double getRate() const         { return rate; }      // Thread rate (hz)
 
    // data i/o
-   base::safe_ptr<base::IIoData> inData;                // "input" data received from the hardware
-   base::safe_ptr<base::IIoData> outData;               // "output" data sent to the hardware
-   base::safe_ptr<base::IPairStream> devices;           // Device list
+   base::safe_ptr<base::AbstractIoData> inData;         // "input" data received from the hardware
+   base::safe_ptr<base::AbstractIoData> outData;        // "output" data sent to the hardware
+   base::safe_ptr<base::PairStream> devices;            // Device list
 
    double rate {50};                                    // Thread Rate (hz)
    double pri {0.5};                                    // Priority of the thread (0->lowest, 1->highest)
@@ -99,12 +99,12 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotIoData(base::IIoData* const);
-   bool setSlotInputData(base::IIoData* const);
-   bool setSlotOutputData(base::IIoData* const);
-   bool setSlotDevices(base::IPairStream* const);
-   bool setSlotRate(const base::IFrequency* const);
-   bool setSlotPriority(const base::INumber* const);
+   bool setSlotIoData(base::AbstractIoData* const);
+   bool setSlotInputData(base::AbstractIoData* const);
+   bool setSlotOutputData(base::AbstractIoData* const);
+   bool setSlotDevices(base::PairStream* const);
+   bool setSlotRate(const base::Frequency* const);
+   bool setSlotPriority(const base::Number* const);
 };
 
 }

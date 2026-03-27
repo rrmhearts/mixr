@@ -1,20 +1,20 @@
 
-#ifndef __mixr_models_common_Message_HPP__
-#define __mixr_models_common_Message_HPP__
+#ifndef __mixr_models_Message_H__
+#define __mixr_models_Message_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
-namespace base { class IList; class String; }
+namespace base { class List; class String; }
 namespace models {
 
 //------------------------------------------------------------------------------
 // Class: Message
 // Description: Base message class
 //----------------------------------------------------------------------------------
-class Message : public base::IObject
+class Message : public base::Object
 {
-   DECLARE_SUBCLASS(Message, base::IObject)
+   DECLARE_SUBCLASS(Message, base::Object)
 
 public:
    //left as enum for future use
@@ -24,7 +24,7 @@ public:
    Message();
 
    const base::String* getSenderName() const;  // Name of the message sender
-   const base::IList* getDestNames() const;    // List of destination name String
+   const base::List* getDestNames() const;     // List of destination name String
 
    double getTimeStamp() const;     // time at which this message was sent (if on receive end)
    double getLifeSpan() const;      // length of time in seconds which this message is valid
@@ -51,14 +51,14 @@ private:
    void initData();
 
    base::String* senderName {};    // name of sending player
-   base::IList* destNames {};      // player names to whome this message is intended for
+   base::List* destNames {};       // player names to whome this message is intended for
    double timeStamp {};            // time at which this message was sent
    double lifeSpan {5.0};          // seconds
    AckCodes ack {ACK};             // ack code
 };
 
 inline const base::String* Message::getSenderName() const               { return senderName;    }
-inline const base::IList* Message::getDestNames() const                 { return destNames;     }
+inline const base::List* Message::getDestNames() const                  { return destNames;     }
 inline double Message::getTimeStamp() const                             { return timeStamp;     }
 inline double Message::getLifeSpan() const                              { return lifeSpan;      }
 inline Message::AckCodes Message::getAckCode() const                    { return ack;           }

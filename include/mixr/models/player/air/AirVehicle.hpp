@@ -1,21 +1,22 @@
 
-#ifndef __mixr_models_AirVehicle_HPP__
-#define __mixr_models_AirVehicle_HPP__
+#ifndef __mixr_models_AirVehicle_H__
+#define __mixr_models_AirVehicle_H__
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 namespace mixr {
-namespace base { class Identifier; }
 namespace models {
-class IAeroDynamics;
+class AerodynamicsModel;
 
 //------------------------------------------------------------------------------
 // Class: AirVehicle
 //
 // Factory name: AirVehicle
-//
 // Slots:
-//  initGearPos <Identifier>    ! Initial gear position {up or down} (default: down)
+//  initGearPos     ! Initial gear position (default: up),
+//                  !   <base::String>: "up" or "down"
+//                  !   <base::Number>: zero(0) for up, non-zero for down
+//
 //
 // Description: Generic Air Vehicles
 //
@@ -59,9 +60,9 @@ class IAeroDynamics;
 //          Sets the commanded wing sweep angle (radians; zero for none)
 //
 //------------------------------------------------------------------------------
-class AirVehicle : public IPlayer
+class AirVehicle : public Player
 {
-    DECLARE_SUBCLASS(AirVehicle, IPlayer)
+    DECLARE_SUBCLASS(AirVehicle, Player)
 
 public:
     AirVehicle();
@@ -140,18 +141,19 @@ public:
     void reset() override;
 
 protected:
-   IAeroDynamics* getDynamics();
-   const IAeroDynamics* getDynamics() const;
+   AerodynamicsModel* getAerodynamicsModel();
+   const AerodynamicsModel* getAerodynamicsModel() const;
 
 private:
-   double initGearPos {1.0};       // initial gear position
+   double initGearPos {};          // initial gear position
    double gearPos {100.0};         // Percent Gear position (0 -> up; 100 -> down)
    double wpnBayDoorPos {100.0};   // Percent Weapon bay door position (0 -> closed; 100 -> open)
    double wingSweep {};            // Wing sweep angle (radians; zero for no wing sweep)
 
 private:
    // slot table helper methods
-   bool setSlotInitGearPos(const base::Identifier* const);
+   bool setSlotInitGearPos(const base::String* const);
+   bool setSlotInitGearPos(const base::Number* const);
 };
 
 }

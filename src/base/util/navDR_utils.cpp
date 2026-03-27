@@ -17,7 +17,7 @@ namespace navDR {
 //==============================================================================
 bool deadReckoning(
          const double dT,               // IN: time increment (secs)
-         const DeadReckoning drCode,    // IN: dead reckoning code
+         const unsigned int drNum,      // IN: dead reckoning code
          const Vec3d& p0,               // IN: Position vector @ T=0 (meters) (ECEF)
          const Vec3d& v0,               // IN: Velocity vector @ T=0 (m/sec)  (ECEF or Body based on 'drNum')
          const Vec3d& a0,               // IN: Acceleration vector @ T=0 ((m/sec)/sec) (ECEF or Body based on 'drNum')
@@ -38,19 +38,19 @@ bool deadReckoning(
    Vec4d newP{p};
    Vec4d newRPY{rpy};
 
-   switch (drCode) {
+   switch (drNum) {
 
       //--------------------------------------------------------------
       // DRM = STATIC -- No dead reckoning 
       //--------------------------------------------------------------
-      case DeadReckoning::STATIC_DRM:  {
+      case STATIC_DRM:  {
          break;
       }
       
       //--------------------------------------------------------------
       // DRM = FPW -- World, No rotation, 1st order linear 
       //--------------------------------------------------------------
-      case DeadReckoning::FPW_DRM:  {
+      case FPW_DRM:  {
          // get new world position
          newP = p + v*dT;                       // new P
          break;
@@ -59,7 +59,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = RPW -- World, 1st order rotation, 1st order linear 
       //--------------------------------------------------------------
-      case DeadReckoning::RPW_DRM:  {
+      case RPW_DRM:  {
          // get new world position
          newP = p + v*dT;                       // new P
 
@@ -75,7 +75,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = RVW -- World, 1st order rotation, 2nd order linear
       //--------------------------------------------------------------
-      case DeadReckoning::RVW_DRM:  {
+      case RVW_DRM:  {
          // get new world position
          newP = p + v*dT + a*dT*dT*0.5;        // new P
 
@@ -91,7 +91,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = FVW -- World, No rotation, 2nd order linear
       //--------------------------------------------------------------
-      case DeadReckoning::FVW_DRM:  {
+      case FVW_DRM:  {
          // get new world position
          newP = p + v*dT + a*dT*dT*0.5;        // new P
          break;
@@ -100,7 +100,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = FPB -- Body, No rotation, 1st order linear
       //--------------------------------------------------------------
-      case DeadReckoning::FPB_DRM:  {
+      case FPB_DRM:  {
          // get new world position
          Matrixd R1,InvR0;
          getR1Matrix(dT, av, &R1);
@@ -112,7 +112,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = RPB -- Body, 1st order rotation, 1st order linear
       //--------------------------------------------------------------
-      case DeadReckoning::RPB_DRM:  {
+      case RPB_DRM:  {
          // get new world position
          Matrixd R1,InvR0;
          getR1Matrix(dT, av, &R1);
@@ -131,7 +131,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = RVB -- Body, 1st order rotation, 2nd order linear 
       //--------------------------------------------------------------
-      case DeadReckoning::RVB_DRM:  {
+      case RVB_DRM:  {
          // get new world position
          Matrixd R1,R2,InvR0;
          getR1Matrix(dT, av, &R1);
@@ -151,7 +151,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = FVB -- Body, No rotation, 2nd order linear 
       //--------------------------------------------------------------
-      case DeadReckoning::FVB_DRM:  {
+      case FVB_DRM:  {
          // get new world position
          Matrixd R1,R2,InvR0;
          getR1Matrix(dT, av, &R1);
@@ -164,7 +164,7 @@ bool deadReckoning(
       //--------------------------------------------------------------
       // DRM = User defined or something else
       //--------------------------------------------------------------
-      case DeadReckoning::OTHER_DRM:
+      case OTHER_DRM:
       default: {
          break;
       }

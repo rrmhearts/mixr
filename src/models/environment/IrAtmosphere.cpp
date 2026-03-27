@@ -1,14 +1,14 @@
 
 #include "mixr/models/environment/IrAtmosphere.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/IrSensor.hpp"
-#include "mixr/models/system/IGimbal.hpp"
+#include "mixr/models/system/Gimbal.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
 
-#include "mixr/base/IList.hpp"
-#include "mixr/base/relations/Table1.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/functors/Table1.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
@@ -30,8 +30,8 @@ END_SLOTTABLE(IrAtmosphere)
 BEGIN_SLOT_MAP(IrAtmosphere)
    ON_SLOT(1, setSlotWaveBands,            base::Table1)
    ON_SLOT(2, setSlotTransmissivityTable1, base::Table1)
-   ON_SLOT(3, setSlotSkyRadiance,          base::INumber)
-   ON_SLOT(4, setSlotEarthRadiance,        base::INumber)
+   ON_SLOT(3, setSlotSkyRadiance,          base::Number)
+   ON_SLOT(4, setSlotEarthRadiance,        base::Number)
 END_SLOT_MAP()
 
 IrAtmosphere::IrAtmosphere()
@@ -77,11 +77,11 @@ bool IrAtmosphere::setSlotTransmissivityTable1(const base::Table1* const tbl)
 //------------------------------------------------------------------------------
 // setSlotSkyRadiance() -- sky radiance
 //------------------------------------------------------------------------------
-bool IrAtmosphere::setSlotSkyRadiance(mixr::base::INumber* const num)
+bool IrAtmosphere::setSlotSkyRadiance(mixr::base::Number* const num)
 {
     bool ok{};
     if (num != nullptr) {
-        skyRadiance = num->asDouble();
+        skyRadiance = num->getReal();
         ok = true;
     }
     return ok;
@@ -90,11 +90,11 @@ bool IrAtmosphere::setSlotSkyRadiance(mixr::base::INumber* const num)
 //------------------------------------------------------------------------------
 // setSlotEarthRadiance() -- set background radiance for ground
 //------------------------------------------------------------------------------
-bool IrAtmosphere::setSlotEarthRadiance(mixr::base::INumber* const num)
+bool IrAtmosphere::setSlotEarthRadiance(mixr::base::Number* const num)
 {
     bool ok{};
     if (num != nullptr) {
-        earthRadiance = num->asDouble();
+        earthRadiance = num->getReal();
         ok = true;
     }
     return ok;
@@ -102,10 +102,10 @@ bool IrAtmosphere::setSlotEarthRadiance(mixr::base::INumber* const num)
 
 // Transmissivity table should have same wavebands defined as for waveBandTable.
 // Values in the table are coefficients of absorption
-double IrAtmosphere::getTransmissivity(const int i, const double range) const
+double IrAtmosphere::getTransmissivity(const unsigned int i, const double range) const
 {
     double trans{1.0};
-    if (transmissivityTable1 != nullptr && i < static_cast<int>(transmissivityTable1->tableSize())) {
+    if (transmissivityTable1 != nullptr && i < transmissivityTable1->tableSize()) {
         const double* transmissivities{transmissivityTable1->getDataTable()};
         trans = transmissivities[i];
         trans = std::exp(trans * -0.001 * range);
@@ -161,16 +161,16 @@ bool IrAtmosphere::calculateAtmosphereContribution(IrQueryMsg* const msg, double
             // compute Geodetic orientation angles
             base::Vec3d angles;
             base::nav::computeEulerAngles(mm, &angles);
-            currentViewAngle = angles[IPlayer::IPITCH];
+            currentViewAngle = angles[Player::IPITCH];
         }
 
         // FAB determine angle to horizon, positive angles are down
         {
-            double hDist{1000000.0 * base::length::NM2M};  // Distance to horizon (m) (default: really far away)
+            double hDist{1000000.0 * base::distance::NM2M};  // Distance to horizon (m) (default: really far away)
             double hTanAng{};
 
             // earth radius in meters
-            const double er{base::nav::ERAD60 * base::length::NM2M};
+            const double er{base::nav::ERAD60 * base::distance::NM2M};
 
             // distance from the center of the earth
             const double distEC{msg->getOwnship()->getAltitudeM() + er};
@@ -205,7 +205,7 @@ bool IrAtmosphere::calculateAtmosphereContribution(IrQueryMsg* const msg, double
         }
     }
 
-    for (int i=0; i<getNumWaveBands(); i++) {
+    for (unsigned int i=0; i<getNumWaveBands(); i++) {
         const double lowerBandBound{centerWavelengths[i] - (widths[i] / 2.0)};
         const double upperBandBound{lowerBandBound + widths[i]};
 

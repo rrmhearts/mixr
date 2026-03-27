@@ -1,13 +1,13 @@
 
-#ifndef __mixr_linkage_MockDevice_HPP__
-#define __mixr_linkage_MockDevice_HPP__
+#ifndef __mixr_linkage_MockDevice_H__
+#define __mixr_linkage_MockDevice_H__
 
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
 #include "mixr/base/safe_ptr.hpp"
 
 namespace mixr {
-namespace base { class IPairStream; class IIoData; }
+namespace base { class PairStream; class AbstractIoData; }
 namespace linkage {
 
 //------------------------------------------------------------------------------
@@ -21,11 +21,11 @@ namespace linkage {
 // Factory name: MockIoDevice
 //
 // Slots:
-//    generators <IPairStream>   : A list of generators
+//    generators <PairStream>   : A list of generators
 //------------------------------------------------------------------------------
-class MockDevice final: public base::IIoDevice
+class MockDevice final: public base::AbstractIoDevice
 {
-    DECLARE_SUBCLASS(MockDevice, base::IIoDevice)
+    DECLARE_SUBCLASS(MockDevice, base::AbstractIoDevice)
 
 public:
    MockDevice();
@@ -52,15 +52,15 @@ public:
 
 private:
    // mock device executes all generators to create values to store in input data buffer
-   void processInputsImpl(const double dt, base::IIoData* const inData) final;
+   void processInputsImpl(const double dt, base::AbstractIoData* const inData) final;
    // mock device looks like a null device, it has no output
-   void processOutputsImpl(const double dt, const base::IIoData* const outData) final       { }
+   void processOutputsImpl(const double dt, const base::AbstractIoData* const outData) final       { }
 
-   base::safe_ptr<base::IPairStream> generators;   // list of adapters used to generate values
+   base::safe_ptr<base::PairStream> generators;   // list of adapters used to generate values
 
 private:
    // slot table helper methods
-   bool setSlotGenerators(base::IPairStream* const);
+   bool setSlotGenerators(base::PairStream* const);
 };
 
 }

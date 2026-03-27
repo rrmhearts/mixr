@@ -1,27 +1,24 @@
 
-#ifndef __mixr_graphics_Cursor_HPP__
-#define __mixr_graphics_Cursor_HPP__
+#ifndef __mixr_graphics_Cursor_H__
+#define __mixr_graphics_Cursor_H__
 
-#include "mixr/graphics/readouts/IReadout.hpp"
+#include "mixr/graphics/readouts/AbstractField.hpp"
 
 namespace mixr {
 namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: Cursor
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: Cursor
-// Slots: none
 //------------------------------------------------------------------------------
-class Cursor final: public IReadout
+class Cursor : public AbstractField
 {
-    DECLARE_SUBCLASS(Cursor, IReadout)
+    DECLARE_SUBCLASS(Cursor, AbstractField)
 
 public:
    Cursor();
-   void updateData(const double dt = 0.0) final;
+   void updateData(const double dt = 0.0) override;
 };
 
 }

@@ -1,10 +1,10 @@
 
 #include "mixr/models/SimAgent.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IStation.hpp"
+#include "mixr/simulation/Station.hpp"
 
 #include "mixr/base/Pair.hpp"
 #include "mixr/base/String.hpp"
@@ -42,10 +42,10 @@ void SimAgent::deleteData()
    }
 }
 
-simulation::IStation* SimAgent::getStation()
+simulation::Station* SimAgent::getStation()
 {
    if ( myStation==nullptr ) {
-      const auto s = dynamic_cast<simulation::IStation*>(findContainerByType(typeid(simulation::IStation)));
+      const auto s = dynamic_cast<simulation::Station*>(findContainerByType(typeid(simulation::Station)));
       if (s != nullptr) {
          myStation = s;
       }
@@ -56,7 +56,7 @@ simulation::IStation* SimAgent::getStation()
 WorldModel* SimAgent::getWorldModel()
 {
    WorldModel* sim{};
-   simulation::IStation* s{getStation()};
+   simulation::Station* s{getStation()};
    if (s != nullptr) {
       sim = dynamic_cast<WorldModel*>(s->getSimulation());
    }
@@ -73,14 +73,14 @@ void SimAgent::initActor()
       } else {
          WorldModel* sim{getWorldModel()};
          if ( sim != nullptr ) {
-            base::IComponent* player{sim->findPlayerByName(actorPlayerName->c_str())};
+            base::Component* player{sim->findPlayerByName(actorPlayerName->getString())};
             if (actorComponentName == nullptr) {
                // no player component specified, so the player is the actor
                setActor(player);
             } else if (player != nullptr) {
-               base::Pair* pair{player->findByName(actorComponentName->c_str())};
+               base::Pair* pair{player->findByName(actorComponentName->getString())};
                if (pair != nullptr) {
-                  setActor(dynamic_cast<base::IComponent*>( pair->object() ));
+                  setActor(dynamic_cast<base::Component*>( pair->object() ));
                }
             }
          }
@@ -104,7 +104,7 @@ bool SimAgent::setSlotActorPlayerName(const base::String* const x)
 {
    bool ok{};
    if ( x != nullptr ) {
-      setActorPlayerByName(x->c_str());
+      setActorPlayerByName(x->getString());
       ok = true;
    }
    return ok;
@@ -114,7 +114,7 @@ bool SimAgent::setSlotActorComponentName(const base::String* const x)
 {
    bool ok{};
    if ( x != nullptr ) {
-      setActorComponentByName(x->c_str());
+      setActorComponentByName(x->getString());
       ok = true;
    }
    return ok;

@@ -1,12 +1,12 @@
 
-#ifndef __mixr_instruments_SolenoidSwitch_HPP__
-#define __mixr_instruments_SolenoidSwitch_HPP__
+#ifndef __mixr_instruments_SolenoidSwitch_H__
+#define __mixr_instruments_SolenoidSwitch_H__
 
 #include "mixr/graphics/Graphic.hpp"
 #include <array>
 
 namespace mixr {
-namespace base { class Boolean; class INumber; class IPairStream; class UpTimer; }
+namespace base { class UpTimer; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -46,11 +46,11 @@ public:
     base::UpTimer* getTimer() { return timer; }
 
     void updateData(const double dt = 0.0) override;
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // event function
-    bool selectLatch(const base::Boolean* const);
+    bool selectLatch(const base::Number* const x);
 
 private:
     std::array<bool, NUM_BUTTONS> picked {};     // tells our buttons if they are currently picked or not
@@ -65,8 +65,8 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotHoldTimer(const base::INumber* const);
-    bool setSlotEventMap(const base::IPairStream* const);
+    bool setSlotHoldTimer(const base::Number* const);
+    bool setSlotEventMap(const base::PairStream* const);
 };
 
 }

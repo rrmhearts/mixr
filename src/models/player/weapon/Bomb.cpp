@@ -1,9 +1,7 @@
 
 #include "mixr/models/player/weapon/Bomb.hpp"
 
-#include "mixr/base/Identifier.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <cmath>
 
@@ -25,12 +23,12 @@ END_SLOTTABLE(Bomb)
 
 BEGIN_SLOT_MAP(Bomb)
    ON_SLOT( 1, setSlotArmingOption, base::Identifier)
-   ON_SLOT( 2, setSlotNoseFuze,     base::Boolean)
-   ON_SLOT( 3, setSlotMidFuze,      base::Boolean)
-   ON_SLOT( 4, setSlotTailFuze,     base::Boolean)
-   ON_SLOT( 5, setSlotFuzeAltitude, base::INumber)
-   ON_SLOT( 6, setSlotFuzeTime,     base::INumber)
-   ON_SLOT( 7, setSlotDragIndex,    base::INumber)
+   ON_SLOT( 2, setSlotNoseFuze,     base::Number)
+   ON_SLOT( 3, setSlotMidFuze,      base::Number)
+   ON_SLOT( 4, setSlotTailFuze,     base::Number)
+   ON_SLOT( 5, setSlotFuzeAltitude, base::Number)
+   ON_SLOT( 6, setSlotFuzeTime,     base::Number)
+   ON_SLOT( 7, setSlotDragIndex,    base::Number)
 END_SLOT_MAP()
 
 // Weapon data for general bomb
@@ -43,8 +41,7 @@ Bomb::Bomb()
    STANDARD_CONSTRUCTOR()
 
    static base::String generic("Bomb");
-   setType_old(&generic);
-   setType("Bomb");
+   setType(&generic);
 
    initData();
 }
@@ -267,7 +264,7 @@ void Bomb::weaponGuidance(const double)
 void Bomb::weaponDynamics(const double dt)
 {
    // Useful constant
-   static const double g{base::ETHG * base::length::FT2M};      // Acceleration of Gravity (m/s/s)
+   static const double g{base::ETHG * base::distance::FT2M};      // Acceleration of Gravity (m/s/s)
 
    // ---
    // Compute & Set acceleration vector (earth)
@@ -351,7 +348,7 @@ bool Bomb::weaponImpactPrediction(
    )
 {
    // Useful constant
-   static const double g{base::ETHG * base::length::FT2M};      // Acceleration of Gravity (m/s/s)
+   static const double g{base::ETHG * base::distance::FT2M};      // Acceleration of Gravity (m/s/s)
 
    // Make sure we have all of our pointers
    if (initPos == nullptr || initVel == nullptr || finalPos == nullptr || tof == nullptr) return false;
@@ -413,44 +410,44 @@ bool Bomb::setSlotArmingOption(base::Identifier* const p)
 }
 
 // noseFuze: Nose fuze flag
-bool Bomb::setSlotNoseFuze(base::Boolean* const p)
+bool Bomb::setSlotNoseFuze(base::Number* const p)
 {
-    setNoseFuze( p->asBool() );
+    setNoseFuze( p->getBoolean() );
     return true;
 }
 
 // midFuze: Middle fuze flag
-bool Bomb::setSlotMidFuze(base::Boolean* const p)
+bool Bomb::setSlotMidFuze(base::Number* const p)
 {
-    setMidFuze( p->asBool() );
+    setMidFuze( p->getBoolean() );
     return true;
 }
 
 // tailFuze: Tail fuze flag
-bool Bomb::setSlotTailFuze(base::Boolean* const p)
+bool Bomb::setSlotTailFuze(base::Number* const p)
 {
-    setTailFuze( p->asBool() );
+    setTailFuze( p->getBoolean() );
     return true;
 }
 
 // fuzeAltitude:  Fuze arming Altitude
-bool Bomb::setSlotFuzeAltitude(base::INumber* const p)
+bool Bomb::setSlotFuzeAltitude(base::Number* const p)
 {
-    setFuzeAltitude( p->asDouble() );
+    setFuzeAltitude( p->getFloat() );
     return true;
 }
 
 // fuzeTime:  Fuze Arming Time
-bool Bomb::setSlotFuzeTime(base::INumber* const p)
+bool Bomb::setSlotFuzeTime(base::Number* const p)
 {
-    setFuzeTime( p->asDouble() );
+    setFuzeTime( p->getFloat() );
     return true;
 }
 
 // dragIndex: drag index used by default dynamics
-bool Bomb::setSlotDragIndex(base::INumber* const p)
+bool Bomb::setSlotDragIndex(base::Number* const p)
 {
-    setDragIndex( p->asDouble() );
+    setDragIndex( p->getReal() );
     return true;
 }
 

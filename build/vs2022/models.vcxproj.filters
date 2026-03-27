@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models">
+      <UniqueIdentifier>{8B87F875-F7E8-D583-8056-1C36ECB60C43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\dynamics">
+      <UniqueIdentifier>{7221C487-5EDC-B333-0794-2C7EF32DFEC3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\environment">
+      <UniqueIdentifier>{2F4F1DA2-9B32-2CE2-A435-5A1E1098F232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\navigation">
+      <UniqueIdentifier>{0A656B81-F68A-35E8-DFD0-BAB3CB955AB4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player">
+      <UniqueIdentifier>{67C2053D-53D2-B10D-BC8B-162CA8BAA0A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player\air">
+      <UniqueIdentifier>{520E7AF5-3E34-445C-277A-C927133F6928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player\effect">
+      <UniqueIdentifier>{63C42DCC-CF32-834B-181C-3E4B84C978E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player\ground">
+      <UniqueIdentifier>{8570B6D1-F1DE-0B51-3AC8-C650A67501ED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player\space">
+      <UniqueIdentifier>{623F803D-4E90-6B7F-77F4-594163A4FEE8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\player\weapon">
+      <UniqueIdentifier>{A0F915F6-0C68-6B75-5551-2675C1FE6011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\sensor">
+      <UniqueIdentifier>{74998D43-60A9-3914-C962-9E32B59128AD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\system">
+      <UniqueIdentifier>{5F44FA44-4B54-A615-B40D-0B34A03C95AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\models\system\trackmanager">
+      <UniqueIdentifier>{3E56D23F-AAE5-932A-B3E1-74421FF0CE36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models">
+      <UniqueIdentifier>{605C916B-4C14-D3B8-B51B-AC14A1F26DA9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\dynamics">
+      <UniqueIdentifier>{E7355665-5397-3373-DC04-7A2548656A32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\environment">
+      <UniqueIdentifier>{840BA779-7005-D0CB-5972-66DC450B3638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\navigation">
+      <UniqueIdentifier>{BF6AD40B-2BD7-8F06-F4CA-276460F6B16E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player">
+      <UniqueIdentifier>{9C35AE0E-084C-ACA4-51C3-37C6BD187D2C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player\air">
+      <UniqueIdentifier>{0714E37F-7380-9E7A-3C74-36D8A89FC0E2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player\effect">
+      <UniqueIdentifier>{F8E917AD-E40E-672D-0D5A-4CBDF9DD654B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player\ground">
+      <UniqueIdentifier>{1A96A0B2-06BB-EF32-2F06-D5C21B8AEE50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player\space">
+      <UniqueIdentifier>{57864106-C3BD-899D-CCC7-EDC0387EB096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\player\weapon">
+      <UniqueIdentifier>{351F00D7-2144-4F57-4A8F-34E736134E75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\sensor">
+      <UniqueIdentifier>{A90C3615-1523-34AB-5E9A-BFCCCAEF0433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\system">
+      <UniqueIdentifier>{94B7A216-00CE-A0AC-4945-2CCEB59A7134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\models\system\trackmanager">
+      <UniqueIdentifier>{9397A9A0-7FBD-7307-6803-F9D254C898D3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\models\Actions.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\AircraftIrSignature.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Designator.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Emission.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Image.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\IrQueryMsg.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\IrShapes.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\IrSignature.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Message.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\MultiActorAgent.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\SensorMsg.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Signatures.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\SimAgent.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\SynchronizedState.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\TargetData.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Tdb.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\Track.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\WorldModel.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\AerodynamicsModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\DynamicsModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\JSBSimModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\LaeroModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\RacModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\dynamics\SpaceDynamicsModel.hpp">
+      <Filter>include\mixr\models\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\environment\AbstractAtmosphere.hpp">
+      <Filter>include\mixr\models\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\environment\IrAtmosphere.hpp">
+      <Filter>include\mixr\models\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\environment\IrAtmosphere1.hpp">
+      <Filter>include\mixr\models\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\factory.hpp">
+      <Filter>include\mixr\models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Bullseye.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Gps.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Ins.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Navigation.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Route.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\navigation\Steerpoint.hpp">
+      <Filter>include\mixr\models\navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\Building.hpp">
+      <Filter>include\mixr\models\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\LifeForm.hpp">
+      <Filter>include\mixr\models\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\Player.hpp">
+      <Filter>include\mixr\models\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\Player.inl">
+      <Filter>include\mixr\models\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\Ship.hpp">
+      <Filter>include\mixr\models\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\air\AirVehicle.hpp">
+      <Filter>include\mixr\models\player\air</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\air\Aircraft.hpp">
+      <Filter>include\mixr\models\player\air</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\air\Helicopter.hpp">
+      <Filter>include\mixr\models\player\air</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\air\UnmannedAirVehicle.hpp">
+      <Filter>include\mixr\models\player\air</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Chaff.hpp">
+      <Filter>include\mixr\models\player\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Decoy.hpp">
+      <Filter>include\mixr\models\player\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Effect.hpp">
+      <Filter>include\mixr\models\player\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\effect\Flare.hpp">
+      <Filter>include\mixr\models\player\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\ArmoredVehicle.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\Artillery.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStation.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStationRadar.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundStationUav.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\GroundVehicle.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\SamVehicle.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\Tank.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\ground\WheeledVehicle.hpp">
+      <Filter>include\mixr\models\player\ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\space\BoosterSpaceVehicle.hpp">
+      <Filter>include\mixr\models\player\space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\space\MannedSpaceVehicle.hpp">
+      <Filter>include\mixr\models\player\space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\space\SpaceVehicle.hpp">
+      <Filter>include\mixr\models\player\space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\space\UnmannedSpaceVehicle.hpp">
+      <Filter>include\mixr\models\player\space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Aam.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\AbstractWeapon.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Agm.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Bomb.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Bullet.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Missile.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\player\weapon\Sam.hpp">
+      <Filter>include\mixr\models\player\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\sensor\Gmti.hpp">
+      <Filter>include\mixr\models\sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\sensor\Stt.hpp">
+      <Filter>include\mixr\models\sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\sensor\Tws.hpp">
+      <Filter>include\mixr\models\sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Antenna.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Autopilot.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\AvionicsPod.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\CollisionDetect.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\CommRadio.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Datalink.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\ExternalStore.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\FuelTank.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Gimbal.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Guns.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Iff.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\IrSeeker.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\IrSensor.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\IrSystem.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Jammer.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\MergingIrSensor.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\OnboardComputer.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Pilot.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Radar.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Radio.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\RfSensor.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\RfSystem.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Rwr.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Sar.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\ScanGimbal.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\SensorMgr.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\SimpleStoresMgr.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\StabilizingGimbal.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\Stores.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\StoresMgr.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\System.hpp">
+      <Filter>include\mixr\models\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirAngleOnlyTrkMgr.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirAngleOnlyTrkMgrPT.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AirTrkMgr.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\AngleOnlyTrackManager.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\GmtiTrkMgr.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\RwrTrkMgr.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\models\system\trackmanager\TrackManager.hpp">
+      <Filter>include\mixr\models\system\trackmanager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\models\Actions.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\AircraftIrSignature.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Designator.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Emission.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Image.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\IrQueryMsg.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\IrShapes.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\IrSignature.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Message.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\MultiActorAgent.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\SensorMsg.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Signatures.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\SimAgent.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\SynchronizedState.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\TargetData.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Tdb.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\Track.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\WorldModel.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\AerodynamicsModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\DynamicsModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\JSBSimModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\LaeroModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\RacModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\dynamics\SpaceDynamicsModel.cpp">
+      <Filter>src\models\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\environment\AbstractAtmosphere.cpp">
+      <Filter>src\models\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\environment\IrAtmosphere.cpp">
+      <Filter>src\models\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\environment\IrAtmosphere1.cpp">
+      <Filter>src\models\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\factory.cpp">
+      <Filter>src\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Bullseye.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Gps.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Ins.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Navigation.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Route.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\navigation\Steerpoint.cpp">
+      <Filter>src\models\navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\Building.cpp">
+      <Filter>src\models\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\LifeForm.cpp">
+      <Filter>src\models\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\Player.cpp">
+      <Filter>src\models\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\Ship.cpp">
+      <Filter>src\models\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\air\AirVehicle.cpp">
+      <Filter>src\models\player\air</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\air\Aircraft.cpp">
+      <Filter>src\models\player\air</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\air\Helicopter.cpp">
+      <Filter>src\models\player\air</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\air\UnmannedAirVehicle.cpp">
+      <Filter>src\models\player\air</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\effect\Chaff.cpp">
+      <Filter>src\models\player\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\effect\Decoy.cpp">
+      <Filter>src\models\player\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\effect\Effect.cpp">
+      <Filter>src\models\player\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\effect\Flare.cpp">
+      <Filter>src\models\player\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\ArmoredVehicle.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\Artillery.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\GroundStation.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\GroundStationRadar.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\GroundStationUav.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\GroundVehicle.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\SamVehicle.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\Tank.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\ground\WheeledVehicle.cpp">
+      <Filter>src\models\player\ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\space\BoosterSpaceVehicle.cpp">
+      <Filter>src\models\player\space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\space\MannedSpaceVehicle.cpp">
+      <Filter>src\models\player\space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\space\SpaceVehicle.cpp">
+      <Filter>src\models\player\space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\space\UnmannedSpaceVehicle.cpp">
+      <Filter>src\models\player\space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Aam.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\AbstractWeapon.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Agm.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Bomb.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Bullet.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Missile.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\player\weapon\Sam.cpp">
+      <Filter>src\models\player\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\sensor\Gmti.cpp">
+      <Filter>src\models\sensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\sensor\Stt.cpp">
+      <Filter>src\models\sensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\sensor\Tws.cpp">
+      <Filter>src\models\sensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Antenna.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Autopilot.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\AvionicsPod.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\CollisionDetect.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\CommRadio.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Datalink.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\ExternalStore.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\FuelTank.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Gimbal.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Guns.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Iff.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\IrSeeker.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\IrSensor.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\IrSystem.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Jammer.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\MergingIrSensor.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\OnboardComputer.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Pilot.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Radar.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Radio.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\RfSensor.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\RfSystem.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Rwr.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Sar.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\ScanGimbal.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\SensorMgr.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\SimpleStoresMgr.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\StabilizingGimbal.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\Stores.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\StoresMgr.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\System.cpp">
+      <Filter>src\models\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirAngleOnlyTrkMgr.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirAngleOnlyTrkMgrPT.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\AirTrkMgr.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\AngleOnlyTrackManager.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\GmtiTrkMgr.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\RwrTrkMgr.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\models\system\trackmanager\TrackManager.cpp">
+      <Filter>src\models\system\trackmanager</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

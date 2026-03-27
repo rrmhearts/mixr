@@ -1,6 +1,6 @@
 
-#ifndef __mixr_graphics_Translator_HPP__
-#define __mixr_graphics_Translator_HPP__
+#ifndef __mixr_graphics_Translator_H__
+#define __mixr_graphics_Translator_H__
 
 #include "Graphic.hpp"
 
@@ -36,13 +36,13 @@ public:
     bool setZPos(const double);                    // Sets the Z position (world coord)
 
     void draw() override;
-    bool event(const int event, IObject* const obj = nullptr) override;
+    bool event(const int event, Object* const obj = nullptr) override;
 
 private:
     // event functions
-    bool onUpdateX(const base::INumber* const);
-    bool onUpdateY(const base::INumber* const);
-    bool onUpdateZ(const base::INumber* const);
+    bool onUpdateX(const base::Number* const);
+    bool onUpdateY(const base::Number* const);
+    bool onUpdateZ(const base::Number* const);
 
     double myXPos{};
     double myYPos{};

@@ -7,17 +7,16 @@
 #include "mixr/interop/dis/Nib.hpp"
 #include "mixr/interop/dis/Ntm.hpp"
 #include "mixr/interop/dis/pdu.hpp"
-#include "mixr/interop/dis/utils.hpp"
 
 #include "mixr/models/player/weapon/Missile.hpp"
-#include "mixr/models/system/IStoresMgr.hpp"
+#include "mixr/models/system/StoresMgr.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IStation.hpp"
+#include "mixr/simulation/Station.hpp"
 
-#include "mixr/base/Identifier.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/util/str_utils.hpp"
 
 namespace mixr {
@@ -41,7 +40,7 @@ void NetIO::processEntityStatePDU(const EntityStatePDU* const pdu)
     if (site == getSiteID() &&  app == getApplicationID()) return;
 
     // Search test (reject PDUs from players on our output list)
-    interop::INib* testNib {findDisNib(playerId, site, app, OUTPUT_NIB)};
+    interop::Nib* testNib {findDisNib(playerId, site, app, OUTPUT_NIB)};
     if (testNib != nullptr) return;
 
     // ---
@@ -69,10 +68,12 @@ void NetIO::processEntityStatePDU(const EntityStatePDU* const pdu)
                nib->setApplicationID(app);
                char cbuff[32] {};
                makeFederateName(cbuff, 32, site, app);
-               nib->setFederateName(cbuff);
+               const auto fname = new base::String(cbuff);
+               nib->setFederateName(fname);
+               fname->unref();
             }
 
-            nib->setDeadReckoning( interop::INib::DeadReckoning( pdu->deadReckoningAlgorithm ) );
+            nib->setDeadReckoning( interop::Nib::DeadReckoning( pdu->deadReckoningAlgorithm ) );
 
             nib->setEntityType(
                pdu->entityType.kind,
@@ -86,16 +87,16 @@ void NetIO::processEntityStatePDU(const EntityStatePDU* const pdu)
             // Side: When mapping Force ID to Player Side ...
             if (pdu->forceID == FRIENDLY_FORCE) {
                 // Friendly's are blue, ...
-                nib->setSide(models::IPlayer::BLUE);
+                nib->setSide(models::Player::BLUE);
             } else if (pdu->forceID == OPPOSING_FORCE) {
                 // opposing side is red, ...
-                nib->setSide(models::IPlayer::RED);
+                nib->setSide(models::Player::RED);
             } else if (pdu->forceID == NEUTRAL_FORCE) {
                 // Neutrals are white, ...
-                nib->setSide(models::IPlayer::WHITE);
+                nib->setSide(models::Player::WHITE);
             } else  {
                 // and everyone else is gray.
-                nib->setSide(models::IPlayer::GRAY);
+                nib->setSide(models::Player::GRAY);
             }
 
             addNib2InputList(nib);

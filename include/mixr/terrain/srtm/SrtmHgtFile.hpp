@@ -1,12 +1,13 @@
 
-#ifndef __mixr_terrain_SrtmHgtFile_HPP__
-#define __mixr_terrain_SrtmHgtFile_HPP__
+#ifndef __mixr_terrain_SrtmHgtFile_H__
+#define __mixr_terrain_SrtmHgtFile_H__
 
 #include "mixr/terrain/DataFile.hpp"
 
 #include <iostream>
 
 namespace mixr {
+namespace base { class Number; }
 namespace terrain {
 
 //------------------------------------------------------------------------------

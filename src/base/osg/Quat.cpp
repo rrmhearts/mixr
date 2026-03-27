@@ -15,7 +15,7 @@
 #include "mixr/base/osg/Matrixd"
 #include "mixr/base/osg/Matrixf"
 
-//#include <math.h>
+#include <math.h>
 
 /// Good introductions to Quaternions at:
 /// http://www.gamasutra.com/features/programming/19980703/quaternions_01.htm
@@ -49,10 +49,11 @@ void Quat::get(Matrixd& matrix) const
 /// (radians) around the axis (x,y,z)
 void Quat::makeRotate( value_type angle, value_type x, value_type y, value_type z )
 {
-    const value_type epsilon{0.0000001};
+    const value_type epsilon = 0.0000001;
 
-    value_type length{sqrt( x*x + y*y + z*z )};
-    if (length < epsilon) {
+    value_type length = sqrt( x*x + y*y + z*z );
+    if (length < epsilon)
+    {
         // ~zero length axis, so reset rotation to zero.
         *this = Quat();
         return;

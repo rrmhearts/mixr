@@ -11,8 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#ifndef __mixr_base_osg_Vec4d_HPP__
-#define __mixr_base_osg_Vec4d_HPP__
+#ifndef __mixr_base_osg_Vec4d_H__
+#define __mixr_base_osg_Vec4d_H__
 
 #include "mixr/base/osg/Vec3d"
 #include "mixr/base/osg/Vec4f"
@@ -36,7 +36,7 @@ class Vec4d
         /** Number of vector components. */
         enum { num_components = 4 };
         
-        value_type _v[4]{};
+        value_type _v[4];
 
         /** Constructor that sets all components of the vector to zero */
         Vec4d() { _v[0]=0.0; _v[1]=0.0; _v[2]=0.0; _v[3]=0.0; }

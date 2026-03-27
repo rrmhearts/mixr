@@ -1,11 +1,10 @@
 
-#ifndef __mixr_instruments_Button_HPP__
-#define __mixr_instruments_Button_HPP__
+#ifndef __mixr_instruments_Button_H__
+#define __mixr_instruments_Button_H__
 
 #include "mixr/graphics/Graphic.hpp"
 
 namespace mixr {
-namespace base { class INumber; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -32,14 +31,14 @@ public:
     // Cancel
     virtual bool onCancel();
 
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 private:
     int eventId {-1};        // holds our event number
 
 private:
     // slot table helper methods
-    bool setSlotEventId(const base::INumber* const);
+    bool setSlotEventId(const base::Number* const);
 };
 
 }

@@ -1,15 +1,36 @@
 
+#----------------------------------------------------------------------------------------
+# To build scanner:
+#
+# cd readouts
+# dos2unix reformat_scanner.l
+# flex -f -oReformatScanner.cpp reformat_scanner.l   // creates ReformatScanner.cpp
+#   (ReformatScanner.hpp already exists)
+#
+# search for "FlexLexer.h" in ReformatScanner.cpp - replace:
+#   #include <FlexLexer.h>
+# with
+#   #include "mixr/base/util/FlexLexer.h"
+#----------------------------------------------------------------------------------------
+
 include ../makedefs
 
 LIB = $(MIXR_LIB_DIR)/libmixr_graphics.a
 
 OBJS =  \
-	fonts/IFont.o \
+	fonts/AbstractFont.o \
+	fonts/AbstractFtglFont.o \
 	fonts/BitmapFont.o \
+	fonts/FtglBitmapFont.o \
+	fonts/FtglExtrdFont.o \
+	fonts/FtglHaloFont.o \
+	fonts/FtglOutlineFont.o \
+	fonts/FtglPixmapFont.o \
+	fonts/FtglPolygonFont.o \
+	fonts/FtglTextureFont.o \
 	fonts/StrokeFont.o \
-	readouts/IReadout.o \
+	readouts/AbstractField.o \
 	readouts/AsciiText.o \
-	readouts/BooleanText.o \
 	readouts/Cursor.o \
 	readouts/DirectionReadout.o \
 	readouts/HexReadout.o \
@@ -17,7 +38,6 @@ OBJS =  \
 	readouts/LongitudeReadout.o \
 	readouts/NumericReadout.o \
 	readouts/OctalReadout.o \
-	readouts/readout_utils.o \
 	readouts/ReformatScanner.o \
 	readouts/Rotary.o \
 	readouts/Rotary2.o \

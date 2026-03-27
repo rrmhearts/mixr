@@ -1,15 +1,15 @@
 
-#ifndef __mixr_graphics_Display_HPP__
-#define __mixr_graphics_Display_HPP__
+#ifndef __mixr_graphics_Display_H__
+#define __mixr_graphics_Display_H__
 
 #include "Page.hpp"
 
 #include <string>
 
 namespace mixr {
-namespace base { class Boolean; class IColor; class Identifier; class Integer; class INumber; class IPairStream; class String; }
+namespace base { class Color; class PairStream; class Identifier; class String; }
 namespace graphics {
-class IFont;
+class AbstractFont;
 class Image;
 class Texture;
 class Material;
@@ -17,9 +17,9 @@ class Material;
 //------------------------------------------------------------------------------
 // Class: Display
 //
-// Description: Display (MFD, CDU, HUD, etc) Manager;
-//              provides a OpenGL canvas and manages the textures, fonts,
-//              materials, colors, and other attributes use by the display.
+// Description:  Display (MFD, CDU, HUD, etc) Manager;
+//               provides a OpenGL canvas and manages the textures, fonts,
+//               materials, colors, and other attributes use by the display.
 //
 // Notes:
 //
@@ -41,37 +41,37 @@ class Material;
 // Factory name: Display
 // Slots:
 //  name             <String>       ! Display name (default: " ")
-//  colorTable       <IPairStream>  ! Color table (default: 0)
+//  colorTable       <PairStream>   ! Color table (default: 0)
 //  normalFont       <AbstractFont> ! Normal font; Font (default: 0)
 //  normalFont       <Identifier>   ! Normal font; base::Identifier (default: 0)
-//  left             <INumber>      ! Left ortho bound (default: -0.5)
-//  right            <INumber>      ! Right ortho bound (default: 640.5)
-//  bottom           <INumber>      ! Bottom ortho bound (default: -0.5)
-//  top              <INumber>      ! Top ortho bound (default: 480.5)
-//  near             <INumber>      ! Near ortho bound (default: -1)
-//  far              <INumber>      ! Far ortho bound (default: 1)
-//  vpX              <Integer>      ! Viewport x origin (default: -1)
-//  vpY              <Integer>      ! Viewport y origin (default: -1)
-//  vpWidth          <Integer>      ! Viewport width (default: 300)
-//  vpHeight         <Integer>      ! Viewport height (default: 300)
-//  displays         <IPairStream>  ! Sub-displays, stream (default: 0)
+//  left             <Number>       ! Left ortho bound (default: -0.5)
+//  right            <Number>       ! Right ortho bound (default: 640.5)
+//  bottom           <Number>       ! Bottom ortho bound (default: -0.5)
+//  top              <Number>       ! Top ortho bound (default: 480.5)
+//  near             <Number>       ! Near ortho bound (default: -1)
+//  far              <Number>       ! Far ortho bound (default: 1)
+//  vpX              <Number>       ! Viewport x origin (default: -1)
+//  vpY              <Number>       ! Viewport y origin (default: -1)
+//  vpWidth          <Number>       ! Viewport width (default: 300)
+//  vpHeight         <Number>       ! Viewport height (default: 300)
+//  displays         <PairStream>   ! Sub-displays, stream (default: 0)
 //  displays         <Display>      ! Sub-displays, single (default: 0)
-//  stdLineWidth     <INumber>      ! Standard Line width (default: 1)
-//  textures         <IPairStream>  ! Texture, stream (default: 0)
+//  stdLineWidth     <Number>       ! Standard Line width (default: 1)
+//  textures         <PairStream>   ! Texture, stream (default: 0)
 //  textures         <Texture>      ! Texture, single (default: 0)
 //  clearColor       <Color>        ! Clear (Background) color (default: 0.0f,0.0f,0.0f,0.0f)
-//  leftBracketChar  <Integer>      ! Left bracket character (default: '[')
+//  leftBracketChar  <Number>       ! Left bracket character (default: '[')
 //  leftBracketChar  <String>       ! Left bracket character (default: '[')
-//  rightBracketChar <Integer>      ! Right bracket character (default: ']')
+//  rightBracketChar <Number>       ! Right bracket character (default: ']')
 //  rightBracketChar <String>       ! Right bracket character (default: ']')
-//  reverseVideoBrackets  <INumber> ! Reverse video brackets flag:
+//  reverseVideoBrackets  <Number>  ! Reverse video brackets flag:
 //                                  ! If true, brackets are drawn with reversed video font,
 //                                  ! otherwise follow the field's drawing mode.  (default: false)
-//  fonts             <IPairStream> ! List of fonts (default: none)
-//  clearDepth        <INumber>     ! clear depth; range: [ 0, 1 ] or negative for no depth buffer (default: -1.0)
+//  fonts             <PairStream>  ! List of fonts (default: none)
+//  clearDepth        <number>      ! clear depth; range: [ 0, 1 ] or negative for no depth buffer (default: -1.0)
 //  orientation       <String>      ! display orientation { normal, cw90, ccw90, inverted } (default: normal)
 //  materials         <Material>    ! List of material objects (default: 0)
-//  antiAliasing      <Boolean>     ! Turn on/off anti-aliasing (default: true)
+//  antiAliasing      <Number>      ! Turn on/off anti-aliasing (default: true)
 //
 // Exceptions:
 //      ExpInvalidDisplayPtr
@@ -113,13 +113,13 @@ public:
    virtual void reshapeIt(int w, int h);           // Resizes the displays's width and height
 
    const base::Vec4d& getClearColor() const;       // Returns the clear (background) color as a Vec4 vector (RGBA).
-   void setClearColor(const base::IColor& ccolor); // Set the display's clear (background) color
+   void setClearColor(const base::Color& ccolor);  // Set the display's clear (background) color
 
    GLclampd getClearDepth() const;                 // Returns the value that the depth buffer is cleared to.
    void setClearDepth(const GLclampd depth);       //  Sets the value that the depth buffer is cleared to (see notes)
 
    virtual void loadTextures();                    // Load the texture table
-   const base::IPairStream* getTextures() const;   // Returns a ptr to the list of textures
+   const base::PairStream* getTextures() const;    // Returns a ptr to the list of textures
 
    // ---
    // Global (display) graphic parameters
@@ -135,14 +135,14 @@ public:
    void setColor(const base::Vec4d& color);           // Sets the current color by an RGBA vector.
    void setColor(const char* cname1);                 // Sets the current color by name (color table)
 
-   base::IColor* getColor(const char* const name);    // Returns a color by name from the color table
-   base::IColor* getColor(const int idx);             // Returns a color by index from the color table
+   base::Color* getColor(const char* const name);     // Returns a color by name from the color table
+   base::Color* getColor(const int idx);              // Returns a color by index from the color table
 
-   bool setColorTable(base::IPairStream* const list); // Sets the color table to this list of colors
-   void addColor(base::IColor*);                      // Adds a color to the color table
+   bool setColorTable(base::PairStream* const list);  // Sets the color table to this list of colors
+   void addColor(base::Color*);                       // Adds a color to the color table
    void addColor(base::Pair*);                        // Adds a color to the color table
 
-   base::IPairStream* defaultColors();                // Generates a list of default colors; returns a pre-ref'ed() ptr
+   base::PairStream* defaultColors();                 // Generates a list of default colors; returns a pre-ref'ed() ptr
                                                       //  -- black, red, green, yellow, blue, magenta, cyan, and white.
 
    // Returns the Material object by material table name
@@ -210,6 +210,7 @@ public:
    // Clears the temporary sub-viewport
    virtual void clearSubscreen();
 
+
    // ---
    // Mouse, keyboard and event functions
    // ---
@@ -241,45 +242,46 @@ public:
    // Event handlers for when the mouse exits our display
    virtual void onMouseExit();
 
+
    // ---
    // Text and font functions
    // ---
 
-   IFont* getFont(const char* const name);                          // Returns a font by name.
-   const IFont* getFont(const char* const name) const;              // const version
+   AbstractFont* getFont(const char* const name);                          // Returns a font by name.
+   const AbstractFont* getFont(const char* const name) const;              // const version
 
-   IFont* getFont(const base::Identifier* const name);              // Returns a font by name (using an Identifier)
-   const IFont* getFont(const base::Identifier* const name) const;  // const version
+   AbstractFont* getFont(const base::Identifier* const name);              // Returns a font by name (using an Identifier)
+   const AbstractFont* getFont(const base::Identifier* const name) const;  // const version
 
-   IFont* getFont(const int index);                 // Returns a font by its font table index.
-   const IFont* getFont(const int index) const;     // const version
+   AbstractFont* getFont(const int index);                 // Returns a font by its font table index.
+   const AbstractFont* getFont(const int index) const;     // const version
 
-   IFont* getNormalFont();                          // Returns the normal text font
-   const IFont* getNormalFont() const;              // const version
+   AbstractFont* getNormalFont();                          // Returns the normal text font
+   const AbstractFont* getNormalFont() const;              // const version
 
    bool isDefaultFont() const;                  // Are we using the default font?
    bool isFontReversed() const;                 // Is the reversed video font selected?
    bool isFontUnderlined() const;               // Is the underline font selected?
 
    // Sets the normal text font
-   bool setNormalFont(IFont* const);
+   bool setNormalFont(AbstractFont* const);
    bool setNormalFont(const char* const fontName);
    bool setNormalFont(const base::Identifier* const fontName);
 
    // Sets the current font) based on the font mode flags.
-   void selectFont(const bool reversed, const bool underlined, IFont* newFont = nullptr);
+   void selectFont(const bool reversed, const bool underlined, AbstractFont* newFont = nullptr);
 
-   IFont* getCurrentFont();                              // Returns a pointer to the current font
-   void setFont(IFont*);                                 // Sets the current font.
+   AbstractFont* getCurrentFont();                      // Returns a pointer to the current font
+   void setFont(AbstractFont*);                         // Sets the current font.
 
-   const base::IColor* getNormColor() const;             // Returns the normal text color
-   void setNormColor(const base::IColor* const nc);      // Sets the normal text color
+   const base::Color* getNormColor() const;             // Returns the normal text color
+   void setNormColor(const base::Color* const nc);      // Sets the normal text color
 
-   const base::IColor* getHighlightColor() const;        // Returns the highlighted text color
-   void setHighlightColor(const base::IColor* const nc); // Sets the highlighted text color
+   const base::Color* getHighlightColor() const;        // Returns the highlighted text color
+   void setHighlightColor(const base::Color* const nc); // Sets the highlighted text color
 
-   void drawLeftBracket(const int ln, const int cp);     // Draws the left bracket at ln, cp
-   void drawRightBracket(const int ln, const int cp);    // Draws the right bracket at ln, cp
+   void drawLeftBracket(const int ln, const int cp);    // Draws the left bracket at ln, cp
+   void drawRightBracket(const int ln, const int cp);   // Draws the right bracket at ln, cp
 
    char getLeftBracketCharacter() const;        // Returns the left bracket character
    bool setLeftBracketCharacter(const char c);  // Sets the left bracket character
@@ -319,8 +321,8 @@ protected:
    // Configures the display's GL modes
    virtual void configure();
 
-   base::IPairStream* getTextures();
-   base::IPairStream* subDisplays();
+   base::PairStream* getTextures();
+   base::PairStream* subDisplays();
    void setSubdisplayFlag(const bool);
 
 private:
@@ -331,12 +333,12 @@ private:
     bool processMaterials();
 
     std::string name;                               // Display name
-    base::IPairStream* subdisplays {};              // Sub-displays
+    base::PairStream* subdisplays {};               // Sub-displays
 
     Graphic* focusPtr {};                           // Input focus
-    base::IPairStream* materials {};                // list of material objects
+    base::PairStream* materials {};                 // list of material objects
 
-    base::IPairStream* textures {};                 // List of textures
+    base::PairStream* textures {};                  // List of textures
 
     GLsizei  vpX {-1}, vpY {-1};                    // viewport size
     GLsizei  vpWidth {300}, vpHeight {300};
@@ -355,16 +357,16 @@ private:
     Orientation orientation {Orientation::NORMAL};  // Display orientation
 
     GLclampd clearDepth {-1.0};           // Display clear depth
-    base::IPairStream* colorTable {};     // Color table
+    base::PairStream* colorTable {};      // Color table
     base::Vec4d color;                    // Current Color
     base::Vec4d clearColor;               // Clear (background) color
     base::Identifier* colorName {};       // Current color name
-    const base::IColor* normColor {};     // Color of a normal text field
-    const base::IColor* hiColor {};       // Color of a high lighted text field.
+    const base::Color* normColor {};      // Color of a normal text field
+    const base::Color* hiColor {};        // Color of a high lighted text field.
 
-    base::IPairStream* fontList {};       // List of fonts
-    IFont* currentFont {};                // Current font
-    IFont* normalFont {};                 // Normal font
+    base::PairStream* fontList {};        // List of fonts
+    AbstractFont* currentFont {};         // Current font
+    AbstractFont* normalFont {};          // Normal font
     base::Identifier* normalFontName {};  // Normal font name
     bool reversedFlg {};                  // Current font setting
     bool underlinedFlg {};                // Current font setting
@@ -378,36 +380,36 @@ private:
 private:
     // slot table helper methods
     bool setSlotName(const base::String* const);
-    bool setSlotNormalFont(IFont* const);
-    bool setSlotNormalFont(const base::Identifier* const);
-    bool setSlotColorTable(base::IPairStream* const list);
-    bool setSlotLeftOrthoBound(const base::INumber* const);
-    bool setSlotRightOrthoBound(const base::INumber* const);
-    bool setSlotBottomOrthoBound(const base::INumber* const);
-    bool setSlotTopOrthoBound(const base::INumber* const);
-    bool setSlotNearOrthoBound(const base::INumber* const);
-    bool setSlotFarOrthoBound(const base::INumber* const);
-    bool setSlotViewportXOrigin(const base::Integer* const);
-    bool setSlotViewportYOrigin(const base::Integer* const);
-    bool setSlotViewportWidth(const base::Integer* const);
-    bool setSlotViewportHeight(const base::Integer* const);
-    bool setSlotSubdisplayStream(base::IPairStream* const);
+    bool setSlotNormalFont(AbstractFont* const);
+    bool setSlotNormalFont(const base::Identifier* const fontName);
+    bool setSlotColorTable(base::PairStream* const list);
+    bool setSlotLeftOrthoBound(const base::Number* const);
+    bool setSlotRightOrthoBound(const base::Number* const);
+    bool setSlotBottomOrthoBound(const base::Number* const);
+    bool setSlotTopOrthoBound(const base::Number* const);
+    bool setSlotNearOrthoBound(const base::Number* const);
+    bool setSlotFarOrthoBound(const base::Number* const);
+    bool setSlotViewportXOrigin(const base::Number* const);
+    bool setSlotViewportYOrigin(const base::Number* const);
+    bool setSlotViewportWidth(const base::Number* const);
+    bool setSlotViewportHeight(const base::Number* const);
+    bool setSlotSubdisplayStream(base::PairStream* const);
     bool setSlotSubdisplaySingle(Display* const);
-    bool setSlotStdLineWidth(const base::INumber* const);
-    bool setSlotTexturesStream(base::IPairStream* const);
+    bool setSlotStdLineWidth(const base::Number* const);
+    bool setSlotTexturesStream(base::PairStream* const);
     bool setSlotTexturesSingle(Texture* const);
-    bool setSlotClearColor(const base::IColor* const);
-    bool setSlotLeftBracketCharacter(const base::Integer* const);
+    bool setSlotClearColor(const base::Color* const);
+    bool setSlotLeftBracketCharacter(const base::Number* const);
     bool setSlotLeftBracketCharacter(const base::String* const);
-    bool setSlotRightBracketCharacter(const base::Integer* const);
+    bool setSlotRightBracketCharacter(const base::Number* const);
     bool setSlotRightBracketCharacter(const base::String* const);
-    bool setSlotReverseVideoBrackets(const base::Boolean* const);
-    bool setFontList(base::IPairStream* const);
-    bool setSlotClearDepth(const base::INumber* const);
-    bool setSlotDisplayOrientation(const base::Identifier* const);
-    bool setSlotMaterials(base::IPairStream* const);
+    bool setSlotReverseVideoBrackets(const base::Number* const);
+    bool setFontList(base::PairStream* const);
+    bool setSlotClearDepth(const base::Number* const);
+    bool setSlotDisplayOrientation(const base::String* const);
+    bool setSlotMaterials(base::PairStream* const);
     bool setSlotMaterials(Material* const);
-    bool setSlotAntialias(const base::Boolean* const);
+    bool setSlotAntialias(const base::Number* const);
 };
 
 inline const char* Display::getName() const                            { return name.c_str(); }
@@ -428,12 +430,12 @@ inline const base::Vec4d& Display::getCurrentColor() const       { return color;
 
 inline void Display::getMouse(int* const x, int* const y) const  { *x = mx; *y = my; }
 
-inline IFont* Display::getCurrentFont()                          { return currentFont; }
+inline AbstractFont* Display::getCurrentFont()                   { return currentFont; }
 inline bool Display::isFontReversed() const                      { return reversedFlg; }
 inline bool Display::isFontUnderlined() const                    { return underlinedFlg; }
 inline bool Display::isDefaultFont() const                       { return currentFont == nullptr; }
-inline const base::IColor* Display::getNormColor() const         { return normColor; }
-inline const base::IColor* Display::getHighlightColor() const    { return hiColor; }
+inline const base::Color* Display::getNormColor() const          { return normColor; }
+inline const base::Color* Display::getHighlightColor() const     { return hiColor; }
 inline char Display::getLeftBracketCharacter() const             { return leftBracketChar; }
 inline bool Display::setLeftBracketCharacter(const char c)       { leftBracketChar = c; return true; }
 inline char Display::getRightBracketCharacter() const            { return rightBracketChar; }
@@ -441,10 +443,10 @@ inline bool Display::setRightBracketCharacter(const char c)      { rightBracketC
 inline bool Display::getReverseVideoBrackets() const             { return rvBrackets; }
 inline bool Display::setReverseVideoBrackets(const bool f)       { rvBrackets = f; return true; }
 
-inline base::IPairStream* Display::getTextures()                 { return textures; }
-inline const base::IPairStream* Display::getTextures() const     { return textures; }
+inline base::PairStream* Display::getTextures()                  { return textures; }
+inline const base::PairStream* Display::getTextures() const      { return textures; }
 
-inline base::IPairStream* Display::subDisplays()                 { return subdisplays; }
+inline base::PairStream* Display::subDisplays()                  { return subdisplays; }
 inline void Display::setSubdisplayFlag(const bool flg)           { subdisplayFlg = flg; }
 inline bool Display::isOkToSwap() const                          { return okToSwap; }
 inline void Display::setOkToSwap(const bool x)                   { okToSwap = x; }

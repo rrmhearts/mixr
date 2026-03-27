@@ -1,6 +1,8 @@
 
-#ifndef __mixr_instruments_IrisGLCompat_HPP__
-#define __mixr_instruments_IrisGLCompat_HPP__
+#ifndef __mixr_instruments_IrisGLCompat_H__
+#define __mixr_instruments_IrisGLCompat_H__
+
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -9,23 +11,25 @@ namespace instruments {
 // Class: IrisGLCompat
 // Description: IrisGL compatibility
 //------------------------------------------------------------------------------
-class IrisGLCompat
+class IrisGLCompat : public base::Object
 {
+    DECLARE_SUBCLASS(IrisGLCompat, base::Object)
+
 public:
-    IrisGLCompat() =default;
+    IrisGLCompat();
 
-    // functions for drawing
-    void arc(const float x, const float y, const float r, const float startAng, const float endAng);
-    void arcf(const float x, const float y, const float r, const float startAng, const float endAng);
-    void circ(const float x, const float y, const float r);
-    void circf(const float x, const float y, const float r);
-    void washerf(const float x, const float y, const float r1, const float r2);
-    void rect(const float x1, const float y1, const float x2, const float y2);
+    // functions for quick drawings.
+    void arc(float x, float y, float r, float startAng, float endAng);
+    void arcf(float x, float y, float r, float startAng, float endAng);
+    void circ(float x, float y, float r);
+    void circf(float x, float y, float r);
+    void washerf(float x, float y, float r1, float r2);
+    void rect(float x1, float y1, float x2, float y2);
 
-    void rpmv2(const float x, const float y);
-    void rpdr2(const float x, const float y);
-    void rmv2(const float x, const float y);
-    void rdr2(const float x, const float y);
+    void rpmv2(float x, float y);
+    void rpdr2(float x, float y);
+    void rmv2(float x, float y);
+    void rdr2(float x, float y);
 
 private:
     float vertexX {};

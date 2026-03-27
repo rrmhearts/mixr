@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\dafif">
+      <UniqueIdentifier>{41834D96-2D67-0EEC-96C7-083F82CAF86D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dafif">
+      <UniqueIdentifier>{769104B5-E2FB-B82B-2B3A-6AD197E39680}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\dafif\Airport.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\AirportLoader.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Database.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Ils.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Magvar.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Navaid.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\NavaidLoader.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Record.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Runway.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\Waypoint.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\WaypointLoader.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\dafifc.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\dafif\factory.hpp">
+      <Filter>include\mixr\dafif</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\dafif\Airport.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\AirportLoader.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Database.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Ils.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Navaid.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\NavaidLoader.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Record.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Runway.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\Waypoint.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\WaypointLoader.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dafif\factory.cpp">
+      <Filter>src\dafif</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

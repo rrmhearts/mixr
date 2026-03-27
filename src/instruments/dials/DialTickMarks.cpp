@@ -1,8 +1,6 @@
 
 #include "mixr/instruments/dials/DialTickMarks.hpp"
-
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <iostream>
 
 namespace mixr {
@@ -17,8 +15,8 @@ BEGIN_SLOTTABLE(DialTickMarks)
 END_SLOTTABLE(DialTickMarks)
 
 BEGIN_SLOT_MAP(DialTickMarks)
-    ON_SLOT(1, setSlotLength,       base::INumber)
-    ON_SLOT(2, setSlotQuantity,     base::Integer)
+    ON_SLOT(1, setSlotLength,       base::Number)
+    ON_SLOT(2, setSlotQuantity,     base::Number)
     ON_SLOT(3, setSlotTickGraphic,  graphics::Graphic)
 END_SLOT_MAP()
 
@@ -51,12 +49,12 @@ void DialTickMarks::drawFunc()
     glGetFloatv(GL_CURRENT_COLOR, currentColor);
 
     // get our data from our baseclass (AnalogDial)
-    double sweepAngle{getSweepAngle()};
-    double startAngle{getStartAngle()};
-    double tRadius{getRadius()};
+    double sweepAngle = getSweepAngle();
+    double startAngle = getStartAngle();
+    double tRadius = getRadius();
 
     // figure our rotation angle per tick mark (deg)
-    double rotation{sweepAngle/quantity};
+    double rotation = sweepAngle/quantity;
 
     glPushMatrix();
         // rotate to our start angle
@@ -86,20 +84,20 @@ void DialTickMarks::drawFunc()
 //------------------------------------------------------------------------------
 // setSlotLength() -- sets our tick mark length
 //------------------------------------------------------------------------------
-bool DialTickMarks::setSlotLength(const base::INumber* const newLength)
+bool DialTickMarks::setSlotLength(const base::Number* const newLength)
 {
     bool ok = true;
-    if (newLength != nullptr) ok = setLength(newLength->asDouble());
+    if (newLength != nullptr) ok = setLength(newLength->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotQuantity() -- sets the number of tick marks
 //------------------------------------------------------------------------------
-bool DialTickMarks::setSlotQuantity(const base::Integer* const newQ)
+bool DialTickMarks::setSlotQuantity(const base::Number* const newQ)
 {
     bool ok = true;
-    if (newQ != nullptr) ok = setQuantity(newQ->asInt());
+    if (newQ != nullptr) ok = setQuantity(newQ->getInt());
     return ok;
 }
 

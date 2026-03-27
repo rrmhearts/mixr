@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_IrSeeker_HPP__
-#define __mixr_models_common_IrSeeker_HPP__
+#ifndef __mixr_models_IrSeeker_H__
+#define __mixr_models_IrSeeker_H__
 
-#include "mixr/models/system/IScanGimbal.hpp"
+#include "mixr/models/system/ScanGimbal.hpp"
 
 #include "mixr/models/Tdb.hpp"
 
@@ -26,9 +26,9 @@ class IrQueryMsg;
 //
 // Factory name: IrSeeker
 //------------------------------------------------------------------------------
-class IrSeeker : public IScanGimbal
+class IrSeeker : public ScanGimbal
 {
-   DECLARE_SUBCLASS(IrSeeker, IScanGimbal)
+   DECLARE_SUBCLASS(IrSeeker, ScanGimbal)
 
 public:
    IrSeeker();
@@ -45,7 +45,7 @@ public:
    virtual unsigned int processPlayersOfInterest(base::PairStream* const poi);
 #endif
 
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
    void reset() override;
 
 protected:

@@ -1,41 +1,46 @@
 
-#ifndef __mixr_graphics_AsciiText_HPP__
-#define __mixr_graphics_AsciiText_HPP__
+#ifndef __mixr_graphics_AsciiText_H__
+#define __mixr_graphics_AsciiText_H__
 
-#include "mixr/graphics/readouts/IReadout.hpp"
+#include "mixr/graphics/readouts/AbstractField.hpp"
 
 namespace mixr {
-namespace base { class IObject; class IList; class String; }
+namespace base { class Object; class List; class String; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: AsciiText
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: text
 // Slots:
 //    text   <String>     ! Text String (default: " ")
 //    text   <List>       ! Text List
+//
+// Public Member Functions:
+//      bool isValidInputPosition(int tc)
+//      Returns true if tc is a valid input position.
+//
+//      bool setTextString(String* stsobj)
+//      Returns true if the text string was set to stsobj.
+//
+//      bool setTextList(List* stlobj)
+//      Returns true if the text list was set to stlobj.
+//
 //------------------------------------------------------------------------------
-
-class AsciiText final: public IReadout
+class AsciiText : public AbstractField
 {
-    DECLARE_SUBCLASS(AsciiText, IReadout)
+    DECLARE_SUBCLASS(AsciiText, AbstractField)
 
 public:
-   AsciiText()                  { STANDARD_CONSTRUCTOR() }
+   AsciiText();
 
-   char filterInputEvent(const int event, const char) final;
-   // returns true if tc is a valid input position
-   bool isValidInputPosition(const int) final;
+   char filterInputEvent(const int event, const int tc) override;
+   bool isValidInputPosition(const int) override;
+   bool event(const int key, base::Object* const obj = nullptr) override;
 
-   bool event(const int key, base::IObject* const obj = nullptr) final;
-
-private:
-   // slot table helper methods
+public:
    bool setSlotTextString(const base::String* const);
-   bool setSlotTextList(const base::IList* const);
+   bool setSlotTextList(const base::List* const);
 };
 
 }

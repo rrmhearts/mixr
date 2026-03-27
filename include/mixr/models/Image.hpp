@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_Image_HPP__
-#define __mixr_models_common_Image_HPP__
+#ifndef __mixr_models_Image_H__
+#define __mixr_models_Image_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 namespace mixr {
 namespace models {
@@ -12,9 +12,9 @@ namespace models {
 // Factory name: SarImage
 // Description: SAR image structure
 //------------------------------------------------------------------------------
-class Image : public base::IObject
+class Image : public base::Object
 {
-    DECLARE_SUBCLASS(Image, base::IObject)
+    DECLARE_SUBCLASS(Image, base::Object)
 
 public:
     Image();

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_map_rpf_CadrgFile_HPP__
-#define __mixr_map_rpf_CadrgFile_HPP__
+#ifndef __mixr_map_rpf_CadrgFile_H__
+#define __mixr_map_rpf_CadrgFile_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 #include <array>
 
 namespace mixr {
@@ -50,9 +50,9 @@ class CadrgTocEntry;
 // file will never get loaded.
 //
 //------------------------------------------------------------------------------
-class CadrgFile : public base::IObject
+class CadrgFile : public base::Object
 {
-    DECLARE_SUBCLASS(CadrgFile, base::IObject)
+    DECLARE_SUBCLASS(CadrgFile, base::Object)
 
 public:
     CadrgFile();

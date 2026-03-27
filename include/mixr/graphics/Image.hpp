@@ -1,8 +1,8 @@
 
-#ifndef __mixr_graphics_Image_HPP__
-#define __mixr_graphics_Image_HPP__
+#ifndef __mixr_graphics_Image_H__
+#define __mixr_graphics_Image_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/base/util/platform_api.hpp"
 #include <GL/gl.h>
@@ -17,9 +17,9 @@ namespace graphics {
 // Class: Image
 // Description: Base class for images and textures
 //------------------------------------------------------------------------------
-class Image : public base::IObject
+class Image : public base::Object
 {
-   DECLARE_SUBCLASS(Image, base::IObject)
+   DECLARE_SUBCLASS(Image, base::Object)
 
 public:
    // Max length of file name or directory path

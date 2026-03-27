@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_StabilizingGimbal_HPP__
-#define __mixr_models_common_StabilizingGimbal_HPP__
+#ifndef __mixr_models_StabilizingGimbal_H__
+#define __mixr_models_StabilizingGimbal_H__
 
-#include "mixr/models/system/IGimbal.hpp"
+#include "mixr/models/system/Gimbal.hpp"
 
 namespace mixr {
 namespace models {
@@ -15,9 +15,9 @@ namespace models {
 //    stabilizingMode  <base::String>    ! Sets the type of stabilization we desire  (elevation, roll, horizon)
 //                                       ! (default: HORIZON)
 //------------------------------------------------------------------------------
-class StabilizingGimbal : public IGimbal
+class StabilizingGimbal : public Gimbal
 {
-    DECLARE_SUBCLASS(StabilizingGimbal, IGimbal)
+    DECLARE_SUBCLASS(StabilizingGimbal, Gimbal)
 
 public:
     enum StabilizingMode { ELEVATION, ROLL, HORIZON };

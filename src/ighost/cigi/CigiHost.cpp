@@ -8,27 +8,29 @@
 
 #include "mixr/ighost/cigi/Player2CigiMap.hpp"
 
+#include "mixr/models/navigation/Navigation.hpp"
 #include "mixr/models/player/air/AirVehicle.hpp"
 #include "mixr/models/player/effect/Decoy.hpp"
 #include "mixr/models/player/effect/Effect.hpp"
 #include "mixr/models/player/effect/Flare.hpp"
 #include "mixr/models/player/ground/GroundVehicle.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 #include "mixr/models/player/ground/SamVehicle.hpp"
 #include "mixr/models/player/weapon/Bomb.hpp"
 #include "mixr/models/player/weapon/Missile.hpp"
 #include "mixr/models/player/Building.hpp"
 #include "mixr/models/player/LifeForm.hpp"
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/player/Ship.hpp"
 #include "mixr/models/player/space/SpaceVehicle.hpp"
-#include "mixr/models/system/IStoresMgr.hpp"
+#include "mixr/models/system/StoresMgr.hpp"
 
 #include "mixr/base/Identifier.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/SlotTable.hpp"
 
 #include "cigicl/CigiEntityCtrlV3.h"
@@ -55,7 +57,6 @@
 #include <iostream>
 
 namespace mixr {
-namespace ighost {
 namespace cigi {
 
 IMPLEMENT_SUBCLASS(CigiHost, "CigiHost")
@@ -65,23 +66,23 @@ BEGIN_SLOTTABLE(CigiHost)
    "async",                // 2) True (non-zero) to run in CIGI async mode (default: false - CIGI sync)
    "hideOwnshipModel",     // 3) True to hide the ownship's model (default: true - ownship's model is not seen)
    "ownshipModel",         // 4) Ownship's model ID
-   "mslTrailModel",        // 5) "Missile Trail" effect model ID
-   "smokePlumeModel",      // 6) "Smoke Plume" effect model ID
-   "airExplosionModel",    // 7) "Air Explosion" effect model ID
-   "groundExplosionModel", // 8) "Ground Explosion" effect model ID
-   "shipWakeModel"         // 9) "Ship Wake" effect model ID
+   "mslTrailModel",        // 5) Missile Trail" effect model ID
+   "smokePlumeModel",      // 6) Smoke Plume" effect model ID
+   "airExplosionModel",    // 7) Air Explosion" effect model ID
+   "groundExplosionModel", // 8) Ground Explosion" effect model ID
+   "shipWakeModel",        // 9) Ship Wake" effect model ID
 END_SLOTTABLE(CigiHost)
 
 BEGIN_SLOT_MAP(CigiHost)
    ON_SLOT(1, setSlotHostSession,             HostSession)
    ON_SLOT(2, setSlotASyncMode,               base::Boolean)
-   ON_SLOT(3, setSlotHideOwnshipModel,        base::Boolean)
-   ON_SLOT(4, setSlotOwnshipModelId,          base::Integer)
-   ON_SLOT(5, setSlotMslTrailModelId,         base::Integer)
-   ON_SLOT(6, setSlotSmokePlumeModelId,       base::Integer)
-   ON_SLOT(7, setSlotAirExplosionModelId,     base::Integer)
-   ON_SLOT(8, setSlotGroundExplosionModelId,  base::Integer)
-   ON_SLOT(9, setSlotShipWakeModelId,         base::Integer)
+   ON_SLOT(3, setSlotHideOwnshipModel,        base::Number)
+   ON_SLOT(4, setSlotOwnshipModelId,          base::Number)
+   ON_SLOT(5, setSlotMslTrailModelId,         base::Number)
+   ON_SLOT(6, setSlotSmokePlumeModelId,       base::Number)
+   ON_SLOT(7, setSlotAirExplosionModelId,     base::Number)
+   ON_SLOT(8, setSlotGroundExplosionModelId,  base::Number)
+   ON_SLOT(9, setSlotShipWakeModelId,         base::Number)
 END_SLOT_MAP()
 
 //------------------------------------------------------------------------------
@@ -94,7 +95,7 @@ CigiHost::CigiHost()
 {
    STANDARD_CONSTRUCTOR()
 
-   for (int i{}; i < NUM_BUFFERS; i++) {
+   for (int i = 0; i < NUM_BUFFERS; i++) {
       ownshipEC[i] = new CigiEntityCtrlV3();
       ownshipCC[i] = new CigiCompCtrlV3();
    }
@@ -109,7 +110,7 @@ void CigiHost::copyData(const CigiHost& org, const bool cc)
    BaseClass::copyData(org);
 
    if (cc) {
-      for (int i{}; i < NUM_BUFFERS; i++) {
+      for (int i = 0; i < NUM_BUFFERS; i++) {
          ownshipEC[i] = new CigiEntityCtrlV3();
          ownshipCC[i] = new CigiCompCtrlV3();
       }
@@ -170,7 +171,7 @@ void CigiHost::deleteData()
       igThread = nullptr;
    }
 
-   for (int i{}; i < NUM_BUFFERS; i++) {
+   for (int i = 0; i < NUM_BUFFERS; i++) {
       if (ownshipEC[i] != nullptr) { delete ownshipEC[i]; ownshipEC[i] = nullptr; }
       if (ownshipCC[i] != nullptr) { delete ownshipCC[i]; ownshipCC[i] = nullptr; }
    }
@@ -323,16 +324,16 @@ bool CigiHost::updateOwnshipModel()
    // Ownship active and type air vehicle?
 //   bool active = false;
 //   if (getOwnship() != nullptr) {
-//      active = getOwnship()->isActive() || getOwnship()->isMode(simulation::IPlayer::PRE_RELEASE);
+//      active = getOwnship()->isActive() || getOwnship()->isMode(simulation::Player::PRE_RELEASE);
 //   }
 
-//   const simulation::IPlayer* av = getOwnship();
+//   const simulation::Player* av = getOwnship();
 
    // code above changed to this by DDH -- NOTE, this appears to be wrong, not AirVehicle!
    bool active{};
-   const auto av = dynamic_cast<const models::IPlayer*>(getOwnship());
+   const auto av = dynamic_cast<const models::Player*>(getOwnship());
    if (av != nullptr) {
-      active = av->isActive() || av->isMode(models::IPlayer::Mode::PRE_RELEASE);
+      active = av->isActive() || av->isMode(models::Player::PRE_RELEASE);
    }
 
    if (active && av != nullptr && getOwnshipEntityControlPacket(iw) != nullptr) {
@@ -400,7 +401,7 @@ int CigiHost::updateModels()
    if (table != nullptr && getModelTableSize() > 0) {
 
       // For all active models in the table ...
-      for (int i{}; i < getModelTableSize(); i++) {
+      for (int i = 0; i < getModelTableSize(); i++) {
          base::safe_ptr<CigiModel> model( static_cast<CigiModel*>(table[i]) );
          if (model != nullptr) {
 
@@ -413,25 +414,25 @@ int CigiHost::updateModels()
                //  (id*8+5) is attached part entity
 
                // Get the player
-               const auto player = dynamic_cast<const models::IPlayer*>(model->getPlayer());  // DDH
+               const auto player = dynamic_cast<const models::Player*>(model->getPlayer());  // DDH
 
                // Set the model data and ...
-               if (player->isMajorType(models::IPlayer::AIR_VEHICLE)) {
+               if (player->isMajorType(models::Player::AIR_VEHICLE)) {
                   setAirVehicleData(model, entity, static_cast<const models::AirVehicle*>(player));
-               } else if (player->isMajorType(models::IPlayer::GROUND_VEHICLE)) {
+               } else if (player->isMajorType(models::Player::GROUND_VEHICLE)) {
                   setGndVehicleData(model, entity, static_cast<const models::GroundVehicle*>(player));
-               } else if (player->isMajorType(models::IPlayer::SHIP)) {
+               } else if (player->isMajorType(models::Player::SHIP)) {
                   setShipData(model, entity, static_cast<const models::Ship*>(player));
-               } else if (player->isMajorType(models::IPlayer::SPACE_VEHICLE)) {
+               } else if (player->isMajorType(models::Player::SPACE_VEHICLE)) {
                   setSpaceVehicleData(model, entity, static_cast<const models::SpaceVehicle*>(player));
-               } else if (player->isMajorType(models::IPlayer::LIFE_FORM)) {
+               } else if (player->isMajorType(models::Player::LIFE_FORM)) {
                   setLifeFormData(model, entity, static_cast<const models::LifeForm*>(player));
-               } else if (player->isMajorType(models::IPlayer::BUILDING)) {
+               } else if (player->isMajorType(models::Player::BUILDING)) {
                   setBuildingData(model, entity, static_cast<const models::Building*>(player));
-               } else if (player->isMajorType(models::IPlayer::WEAPON)) {
+               } else if (player->isMajorType(models::Player::WEAPON)) {
                   const auto effect = dynamic_cast<const models::Effect*>(model->getPlayer());
                   const auto msl = dynamic_cast<const models::Missile*>(model->getPlayer());
-                  const auto wpn = dynamic_cast<const models::IWeapon*>(model->getPlayer());
+                  const auto wpn = dynamic_cast<const models::AbstractWeapon*>(model->getPlayer());
                   if (effect != nullptr)     // Effects before general weapons (because effects are also weapons)
                      setEffectData(model, entity, effect);
                   else if (msl != nullptr)   // Missiles before general weapons (because missiles are also weapons)
@@ -449,7 +450,7 @@ int CigiHost::updateModels()
 }
 
 // sets a CigiEntityCtrlV3 structure with common data entity data
-bool CigiHost::setCommonModelData(CigiEntityCtrlV3* const ec, const int entity, const models::IPlayer* const p)
+bool CigiHost::setCommonModelData(CigiEntityCtrlV3* const ec, const int entity, const models::Player* const p)
 {
    bool ok{ec != nullptr && p != nullptr};
 
@@ -619,13 +620,13 @@ bool CigiHost::setBuildingData(CigiModel* const m, const int entity, const model
 
       if (p->getDamage() > 0.0) {
          if (p->isDestroyed()) {
-            damage->SetCompState(3);    // 3 = DESTROYED
+            damage->SetCompState(3);    // 3 = DISTROYED
          } else {
             damage->SetCompState(2);    // 2 = DAMAGED
          }
          m->damageActive = true;
       } else {
-         damage->SetCompState(1);       // 0 = DEFAULT, 1 = GOOD, 2 = DAMAGED, 3 = DESTROYED
+         damage->SetCompState(1);       // 0 = DEFAULT, 1 = GOOD, 2 = DAMAGED, 3 = DISTROYED
       }
    } else {
       ec->SetEntityState(CigiEntityCtrlV3::Standby);
@@ -752,11 +753,11 @@ bool CigiHost::setGndVehicleData(CigiModel* const m, const int entity, const mod
       int apartNumMissiles{};     // Number of attached missiles
 
       // find all attached missiles
-      const models::IStoresMgr* sm{p->getStoresManagement()};
+      const models::StoresMgr* sm{p->getStoresManagement()};
       if (sm != nullptr) {
-         const base::IPairStream* stores{sm->getStores()};
+         const base::PairStream* stores{sm->getStores()};
          if (stores != nullptr) {
-            const base::IList::Item* item{stores->getFirstItem()};
+            const base::List::Item* item{stores->getFirstItem()};
             while (item != nullptr && apartNumMissiles == 0) {
                const auto pair = static_cast<const base::Pair*>(item->getValue());
                if (pair != nullptr) {
@@ -1206,7 +1207,7 @@ bool CigiHost::setSpaceVehicleData(CigiModel* const m, const int entity, const m
 //------------------------------------------------------------------------------
 // setWeaponData() -- Sets a 'model_t' structure to a weapon's state
 //------------------------------------------------------------------------------
-bool CigiHost::setWeaponData(CigiModel* const m, const int entity, const models::IWeapon* const p)
+bool CigiHost::setWeaponData(CigiModel* const m, const int entity, const models::AbstractWeapon* const p)
 {
    // Make sure we have an entity control block, ...
    if (m->parentEC[iw] == nullptr) {
@@ -1343,39 +1344,39 @@ bool CigiHost::getLineOfSightData(
 // Set Slot Functions
 //------------------------------------------------------------------------------
 
-bool CigiHost::setSlotHostSession(HostSession* const x)
+bool CigiHost::setSlotHostSession(HostSession* const msg)
 {
-   session = x;
+   session = msg;
    return true;
 }
 
 // Set/clear the ASYNC mode
-bool CigiHost::setSlotASyncMode(const base::Boolean* const x)
+bool CigiHost::setSlotASyncMode(const base::Boolean* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      setASyncMode(x->asBool());
+   if (msg != nullptr) {
+      setASyncMode(msg->getBoolean());
       ok = true;
    }
    return ok;
 }
 
 // Set/clear the hide ownship model flag
-bool CigiHost::setSlotHideOwnshipModel(const base::Boolean* const x)
+bool CigiHost::setSlotHideOwnshipModel(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      setHideOwnshipModel(x->asBool());
+   if (msg != nullptr) {
+      setHideOwnshipModel(msg->getBoolean());
       ok = true;
    }
    return ok;
 }
 
-bool CigiHost::setSlotOwnshipModelId(const base::Integer* const x)
+bool CigiHost::setSlotOwnshipModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setOwnshipModelId(id);
          ok = true;
@@ -1384,11 +1385,11 @@ bool CigiHost::setSlotOwnshipModelId(const base::Integer* const x)
    return ok;
 }
 
-bool CigiHost::setSlotMslTrailModelId(const base::Integer* const x)
+bool CigiHost::setSlotMslTrailModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setMslTrailModelId(id);
          ok = true;
@@ -1397,11 +1398,11 @@ bool CigiHost::setSlotMslTrailModelId(const base::Integer* const x)
    return ok;
 }
 
-bool CigiHost::setSlotSmokePlumeModelId(const base::Integer* const x)
+bool CigiHost::setSlotSmokePlumeModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setSmokePlumeModelId(id);
          ok = true;
@@ -1410,11 +1411,11 @@ bool CigiHost::setSlotSmokePlumeModelId(const base::Integer* const x)
    return ok;
 }
 
-bool CigiHost::setSlotAirExplosionModelId(const base::Integer* const x)
+bool CigiHost::setSlotAirExplosionModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setAirExplosionModelId(id);
          ok = true;
@@ -1423,11 +1424,11 @@ bool CigiHost::setSlotAirExplosionModelId(const base::Integer* const x)
    return ok;
 }
 
-bool CigiHost::setSlotGroundExplosionModelId(const base::Integer* const x)
+bool CigiHost::setSlotGroundExplosionModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setGroundExplosionModelId(id);
          ok = true;
@@ -1436,11 +1437,11 @@ bool CigiHost::setSlotGroundExplosionModelId(const base::Integer* const x)
    return ok;
 }
 
-bool CigiHost::setSlotShipWakeModelId(const base::Integer* const x)
+bool CigiHost::setSlotShipWakeModelId(const base::Number* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      const int id{x->asInt()};
+   if (msg != nullptr) {
+      const int id{msg->getInt()};
       if (id >= 0 && id <= 0xFFFF) {
          setShipWakeModelId(id);
          ok = true;
@@ -1482,7 +1483,7 @@ bool CigiHost::sendCigiData()
    // And add an Entity Control packet for the "ownship."
    // ---
    session->addPacketEntityCtrl(getOwnshipEntityControlPacket(ir));
-//   session->addPacketComponentCtrl(getOwnshipComponentControlPacket(ir));
+   session->addPacketComponentCtrl(getOwnshipComponentControlPacket(ir));
 
    // ---
    // Send all entity controls from the model table
@@ -1501,7 +1502,7 @@ bool CigiHost::sendCigiData()
          // Add all of the models (that we can) to the buffer.
          int sendSize{session->getOutgoingBufferSize()};
          int maxAge{static_cast<int>(getModelTableSize())};
-         for (int i{}; i < getModelTableSize() && sendSize < (MAX_BUF_SIZE - padding); i++) {
+         for (int i = 0; i < getModelTableSize() && sendSize < (MAX_BUF_SIZE - padding); i++) {
             base::safe_ptr<CigiModel> model( static_cast<CigiModel*>(table[i]) );
             if (model != nullptr) {
 
@@ -1597,7 +1598,7 @@ bool CigiHost::sendCigiData()
          // -- look for the oldest request ---
          base::safe_ptr<CigiModel> oldest;
          base::safe_ptr<CigiModel> model;
-         for (int i{}; i < getElevationTableSize(); i++) {
+         for (int i = 0; i < getElevationTableSize(); i++) {
             model = table[i];
             if (model != nullptr) {
                // Must be active and haven't been requested for at least TBD frames ...
@@ -1612,7 +1613,7 @@ bool CigiHost::sendCigiData()
          if (oldest != nullptr) {
 
             int idx{-1};
-            for (int i{}; idx < 0 && i < getElevationTableSize(); i++) {
+            for (int i = 0; idx < 0 && i < getElevationTableSize(); i++) {
                if (table[i] == oldest) idx = i;
             }
 
@@ -1622,7 +1623,7 @@ bool CigiHost::sendCigiData()
 
                // Requested Position (lat/lon)
                double hotLat{}, hotLon{};
-               dynamic_cast<models::IPlayer*>(oldest->getPlayer())->getPositionLL(&hotLat, &hotLon);
+               dynamic_cast<models::Player*>(oldest->getPlayer())->getPositionLL(&hotLat, &hotLon);
                hotRequest.SetLat(hotLat);
                hotRequest.SetLon(hotLon);
                hotRequest.SetReqType(CigiHatHotReqV3::HOT);
@@ -1715,6 +1716,7 @@ bool CigiHost::sendCigiData()
       //}
 
    }
+
    // ---
    // End the message.
    // ---
@@ -1828,7 +1830,7 @@ void CigiHost::hatHotResp(const CigiHatHotRespV3* const p)
          if (model->isHotActive() && model->getPlayer() != nullptr) {
             // When the player and elevation table are still valid, store
             // the terrain elevation (meters)
-            dynamic_cast<models::IPlayer*>(model->getPlayer())->setTerrainElevation(static_cast<double>(p->GetHot()));
+            dynamic_cast<models::Player*>(model->getPlayer())->setTerrainElevation(static_cast<double>(p->GetHot()));
 
             //if (isMessageEnabled(MSG_DEBUG)) {
             //   std::cout << "hotResp: alt = --, pid = " << model->getPlayer()->getID() << std::endl;
@@ -1868,6 +1870,5 @@ void CigiHost::igResponse(const CigiIGMsgV3* const p)
    }
 }
 
-}
 }
 }

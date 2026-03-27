@@ -1,20 +1,20 @@
-#ifndef __mixr_models_common_Gmti_HPP__
-#define __mixr_models_common_Gmti_HPP__
+#ifndef __mixr_models_Gmti_H__
+#define __mixr_models_Gmti_H__
 
-#include "mixr/models/system/IRadar.hpp"
+#include "mixr/models/system/Radar.hpp"
 #include "mixr/base/osg/Vec3d"
 
 namespace mixr {
-namespace base { class IList; }
+namespace base { class List; }
 namespace models {
 
 //------------------------------------------------------------------------------
 // Class: Gmti
-// Description: Concrete, Very simple, Ground-Moving-Target-Indication (GMTI) mode radar
+// Description: Very simple, Ground-Moving-Target-Indication (GMTI) mode radar
 //------------------------------------------------------------------------------
-class Gmti final: public IRadar
+class Gmti : public Radar
 {
-   DECLARE_SUBCLASS(Gmti, IRadar)
+   DECLARE_SUBCLASS(Gmti, Radar)
 
 public:
    Gmti();
@@ -31,7 +31,7 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotPoi(base::IList* const);
+   bool setSlotPoi(base::List* const);
 };
 
 }

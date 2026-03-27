@@ -11,11 +11,11 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#ifndef __mixr_base_osg_Vec3f_HPP__
-#define __mixr_base_osg_Vec3f_HPP__
+#ifndef __mixr_base_osg_Vec3f_H__
+#define __mixr_base_osg_Vec3f_H__
 
 #include "mixr/base/osg/Vec2f"
-#include "mixr/base/osg/math.hpp"
+#include "mixr/base/osg/osg_math.hpp"
 
 namespace mixr {
 namespace base {
@@ -36,7 +36,7 @@ class Vec3f
         /** Number of vector components. */
         enum { num_components = 3 };
         
-        value_type _v[3]{};
+        value_type _v[3];
 
         /** Constructor that sets all components of the vector to zero */
         Vec3f() { _v[0]=0.0f; _v[1]=0.0f; _v[2]=0.0f;}

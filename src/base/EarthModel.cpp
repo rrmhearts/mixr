@@ -3,8 +3,7 @@
 
 #include "mixr/base/util/nav_utils.hpp"
 
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/qty/lengths.hpp"
+#include "mixr/base/units/Distances.hpp"
 
 #include <cstring>
 
@@ -47,9 +46,13 @@ BEGIN_SLOTTABLE(EarthModel)
 END_SLOTTABLE(EarthModel)
 
 BEGIN_SLOT_MAP(EarthModel)
-   ON_SLOT(1, setSlotA, ILength)
-   ON_SLOT(2, setSlotB, ILength)
-   ON_SLOT(3, setSlotF, INumber)
+   ON_SLOT(1, setSlotA, Distance) /* always check units before numbers */
+   ON_SLOT(1, setSlotA, Number)
+
+   ON_SLOT(2, setSlotB, Distance) /* always check units before numbers */
+   ON_SLOT(2, setSlotB, Number)
+
+   ON_SLOT(3, setSlotF, Number)
 END_SLOT_MAP()
 
 EarthModel::EarthModel(const double a0, const double f0)
@@ -153,19 +156,49 @@ bool EarthModel::setF(const double f0)
 //------------------------------------------------------------------------------
 // Slot functions
 //------------------------------------------------------------------------------
-bool EarthModel::setSlotA(const ILength* const x)
+bool EarthModel::setSlotA(const Distance* const msg)
 {
-   return setA(x->getValueInMeters());
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setA( Meters::convertStatic( *msg ) );
+   }
+   return ok;
 }
 
-bool EarthModel::setSlotB(const ILength* const x)
+bool EarthModel::setSlotA(const Number* const msg)
 {
-   return setB(x->getValueInMeters());
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setA( msg->getDouble() );
+   }
+   return ok;
 }
 
-bool EarthModel::setSlotF(const INumber* const msg)
+bool EarthModel::setSlotB(const Distance* const msg)
 {
-   return setF( msg->asDouble() );
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setB( Meters::convertStatic( *msg ) );
+   }
+   return ok;
+}
+
+bool EarthModel::setSlotB(const Number* const msg)
+{
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setB( msg->getDouble() );
+   }
+   return ok;
+}
+
+bool EarthModel::setSlotF(const Number* const msg)
+{
+   bool ok{};
+   if (msg != nullptr) {
+      ok = setF( msg->getDouble() );
+   }
+   return ok;
 }
 
 }

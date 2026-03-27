@@ -4,14 +4,12 @@ include ../makedefs
 LIB = $(MIXR_LIB_DIR)/libmixr_simulation.a
 
 OBJS =  \
-	IDataRecorder.o \
-	IIgHost.o \
-	INetIO.o \
-	INib.o \
-	IPlayer.o \
-	IRecorder.o \
-	ISimulation.o \
-	IStation.o \
+	AbstractDataRecorder.o \
+	AbstractIgHost.o \
+	AbstractNetIO.o \
+	AbstractNib.o \
+	AbstractPlayer.o \
+	AbstractRecorderComponent.o \
 	Simulation.o \
 	SimulationBgSyncThread.o \
 	SimulationTcSyncThread.o \

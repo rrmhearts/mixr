@@ -1,19 +1,21 @@
 
 #include "mixr/models/system/trackmanager/RwrTrkMgr.hpp"
 
-#include "mixr/models/RfEmission.hpp"
-#include "mixr/models/track/ITrack.hpp"
-#include "mixr/models/track/RfTrack.hpp"
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/Emission.hpp"
+#include "mixr/models/Track.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/numeric/Number.hpp"
+
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/units/Times.hpp"
 
-#include "mixr/simulation/IDataRecorder.hpp"
+#include "mixr/base/units/Distances.hpp"
+
+#include "mixr/simulation/AbstractDataRecorder.hpp"
 #include "mixr/models/WorldModel.hpp"
 
 namespace mixr {
@@ -31,7 +33,7 @@ RwrTrkMgr::RwrTrkMgr()
 
 void RwrTrkMgr::initData()
 {
-   setType( ITrack::ONBOARD_SENSOR_BIT | ITrack::RWR_TRACK_BIT );
+   setType( Track::ONBOARD_SENSOR_BIT | Track::RWR_TRACK_BIT );
 
    reportNumMatches = new unsigned int[MAX_REPORTS];
    trackNumMatches = new unsigned int[MAX_TRKS];
@@ -94,7 +96,7 @@ void RwrTrkMgr::deleteData()
 void RwrTrkMgr::processTrackList(const double dt)
 {
    // Make sure we have an ownship to work with
-   const auto ownship = dynamic_cast<IPlayer*>( findContainerByType(typeid(IPlayer)) );
+   const auto ownship = dynamic_cast<Player*>( findContainerByType(typeid(Player)) );
    if (ownship == nullptr || dt == 0) return;
 
    // Make sure we have the A and B matrix
@@ -119,15 +121,15 @@ void RwrTrkMgr::processTrackList(const double dt)
 
    // Get each new emission report from the queue
    unsigned int nReports{};
-   RfEmission* emissions[MAX_REPORTS]{};
+   Emission* emissions[MAX_REPORTS]{};
    double newSignal[MAX_REPORTS]{};
    double newRdot[MAX_REPORTS]{};
    base::Vec3d tgtPos[MAX_REPORTS];
    double tmp{};
-   for (RfEmission* em = getReport(&tmp); em != nullptr; em = getReport(&tmp)) {
+   for (Emission* em = getReport(&tmp); em != nullptr; em = getReport(&tmp)) {
       if (nReports < MAX_REPORTS) {
          // save the report
-         IPlayer* tgt{em->getOwnship()};  // The emissions ownship is our target!
+         Player* tgt{em->getOwnship()};  // The emissions ownship is our target!
          emissions[nReports] = em;
          newSignal[nReports] = tmp;
          newRdot[nReports] = emissions[nReports]->getRangeRate();
@@ -147,7 +149,7 @@ void RwrTrkMgr::processTrackList(const double dt)
    for (unsigned int it = 0; it < nTrks; it++) {
       trackNumMatches[it] = 0;
       const RfTrack* const trk{static_cast<const RfTrack*>(tracks[it])};        // we produce only RfTracks
-      const IPlayer* const tgt{trk->getLastEmission()->getOwnship()};           // The emissions ownship is our target!
+      const Player* const tgt{trk->getLastEmission()->getOwnship()};            // The emissions ownship is our target!
       for (unsigned int ir = 0; ir < nReports; ir++) {
          if (emissions[ir]->getOwnship() == tgt) {  // The emissions ownship is our target!
             // We have a new report for the same target as this track ...
@@ -284,7 +286,7 @@ void RwrTrkMgr::processTrackList(const double dt)
          const auto newTrk = new RfTrack();
          newTrk->setTrackID( getNewTrackID() );
          newTrk->setTarget( emissions[i]->getOwnship() );  // The emissions ownship is our target!
-         newTrk->setType(ITrack::RWR_TRACK_BIT  | ITrack::ONBOARD_SENSOR_BIT);
+         newTrk->setType(Track::RWR_TRACK_BIT  | Track::ONBOARD_SENSOR_BIT);
          newTrk->setPosition(tgtPos[i]);
          newTrk->ownshipDynamics(osGndTrk, osVel, osAccel, 0.0f);
          newTrk->setRangeRate(newRdot[i]);

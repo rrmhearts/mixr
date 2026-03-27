@@ -1,14 +1,13 @@
 
-#ifndef __mixr_ighost_cigi3_Player2CigiMap_HPP__
-#define __mixr_ighost_cigi3_Player2CigiMap_HPP__
+#ifndef __mixr_ighost_cigi_Player2CigiMap_H__
+#define __mixr_ighost_cigi_Player2CigiMap_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 #include "mixr/base/safe_ptr.hpp"
 
 namespace mixr {
-namespace base { class Identifier; class Integer; class String; }
-namespace models { class IPlayer; }
-namespace ighost {
+namespace base { class Identifier; class Number; class String; }
+namespace models { class Player; }
 namespace cigi {
 
 //------------------------------------------------------------------------------
@@ -21,7 +20,7 @@ namespace cigi {
 // Slots:
 //     factoryName   <Identifier>     ! Reference factory name (default: 0)
 //     typeName      <String>         ! Reference type name (default: 0)
-//     entityId      <Integer>        ! Entity type ID number (int) (default: 0)
+//     entityId      <Number>         ! Entity type ID number (int) (default: 0)
 //
 // Examples:
 //    ( Player2CigiMap  factoryName: Aircraft  typeName: "B-1B"  entityId: 203 )
@@ -51,9 +50,9 @@ namespace cigi {
 //          (e.g., Test player's general "F-16" type would not match our "F-16C")
 //
 //------------------------------------------------------------------------------
-class Player2CigiMap : public base::IObject
+class Player2CigiMap : public base::Object
 {
-    DECLARE_SUBCLASS(Player2CigiMap, base::IObject)
+    DECLARE_SUBCLASS(Player2CigiMap, base::Object)
 
 public:
     Player2CigiMap();
@@ -66,7 +65,7 @@ public:
     const base::String* getRefTypeName() const               { return refTypeName; }     // Reference type name
 
     // True if player's factory & type names match our reference factory and type names.
-    virtual bool isMatchingPlayerType(const models::IPlayer* const) const;
+    virtual bool isMatchingPlayerType(const models::Player* const) const;
 
 private:
     base::safe_ptr<const base::Identifier> refFactoryName;    // Reference factory name
@@ -75,12 +74,11 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotEntityId(const base::Integer* const);           // Sets the IG entity type number
+    bool setSlotEntityId(const base::Number* const);            // Sets the IG entity type number
     bool setSlotRefFactoryName(const base::Identifier* const);  // Sets the Reference factory name
     bool setSlotRefTypeName(const base::String* const);         // Sets the Reference type name
 };
 
-}
 }
 }
 

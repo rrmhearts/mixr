@@ -1,0 +1,19 @@
+﻿  IoData.cpp
+  IoDevice.cpp
+  IoHandler.cpp
+  IoPeriodicThread.cpp
+  MockDevice.cpp
+  AbstractAdapter.cpp
+  Ai2DiSwitch.cpp
+  AnalogInput.cpp
+  AnalogOutput.cpp
+  DiscreteInput.cpp
+  DiscreteOutput.cpp
+  factory.cpp
+  AbstractGenerator.cpp
+  AnalogInputFixed.cpp
+  AnalogSignalGen.cpp
+  DiscreteInputFixed.cpp
+  UsbJoystick_msvc.cpp
+  Generating Code...
+  linkage.vcxproj -> C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\lib\mixr_linkage.lib

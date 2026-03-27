@@ -1,6 +1,6 @@
 
-#ifndef __mixr_instruments_LandingLight_HPP__
-#define __mixr_instruments_LandingLight_HPP__
+#ifndef __mixr_instruments_LandingLight_H__
+#define __mixr_instruments_LandingLight_H__
 
 #include "LandingGear.hpp"
 
@@ -34,13 +34,13 @@ public:
     void drawFunc() override;
 
 private:
-    double lRadius{};      // our light radius - 0 means don't use it
-    double gearCurrent{};  // our gear current value
+    double lRadius {};     // our light radius - 0 means don't use it
+    double gearCurrent {}; // our gear current value
     SendData selSD;        // our selection
 
 private:
     // slot table helper methods
-    bool setSlotLightRadius(const base::INumber* const);
+    bool setSlotLightRadius(const base::Number* const);
 };
 
 }

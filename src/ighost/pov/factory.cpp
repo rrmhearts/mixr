@@ -1,19 +1,18 @@
 
 #include "mixr/ighost/pov/factory.hpp"
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/ighost/pov/PovHost.hpp"
 
 #include <string>
 
 namespace mixr {
-namespace ighost {
 namespace pov {
 
-base::IObject* factory(const std::string& name)
+base::Object* factory(const std::string& name)
 {
-    base::IObject* obj{};
+    base::Object* obj{};
 
     if ( name == PovHost::getFactoryName() ) {
         obj = new PovHost();
@@ -21,6 +20,5 @@ base::IObject* factory(const std::string& name)
     return obj;
 }
 
-}
 }
 }

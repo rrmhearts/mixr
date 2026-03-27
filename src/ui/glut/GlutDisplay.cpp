@@ -1,19 +1,20 @@
 
 #include "mixr/ui/glut/GlutDisplay.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
+
+#include "mixr/base/colors/Color.hpp"
 
 #include "mixr/base/String.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include "mixr/base/util/system_utils.hpp"
 
 #include <cstdlib>
 
 #include <GL/glut.h>
+//#include <GL/freeglut.h>
 
 #if !defined(WIN32)
 #include <sys/time.h>
@@ -28,8 +29,8 @@ int GlutDisplay::idList[GlutDisplay::MAX_DISPLAYS] {};                 // List o
 GlutDisplay* GlutDisplay::displayList[GlutDisplay::MAX_DISPLAYS] {};   // Display List
 int GlutDisplay::numGlutDisplays {};                                   // Number of  registered GlutDisplays
 
-const float GlutDisplay::CLICK_TIME{0.5f};                             // our double click timeout
-const int DEFAULT_IDLE_SLEEP{40};                                      // default idle CB sleep time
+const float GlutDisplay::CLICK_TIME    {0.5f};                         // our double click timeout
+const unsigned int DEFAULT_IDLE_SLEEP  {40};                            // default idle CB sleep time
 
 BEGIN_SLOTTABLE(GlutDisplay)
    "fullScreen",           // 1) Full screen flag     -- Main windows only --
@@ -42,13 +43,13 @@ BEGIN_SLOTTABLE(GlutDisplay)
 END_SLOTTABLE(GlutDisplay)
 
 BEGIN_SLOT_MAP(GlutDisplay)
-   ON_SLOT(1,setSlotFullScreen,    base::Boolean)
-   ON_SLOT(2,setSlotIdleSleepTime, base::Integer)
-   ON_SLOT(3,setSlotResizeWindows, base::Boolean)
-   ON_SLOT(4,setSlotPickWidth,     base::INumber)
-   ON_SLOT(5,setSlotPickHeight,    base::INumber)
-   ON_SLOT(6,setSlotAccumBuff,     base::Boolean)
-   ON_SLOT(7,setSlotStencilBuff,   base::Boolean)
+   ON_SLOT(1,setSlotFullScreen,    base::Number)
+   ON_SLOT(2,setSlotIdleSleepTime, base::Number)
+   ON_SLOT(3,setSlotResizeWindows, base::Number)
+   ON_SLOT(4,setSlotPickWidth,     base::Number)
+   ON_SLOT(5,setSlotPickHeight,    base::Number)
+   ON_SLOT(6,setSlotAccumBuff,     base::Number)
+   ON_SLOT(7,setSlotStencilBuff,   base::Number)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(GlutDisplay)
@@ -115,7 +116,7 @@ bool GlutDisplay::onEscKey()
       if (isMessageEnabled(MSG_INFO)) {
          std::cout<<"mixr::glut::GlutDisplay::onEscKey()Exit by the ESC key!"<<std::endl;
       }
-#ifdef __FREEGLUT_EXT_HPP__     /* freeglut only */
+#ifdef __FREEGLUT_EXT_H__     /* freeglut only */
       glutLeaveMainLoop();
       return true;
 #else
@@ -128,7 +129,7 @@ bool GlutDisplay::onEscKey()
 //-----------------------------------------------------------------------------
 // setIdleSleepTime() - Sets the idle callback's sleep time
 //-----------------------------------------------------------------------------
-bool GlutDisplay::setIdleSleepTime(const int ms)
+bool GlutDisplay::setIdleSleepTime(const unsigned int ms)
 {
    idleSleepTimeMS = ms;
    return true;
@@ -141,7 +142,7 @@ int GlutDisplay::createWindow()
 {
    winId = -1;
 
-#ifdef __FREEGLUT_EXT_HPP__     /* freeglut only */
+#ifdef __FREEGLUT_EXT_H__     /* freeglut only */
       glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 #endif
 
@@ -180,7 +181,7 @@ int GlutDisplay::createWindow()
 
       // Create sub windows (if any)
       if (subDisplays() != nullptr) {
-         base::IList::Item* item = subDisplays()->getFirstItem();
+         base::List::Item* item = subDisplays()->getFirstItem();
          while (item != nullptr) {
             const auto pair = dynamic_cast<base::Pair*>(item->getValue());
             if (pair != nullptr) {
@@ -257,7 +258,7 @@ int GlutDisplay::createSubWindow(const int mainId)
 
       // Create sub windows (if any)
       if (subDisplays() != nullptr) {
-         base::IList::Item* item = subDisplays()->getFirstItem();
+         base::List::Item* item = subDisplays()->getFirstItem();
          while (item != nullptr) {
             const auto pair = dynamic_cast<base::Pair*>(item->getValue());
             if (pair != nullptr) {
@@ -330,7 +331,7 @@ void GlutDisplay::reshapeIt(int w, int h)
       if (subDisplays() != nullptr && okToResize) {
 
          // go through and put our new numbers in
-         base::IList::Item* item = subDisplays()->getFirstItem();
+         base::List::Item* item = subDisplays()->getFirstItem();
          while (item != nullptr) {
             const auto pair = static_cast<base::Pair*>(item->getValue());
             if (pair != nullptr) {
@@ -755,18 +756,18 @@ int GlutDisplay::findRegisteredWinId(const GlutDisplay* dp)
 //-----------------------------------------------------------------------------
 void GlutDisplay::idleCB()
 {
-   const int id{glutGetWindow()};
-   const double time{base::getComputerTime()};
+   int id = glutGetWindow();
+   double time = base::getComputerTime();
 
    // N-1 Time
-   static double time0{time};
+   static double time0 = time;
 
    // Compute delta time
-   const double dt{time - time0};
+   double dt = (time - time0);
    time0 = time;
 
    // Update displays
-   int sleepFor{DEFAULT_IDLE_SLEEP};
+   unsigned int sleepFor = DEFAULT_IDLE_SLEEP;
    for (int i = 0; i < numGlutDisplays; i++) {
       if (idList[i] >= 0) {
          glutSetWindow(idList[i]);
@@ -789,8 +790,8 @@ void GlutDisplay::idleCB()
 //-----------------------------------------------------------------------------
 void GlutDisplay::drawFuncCB()
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::drawFuncCB(): id = " << id << ", p = " << p << std::endl;
@@ -805,8 +806,8 @@ void GlutDisplay::drawFuncCB()
 //-----------------------------------------------------------------------------
 void GlutDisplay::reshapeItCB(int w, int h)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::reshapeItCB(): id = " << id << ", p = " << p << std::endl;
@@ -821,8 +822,8 @@ void GlutDisplay::reshapeItCB(int w, int h)
 //-----------------------------------------------------------------------------
 void GlutDisplay::keyboardFuncCB(unsigned char key, int, int)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::keyboardFuncCB(): id = " << id << ", p = " << p << std::endl;
@@ -837,8 +838,8 @@ void GlutDisplay::keyboardFuncCB(unsigned char key, int, int)
 //-----------------------------------------------------------------------------
 void GlutDisplay::specialFuncCB(int key, int, int)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::specialFuncCB(): id = " << id << ", p = " << p << std::endl;
@@ -853,8 +854,8 @@ void GlutDisplay::specialFuncCB(int key, int, int)
 //-----------------------------------------------------------------------------
 void GlutDisplay::mouseFuncCB(int button, int state, int x, int y)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::mouseFuncCBStatic(): id = " << id << ", p = " << p << std::endl;
@@ -869,8 +870,8 @@ void GlutDisplay::mouseFuncCB(int button, int state, int x, int y)
 //-----------------------------------------------------------------------------
 void GlutDisplay::passiveMotionFuncCB(int x, int y)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::specialFuncCB(): id = " << id << ", p = " << p << std::endl;
@@ -885,8 +886,8 @@ void GlutDisplay::passiveMotionFuncCB(int x, int y)
 //-----------------------------------------------------------------------------
 void GlutDisplay::motionFuncCB(int x, int y)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::mouseFuncCBStatic(): id = " << id << ", p = " << p << std::endl;
@@ -901,8 +902,8 @@ void GlutDisplay::motionFuncCB(int x, int y)
 //-----------------------------------------------------------------------------
 void GlutDisplay::entryFuncCB(int state)
 {
-   const int id{glutGetWindow()};
-   GlutDisplay* p{findRegisteredGlutDisplay(id)};
+   int id = glutGetWindow();
+   GlutDisplay* p = findRegisteredGlutDisplay(id);
 
    if (p != nullptr && p->isMessageEnabled(MSG_DEBUG)) {
       std::cout << "GlutDisplay::mouseFuncCBStatic(): id = " << id << ", p = " << p << std::endl;
@@ -911,53 +912,63 @@ void GlutDisplay::entryFuncCB(int state)
    if (p != nullptr) {
       if (state == GLUT_LEFT) {
          p->onMouseExit();
-      } else if (state == GLUT_ENTERED) {
+      }
+      else if (state == GLUT_ENTERED) {
          p->onMouseEnter();
       }
    }
 }
 
-bool GlutDisplay::setSlotFullScreen(const base::Boolean* const msg)
+//-----------------------------------------------------------------------------
+// Slot functions
+//-----------------------------------------------------------------------------
+
+// setSlotFullScreen()
+bool GlutDisplay::setSlotFullScreen(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      fullScreenFlg = msg->asBool();
+      fullScreenFlg = msg->getBoolean();
       ok = true;
    }
    return ok;
 }
 
-bool GlutDisplay::setSlotIdleSleepTime(const base::Integer* const msg)
+// setSlotIdleSleepTime()
+bool GlutDisplay::setSlotIdleSleepTime(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      const int ms{msg->asInt()};
-      if (ms >= 0) {
+      int i = msg->getInt();
+      if (i >= 0) {
+         unsigned int ms = static_cast<unsigned int>(i);
          ok = setIdleSleepTime(ms);
       }
    }
    return ok;
 }
 
-bool GlutDisplay::setSlotResizeWindows(const base::Boolean* const msg)
+// setSlotResizeWindows()
+bool GlutDisplay::setSlotResizeWindows(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      ok = setResizeWindows(msg->asBool());
+      ok = setResizeWindows(msg->getBoolean());
    }
    return ok;
 }
 
 // pickWidth -- Width of the pick area
-bool GlutDisplay::setSlotPickWidth(const base::INumber* const msg)
+bool GlutDisplay::setSlotPickWidth(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      GLdouble s{static_cast<GLdouble>(msg->asDouble())};
+      GLdouble s = msg->getDouble();
       if (s > 0) {
          pickWidth = s;
          ok = true;
-      } else {
+      }
+      else {
          std::cerr << "GlutDisplay::setSlotPickWidth() error; pick size (" << s << ") must be greater than zero!" << std::endl;
       }
    }
@@ -965,36 +976,37 @@ bool GlutDisplay::setSlotPickWidth(const base::INumber* const msg)
 }
 
 // pickHeight -- Height of the pick area
-bool GlutDisplay::setSlotPickHeight(const base::INumber* const msg)
+bool GlutDisplay::setSlotPickHeight(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      GLdouble s{static_cast<GLdouble>(msg->asDouble())};
+      GLdouble s = msg->getDouble();
       if (s > 0) {
          pickHeight = s;
          ok = true;
-      } else {
+      }
+      else {
          std::cerr << "GlutDisplay::setSlotPickHeight() error; pick size (" << s << ") must be greater than zero!" << std::endl;
       }
    }
    return ok;
 }
 
-bool GlutDisplay::setSlotAccumBuff(const base::Boolean* const msg)
+bool GlutDisplay::setSlotAccumBuff(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      accumBuff = msg->asBool();
+      accumBuff = msg->getBoolean();
       ok = true;
    }
    return ok;
 }
 
-bool GlutDisplay::setSlotStencilBuff(const base::Boolean* const msg)
+bool GlutDisplay::setSlotStencilBuff(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      stencilBuff = msg->asBool();
+      stencilBuff = msg->getBoolean();
       ok = true;
    }
    return ok;

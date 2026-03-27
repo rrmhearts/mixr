@@ -1,11 +1,11 @@
 
-#ifndef __mixr_models_SamVehicle_HPP__
-#define __mixr_models_SamVehicle_HPP__
+#ifndef __mixr_models_SamVehicle_H__
+#define __mixr_models_SamVehicle_H__
 
 #include "mixr/models/player/ground/GroundVehicle.hpp"
 
 namespace mixr {
-namespace base { class ILength; }
+namespace base { class Distance; }
 namespace models {
 
 //------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ namespace models {
 //
 // Factory name: SamVehicle
 // Slots:
-//    minLaunchRange    <base::Length>     ! Min launch range (base::Length)
+//    minLaunchRange    <base::Distance>   ! Min launch range (base::Distance)
 //                                         ! (default: DEFAULT_MIN_LAUNCH_RANGE)
-//    maxLaunchRange    <base::Length>     ! Max launch range (base::Length)
+//    maxLaunchRange    <base::Distance>   ! Max launch range (base::Distance)
 //                                         ! (default: DEFAULT_MAX_LAUNCH_RANGE)
 //
 //------------------------------------------------------------------------------
@@ -48,8 +48,8 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotMinLaunchRange(const base::ILength* const);
-   bool setSlotMaxLaunchRange(const base::ILength* const);
+   bool setSlotMinLaunchRange(const base::Distance* const);
+   bool setSlotMaxLaunchRange(const base::Distance* const);
 };
 
 }

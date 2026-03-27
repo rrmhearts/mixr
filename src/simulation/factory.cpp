@@ -1,7 +1,7 @@
 
 #include "mixr/simulation/factory.hpp"
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/simulation/Simulation.hpp"
 #include "mixr/simulation/Station.hpp"
@@ -11,16 +11,12 @@
 namespace mixr {
 namespace simulation {
 
-base::IObject* factory(const std::string& name)
+base::Object* factory(const std::string& name)
 {
-    base::IObject* obj {};
+    base::Object* obj {};
 
-    if ( name == Simulation::getFactoryName() ) {
-        obj = new Simulation();
-    }
-    else if ( name == Station::getFactoryName() ) {
-        obj = new Station();
-    }
+    if ( name == Simulation::getFactoryName() )   { obj = new Simulation(); }
+    else if ( name == Station::getFactoryName() ) { obj = new Station();    }
 
     return obj;
 }

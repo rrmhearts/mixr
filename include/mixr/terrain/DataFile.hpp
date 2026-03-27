@@ -1,8 +1,8 @@
 
-#ifndef __mixr_terrain_DataFile_HPP__
-#define __mixr_terrain_DataFile_HPP__
+#ifndef __mixr_terrain_DataFile_H__
+#define __mixr_terrain_DataFile_H__
 
-#include "mixr/terrain/ITerrain.hpp"
+#include "mixr/terrain/Terrain.hpp"
 
 namespace mixr {
 namespace terrain {
@@ -17,9 +17,9 @@ namespace terrain {
 //    2) the final elevation point [n-1] is at the maximum range
 //    3) The size of all arrays, n, must contain at least 2 points (ref point & max range)
 //------------------------------------------------------------------------------
-class DataFile : public ITerrain
+class DataFile : public Terrain
 {
-   DECLARE_SUBCLASS(DataFile, ITerrain)
+   DECLARE_SUBCLASS(DataFile, Terrain)
 
 public:
    DataFile();

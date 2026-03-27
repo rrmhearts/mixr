@@ -8,17 +8,17 @@
 #include "mixr/models/player/weapon/Missile.hpp"
 #include "mixr/models/player/weapon/Sam.hpp"
 
-#include "mixr/models/system/IExternalStore.hpp"
+#include "mixr/models/system/ExternalStore.hpp"
 #include "mixr/models/system/FuelTank.hpp"
-#include "mixr/models/system/Gun.hpp"
+#include "mixr/models/system/Guns.hpp"
 #include "mixr/models/system/OnboardComputer.hpp"
-#include "mixr/models/system/IRfSensor.hpp"
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
-#include "mixr/models/track/ITrack.hpp"
+#include "mixr/models/system/RfSensor.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
+#include "mixr/models/Track.hpp"
 
 #include "mixr/base/numeric/Boolean.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include <cstring>
 
 namespace mixr {
@@ -71,21 +71,21 @@ void SimpleStoresMgr::updateData(const double dt)
    // Get the current weapon data
    // ---
    {
-      auto wpn = static_cast<IWeapon*>(getCurrentWeapon());
+      auto wpn = static_cast<AbstractWeapon*>(getCurrentWeapon());
       if (wpn != nullptr) {
          // Weapon ID
          curWpnID = wpn->getWeaponID();
 
          // Number of this type weapon
          int count{};
-         base::IPairStream* list{getStores()};
+         base::PairStream* list{getStores()};
          if (list != nullptr) {
-            const base::IList::Item* item{list->getFirstItem()};
+            const base::List::Item* item{list->getFirstItem()};
             while (item != nullptr) {
                const base::Pair* pair{static_cast<const base::Pair*>(item->getValue())};
                if (pair != nullptr) {
-                  const auto s = dynamic_cast<const IWeapon*>( pair->object() );
-                  if ( s != nullptr && s->isMode(IPlayer::Mode::INACTIVE) && (s->getFactoryName() == wpn->getFactoryName()) == true ) {
+                  const auto s = dynamic_cast<const AbstractWeapon*>( pair->object() );
+                  if ( s != nullptr && s->isMode(Player::INACTIVE) && std::strcmp(s->getFactoryName(), wpn->getFactoryName()) == 0 ) {
                      count++;
                   }
                }
@@ -112,9 +112,9 @@ void SimpleStoresMgr::updateData(const double dt)
 //------------------------------------------------------------------------------
 
 // Default function to return the current weapon (Pre-ref()'d)
-IWeapon* SimpleStoresMgr::getCurrentWeapon()
+AbstractWeapon* SimpleStoresMgr::getCurrentWeapon()
 {
-   IWeapon* wpn{};
+   AbstractWeapon* wpn{};
    if ( isWeaponDeliveryMode(A2A) ) {
       wpn = getNextMissile();    // We need a missile
    } else {
@@ -123,9 +123,9 @@ IWeapon* SimpleStoresMgr::getCurrentWeapon()
    return wpn;
 }
 
-const IWeapon* SimpleStoresMgr::getCurrentWeapon() const
+const AbstractWeapon* SimpleStoresMgr::getCurrentWeapon() const
 {
-   const IWeapon* wpn{};
+   const AbstractWeapon* wpn{};
    if ( isWeaponDeliveryMode(A2A) ) {
       wpn = getNextMissile();    // We need a missile
    } else {
@@ -169,11 +169,11 @@ Missile* SimpleStoresMgr::getNextMissileImp()
 {
    Missile* msl{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) missile
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && msl == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Missile*>(pair->object());
@@ -207,11 +207,11 @@ Sam* SimpleStoresMgr::getNextSamImp()
 {
    Sam* msl{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) SAM
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && msl == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Sam*>(pair->object());
@@ -246,11 +246,11 @@ Bomb* SimpleStoresMgr::getNextBombImp()
 {
    Bomb* bomb{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) bomb
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && bomb == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Bomb*>(pair->object());
@@ -285,11 +285,11 @@ Chaff* SimpleStoresMgr::getNextChaffImp()
 {
    Chaff* chaff{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) chaff bundle
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && chaff == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Chaff*>(pair->object());
@@ -324,11 +324,11 @@ Flare* SimpleStoresMgr::getNextFlareImp()
 {
    Flare* flare{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) flare
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && flare == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Flare*>(pair->object());
@@ -363,11 +363,11 @@ Decoy* SimpleStoresMgr::getNextDecoyImp()
 {
    Decoy* decoy{};
 
-   base::IPairStream* list{getWeapons()};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
 
       // find the first free (inactive) decoy
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && decoy == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
          const auto p = dynamic_cast<Decoy*>( pair->object() );
@@ -391,17 +391,17 @@ Missile* SimpleStoresMgr::getSpecificMissile(const base::String* const missileTy
    Missile* msl{};
    if (missileType != nullptr) {
 
-      base::IPairStream* list{getWeapons()};
+      base::PairStream* list{getWeapons()};
       if (list != nullptr) {
 
          // Find the first free (inactive) missile of type weaponType
-         base::IList::Item* item{list->getFirstItem()};
+         base::List::Item* item{list->getFirstItem()};
          while (item != nullptr && msl == nullptr) {
             const auto pair = static_cast<base::Pair*>(item->getValue());
             const auto p = dynamic_cast<Missile*>(pair->object());
             if (p != nullptr && p->isInactive()) {
                // Ok, we have a missile, but is it the type we want?
-               if (*p->getType_old() == *missileType) {
+               if (*p->getType() == *missileType) {
                   p->ref();
                   msl = p;
                }
@@ -422,17 +422,17 @@ Bomb* SimpleStoresMgr::getSpecificBomb(const base::String* const bombType)
    Bomb* bomb{};
    if (bombType != nullptr)  {
 
-      base::IPairStream* list{getWeapons()};
+      base::PairStream* list{getWeapons()};
       if (list != nullptr)  {
 
          // Find the first free (inactive) bomb
-         base::IList::Item* item{list->getFirstItem()};
+         base::List::Item* item{list->getFirstItem()};
          while (item != nullptr && bomb == nullptr) {
             const auto pair = static_cast<base::Pair*>(item->getValue());
             const auto p = dynamic_cast<Bomb*>(pair->object());
             if (p != nullptr && p->isInactive()) {
                // Ok, we have a bomb, but is it the type we want?
-               if (*p->getType_old() == *bombType) {
+               if (*p->getType() == *bombType) {
                   p->ref();
                   bomb = p;
                }
@@ -448,16 +448,16 @@ Bomb* SimpleStoresMgr::getSpecificBomb(const base::String* const bombType)
 }
 
 // Get the next free weapon of this 'type'
-IWeapon* SimpleStoresMgr::getSpecificWeapon(const std::type_info& type)
+AbstractWeapon* SimpleStoresMgr::getSpecificWeapon(const std::type_info& type)
 {
-   IWeapon* wpn{};
-   base::IPairStream* list{getWeapons()};
+   AbstractWeapon* wpn{};
+   base::PairStream* list{getWeapons()};
    if (list != nullptr) {
       // Find the first free (inactive) bomb
-      base::IList::Item* item{list->getFirstItem()};
+      base::List::Item* item{list->getFirstItem()};
       while (item != nullptr && wpn == nullptr) {
          const auto pair = static_cast<base::Pair*>(item->getValue());
-         const auto p = dynamic_cast<IWeapon*>(pair->object());
+         const auto p = dynamic_cast<AbstractWeapon*>(pair->object());
          if (p != nullptr && p->isInactive() && p->isClassType(type)) {
             p->ref();
             wpn = p;
@@ -483,9 +483,9 @@ bool SimpleStoresMgr::setWeaponReleaseTimer(const double v)
 //------------------------------------------------------------------------------
 // Find the next target to shoot
 //------------------------------------------------------------------------------
-ITrack* SimpleStoresMgr::getNextTarget()
+Track* SimpleStoresMgr::getNextTarget()
 {
-   ITrack* trk{};
+   Track* trk{};
 
    if (getOwnship() != nullptr) {
 
@@ -494,7 +494,7 @@ ITrack* SimpleStoresMgr::getNextTarget()
 
          // Get the next to shoot
          int n{};
-         base::safe_ptr<ITrack> track;
+         base::safe_ptr<Track> track;
          n = obc->getShootList(&track,1);
          if (n > 0) trk = track;
 
@@ -588,18 +588,18 @@ bool SimpleStoresMgr::onWpnRelEvent(const base::Boolean* const sw)
 {
    // Weapon release follows the switch or by default is true
    bool wpnRel{true};
-   if (sw != nullptr) wpnRel = sw->asBool();
+   if (sw != nullptr) wpnRel = sw->getBoolean();
 
    if ( wpnRel && (isWeaponDeliveryMode(A2A) || isWeaponDeliveryMode(A2G)) ) {
 
       // A/A missiles and A/G bombs only ...
 
-      IWeapon* wpn{getCurrentWeapon()};
+      AbstractWeapon* wpn{getCurrentWeapon()};
       if (wpn != nullptr) {
 
          // release the weapon ---
          //  if successful, returns a pre-ref()'d pointer to the flyout weapon.
-         IWeapon* flyout{releaseWeapon(wpn)};
+         AbstractWeapon* flyout{releaseWeapon(wpn)};
          if (flyout != nullptr) {
 
             if (isWeaponDeliveryMode(A2A)) {
@@ -607,17 +607,17 @@ bool SimpleStoresMgr::onWpnRelEvent(const base::Boolean* const sw)
                // ---
                // Setup the guidance ...
                // ---
-               ITrack* trk{getNextTarget()};
+               Track* trk{getNextTarget()};
                if (trk != nullptr) {
-                  IPlayer* tgt{trk->getTarget()};
+                  Player* tgt{trk->getTarget()};
 
-                  ITrackMgr* tm{};
-                  IRfSensor* sm{flyout->getSensor()};
+                  TrackManager* tm{};
+                  RfSensor* sm{flyout->getSensor()};
                   if (sm != nullptr) tm = sm->getTrackManager();
 
                   if (tm != nullptr) {
                      // Give a copy of the track to the weapon's track manager
-                     ITrack* newTrk{trk->clone()};
+                     Track* newTrk{trk->clone()};
                      tm->clearTracksAndQueues();
                      tm->addTrack(newTrk);
                      flyout->setTargetTrack(newTrk,true);
@@ -669,7 +669,7 @@ bool SimpleStoresMgr::onTriggerSwEvent(const base::Boolean* const sw)
       bool fire{};
       if ( isWeaponDeliveryMode(A2A) || isWeaponDeliveryMode(A2G) ) {
          if ( burst ) fire = true;
-         else fire = sw->asBool();
+         else fire = sw->getBoolean();
       }
 
       // Pass the control to the gun

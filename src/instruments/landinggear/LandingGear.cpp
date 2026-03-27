@@ -1,6 +1,6 @@
 
 #include "mixr/instruments/landinggear/LandingGear.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include <iostream>
 
 namespace mixr {
@@ -17,8 +17,8 @@ BEGIN_SLOTTABLE(LandingGear)
 END_SLOTTABLE(LandingGear)
 
 BEGIN_SLOT_MAP(LandingGear)
-    ON_SLOT(1, setSlotGearDownValue, base::INumber)
-    ON_SLOT(2, setSlotGearUpValue,   base::INumber)
+    ON_SLOT(1, setSlotGearDownValue, base::Number)
+    ON_SLOT(2, setSlotGearUpValue,   base::Number)
 END_SLOT_MAP()
 
 LandingGear::LandingGear()
@@ -43,19 +43,19 @@ void LandingGear::copyData(const LandingGear& org, const bool)
 //------------------------------------------------------------------------------
 // setSlotGearDownValue() -
 //------------------------------------------------------------------------------
-bool LandingGear::setSlotGearDownValue(const base::INumber* const newDV)
+bool LandingGear::setSlotGearDownValue(const base::Number* const newDV)
 {
-    bool ok{};
-    if (newDV != nullptr) ok = setGearDownValue(newDV->asDouble());
+    bool ok = false;
+    if (newDV != nullptr) ok = setGearDownValue(newDV->getReal());
     return ok;
 }
 //------------------------------------------------------------------------------
 // setSlotGearUpValue() -
 //------------------------------------------------------------------------------
-bool LandingGear::setSlotGearUpValue(const base::INumber* const newUV)
+bool LandingGear::setSlotGearUpValue(const base::Number* const newUV)
 {
-    bool ok{};
-    if (newUV != nullptr) ok = setGearUpValue(newUV->asDouble());
+    bool ok = false;
+    if (newUV != nullptr) ok = setGearUpValue(newUV->getReal());
     return ok;
 }
 
@@ -86,13 +86,14 @@ void LandingGear::updateData(const double dt)
     BaseClass::updateData(dt);
 
     // this will store our last value, so we know which way we are going
-    double lastPos{gearPos};
+    double lastPos = gearPos;
     gearPos = getInstValue();
 
     if (gearPos == gearUV) {
         gearState = 0;
         inTransit = false;
-    } else if (gearPos == gearDV) {
+    }
+    else if (gearPos == gearDV) {
         gearState = 1;
         inTransit = false;
     }
@@ -107,7 +108,7 @@ void LandingGear::updateData(const double dt)
     }
 
     // now send our select down based on our transition flag and gear pos
-    int x{};
+    int x = 0;
     if (gearState == 0 && !inTransit) x = 1;
     else if (gearState == 0 && inTransit) x = 2;
     else if (gearState == 1 && inTransit) x = 3;
@@ -116,7 +117,7 @@ void LandingGear::updateData(const double dt)
     send("gearpos", SELECT, x, gearSelSD);
 
     // determine if we have a rotary
-    base::Pair* pair{static_cast<base::Pair*>(findByName("gearpos"))};
+    base::Pair* pair = (base::Pair*)findByName("gearpos");
     if (pair != nullptr) haveRotary = true;
 }
 

@@ -1,12 +1,12 @@
 
-#ifndef __mixr_instruments_CompassRose_HPP__
-#define __mixr_instruments_CompassRose_HPP__
+#ifndef __mixr_instruments_CompassRose_H__
+#define __mixr_instruments_CompassRose_H__
 
 #include "mixr/graphics/Graphic.hpp"
-#include "mixr/base/qty/util/angle_utils.hpp"
+#include "mixr/base/units/angle_utils.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class INumber; }
+namespace base { class Number; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -46,16 +46,16 @@ public:
     void draw() override;
 
     void updateData(const double dt = 0.0) override;
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // event functions
-    bool onUpdateRotDeg(const base::INumber* const);
-    bool onUpdateRadius(const base::INumber* const);
-    bool onUpdateCenRad(const base::INumber* const);
-    bool onUpdateDecRadius(const base::INumber* const);
-    bool onUpdateDisplacement(const base::INumber* const);
-    bool onUpdateCentered(const base::Boolean* const);
+    bool onUpdateRotDeg(const base::Number* const);
+    bool onUpdateRadius(const base::Number* const);
+    bool onUpdateCenRad(const base::Number* const);
+    bool onUpdateDecRadius(const base::Number* const);
+    bool onUpdateDisplacement(const base::Number* const);
+    bool onUpdateCentered(const base::Number* const);
 
 private:
     double rot {};              // rotation angle (rads)
@@ -70,9 +70,9 @@ private:
 
 private:
     // slot table helper methods
-    bool setSlotCenteredRadius(const base::INumber* const);
-    bool setSlotDeCenteredRadius(const base::INumber* const);
-    bool setSlotDisplacement(const base::INumber* const);
+    bool setSlotCenteredRadius(const base::Number* const);
+    bool setSlotDeCenteredRadius(const base::Number* const);
+    bool setSlotDisplacement(const base::Number* const);
 };
 
 }

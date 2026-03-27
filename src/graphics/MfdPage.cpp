@@ -63,8 +63,13 @@ BEGIN_EVENT_HANDLER(MfdPage)
     ON_EVENT(OSB_L10,onOsbL10)
 END_EVENT_HANDLER()
 
+MfdPage::MfdPage()
+{
+    STANDARD_CONSTRUCTOR()
+}  
+
 //------------------------------------------------------------------------------
-// OSB event handlers (just returns false -- not used)
+// Default OSB event handlers (just returns false -- not used)
 //------------------------------------------------------------------------------
 bool MfdPage::onOsbT1()    { return false; }
 bool MfdPage::onOsbT2()    { return false; }

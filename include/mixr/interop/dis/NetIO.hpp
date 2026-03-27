@@ -1,15 +1,14 @@
 
-#ifndef __mixr_interop_dis_NetIO_HPP__
-#define __mixr_interop_dis_NetIO_HPP__
+#ifndef __mixr_interop_dis_NetIO_H__
+#define __mixr_interop_dis_NetIO_H__
 
-#include "mixr/interop/INetIO.hpp"
-
+#include "mixr/interop/common/NetIO.hpp"
 #include <array>
 
 namespace mixr {
-namespace base { class IAngle; class Integer; class ILength; class IPairStream; class INetHandler; class Identifier; }
-namespace models { class Iff; class IRfSensor; class IPlayer; }
-namespace interop { class INib; }
+namespace base { class Angle; class NetHandler; }
+namespace models { class Iff; class RfSensor; }
+namespace interop { class Nib; }
 namespace dis {
 class Nib;
 class Ntm;
@@ -44,39 +43,39 @@ struct ActionResponsePDU_R;
 // Description: Distributed-Interactive-Simulation (DIS) protocol manager.
 //
 // Slots:
-//    netInput    <base::INetHandler>        ! Network input handler
-//    netOutput   <base::INetHandler>        ! Network output handler
+//    netInput    <base::NetHandler>     ! Network input handler
+//    netOutput   <base::NetHandler>     ! Network output handler
 //
-//    version     <base::Integer>            ! DIS version number [ 0 .. 6 ] (IST-CF-03-01, May 5, 2003)
-//                                           !   0 => Other
-//                                           !   1 => DIS PDU version 1.0 (May 92)
-//                                           !   2 => IEEE 1278-1993
-//                                           !   3 => DIS PDU version 2.0 - third draft (May 93)
-//                                           !   4 => DIS PDU version 2.0 - fourth draft (revised) March 16, 1994
-//                                           !   5 => IEEE 1278.1-1995
-//                                           !   6 => IEEE 1278.1A-1998
-//                                           !   7 => IEEE 1278.1 -- draft 15
+//    version     <base::Number>         ! DIS version number [ 0 .. 6 ] (IST-CF-03-01, May 5, 2003)
+//                                       !   0 => Other
+//                                       !   1 => DIS PDU version 1.0 (May 92)
+//                                       !   2 => IEEE 1278-1993
+//                                       !   3 => DIS PDU version 2.0 - third draft (May 93)
+//                                       !   4 => DIS PDU version 2.0 - fourth draft (revised) March 16, 1994
+//                                       !   5 => IEEE 1278.1-1995
+//                                       !   6 => IEEE 1278.1A-1998
+//                                       !   7 => IEEE 1278.1 -- draft 15
 //
-//    siteID         <base::Integer>         ! Site Identification (default: 1)
-//    applicationID  <base::Integer>         ! Application Identification (default: 1)
-//    exerciseID     <base::Integer>         ! Exercise Identification (default: 1)
+//    siteID         <base::Number>      ! Site Identification (default: 1)
+//    applicationID  <base::Number>      ! Application Identification (default: 1)
+//    exerciseID     <base::Number>      ! Exercise Identification (default: 1)
 //
-//    maxTimeDR   <base::ITime>              ! Max DR time (default: 5 seconds)
-//                <base::IPairStream>        ! List of max DR times by kinds and domains (see note #4)
+//    maxTimeDR   <base::Time>           ! Max DR time (default: 5 seconds)
+//                <base::PairStream>     ! List of max DR times by kinds and domains (see note #4)
 //
-//    maxPositionError <base::ILength>       ! Max DR position error (default: 3 meters)
-//                     <base::IPairStream>   ! List of max DR position errors by kinds and domains (see note #4)
+//    maxPositionError <base::Distance>      ! Max DR position error (default: 3 meters)
+//                     <base::PairStream>    ! List of max DR position errors by kinds and domains (see note #4)
 //
-//    maxOrientationError <base::IAngle>     ! Max DR angular error (default: 3 degrees)
-//                        <base::IPairStream>! List of max DR angular errors by kinds and domains (see note #4)
+//    maxOrientationError <base::Angle>      ! Max DR angular error (default: 3 degrees)
+//                        <base::PairStream> ! List of max DR angular errors by kinds and domains (see note #4)
 //
-//    maxAge         <base::ITime>           ! Max age (without update) (default: 12.5 seconds)
-//                   <base::IPairStream>     ! List of max ages (without update) by kinds and domains (see note #4)
+//    maxAge         <base::Time>        ! Max age (without update) (default: 12.5 seconds)
+//                   <base::PairStream>  ! List of max ages (without update) by kinds and domains (see note #4)
 //
-//    maxEntityRange <base::ILength>         ! Max entity range, or zero for no max range (default: 0 -- no range filtering)
-//                   <base::IPairStream>     ! List of max entity ranges by kinds and domains (see note #4)
+//    maxEntityRange <base::Distance>    ! Max entity range, or zero for no max range (default: 0 -- no range filtering)
+//                   <base::PairStream>  ! List of max entity ranges by kinds and domains (see note #4)
 //
-//    EmissionPduHandlers <base::IPairStream>! List of Electromagnetic-Emission PDU handlers
+//    EmissionPduHandlers <base::PairStream> ! List of Electromagnetic-Emission PDU handlers
 //
 //
 // Notes:
@@ -92,7 +91,7 @@ struct ActionResponsePDU_R;
 //       being order by player ID, site ID and app ID.
 //
 //    4) For the slots maxTimeDR, maxPositionError, maxOrientationError, maxAge and
-//       maxEntityRange, if the slot type is base::Time, base::Angle or base::Length then that
+//       maxEntityRange, if the slot type is base::Time, base::Angle or base::Distance then that
 //       parameter is set for entity types of all kinds and domains.  If a pair stream
 //       is given then individual entity kind/domain parameters can be set.  To set the
 //       parameters for individual entity kind/domain types, the slot name must have
@@ -106,15 +105,15 @@ struct ActionResponsePDU_R;
 //       will filter out all entities of that kind/domain type.
 //
 //    6) For outgoing emission PDUs, the list of EmissionPduHandlers are matched
-//       with IRfSensors using the IRfSensor::getTypeId().  That is, the type id
+//       with RfSensors using the RfSensor::getTypeId().  That is, the type id
 //       of the sensor is matched with the type id of the EmissionPduHandler's
 //       type id.  For incoming emission PDUs, the "emitter name" from the PDU
 //       is matched with the EmissionPduHandler's "emitterName" value.
 //
 //------------------------------------------------------------------------------
-class NetIO : public interop::INetIO
+class NetIO : public interop::NetIO
 {
-    DECLARE_SUBCLASS(NetIO, interop::INetIO)
+    DECLARE_SUBCLASS(NetIO, interop::NetIO)
 
 public:
    // Max PDU buffer size
@@ -239,8 +238,24 @@ public:
    virtual bool setVersion(const unsigned char v);                            // Sets the operating version number
 
    // Emission PDU handler
-   const EmissionPduHandler* findEmissionPduHandler(const models::IRfSensor* const);
+   const EmissionPduHandler* findEmissionPduHandler(const models::RfSensor* const);
    const EmissionPduHandler* findEmissionPduHandler(const EmissionSystem* const);
+
+   // Generate a federate name from the site and application numbers:
+   //  "SnnAmm" -- where nn and mm are the site and app numbers.
+   static bool makeFederateName(char* const fedName, const unsigned int len, const unsigned short site, const unsigned short app);
+
+   // Parse federate name for the site and application numbers
+   //  (We're expecting "SnnAmm" where nn and mm are the site and app numbers.)
+   static bool parseFederateName(unsigned short* const site, unsigned short* const app, const char* const fedName);
+
+   // Generate a federation name from the exercise numbers:
+   //  "Ennn" -- where nnn is the exercise number, which must be greater than zero
+   static bool makeFederationName(char* const fedName, const unsigned int len, const unsigned short exercise);
+
+   // Parse federation name for the exercise number
+   //  (We're expecting "Ennn" where nnn is the exercise.)
+   static bool parseFederationName(unsigned short* const exercise, const char* const fedName);
 
    // Finds the Nib for 'ioType' by player, site and app IDs
    virtual Nib* findDisNib(const unsigned short playerId, const unsigned short siteId, const unsigned short appId, const IoType ioType);
@@ -256,13 +271,13 @@ public:
          const unsigned char  extra = 0
       ) const;
 
-   double getMaxEntityRange(const interop::INib* const nib) const final;
-   double getMaxEntityRangeSquared(const interop::INib* const nib) const final;
-   double getMaxTimeDR(const interop::INib* const nib) const final;
-   double getMaxPositionErr(const interop::INib* const nib) const final;
-   double getMaxOrientationErr(const interop::INib* const nib) const final;
-   double getMaxAge(const interop::INib* const nib) const final;
-   interop::INib* createNewOutputNib(models::IPlayer* const player) final;
+   double getMaxEntityRange(const interop::Nib* const nib) const final;
+   double getMaxEntityRangeSquared(const interop::Nib* const nib) const final;
+   double getMaxTimeDR(const interop::Nib* const nib) const final;
+   double getMaxPositionErr(const interop::Nib* const nib) const final;
+   double getMaxOrientationErr(const interop::Nib* const nib) const final;
+   double getMaxAge(const interop::Nib* const nib) const final;
+   interop::Nib* createNewOutputNib(models::Player* const player) final;
 
    // DIS v7 additions
    virtual double getHbtPduEe() const;
@@ -308,30 +323,30 @@ protected:
 
    virtual bool slot2KD(const char* const slotname, unsigned char* const k, unsigned char* const d);
    virtual bool setMaxTimeDR(const double v, const unsigned char kind, const unsigned char domain);
-   virtual bool setMaxTimeDR(const base::ITime* const p, const unsigned char kind, const unsigned char domain);
+   virtual bool setMaxTimeDR(const base::Time* const p, const unsigned char kind, const unsigned char domain);
    virtual bool setMaxPositionErr(const double v, const unsigned char kind, const unsigned char domain);
-   virtual bool setMaxPositionErr(const base::ILength* const p, const unsigned char kind, const unsigned char domain);
+   virtual bool setMaxPositionErr(const base::Distance* const p, const unsigned char kind, const unsigned char domain);
    virtual bool setMaxOrientationErr(const double v, const unsigned char kind, const unsigned char domain);
-   virtual bool setMaxOrientationErr(const base::IAngle* const p, const unsigned char kind, const unsigned char domain);
+   virtual bool setMaxOrientationErr(const base::Angle* const p, const unsigned char kind, const unsigned char domain);
    virtual bool setMaxAge(const double v, const unsigned char kind, const unsigned char domain);
-   virtual bool setMaxAge(const base::ITime* const p, const unsigned char kind, const unsigned char domain);
+   virtual bool setMaxAge(const base::Time* const p, const unsigned char kind, const unsigned char domain);
    virtual bool setMaxEntityRange(const double v, const unsigned char kind, const unsigned char domain);
-   virtual bool setMaxEntityRange(const base::ILength* const p, const unsigned char kind, const unsigned char domain);
+   virtual bool setMaxEntityRange(const base::Distance* const p, const unsigned char kind, const unsigned char domain);
 
    // NetIO Interface
    bool initNetwork() override;                                                   // Initialize the network
    void netInputHander() override;                                                // Network input handler
    void processInputList() override;                                              // Update players/systems from the Input-list
-   interop::INib* nibFactory(const interop::INetIO::IoType ioType) override;      // Create a new Nib
-   interop::INtmInputNode* rootNtmInputNodeFactory() const override;
-   void testOutputEntityTypes(const int) final;                                   // Test quick lookup of outgoing entity types
-   void testInputEntityTypes(const int) final;                                    // Test quick lookup of incoming entity types
+   interop::Nib* nibFactory(const interop::NetIO::IoType ioType) override;        // Create a new Nib
+   interop::NetIO::NtmInputNode* rootNtmInputNodeFactory() const override;
+   void testOutputEntityTypes(const unsigned int) override;                       // Test quick lookup of outgoing entity types
+   void testInputEntityTypes(const unsigned int) override;                        // Test quick lookup of incoming entity types
 
 private:
     void initData();
 
-    base::safe_ptr<base::INetHandler> netInput;    // Input network handler
-    base::safe_ptr<base::INetHandler> netOutput;   // Output network handler
+    base::safe_ptr<base::NetHandler> netInput;    // Input network handler
+    base::safe_ptr<base::NetHandler> netOutput;   // Output network handler
     unsigned char version{VERSION_1278_1A};       // Version number [ 0 .. 6 ]
 
    // Network Model IDs
@@ -362,26 +377,26 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotFederateName(const base::Identifier* const) final;     // Sets our federate name
-   bool setSlotFederationName(const base::Identifier* const) final;   // Sets our federation name
-   bool setSlotMaxTimeDR(const base::ITime* const) final;             // Sets the max DR time(s) for all entity types
-   bool setSlotMaxPositionErr(const base::ILength* const) final;      // Sets the max positional error(s) for all entity types
-   bool setSlotMaxOrientationErr(const base::IAngle* const) final;    // Sets the max orientation error(s) for all entity types
-   bool setSlotMaxEntityRange(const base::ILength* const) final;      // Sets the max entity range(s) for all entity types
-   bool setSlotMaxAge(const base::ITime* const) final;                // Sets the max age(s) for all entity types
+   bool setSlotFederateName(const base::String* const) final;         // Sets our federate name
+   bool setSlotFederationName(const base::String* const) final;       // Sets our federation name
+   bool setSlotMaxTimeDR(const base::Time* const) final;              // Sets the max DR time(s) for all entity types
+   bool setSlotMaxPositionErr(const base::Distance* const) final;     // Sets the max positional error(s) for all entity types
+   bool setSlotMaxOrientationErr(const base::Angle* const) final;     // Sets the max orientation error(s) for all entity types
+   bool setSlotMaxEntityRange(const base::Distance* const) final;     // Sets the max entity range(s) for all entity types
+   bool setSlotMaxAge(const base::Time* const) final;                 // Sets the max age(s) for all entity types
 
-   bool setSlotNetInput(base::INetHandler* const);                    // Network input handler
-   bool setSlotNetOutput(base::INetHandler* const);                   // Network output handler
-   bool setSlotVersion(const base::Integer* const);                   // DIS version
-   bool setSlotMaxTimeDR(const base::IPairStream* const);             // Sets the max DR time(s) for selected entity types
-   bool setSlotMaxPositionErr(const base::IPairStream* const);        // Sets the max positional error(s) for selected entity types
-   bool setSlotMaxOrientationErr(const base::IPairStream* const);     // Sets the max orientation error(s) for selected entity types
-   bool setSlotMaxAge(const base::IPairStream* const);                // Sets the max age(s) for selected entity types
-   bool setSlotMaxEntityRange(const base::IPairStream* const);        // Sets the max entity range(s) for selected entity types
-   bool setSlotEmissionPduHandlers(base::IPairStream* const);         // Sets the list of Electromagnetic Emission PDU handlers
-   bool setSlotSiteID(const base::Integer* const);                    // Sets Site ID
-   bool setSlotApplicationID(const base::Integer* const);             // Sets Application ID
-   bool setSlotExerciseID(const base::Integer* const);                // Sets Exercise ID
+   bool setSlotNetInput(base::NetHandler* const);                     // Network input handler
+   bool setSlotNetOutput(base::NetHandler* const);                    // Network output handler
+   bool setSlotVersion(const base::Number* const);                    // DIS version
+   bool setSlotMaxTimeDR(const base::PairStream* const);              // Sets the max DR time(s) for selected entity types
+   bool setSlotMaxPositionErr(const base::PairStream* const);         // Sets the max positional error(s) for selected entity types
+   bool setSlotMaxOrientationErr(const base::PairStream* const);      // Sets the max orientation error(s) for selected entity types
+   bool setSlotMaxAge(const base::PairStream* const);                 // Sets the max age(s) for selected entity types
+   bool setSlotMaxEntityRange(const base::PairStream* const);         // Sets the max entity range(s) for selected entity types
+   bool setSlotEmissionPduHandlers(base::PairStream* const);          // Sets the list of Electromagnetic Emission PDU handlers
+   bool setSlotSiteID(const base::Number* const);                     // Sets Site ID
+   bool setSlotApplicationID(const base::Number* const);              // Sets Application ID
+   bool setSlotExerciseID(const base::Number* const);                 // Sets Exercise ID
 };
 
 }

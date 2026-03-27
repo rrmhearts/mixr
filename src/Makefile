@@ -1,50 +1,39 @@
 
 include makedefs
 
-# Platform library  : Dependency libraries
+# Library           : Requires
 # ------------------------------------------------------------------------
-# base                 : -
-# dafif                : -
-# graphics             : OpenGL
-# graphics_ftgl        : FTGL, freetype
-# gui_glut             : freeglut
-# instruments          : -
-# interop              : -
-# interop_dis          : -
-# interop_hla          : HLA RTI
-# interop_rprfom       : HLA RTI
-# linkage              : -
-# map                  : -
-# models               : -
-# models_jsbsim        : JSBSim
-# ighost_cigi          : CIGICL 3.x
-# ighost_flightgear    : -
-# ighost_pov           : -
-# recorder_protobuf_v2 : Google protocol buffers, version 2
-# simulation           : -
-# terrain              : -
+# base              : -
+# dafif             : -
+# graphics          : OpenGL, FTGL, freetype
+# gui_glut          : freeglut
+# instruments       : -
+# interop           : -
+# interop_dis       : -
+# interop_hla       : HLA RTI
+# interop_rprfom    : HLA RTI
+# linkage           : -
+# linearsystem      : -
+# map_rpf           : -
+# models            : JSBSim
+# ighost_cigi       : CIGICL 3.x
+# ighost_pov        : -
+# recorder          : Google protocol buffers
+# simulation        : -
+# terrain           : -
 #
 PROJECTS = base
 PROJECTS += dafif
 PROJECTS += linkage
-PROJECTS += simulation
-PROJECTS += terrain
-#
-# Models
-#
+PROJECTS += linearsystem 
+PROJECTS += simulation terrain
 PROJECTS += models
-PROJECTS += models/dynamics/jsbsim
-
-#
-# Data recorder
-#
-PROJECTS += recorder/protobuf_v2
+PROJECTS += recorder
 
 #
 # OpenGL-based graphics libraries
 #
 PROJECTS += graphics
-PROJECTS += graphics/fonts/ftgl
 PROJECTS += instruments
 
 #
@@ -55,16 +44,15 @@ PROJECTS += ui/glut
 #
 # Interoperability interfaces
 #
-PROJECTS += interop
+PROJECTS += interop/common
 PROJECTS += interop/dis
 PROJECTS += interop/hla
-PROJECTS += interop/hla/rprfom
+PROJECTS += interop/rprfom
 
 #
 # Image generator host interfaces
 #
 PROJECTS += ighost/cigi
-PROJECTS += ighost/flightgear
 PROJECTS += ighost/pov
 
 #
@@ -82,6 +70,14 @@ all: $(PROJECTS)
 
 $(PROJECTS):
 	$(MAKE) -C $@
+
+install: uninstall
+	-cp -r ../include/mixr /usr/local/include/mixr
+	-cp -r ../lib /usr/local/lib/mixr
+
+uninstall:
+	-rm -rf /usr/local/include/mixr
+	-rm -rf /usr/local/lib/mixr
 
 clean:
 	-for d in $(PROJECTS); do (cd $$d; $(MAKE) clean ); done

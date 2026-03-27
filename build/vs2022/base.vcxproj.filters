@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base">
+      <UniqueIdentifier>{62FCE978-CE12-E80E-178A-733083DFB896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\colors">
+      <UniqueIdentifier>{03987F88-EFBC-CE08-1808-B498048CCD26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\concepts">
+      <UniqueIdentifier>{B0B18FAA-9CC1-3B7B-057B-A099F1A92A14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\concepts\linkage">
+      <UniqueIdentifier>{BAA0D6BF-A6DC-D929-0FEF-F120FB498244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\functors">
+      <UniqueIdentifier>{05D23A3D-F1E1-E60D-5A9B-4B2C46CAD5A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\network">
+      <UniqueIdentifier>{FBB874D0-677B-A85A-B02B-37E71C2D8138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\numeric">
+      <UniqueIdentifier>{44C43EF5-B086-727F-F936-010C65384B5D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\osg">
+      <UniqueIdentifier>{9A0A919C-0677-4C97-CF6A-E4F43B966EFF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\threads">
+      <UniqueIdentifier>{3C5223A5-A814-572F-F1C4-E5BB5DC62F0D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\ubf">
+      <UniqueIdentifier>{EE21919C-5A8E-4C97-2382-E4F48FAD6EFF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\units">
+      <UniqueIdentifier>{24066805-903D-B09C-9947-14C005FED695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\util">
+      <UniqueIdentifier>{0FADB52E-FBA6-DE80-E413-7591D0AC44ED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\base\util\platform">
+      <UniqueIdentifier>{63A6EF0E-CF89-FE4E-D88C-2C8B44EFC49F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base">
+      <UniqueIdentifier>{F7972DCF-E364-88DA-0C7E-7682F8A9BD68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\colors">
+      <UniqueIdentifier>{F8B99733-6445-05F8-6D56-88ECD96061F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\concepts">
+      <UniqueIdentifier>{E524387C-513B-3612-9AB2-C1330608079A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\concepts\linkage">
+      <UniqueIdentifier>{EF7805BE-5B3B-3948-A4EB-C7D410ED1126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\edl_parser">
+      <UniqueIdentifier>{A7E0BC7D-1342-9A8B-9CAF-E03D0810D14A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\functors">
+      <UniqueIdentifier>{3A45E30E-A65B-E1A4-EFD2-6CC65B28B22C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\network">
+      <UniqueIdentifier>{901991DE-7C12-B030-A544-95B5919C8F3C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\numeric">
+      <UniqueIdentifier>{D9245B03-C51D-7A55-EE4F-5FDADAA75961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\osg">
+      <UniqueIdentifier>{AF68B25B-9BCB-4100-4451-7AB630930D83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\threads">
+      <UniqueIdentifier>{D1B23FB3-BDAB-5E05-E6DD-438AD2353E11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\threads\platform">
+      <UniqueIdentifier>{65469193-D108-C51D-1AB9-53AA86BA9DFB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\ubf">
+      <UniqueIdentifier>{0380B25B-EFE2-4100-9868-7AB684AA0D83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\units">
+      <UniqueIdentifier>{793D5912-650B-4D18-4E9F-BD3E3A0C297D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\util">
+      <UniqueIdentifier>{C4CD02D2-308E-7E08-F9C8-C7856548C3E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\util\platform">
+      <UniqueIdentifier>{B86279E6-A45C-A238-8DC9-3849796208A5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\base\Component.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\EarthModel.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\FileReader.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Identifier.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\LatLon.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\List.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Locus.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Matrix.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\MetaObject.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\MonitorMetrics.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Object.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Pair.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\PairStream.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Referenced.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\SlotTable.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Stack.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\StateMachine.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Statistic.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\String.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Timers.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Transforms.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\Vectors.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Cie.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Cmy.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Color.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Hls.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Hsv.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Hsva.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Rgb.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Rgba.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\colors\Yiq.hpp">
+      <Filter>include\mixr\base\colors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoData.hpp">
+      <Filter>include\mixr\base\concepts\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoDevice.hpp">
+      <Filter>include\mixr\base\concepts\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\concepts\linkage\AbstractIoHandler.hpp">
+      <Filter>include\mixr\base\concepts\linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\edl_parser.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\eventTokens.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\factory.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\FStorage.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Func1.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Func2.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Func3.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Func4.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Func5.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Function.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Polynomial.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table1.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table2.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table3.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table4.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\Table5.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\functors\TableStorage.hpp">
+      <Filter>include\mixr\base\functors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\macros.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\NetHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\PosixHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\TcpClient.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\TcpHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\TcpServerMultiple.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\TcpServerSingle.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\UdpBroadcastHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\UdpMulticastHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\network\UdpUnicastHandler.hpp">
+      <Filter>include\mixr\base\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Boolean.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Complex.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Complex.inl">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Float.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Integer.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Number.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\numeric\Operators.hpp">
+      <Filter>include\mixr\base\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\osg\osg_math.hpp">
+      <Filter>include\mixr\base\osg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\safe_ptr.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\safe_queue.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\safe_stack.hpp">
+      <Filter>include\mixr\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\threads\AbstractThread.hpp">
+      <Filter>include\mixr\base\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\threads\OneShotThread.hpp">
+      <Filter>include\mixr\base\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\threads\PeriodicThread.hpp">
+      <Filter>include\mixr\base\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\threads\SyncThread.hpp">
+      <Filter>include\mixr\base\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractAction.hpp">
+      <Filter>include\mixr\base\ubf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractBehavior.hpp">
+      <Filter>include\mixr\base\ubf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\ubf\AbstractState.hpp">
+      <Filter>include\mixr\base\ubf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\ubf\Agent.hpp">
+      <Filter>include\mixr\base\ubf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\ubf\Arbiter.hpp">
+      <Filter>include\mixr\base\ubf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Angles.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\AngularVelocity.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Areas.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Decibel.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Density.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Distances.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Energies.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\FlowRate.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Forces.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Frequencies.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\LinearVelocity.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Masses.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Powers.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Times.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\Volumes.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\angle_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\area_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\distance_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\energy_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\force_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\frequency_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\mass_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\power_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\time_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\units\volume_utils.hpp">
+      <Filter>include\mixr\base\units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\FlexLexer.h">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\atomics.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\constants.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\enum_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\lfi.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\math_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\navDR_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\navDR_utils.inl">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\nav_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\nav_utils.inl">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\osg_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_linux.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_mingw.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\atomics_msvc.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_linux.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_mingw.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform\platform_api_msvc.hpp">
+      <Filter>include\mixr\base\util\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\platform_api.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\str_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\base\util\system_utils.hpp">
+      <Filter>include\mixr\base\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\base\edl_parser\EdlParser.hpp">
+      <Filter>src\base\edl_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\base\edl_parser\EdlScanner.hpp">
+      <Filter>src\base\edl_parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\base\Component.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\EarthModel.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\FileReader.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Identifier.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\LatLon.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\List.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Locus.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Matrix.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\MetaObject.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\MonitorMetrics.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Object.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Pair.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\PairStream.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\SlotTable.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Stack.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\StateMachine.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Statistic.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\String.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Timers.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Transforms.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Vectors.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Cie.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Cmy.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Color.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Hls.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Hsv.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Hsva.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Rgb.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Rgba.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\colors\Yiq.cpp">
+      <Filter>src\base\colors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoData.cpp">
+      <Filter>src\base\concepts\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoDevice.cpp">
+      <Filter>src\base\concepts\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\concepts\linkage\AbstractIoHandler.cpp">
+      <Filter>src\base\concepts\linkage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\edl_parser\EdlParser.cpp">
+      <Filter>src\base\edl_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\edl_parser\EdlScanner.cpp">
+      <Filter>src\base\edl_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\factory.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\FStorage.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Func1.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Func2.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Func3.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Func4.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Func5.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Function.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Polynomial.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table1.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table2.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table3.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table4.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\Table5.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\functors\TableStorage.cpp">
+      <Filter>src\base\functors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\NetHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\PosixHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\TcpClient.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\TcpHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\TcpServerMultiple.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\TcpServerSingle.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\UdpBroadcastHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\UdpMulticastHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\network\UdpUnicastHandler.cpp">
+      <Filter>src\base\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Boolean.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Complex.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Float.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Integer.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Number.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\numeric\Operators.cpp">
+      <Filter>src\base\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\osg\MatrixDecomposition.cpp">
+      <Filter>src\base\osg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\osg\Matrixd.cpp">
+      <Filter>src\base\osg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\osg\Matrixf.cpp">
+      <Filter>src\base\osg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\osg\Quat.cpp">
+      <Filter>src\base\osg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\osg\math.cpp">
+      <Filter>src\base\osg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\AbstractThread.cpp">
+      <Filter>src\base\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\OneShotThread.cpp">
+      <Filter>src\base\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\PeriodicThread.cpp">
+      <Filter>src\base\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\SyncThread.cpp">
+      <Filter>src\base\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\platform\AbstractThread_msvc.cpp">
+      <Filter>src\base\threads\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\platform\PeriodicThread_msvc.cpp">
+      <Filter>src\base\threads\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\threads\platform\SyncThread_msvc.cpp">
+      <Filter>src\base\threads\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\ubf\AbstractAction.cpp">
+      <Filter>src\base\ubf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\ubf\AbstractBehavior.cpp">
+      <Filter>src\base\ubf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\ubf\AbstractState.cpp">
+      <Filter>src\base\ubf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\ubf\Agent.cpp">
+      <Filter>src\base\ubf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\ubf\Arbiter.cpp">
+      <Filter>src\base\ubf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Angles.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\AngularVelocity.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Areas.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Decibel.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Density.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Distances.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Energies.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\FlowRate.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Forces.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Frequencies.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\LinearVelocity.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Masses.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Powers.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Times.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\units\Volumes.cpp">
+      <Filter>src\base\units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\lfi.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\math_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\navDR_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\nav_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\osg_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\platform\system_msvc.cpp">
+      <Filter>src\base\util\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\str_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\util\system_utils.cpp">
+      <Filter>src\base\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\mixr\base\eventTokens.epp">
+      <Filter>include\mixr\base</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\BoundingBox">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\BoundingSphere">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Matrixd">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Matrixf">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Quat">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec2b">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec2d">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec2f">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec2s">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec3b">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec3d">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec3f">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec3s">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec4b">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec4d">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec4f">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec4s">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\include\mixr\base\osg\Vec4ub">
+      <Filter>include\mixr\base\osg</Filter>
+    </None>
+    <None Include="..\..\src\base\edl_parser\edl_parser.y">
+      <Filter>src\base\edl_parser</Filter>
+    </None>
+    <None Include="..\..\src\base\edl_parser\edl_scanner.l">
+      <Filter>src\base\edl_parser</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,7 +1,8 @@
 
 #include "mixr/graphics/Polygon.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/graphics/ColorGradient.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include <GL/glu.h>
 
 namespace mixr {
@@ -145,7 +146,7 @@ void Polygon::drawFunc()
             base::Vec3d* ptr = nullptr;
             for (unsigned int i = 0; i < nv; i++) {
                 if (colGradient != nullptr) {
-                    base::IColor* col = colGradient->getColorByIdx(i+1);
+                    base::Color* col = colGradient->getColorByIdx(i+1);
                     if (col != nullptr)
                        glColor4f(static_cast<GLfloat>(col->red()), static_cast<GLfloat>(col->green()),
                                  static_cast<GLfloat>(col->blue()), static_cast<GLfloat>(col->alpha()));

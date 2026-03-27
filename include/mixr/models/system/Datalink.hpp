@@ -1,16 +1,16 @@
 
-#ifndef __mixr_models_common_Datalink_HPP__
-#define __mixr_models_common_Datalink_HPP__
+#ifndef __mixr_models_Datalink_H__
+#define __mixr_models_Datalink_H__
 
-#include "mixr/models/system/ISystem.hpp"
+#include "mixr/models/system/System.hpp"
 
 #include "mixr/base/safe_queue.hpp"
 
 namespace mixr {
-namespace base { class Integer; class ILength; class String; }
+namespace base { class Distance; class Number; class String; }
 namespace models {
 class CommRadio;
-class ITrackMgr;
+class TrackManager;
 
 //------------------------------------------------------------------------------
 // Class: Datalink
@@ -18,8 +18,8 @@ class ITrackMgr;
 //
 // Factory name: Datalink
 // Slots:
-//    radioId           <Integer>    ! Radio ID (see note #1) (default: 0)
-//    maxRange          <ILength>    ! Max range of the datalink (w/o a radio model) (see note #2)
+//    radioId           <Number>     ! Radio ID (see note #1) (default: 0)
+//    maxRange          <Distance>   ! Max range of the datalink (w/o a radio model) (see note #2)
 //                                   ! (default: 5000)
 //    radioName         <Identifier> ! Name of the (optional) communication radio model (see notes #1 and #2)
 //                                   ! (default: 0)
@@ -35,15 +35,15 @@ class ITrackMgr;
 //    3) This class is one of the "top level" systems attached to a Player
 //       class (see Player.hpp).
 //------------------------------------------------------------------------------
-class Datalink : public ISystem
+class Datalink : public System
 {
-   DECLARE_SUBCLASS(Datalink, ISystem)
+   DECLARE_SUBCLASS(Datalink, System)
 
 public:
    Datalink();
 
-   virtual bool sendMessage(base::IObject* const msg);
-   virtual base::IObject* receiveMessage();
+   virtual bool sendMessage(base::Object* const msg);
+   virtual base::Object* receiveMessage();
 
    unsigned short getRadioID() const;
 
@@ -67,24 +67,24 @@ public:
    virtual bool setNetworkQueueEnabled(const bool flg);
 
    // For network handler to get to the messages
-   base::safe_queue<base::IObject*>* getOutputQueue()                  { return outQueue; }
+   base::safe_queue<base::Object*>* getOutputQueue()                   { return outQueue; }
 
-   ITrackMgr* getTrackManager()                                        { return trackManager; }
-   const ITrackMgr* getTrackManager() const                            { return trackManager; }
-   virtual bool setTrackManager(ITrackMgr* const tm);
+   TrackManager* getTrackManager()                                     { return trackManager; }
+   const TrackManager* getTrackManager() const                         { return trackManager; }
+   virtual bool setTrackManager(TrackManager* const tm);
 
    const base::String* getTrackManagerName() const                     { return tmName; }
    bool setTrackManagerName(const base::String* const);
 
    // Event handler(s)
-   virtual bool onDatalinkMessageEvent(base::IObject* const);
+   virtual bool onDatalinkMessageEvent(base::Object* const);
 
-   bool event(const int event, base::IObject* const obj = nullptr) override;
+   bool event(const int event, base::Object* const obj = nullptr) override;
    void reset() override;
 
 protected:
-   virtual bool queueIncomingMessage(base::IObject* const);  // Queue up an incoming message
-   virtual bool queueOutgoingMessage(base::IObject* const);  // Queue up an outgoing message
+   virtual bool queueIncomingMessage(base::Object* const);  // Queue up an incoming message
+   virtual bool queueOutgoingMessage(base::Object* const);  // Queue up an outgoing message
    virtual void clearQueues(); // Clear all queues
 
    void dynamics(const double dt) override;
@@ -96,8 +96,8 @@ private:
 
    static const int MAX_MESSAGES{1000};    // Max number of messages in queues
 
-   base::safe_queue<base::IObject*>* inQueue {};  // Received message queue
-   base::safe_queue<base::IObject*>* outQueue {}; // Queue for messages going out over the network/DIS
+   base::safe_queue<base::Object*>* inQueue {};   // Received message queue
+   base::safe_queue<base::Object*>* outQueue {};  // Queue for messages going out over the network/DIS
    double noRadioMaxRange {5000.0};               // Max range of our datalink (NM)
 
    const base::String* radioName {};     // Name of our radio
@@ -109,13 +109,13 @@ private:
    bool sendLocal {true};                // Send to local players flag; direct or via the radio
    bool queueForNetwork {true};          // Send the message to the network output queue
 
-   ITrackMgr* trackManager {};           // Track manager
+   TrackManager* trackManager {};        // Track manager
    const base::String* tmName {};        // Track manager name
 
 private:
    // slot table helper methods
-   bool setSlotRadioId(const base::Integer* const);
-   bool setSlotMaxRange(const base::ILength* const);
+   bool setSlotRadioId(const base::Number* const);
+   bool setSlotMaxRange(const base::Distance* const);
    bool setSlotRadioName(const base::String* const x)                { return setRadioName(x); }
    bool setSlotTrackManagerName(const base::String* const x)         { return setTrackManagerName(x); }
 };

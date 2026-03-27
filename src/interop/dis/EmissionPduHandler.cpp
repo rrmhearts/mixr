@@ -7,22 +7,23 @@
 #include "mixr/interop/dis/pdu.hpp"
 
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/track/ITrack.hpp"
-#include "mixr/models/system/trackmanager/ITrackMgr.hpp"
+#include "mixr/models/Track.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 #include "mixr/models/system/Jammer.hpp"
+#include "mixr/models/system/Radar.hpp"
 #include "mixr/models/system/SensorMgr.hpp"
 
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/network/INetHandler.hpp"
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Decibel.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/units/Decibel.hpp"
+#include "mixr/base/network/NetHandler.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <cmath>
 #include <cstring>
 
 namespace mixr {
+
 namespace dis {
 
 IMPLEMENT_SUBCLASS(EmissionPduHandler, "EmissionPduHandler")
@@ -37,12 +38,12 @@ BEGIN_SLOTTABLE(EmissionPduHandler)
 END_SLOTTABLE(EmissionPduHandler)
 
 BEGIN_SLOT_MAP(EmissionPduHandler)
-    ON_SLOT(1, setSlotEmitterName,     base::Integer )
-    ON_SLOT(2, setSlotEmitterFunction, base::Integer )
-    ON_SLOT(3, setSlotSensorTemplate,  models::IRfSensor )
+    ON_SLOT(1, setSlotEmitterName,     base::Number )
+    ON_SLOT(2, setSlotEmitterFunction, base::Number )
+    ON_SLOT(3, setSlotSensorTemplate,  models::RfSensor )
     ON_SLOT(4, setSlotAntennaTemplate, models::Antenna )
-    ON_SLOT(5, setSlotDefaultIn,       base::Boolean )
-    ON_SLOT(6, setSlotDefaultOut,      base::Boolean )
+    ON_SLOT(5, setSlotDefaultIn,       base::Number )
+    ON_SLOT(6, setSlotDefaultOut,      base::Number )
 END_SLOT_MAP()
 
 EmissionPduHandler::EmissionPduHandler()
@@ -68,14 +69,14 @@ void EmissionPduHandler::copyData(const EmissionPduHandler& org, const bool)
 
    setSensorModel(nullptr);
    if (org.getSensorModel() != nullptr) {
-      models::IRfSensor* tmp{org.getSensorModel()->clone()};
+      models::RfSensor* tmp = org.getSensorModel()->clone();
       setSensorModel(tmp);
       tmp->unref();
    }
 
    setAntennaModel(nullptr);
    if (org.getAntennaModel() != nullptr) {
-      models::Antenna* tmp{org.getAntennaModel()->clone()};
+      models::Antenna* tmp = org.getAntennaModel()->clone();
       setAntennaModel(tmp);
       tmp->unref();
    }
@@ -97,13 +98,13 @@ void EmissionPduHandler::copyData(const EmissionPduHandler& org, const bool)
 
 void EmissionPduHandler::deleteData()
 {
-   if (sensor != nullptr) { sensor->event(mixr::base::IComponent::SHUTDOWN_EVENT); }
+   if (sensor != nullptr) { sensor->event(mixr::base::Component::SHUTDOWN_EVENT); }
    setSensor(nullptr);
 
-   if (sensorModel != nullptr) { sensorModel->event(mixr::base::IComponent::SHUTDOWN_EVENT); }
+   if (sensorModel != nullptr) { sensorModel->event(mixr::base::Component::SHUTDOWN_EVENT); }
    setSensorModel(nullptr);
 
-   if (antennaModel != nullptr) { antennaModel->event(mixr::base::IComponent::SHUTDOWN_EVENT); }
+   if (antennaModel != nullptr) { antennaModel->event(mixr::base::Component::SHUTDOWN_EVENT); }
    setAntennaModel(nullptr);
 }
 
@@ -126,14 +127,14 @@ bool EmissionPduHandler::setEmitterFunction(const unsigned char num)
 }
 
 // Sets our R/F emitter system
-bool EmissionPduHandler::setSensor(models::IRfSensor* const msg)
+bool EmissionPduHandler::setSensor(models::RfSensor* const msg)
 {
    sensor = msg;
    return true;
 }
 
 // Sets our template sensor model
-bool EmissionPduHandler::setSensorModel(models::IRfSensor* const msg)
+bool EmissionPduHandler::setSensorModel(models::RfSensor* const msg)
 {
    sensorModel = msg;
    return true;
@@ -181,7 +182,7 @@ bool EmissionPduHandler::setSavedEmissionSystemData(const EmissionSystem& newES)
 // Saved EmitterBeamData
 bool EmissionPduHandler::setSavedEmitterBeamData(const unsigned int idx, const EmitterBeamData& newEBD)
 {
-   bool ok{};
+   bool ok = false;
    if (idx < MAX_EM_BEAMS) {
       emitterBeamDataN1[idx] = newEBD;
       ok = true;
@@ -193,7 +194,7 @@ bool EmissionPduHandler::setSavedEmitterBeamData(const unsigned int idx, const E
 bool EmissionPduHandler::setSavedTrackJamTargetData(const unsigned int ibeam, const unsigned int ifield, const TrackJamTargets& newTJT)
 {
 {
-   bool ok{};
+   bool ok = false;
    if (ibeam < MAX_EM_BEAMS && ifield < MAX_TARGETS_IN_TJ_FIELD) {
       tjTargetsN1[ibeam][ifield] = newTJT;
       ok = true;
@@ -213,11 +214,11 @@ bool EmissionPduHandler::setTemplatesFound(const bool newTF)
 //------------------------------------------------------------------------------
 
 // Sets the our DIS Emitter Name
-bool EmissionPduHandler::setSlotEmitterName(const base::Integer* const msg)
+bool EmissionPduHandler::setSlotEmitterName(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      const int i{msg->asInt()};
+      int i = msg->getInt();
       if (i >= 0 && i <= 0xffff) {
          ok = setEmitterName( static_cast<unsigned short>(i) );
       }
@@ -226,11 +227,11 @@ bool EmissionPduHandler::setSlotEmitterName(const base::Integer* const msg)
 }
 
 // Sets our DIS Emitter Function
-bool EmissionPduHandler::setSlotEmitterFunction(const base::Integer* const msg)
+bool EmissionPduHandler::setSlotEmitterFunction(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      const int i{msg->asInt()};
+      int i = msg->getInt();
       if (i >= 0 && i <= 0xff) {
          ok = setEmitterFunction( static_cast<unsigned char>(i) );
       }
@@ -239,7 +240,7 @@ bool EmissionPduHandler::setSlotEmitterFunction(const base::Integer* const msg)
 }
 
 // Sets our template sensor model
-bool EmissionPduHandler::setSlotSensorTemplate(models::IRfSensor* const msg)
+bool EmissionPduHandler::setSlotSensorTemplate(models::RfSensor* const msg)
 {
    return setSensorModel(msg);
 }
@@ -250,20 +251,20 @@ bool EmissionPduHandler::setSlotAntennaTemplate(models::Antenna* const msg)
    return setAntennaModel(msg);
 }
 
-bool EmissionPduHandler::setSlotDefaultIn(const base::Boolean* const msg)
+bool EmissionPduHandler::setSlotDefaultIn(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      ok = setDefaultIn( msg->asBool() );
+      ok = setDefaultIn( msg->getBoolean() );
    }
    return ok;
 }
 
-bool EmissionPduHandler::setSlotDefaultOut(const base::Boolean* const msg)
+bool EmissionPduHandler::setSlotDefaultOut(const base::Number* const msg)
 {
-   bool ok{};
+   bool ok = false;
    if (msg != nullptr) {
-      ok = setDefaultOut( msg->asBool() );
+      ok = setDefaultOut( msg->getBoolean() );
    }
    return ok;
 }
@@ -271,10 +272,10 @@ bool EmissionPduHandler::setSlotDefaultOut(const base::Boolean* const msg)
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-// Returns true if IRfSensor data matches our parameters
-bool EmissionPduHandler::isMatchingRfSystemType(const models::IRfSensor* const p) const
+// Returns true if RfSensor data matches our parameters
+bool EmissionPduHandler::isMatchingRfSystemType(const models::RfSensor* const p) const
 {
-   bool match{};
+   bool match = false;
    if (p != nullptr && sensorModel != nullptr) {
       match = (std::strcmp(sensorModel->getTypeId(),p->getTypeId()) == 0);
    }
@@ -284,7 +285,7 @@ bool EmissionPduHandler::isMatchingRfSystemType(const models::IRfSensor* const p
 // True if EmissionSystem PDU data matches our parameters.
 bool EmissionPduHandler::isMatchingRfSystemType(const EmissionSystem* const p) const
 {
-   bool match{};
+   bool match = false;
    if (p != nullptr) {
       // All we need to match is the DIS "emitter name"
       match = (emitterName == p->emitterSystem.emitterName);
@@ -298,7 +299,7 @@ bool EmissionPduHandler::isMatchingRfSystemType(const EmissionSystem* const p) c
 //------------------------------------------------------------------------------
 void EmissionPduHandler::setTimedOut()
 {
-   models::IRfSensor* rfSys{getSensor()};
+   models::RfSensor* rfSys = getSensor();
    if (rfSys != nullptr) {
       rfSys->setTransmitterEnableFlag(false);
       rfSys->setReceiverEnabledFlag(false);
@@ -311,22 +312,22 @@ void EmissionPduHandler::setTimedOut()
 //------------------------------------------------------------------------------
 bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const pdu, const EmissionSystem* const es, Nib* const nib)
 {
-   models::IPlayer* player{nib->getPlayer()};
+   models::Player* player = nib->getPlayer();
    if (player == nullptr || noTemplatesFound) return false;
 
    // ---
    // Default sensor: process only one beam)
    // ---
    if (es->numberOfBeams > 0) {
-      const EmitterBeamData* bd{es->getEmitterBeamData(0)};
+      const EmitterBeamData* bd = es->getEmitterBeamData(0);
 
       // ---
       // Use our template models to create the RfSensor and Antenna
       // ---
       if (getSensor() == nullptr && !noTemplatesFound) {
 
-         models::IRfSensor* rp{getSensorModel()};
-         models::Antenna*   ap{getAntennaModel()};
+         models::RfSensor* rp = getSensorModel();
+         models::Antenna*  ap = getAntennaModel();
 
          // If we have both the RF system and antenna models ...
          if (rp != nullptr && ap != nullptr) {
@@ -336,13 +337,13 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
             rp->reset();
             ap->reset();
 
-            // Give the antenna list to the proxy player
+            // Give the antenna list to the IPlayer
             {
                // First get the (top level) container gimbal
-               models::IGimbal* gimbal{player->getGimbal()};
+               models::Gimbal* gimbal = player->getGimbal();
                if (gimbal == nullptr) {
                   // Create the container gimbal!
-                  gimbal = new models::IGimbal();
+                  gimbal = new models::Gimbal();
                   const auto pair = new base::Pair("gimbal", gimbal);
                   gimbal->unref();  // pair owns it
                   player->addComponent(pair);
@@ -356,10 +357,10 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
                pair->unref(); // top level gimbal owns it
             }
 
-            // Give the sensor list to the proxy player
+            // Give the sensor list to the IPlayer
             {
                // First get the (top level) sensor manager
-               models::IRfSensor* sm{player->getSensor()};
+               models::RfSensor* sm = player->getSensor();
                if (sm == nullptr) {
                   // Create the sensor manager
                   sm = new models::SensorMgr();
@@ -394,13 +395,13 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
       }
 
       // ---
-      // Update the proxy players sensor/antenna structures with the PDU data
+      // Update the IPlayer's sensor/antenna structures with the PDU data
       // ---
-      models::IRfSensor* rfSys{getSensor()};
+      models::RfSensor* rfSys = getSensor();
       if (rfSys != nullptr && !noTemplatesFound) {
-         models::Antenna* antenna{rfSys->getAntenna()};
+         models::Antenna* antenna = rfSys->getAntenna();
 
-         // reset the timeout clock for this proxy players emissions
+         // reset the timeout clock for this Iplayer's emissions
          setEmPduExecTime(player->getWorldModel()->getExecTimeSec());
 
          rfSys->setFrequency( bd->parameterData.frequency );
@@ -409,7 +410,7 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
          // DPG ### Setting peak power to the effected radiated power from the PDU,
          // so our transmitter loss and antenna gain should both be set to 0 dB (real 1.0).
          base::Decibel db( bd->parameterData.effectiveRadiatedPower  );  // dBm (dB milliwatts)
-         rfSys->setPeakPower( db.asDouble() / 1000.0 );
+         rfSys->setPeakPower( db.getReal() / 1000.0f );
 
          rfSys->setPRF( bd->parameterData.pulseRepetitiveFrequency );
          rfSys->setPulseWidth( bd->parameterData.pulseWidth / 1000000.0f );
@@ -420,20 +421,22 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
                // circular scan
                antenna->setRefAzimuth( 0 );
                antenna->setRefElevation( bd->beamData.beamElevationCenter );
-               antenna->setScanMode( models::IScanGimbal::ScanMode::CIRCULAR_SCAN );
+               antenna->setScanMode( models::ScanGimbal::CIRCULAR_SCAN );
                antenna->setCmdRate( (24.0f * static_cast<double>(base::angle::D2RCC)), 0 );  // default rates
-         } else {
+         }
+         else {
             // Standard search volume parameters
             antenna->setRefAzimuth( bd->beamData.beamAzimuthCenter );
             antenna->setRefElevation( bd->beamData.beamElevationCenter );
             // note that beamElevationSweep corresponds to scanHeight; setSearchVolume is expecting el component to be scanHeight+.5*barspacing
-            antenna->setSearchVolume( bd->beamData.beamAzimuthSweep * 2.0, bd->beamData.beamElevationSweep * 2.0);
+            antenna->setSearchVolume( bd->beamData.beamAzimuthSweep * 2.0f, bd->beamData.beamElevationSweep * 2.0f);
          }
 
-         // proxy player's transmit (when they're active) but don't need to receive
+         // IPlayer's transmit (when they're active) but don't need to receive
          if (pdu->header.protocolVersion >= NetIO::VERSION_7) {
             rfSys->setTransmitterEnableFlag((bd->beamStatus == BS_ACTIVE));
-         } else {
+         }
+         else {
             rfSys->setTransmitterEnableFlag(true);
          }
          rfSys->setReceiverEnabledFlag(false);
@@ -443,7 +446,7 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
 
    // No beam data -- turn off the transmitter and receiver
    else {
-      models::IRfSensor* rfSys{getSensor()};
+      models::RfSensor* rfSys = getSensor();
       if (rfSys != nullptr) {
          rfSys->setTransmitterEnableFlag(false);
          rfSys->setReceiverEnabledFlag(false);
@@ -458,16 +461,16 @@ bool EmissionPduHandler::updateIncoming(const ElectromagneticEmissionPDU* const 
 //------------------------------------------------------------------------------
 bool EmissionPduHandler::updateOutgoing(const double curExecTime, Nib* const nib)
 {
-   bool pduSent{};
+   bool pduSent = false;
 
-   bool stateChg{};
+   bool stateChg = false;
    if (nib != nullptr) {
-      NetIO* const disIO{static_cast<NetIO*>(nib->getNetIO())};
+      NetIO* const disIO = static_cast<NetIO*>(nib->getNetIO());
       if (disIO != nullptr && isUpdateRequired(curExecTime, &stateChg, nib)) {
 
          // Out going Electromagnetic Emission PDU is just a buffer to be filled
          unsigned int packet[NetIO::MAX_PDU_SIZE / 4];
-         ElectromagneticEmissionPDU* pdu{reinterpret_cast<ElectromagneticEmissionPDU*>(&packet[0])};
+         ElectromagneticEmissionPDU* pdu = reinterpret_cast<ElectromagneticEmissionPDU*>(&packet[0]);
 
          // Standard header stuff
          pdu->header.protocolVersion = disIO->getVersion();
@@ -499,13 +502,13 @@ bool EmissionPduHandler::updateOutgoing(const double curExecTime, Nib* const nib
          pdu->numberOfSystems = 1;
 
          // Pointer to emission system
-         unsigned char* p{(reinterpret_cast<unsigned char*>(pdu)) + sizeof(ElectromagneticEmissionPDU)};
-         EmissionSystem* es{reinterpret_cast<EmissionSystem*>(p)};
+         unsigned char* p = (reinterpret_cast<unsigned char*>(pdu)) + sizeof(ElectromagneticEmissionPDU);
+         EmissionSystem* es = reinterpret_cast<EmissionSystem*>(p);
 
          // ---
          // Add the emission system to the end of the PDU and send it
          // ---
-         unsigned short result{emissionSystemData2PDU(es)};
+         unsigned short result = emissionSystemData2PDU(es);
          if (result > 0) {
 
             // Update our total length and number of systems
@@ -514,8 +517,8 @@ bool EmissionPduHandler::updateOutgoing(const double curExecTime, Nib* const nib
             es = reinterpret_cast<EmissionSystem*>(p);
             //pdu->dumpData();
 
-            const int length{pdu->header.length};
-            if (base::INetHandler::isNotNetworkByteOrder()) pdu->swapBytes();
+            const int length = pdu->header.length;
+            if (base::NetHandler::isNotNetworkByteOrder()) pdu->swapBytes();
             pduSent = disIO->sendData(reinterpret_cast<char*>(pdu), length);
 
             setEmPduExecTime(curExecTime);
@@ -533,14 +536,14 @@ bool EmissionPduHandler::updateOutgoing(const double curExecTime, Nib* const nib
 //------------------------------------------------------------------------------
 bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const stateChg, Nib* const nib)
 {
-   bool sc{};
+   bool sc = false;
    enum { NO, YES, UNSURE } result = UNSURE;
 
    // Early out if we don't have everything we need!
    if (nib == nullptr) return NO;
-   NetIO* const disIO{static_cast<NetIO*>(nib->getNetIO())};
+   NetIO* const disIO = static_cast<NetIO*>(nib->getNetIO());
    if (disIO == nullptr) return NO;
-   models::IRfSensor* beam{getSensor()};
+   models::RfSensor* beam = getSensor();
    if (beam == nullptr) return NO;
 
    // ---
@@ -551,13 +554,14 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
    // possibly intended to reduce amount of processing expended for no PDUs sent?
    // otherwise, could be entirely removed.
    if (disIO->getVersion() >= NetIO::VERSION_7) {
-      double drTime{curExecTime - getEmPduExecTime()};
+      double drTime = curExecTime - getEmPduExecTime();
       if ( drTime < (disIO->getHbtPduEe() / 10.0f) ) {
          result = NO;
       }
-   } else {
+   }
+   else {
       if ( (result == UNSURE) ) {
-         double drTime{curExecTime - getEmPduExecTime()};
+         double drTime = curExecTime - getEmPduExecTime();
          if ( drTime < (disIO->getMaxTimeDR(nib) /10.0f) ) {
             result = NO;
          }
@@ -580,17 +584,17 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
       // ---
       // Simple radar with only one beam
       // ---
-      unsigned char numberOfBeams{};
-      unsigned char ib{};
+      unsigned char numberOfBeams = 0;
+      unsigned char ib = 0;
 
       // ---
       // If the transmitter is emitting then create the beam data
       // ---
-      bool playerOk{nib->getPlayer()->isActive() && !nib->getPlayer()->isDestroyed()};
+      bool playerOk = nib->getPlayer()->isActive() && !nib->getPlayer()->isDestroyed();
       if (playerOk && beam->isTransmitting()) {
 
          // Antenna (if any)
-         const models::Antenna* const ant{beam->getAntenna()};
+         const models::Antenna* const ant = beam->getAntenna();
 
          // Beam data
          numberOfBeams = 1;
@@ -607,15 +611,15 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
          bd.parameterData.frequencyRange  = static_cast<float>(beam->getBandwidth());      // Hz
 
          // Compute effected radiated power (watts)
-         double power{beam->getPeakPower()};
-         double loss{beam->getRfTransmitLoss()};
+         double power = beam->getPeakPower();
+         double loss = beam->getRfTransmitLoss();
          if (ant != nullptr) power = (power * static_cast<double>(ant->getGain()));
          if (loss >= 1.0f) power = (power / loss);
 
          // Effected radiated power -- dBm (dB milliwatts)
          base::Decibel db;
-         db.setValue( power * 1000.0 );
-         bd.parameterData.effectiveRadiatedPower = static_cast<float>(db.asdB());
+         db.setValue( power * 1000.0f );
+         bd.parameterData.effectiveRadiatedPower = static_cast<float>(db.getValueDB());
 
          bd.parameterData.pulseRepetitiveFrequency = static_cast<float>(beam->getPRF());          // Hz (Average)
          bd.parameterData.pulseWidth = static_cast<float>(beam->getPulseWidth()) * 1000000.0f;    // uSec
@@ -625,7 +629,8 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
             bd.beamData.beamAzimuthSweep    = static_cast<float>(ant->getScanWidth()/2.0);   // Radians -- half angles
             bd.beamData.beamElevationCenter = static_cast<float>(ant->getRefElevation());    // Radians
             bd.beamData.beamElevationSweep  = static_cast<float>(ant->getScanHeight()/2.0);  // Radians -- half angles
-         } else {
+         }
+         else {
             // Default values
             bd.beamData.beamAzimuthCenter   = 0.0f;
             bd.beamData.beamAzimuthSweep    = 30.0f * static_cast<float>(base::angle::D2RCC);
@@ -640,7 +645,8 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
             bd.jammingTechnique.category = 0;
             bd.jammingTechnique.subcat = 0;
             bd.jammingTechnique.specific = 0;
-         } else {
+         }
+         else {
             bd.jammingTechnique.setJammingModeSequence(0);
          }
 
@@ -651,10 +657,12 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
                // ... full azimuth sweep?  assume searching
                bd.beamFunction = BF_SEARCH;
                es.emitterSystem.function = ESF_EW; // override emitter sys function to EW when searching
-            } else
+            }
+            else
                // ... limited az sweep?  assume acq/track
                bd.beamFunction = BF_ACQUISITION_AND_TRACKING;
-         } else {
+         }
+         else {
             // Jammer
             bd.beamFunction = BF_JAMMER;
             if (disIO->getVersion() >= NetIO::VERSION_7) {
@@ -670,31 +678,32 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
          // Locate any targets that this emitter is tracking
          // ---
          TrackJamTargets tjt[MAX_TARGETS_IN_TJ_FIELD];
-         unsigned char numTJT{};
+         unsigned char numTJT = 0;
 
          // Get the track list
-         models::ITrackMgr* tm{beam->getTrackManager()};
+         models::TrackManager* tm = beam->getTrackManager();
          if (tm != nullptr) {
-            const int max1{MAX_TARGETS_IN_TJ_FIELD + 1};   // check for one more than the max (highDensityTracks)
-            base::safe_ptr<models::ITrack> trackList[max1];
-            int n{tm->getTrackList(trackList, max1)};
+            const int max1 = MAX_TARGETS_IN_TJ_FIELD + 1; // check for one more than the max (highDensityTracks)
+            base::safe_ptr<models::Track> trackList[max1];
+            int n = tm->getTrackList(trackList,max1);
             if (n <= MAX_TARGETS_IN_TJ_FIELD) {
 
                // Locate players for these tracks and set the TrackJamTargets data for each ...
                for (int i = 0; i < n; i++) {
                   // Does the track have a target player that we can find the entity ID for?
-                  const models::IPlayer* tgt{trackList[i]->getTarget()};
+                  const models::Player* tgt = trackList[i]->getTarget();
                   if (tgt != nullptr) {
-                     unsigned short tjtPlayerID{};
-                     unsigned short tjtSiteID{};
-                     unsigned short tjtAppID{};
+                     unsigned short  tjtPlayerID = 0;
+                     unsigned short  tjtSiteID = 0;
+                     unsigned short  tjtAppID = 0;
                      if (tgt->isLocalPlayer()) {
                         tjtPlayerID = tgt->getID();
                         // Local player so use our site and app IDs
                         tjtSiteID = disIO->getSiteID();
                         tjtAppID  = disIO->getApplicationID();
-                     } else {
-                        const Nib* const tjtNib{dynamic_cast<const Nib*>( tgt->getNib() )};
+                     }
+                     else {
+                        const Nib* const tjtNib = dynamic_cast<const Nib*>( tgt->getNib() );
                         if (tjtNib != nullptr) {
                            tjtPlayerID = tjtNib->getPlayerID();
                            tjtSiteID = tjtNib->getSiteID();
@@ -710,7 +719,9 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
                      numTJT++;
                   }
                }
-            } else {
+
+            }
+            else {
                // Lots of targets -- set the high density tracks flag
                bd.highDensityTracks = EmitterBeamData::SELECTED;
             }
@@ -728,9 +739,9 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
          bd.numberOfTargetsInTrack = numTJT;
 
          // implement DISv7 parameter thresholds and other restrictions on parameters that could otherwise cause updated PDUs to be sent.
-         float tmpbeamSweepSync{};
-         float tmpbeamAzimuthCenter{};
-         float tmpbeamElevationCenter{};
+         float tmpbeamSweepSync = 0;
+         float tmpbeamAzimuthCenter = 0;
+         float tmpbeamElevationCenter = 0;
          if (disIO->getVersion() >= NetIO::VERSION_7) {
 
             // change in beamSweepSync should not force new PDU
@@ -764,7 +775,7 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
          // ---
          // Compute beam data length (in 32bit words, including the track/jam targets)
          // ---
-         unsigned char lenB{static_cast<unsigned char>(sizeof(EmitterBeamData) + (numTJT * sizeof(TrackJamTargets)))};
+         unsigned char lenB = sizeof(EmitterBeamData) + (numTJT * sizeof(TrackJamTargets));
          bd.beamDataLength = (lenB/4);
 
          // ---
@@ -801,7 +812,7 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
          // ---
          // Compute beam data length (in 32bit words, including the track/jam targets)
          // ---
-         unsigned char lenB{sizeof(dis::EmitterBeamData)};
+         unsigned char lenB = sizeof(dis::EmitterBeamData);
          bd.beamDataLength = (lenB/4);
          // ---
          // compare & transfer the emitter beam data
@@ -837,7 +848,7 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
       // ---
       if (disIO->getVersion() >= NetIO::VERSION_7) {
          if ( playerOk && (result == UNSURE) && nib->getPlayer()->isLocalPlayer() ) {
-            double drTime{curExecTime - getEmPduExecTime()};
+            double drTime = curExecTime - getEmPduExecTime();
             if ( drTime >= disIO->getHbtPduEe() ) {
                result = YES;
                sc = true;
@@ -846,7 +857,7 @@ bool EmissionPduHandler::isUpdateRequired(const double curExecTime, bool* const 
       }
       else {
          if ( (result == UNSURE) && nib->getPlayer()->isLocalPlayer()) {
-            double drTime{curExecTime - getEmPduExecTime()};
+            double drTime = curExecTime - getEmPduExecTime();
             if ( drTime >= disIO->getMaxTimeDR(nib) ) {
                result = YES;
                sc = true;
@@ -881,28 +892,28 @@ unsigned short EmissionPduHandler::emissionSystemData2PDU(EmissionSystem* const 
     *es = *( getSavedEmissionSystemData() );
 
     // total length in bytes
-    unsigned short totalLength{sizeof(EmissionSystem)};
+    unsigned short totalLength = sizeof(EmissionSystem);
 
     // ---
     // Copy the emitter beam data, plus the track/jam targets
     // ---
 
     // The EmitterBeamData structures follow the EmissionSystem structure
-    unsigned char* p{reinterpret_cast<unsigned char*>(es) + sizeof(EmissionSystem)};
+    unsigned char* p = reinterpret_cast<unsigned char*>(es) + sizeof(EmissionSystem);
 
     for (unsigned int ib = 0; ib < es->numberOfBeams && ib < MAX_EM_BEAMS; ib++) {
 
       // Copy emitter beam data
-      EmitterBeamData* eb{reinterpret_cast<EmitterBeamData*>(p)};
+      EmitterBeamData* eb = reinterpret_cast<EmitterBeamData*>(p);
       *eb = *getSavedEmitterBeamData(ib);
       p += sizeof(EmitterBeamData);
 
       // The TrackJamTargets structures follow their EmitterBeamData structure
-      int n{getSavedEmitterBeamData(ib)->numberOfTargetsInTrack};
+      int n = getSavedEmitterBeamData(ib)->numberOfTargetsInTrack;
       for (int it = 0; it < n && it < MAX_TARGETS_IN_TJ_FIELD; it++) {
 
          // Copy the Track/Jam target data
-         TrackJamTargets* tjt{reinterpret_cast<TrackJamTargets*>(p)};
+         TrackJamTargets* tjt = reinterpret_cast<TrackJamTargets*>(p);
          *tjt = *getSavedTrackJamTargetData(ib,it);
          p += sizeof(TrackJamTargets);
       }

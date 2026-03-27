@@ -1,16 +1,15 @@
 
 #include "mixr/models/system/Sar.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/Antenna.hpp"
-#include "mixr/models/system/IScanGimbal.hpp"
 #include "mixr/models/Image.hpp"
 
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
@@ -26,7 +25,7 @@ BEGIN_SLOTTABLE(Sar)
 END_SLOTTABLE(Sar)
 
 BEGIN_SLOT_MAP(Sar)
-    ON_SLOT( 1, setSlotChipSize,  base::Integer)
+    ON_SLOT( 1, setSlotChipSize,  base::Number)
 END_SLOT_MAP()
 
 // Default parameters
@@ -99,9 +98,9 @@ bool Sar::isSystemReady() const
 }
 
 // Return a list of all images
-base::IPairStream* Sar::getImages()
+base::PairStream* Sar::getImages()
 {
-    base::IPairStream* p{imgList};
+    base::PairStream* p{imgList};
     if (p != nullptr) p->ref();
     return p;
 }
@@ -130,11 +129,15 @@ bool Sar::setStarePoint(const double lat, const double lon, const double elev)
     return true;
 }
 
-bool Sar::setSlotChipSize(const base::Integer* const msg)
+//-----------------------------------------------------------------------------
+// Set functions
+//-----------------------------------------------------------------------------
+
+bool Sar::setSlotChipSize(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        const int n{msg->asInt()};
+        const int n{msg->getInt()};
         if (n >= 0) {
             ok = setChipSize( n );
         }
@@ -220,7 +223,7 @@ void Sar::process(const double dt)
 
          ant->setRefAzimuth(az);
          ant->setRefElevation(el);
-         ant->setScanMode(IScanGimbal::ScanMode::CONICAL_SCAN);
+         ant->setScanMode(Antenna::CONICAL_SCAN);
       }
 
       // ---
@@ -241,7 +244,7 @@ void Sar::process(const double dt)
             std::cout << "Sar:: Generating test image: resolution: " << getResolution() << std::endl;
          }
          if (getResolution() > 0) p->setResolution( getResolution() );
-         else p->setResolution( 3.0 * base::length::FT2M );
+         else p->setResolution( 3.0 * base::distance::FT2M );
          const auto pp = new base::Pair("image", p);
          addImage(pp);
          // ### TEST
@@ -282,7 +285,7 @@ bool Sar::addImage(base::Pair* const newImage)
     bool ok{};
     if (newImage != nullptr) {
         if (imgList == nullptr) {
-            imgList = new base::IPairStream();
+            imgList = new base::PairStream();
         }
         imgList->put(newImage);
     }

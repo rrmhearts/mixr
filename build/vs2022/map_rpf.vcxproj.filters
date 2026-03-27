@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr">
+      <UniqueIdentifier>{B8E0DE69-A443-6E0E-4DC9-A6C4390B3A91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\map">
+      <UniqueIdentifier>{251F6C0B-1118-8B5D-3A4A-70E226A26A69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\mixr\map\rpf">
+      <UniqueIdentifier>{3CE31C15-2872-A6DE-D190-BAD9BDFEB684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\map">
+      <UniqueIdentifier>{1A1C30A9-86FB-AE44-8F13-3A1BFB7115A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\map\rpf">
+      <UniqueIdentifier>{B152D0BD-1D08-49B3-A6FC-428A12B13FB7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgClut.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgFile.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgFrame.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgFrameEntry.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgMap.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\CadrgTocEntry.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\MapDrawer.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\TexturePager.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\TextureTable.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\factory.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\mixr\map\rpf\map_utils.hpp">
+      <Filter>include\mixr\map\rpf</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\map\rpf\CadrgClut.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\CadrgFile.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\CadrgFrame.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\CadrgFrameEntry.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\CadrgMap.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\CadrgTocEntry.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\MapDrawer.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\TexturePager.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\TextureTable.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\factory.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\map\rpf\map_utils.cpp">
+      <Filter>src\map\rpf</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

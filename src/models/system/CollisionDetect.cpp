@@ -1,15 +1,13 @@
 
 #include "mixr/models/system/CollisionDetect.hpp"
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/util/str_utils.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
 
 #include <cmath>
 
@@ -30,14 +28,14 @@ BEGIN_SLOTTABLE(CollisionDetect)
 END_SLOTTABLE(CollisionDetect)
 
 BEGIN_SLOT_MAP(CollisionDetect)
-    ON_SLOT( 1,  setSlotCollisionRange,      base::ILength)
-    ON_SLOT( 2,  setSlotMaxPlayers,          base::Integer)
-    ON_SLOT( 3,  setSlotPlayerTypes,         base::IPairStream)
-    ON_SLOT( 4,  setSlotMaxRange2Players,    base::ILength)
-    ON_SLOT( 5,  setSlotMaxAngle2Players,    base::IAngle)
-    ON_SLOT( 6,  setSlotLocalOnly,           base::Boolean)
-    ON_SLOT( 7,  setSlotUseWorldCoordinates, base::Boolean)
-    ON_SLOT( 8,  setSlotSendCrashEvents,     base::Boolean)
+    ON_SLOT( 1,  setSlotCollisionRange,      base::Distance)
+    ON_SLOT( 2,  setSlotMaxPlayers,          base::Number)
+    ON_SLOT( 3,  setSlotPlayerTypes,         base::PairStream)
+    ON_SLOT( 4,  setSlotMaxRange2Players,    base::Distance)
+    ON_SLOT( 5,  setSlotMaxAngle2Players,    base::Angle)
+    ON_SLOT( 6,  setSlotLocalOnly,           base::Number)
+    ON_SLOT( 7,  setSlotUseWorldCoordinates, base::Number)
+    ON_SLOT( 8,  setSlotSendCrashEvents,     base::Number)
 END_SLOT_MAP()
 
 CollisionDetect::CollisionDetect()
@@ -78,7 +76,7 @@ void CollisionDetect::deleteData()
 // -- Pointers to the players that we've collided with and the distances are
 //    stored in the caller provided arrays 'players' and 'distances' arrays.
 //------------------------------------------------------------------------------
-unsigned int CollisionDetect::getCollisions(IPlayer* list[], double distances[], const unsigned int arraySize)
+unsigned int CollisionDetect::getCollisions(Player* list[], double distances[], const unsigned int arraySize)
 {
    unsigned int n{};
    base::lock(poiLock);
@@ -154,7 +152,7 @@ void CollisionDetect::updateData(const double dt)
    // Our base class methods
    BaseClass::updateData(dt);
 
-   const IPlayer* const ownship{getOwnship()};
+   const Player* const ownship{getOwnship()};
    WorldModel* const sim{getWorldModel()};
 
    // early out checks ...
@@ -190,19 +188,19 @@ void CollisionDetect::updateData(const double dt)
    // ---
    // Scan the player list ---
    // ---
-   base::IPairStream* plist{sim->getPlayers()};
+   base::PairStream* plist{sim->getPlayers()};
    if (plist != nullptr) {
 
-      base::IList::Item* item{plist->getFirstItem()};
+      base::List::Item* item{plist->getFirstItem()};
       bool finished{};
       while ( item != nullptr && !finished ) {
 
          // Get the pointer to the target player
          base::Pair* pair{static_cast<base::Pair*>(item->getValue())};
-         IPlayer* target{static_cast<IPlayer*>(pair->object())};
+         Player* target{static_cast<Player*>(pair->object())};
 
          // Did we complete the local only players?
-         finished = localOnly && target->isProxyPlayer();
+         finished = localOnly && target->isNetworkedPlayer();
 
          // We should process this target if ...
          bool processTgt {
@@ -299,7 +297,7 @@ void CollisionDetect::updateData(const double dt)
 //------------------------------------------------------------------------------
 void CollisionDetect::process(const double dt)
 {
-   IPlayer* const ownship{getOwnship()};
+   Player* const ownship{getOwnship()};
 
    // early out checks ...
    if (ownship == nullptr || maxPlayers == 0 || dt == 0.0) return;
@@ -332,7 +330,7 @@ void CollisionDetect::process(const double dt)
    for (unsigned int i = 0; i < maxPlayers; i++) {
 
       // If this player active  ...
-      IPlayer* const tgt{players[i].player};
+      Player* const tgt{players[i].player};
       if ( players[i].active && tgt != nullptr && tgt->isActive() ) {
 
          // Target position and velocity vectors
@@ -435,7 +433,7 @@ void CollisionDetect::process(const double dt)
 // Update the POI list with this target player; that is, check if its a match
 // and if not then add it as a new POI.
 //------------------------------------------------------------------------------
-void CollisionDetect::updatePoiList(IPlayer* const target)
+void CollisionDetect::updatePoiList(Player* const target)
 {
    if (maxPlayers > 0 && target != nullptr) {
 
@@ -447,7 +445,7 @@ void CollisionDetect::updatePoiList(IPlayer* const target)
       bool matched{};
       unsigned int idx{maxPlayers};
       for (unsigned int i = 0; i < maxPlayers && !matched; i++) {
-         const IPlayer* p{players[i].player};
+         const Player* p{players[i].player};
          if (players[i].active && p == target) {
             // Matched!
             players[i].unmatched = false;
@@ -525,11 +523,11 @@ void CollisionDetect::clearPoiList()
 //------------------------------------------------------------------------------
 // Slot Functions
 //------------------------------------------------------------------------------
-bool CollisionDetect::setSlotCollisionRange(const base::ILength* const msg)
+bool CollisionDetect::setSlotCollisionRange(const base::Distance* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double meters{msg->getValueInMeters()};
+      const double meters{base::Meters::convertStatic(*msg)};
       if (meters >= 0.0) {
          ok = setCollisionRange( meters );
       }
@@ -537,11 +535,11 @@ bool CollisionDetect::setSlotCollisionRange(const base::ILength* const msg)
    return ok;
 }
 
-bool CollisionDetect::setSlotMaxPlayers(const base::Integer* const msg)
+bool CollisionDetect::setSlotMaxPlayers(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const int n{msg->asInt()};
+      const int n{msg->getInt()};
       if (n >= 0) {
          ok = setMaxPlayers( static_cast<unsigned int>(n) );
       }
@@ -549,30 +547,30 @@ bool CollisionDetect::setSlotMaxPlayers(const base::Integer* const msg)
    return ok;
 }
 
-bool CollisionDetect::setSlotPlayerTypes(const base::IPairStream* const msg)
+bool CollisionDetect::setSlotPlayerTypes(const base::PairStream* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
       unsigned int mask{};
-      const base::IList::Item* item{msg->getFirstItem()};
+      const base::List::Item* item{msg->getFirstItem()};
       while (item != nullptr) {
          const auto pair = static_cast<const base::Pair*>(item->getValue());
          const auto type = dynamic_cast<const base::String*>( pair->object() );
          if (type != nullptr) {
-            if ( base::utStrcasecmp(type->c_str(), "air") == 0 ) {
-               mask = (mask | IPlayer::AIR_VEHICLE);
-            } else if ( base::utStrcasecmp(type->c_str(), "ground") == 0 ) {
-               mask = (mask | IPlayer::GROUND_VEHICLE);
-            } else if ( base::utStrcasecmp(type->c_str(), "weapon") == 0 ) {
-               mask = (mask | IPlayer::WEAPON);
-            } else if ( base::utStrcasecmp(type->c_str(), "ship") == 0 ) {
-               mask = (mask | IPlayer::SHIP);
-            } else if ( base::utStrcasecmp(type->c_str(), "building") == 0 ) {
-               mask = (mask | IPlayer::BUILDING);
-            } else if ( base::utStrcasecmp(type->c_str(), "lifeform") == 0 ) {
-               mask = (mask | IPlayer::LIFE_FORM);
-            } else if ( base::utStrcasecmp(type->c_str(), "space") == 0 ) {
-               mask = (mask | IPlayer::SPACE_VEHICLE);
+            if ( utStrcasecmp(*type,"air") == 0 ) {
+               mask = (mask | Player::AIR_VEHICLE);
+            } else if ( utStrcasecmp(*type,"ground") == 0 ) {
+               mask = (mask | Player::GROUND_VEHICLE);
+            } else if ( utStrcasecmp(*type,"weapon") == 0 ) {
+               mask = (mask | Player::WEAPON);
+            } else if ( utStrcasecmp(*type,"ship") == 0 ) {
+               mask = (mask | Player::SHIP);
+            } else if ( utStrcasecmp(*type,"building") == 0 ) {
+               mask = (mask | Player::BUILDING);
+            } else if ( utStrcasecmp(*type,"lifeform") == 0 ) {
+               mask = (mask | Player::LIFE_FORM);
+            } else if ( utStrcasecmp(*type,"space") == 0 ) {
+               mask = (mask | Player::SPACE_VEHICLE);
             }
          }
          item = item->getNext();
@@ -582,11 +580,11 @@ bool CollisionDetect::setSlotPlayerTypes(const base::IPairStream* const msg)
    return ok;
 }
 
-bool CollisionDetect::setSlotMaxRange2Players(const base::ILength* const msg)
+bool CollisionDetect::setSlotMaxRange2Players(const base::Distance* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double meters{msg->getValueInMeters()};
+      const double meters{base::Meters::convertStatic(*msg)};
       if (meters >= 0.0) {
          ok = setMaxRange2Players( meters );
       }
@@ -594,11 +592,11 @@ bool CollisionDetect::setSlotMaxRange2Players(const base::ILength* const msg)
    return ok;
 }
 
-bool CollisionDetect::setSlotMaxAngle2Players(const base::IAngle* const msg)
+bool CollisionDetect::setSlotMaxAngle2Players(const base::Angle* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      const double radians{msg->getValueInRadians()};
+      const double radians{base::Radians::convertStatic(*msg)};
       if (radians >= 0.0) {
          ok = setMaxAngle2Players( radians );
       }
@@ -606,29 +604,29 @@ bool CollisionDetect::setSlotMaxAngle2Players(const base::IAngle* const msg)
    return ok;
 }
 
-bool CollisionDetect::setSlotUseWorldCoordinates(const base::Boolean* const msg)
+bool CollisionDetect::setSlotUseWorldCoordinates(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setUseWorld( msg->asBool() );
+      ok = setUseWorld( msg->getBoolean() );
    }
    return ok;
 }
 
-bool CollisionDetect::setSlotLocalOnly(const base::Boolean* const msg)
+bool CollisionDetect::setSlotLocalOnly(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setLocalOnly( msg->asBool() );
+      ok = setLocalOnly( msg->getBoolean() );
    }
    return ok;
 }
 
-bool CollisionDetect::setSlotSendCrashEvents(const base::Boolean* const msg)
+bool CollisionDetect::setSlotSendCrashEvents(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setSendCrashEventsEnabled( msg->asBool() );
+      ok = setSendCrashEventsEnabled( msg->getBoolean() );
    }
    return ok;
 }

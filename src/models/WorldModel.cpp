@@ -3,20 +3,15 @@
 
 #include "mixr/base/EarthModel.hpp"
 #include "mixr/base/Identifier.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/LatLon.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/Pair.hpp"
-
-#include "mixr/base/Latitude.hpp"
-#include "mixr/base/Longitude.hpp"
-
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
 // environment models
-#include "mixr/models/environment/IAtmosphere.hpp"
-#include "mixr/terrain/ITerrain.hpp"
+#include "mixr/models/environment/AbstractAtmosphere.hpp"
+#include "mixr/terrain/Terrain.hpp"
 
 #include <cmath>
 
@@ -44,21 +39,21 @@ BEGIN_SLOTTABLE(WorldModel)
 END_SLOTTABLE(WorldModel)
 
 BEGIN_SLOT_MAP(WorldModel)
-    ON_SLOT( 1, setSlotRefLatitude,          base::Latitude)
-    ON_SLOT( 1, setSlotRefLatitude,          base::INumber)
+    ON_SLOT( 1, setSlotRefLatitude,          base::LatLon)
+    ON_SLOT( 1, setSlotRefLatitude,          base::Number)
 
-    ON_SLOT( 2, setSlotRefLongitude,         base::Longitude)
-    ON_SLOT( 2, setSlotRefLongitude,         base::INumber)
+    ON_SLOT( 2, setSlotRefLongitude,         base::LatLon)
+    ON_SLOT( 2, setSlotRefLongitude,         base::Number)
 
-    ON_SLOT( 3, setSlotGamingAreaRange,      base::ILength)
+    ON_SLOT( 3, setSlotGamingAreaRange,      base::Distance)
 
     ON_SLOT( 4, setSlotEarthModel,           base::EarthModel)
-    ON_SLOT( 4, setSlotEarthModel,           base::Identifier)
+    ON_SLOT( 4, setSlotEarthModel,           base::String)
 
-    ON_SLOT( 5, setSlotGamingAreaEarthModel, base::Boolean)
+    ON_SLOT( 5, setSlotGamingAreaEarthModel, base::Number)
 
-    ON_SLOT( 6, setSlotTerrain,              terrain::ITerrain)
-    ON_SLOT( 7, setSlotAtmosphere,           IAtmosphere)
+    ON_SLOT( 6, setSlotTerrain,              terrain::Terrain)
+    ON_SLOT( 7, setSlotAtmosphere,           AbstractAtmosphere)
 END_SLOT_MAP()
 
 WorldModel::WorldModel()
@@ -90,7 +85,7 @@ void WorldModel::copyData(const WorldModel& org, const bool cc)
 
 
    if (org.terrain != nullptr) {
-      terrain::ITerrain* copy = org.terrain->clone();
+      terrain::Terrain* copy = org.terrain->clone();
       setSlotTerrain( copy );
       copy->unref();
    }
@@ -99,7 +94,7 @@ void WorldModel::copyData(const WorldModel& org, const bool cc)
    }
 
    if (org.atmosphere != nullptr) {
-      IAtmosphere* copy = org.atmosphere->clone();
+      AbstractAtmosphere* copy = org.atmosphere->clone();
       setSlotAtmosphere( copy );
       copy->unref();
    }
@@ -264,47 +259,47 @@ bool WorldModel::setMaxRefRange(const double v)
 // Set Slot routines
 //------------------------------------------------------------------------------
 
-bool WorldModel::setSlotRefLatitude(const base::Latitude* const msg)
+bool WorldModel::setSlotRefLatitude(const base::LatLon* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        ok = setRefLatitude(msg->getDecimalDegrees());
+        ok = setRefLatitude(msg->getDouble());
     }
     return ok;
 }
 
-bool WorldModel::setSlotRefLatitude(const base::INumber* const msg)
+bool WorldModel::setSlotRefLatitude(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        ok = setRefLatitude(msg->asDouble());
+        ok = setRefLatitude(msg->getDouble());
     }
     return ok;
 }
 
-bool WorldModel::setSlotRefLongitude(const base::Longitude* const msg)
+bool WorldModel::setSlotRefLongitude(const base::LatLon* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        ok = setRefLongitude(msg->getDecimalDegrees());
+        ok = setRefLongitude(msg->getDouble());
     }
     return ok;
 }
 
-bool WorldModel::setSlotRefLongitude(const base::INumber* const msg)
+bool WorldModel::setSlotRefLongitude(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        ok = setRefLongitude(msg->asDouble());
+        ok = setRefLongitude(msg->getDouble());
     }
     return ok;
 }
 
-bool WorldModel::setSlotGamingAreaRange(const base::ILength* const x)
+bool WorldModel::setSlotGamingAreaRange(const base::Distance* const msg)
 {
    bool ok{};
-   if (x != nullptr) {
-      ok = setMaxRefRange(x->getValueInMeters());
+   if (msg != nullptr) {
+      ok = setMaxRefRange( base::Meters::convertStatic(*msg) );
    }
    return ok;
 }
@@ -314,11 +309,11 @@ bool WorldModel::setSlotEarthModel(const base::EarthModel* const msg)
    return setEarthModel(msg);
 }
 
-bool WorldModel::setSlotEarthModel(const base::Identifier* const msg)
+bool WorldModel::setSlotEarthModel(const base::String* const msg)
 {
    bool ok{};
-   if (msg != nullptr && msg->asString().length() > 0) {
-      const base::EarthModel* p{base::EarthModel::getEarthModel((*msg).c_str())};
+   if (msg != nullptr && msg->len() > 0) {
+      const base::EarthModel* p{base::EarthModel::getEarthModel(*msg)};
       if (p != nullptr) {
          // found the earth model
          ok = setEarthModel(p);
@@ -333,39 +328,39 @@ bool WorldModel::setSlotEarthModel(const base::Identifier* const msg)
    return ok;
 }
 
-bool WorldModel::setSlotGamingAreaEarthModel(const base::Boolean* const msg)
+bool WorldModel::setSlotGamingAreaEarthModel(const base::Number* const msg)
 {
    bool ok{};
    if (msg != nullptr) {
-      ok = setGamingAreaUseEarthModel(msg->asBool());
+      ok = setGamingAreaUseEarthModel(msg->getBoolean());
    }
    return ok;
 }
 
 // returns the terrain elevation database
-const terrain::ITerrain* WorldModel::getTerrain() const
+const terrain::Terrain* WorldModel::getTerrain() const
 {
    return terrain;
 }
 
-terrain::ITerrain* WorldModel::getTerrain()
+terrain::Terrain* WorldModel::getTerrain()
 {
    return terrain;
 }
 
 // returns the atmosphere model
-IAtmosphere* WorldModel::getAtmosphere()
+AbstractAtmosphere* WorldModel::getAtmosphere()
 {
    return atmosphere;
 }
 
 // returns the atmospheric model
-const IAtmosphere* WorldModel::getAtmosphere() const
+const AbstractAtmosphere* WorldModel::getAtmosphere() const
 {
    return atmosphere;
 }
 
-bool WorldModel::setSlotTerrain(terrain::ITerrain* const msg)
+bool WorldModel::setSlotTerrain(terrain::Terrain* const msg)
 {
    if (terrain != nullptr) terrain->unref();
    terrain = msg;
@@ -373,7 +368,7 @@ bool WorldModel::setSlotTerrain(terrain::ITerrain* const msg)
    return true;
 }
 
-bool WorldModel::setSlotAtmosphere(IAtmosphere* const msg)
+bool WorldModel::setSlotAtmosphere(AbstractAtmosphere* const msg)
 {
    if (atmosphere != nullptr) atmosphere->unref();
    atmosphere = msg;

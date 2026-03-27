@@ -5,11 +5,11 @@
 #include "mixr/interop/dis/pdu.hpp"
 
 #include "mixr/models/system/Jammer.hpp"
-#include "mixr/models/system/IRadar.hpp"
+#include "mixr/models/system/Radar.hpp"
 #include "mixr/models/WorldModel.hpp"
 
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace dis {
@@ -17,12 +17,12 @@ namespace dis {
 IMPLEMENT_PARTIAL_SUBCLASS(Nib, "DisNib")
 EMPTY_SLOTTABLE(Nib)
 
-Nib::Nib(const interop::INetIO::IoType ioType) : interop::INib(ioType)
+Nib::Nib(const interop::NetIO::IoType ioType) : interop::Nib(ioType)
 {
    STANDARD_CONSTRUCTOR()
 }
 
-Nib::Nib(const Nib& org) : interop::INib(org.getIoType())
+Nib::Nib(const Nib& org) : interop::Nib(org.getIoType())
 {
     STANDARD_CONSTRUCTOR()
     copyData(org,true);
@@ -175,20 +175,20 @@ bool Nib::networkOutputManagers(const double curExecTime)
 }
 
 //------------------------------------------------------------------------------
-// updateProxyPlayer() -- (Input support)
+// updateTheIPlayer() -- (Input support)
 //   Called by our processInputList() to its time to update the
 //   networked player.
 //------------------------------------------------------------------------------
-void Nib::updateProxyPlayer()
+void Nib::updateTheIPlayer()
 {
-    models::IPlayer* p{getPlayer()};
+    models::Player* p = getPlayer();
 
    // ---
-   // If we haven't tried to create the proxy player yet ...
+   // If we haven't tried to created the IPlayer yet ...
    // ---
    if (p == nullptr && isEntityTypeUnchecked()) {
       // create the player
-      p = getNetIO()->createProxyPlayer(this);
+      p = getNetIO()->createIPlayer(this);
    }
 
    // ---
@@ -202,9 +202,9 @@ void Nib::updateProxyPlayer()
       // ---
       // check all emission handlers for timeout
       // ---
-      NetIO* const disIO{static_cast<NetIO*>(getNetIO())};
+      NetIO* const disIO = static_cast<NetIO*>(getNetIO());
       if (disIO->getVersion() >= NetIO::VERSION_7) {
-         const double curExecTime{disIO->getSimulation()->getExecTimeSec()};
+         const double curExecTime = disIO->getSimulation()->getExecTimeSec();
          for (unsigned char i = 0; i < numEmissionSystems; i++) {
             double drTime = curExecTime - emitterSysHandler[i]->getEmPduExecTime();
             if ( drTime >= (disIO->getHbtPduEe() * disIO->getHbtTimeoutMplier()) ) {
@@ -322,16 +322,16 @@ bool Nib::processElectromagneticEmissionPDU(const ElectromagneticEmissionPDU* co
 bool Nib::emitterBeamsManager(const double curExecTime)
 {
    // ---
-   // First, find all of our player's IRfSensor systems and setup their handlers
+   // First, find all of our player's RfSensor systems and setup their handlers
    // ---
    if ( numEmissionSystems == 0 ) {
 
       // Check for the single-beam RADAR
       {
          // (DPG -- #### only a simple, single-beam Radar)
-         const base::Pair * pair = getPlayer()->getSensorByType(typeid(models::IRadar));
+         const base::Pair * pair = getPlayer()->getSensorByType(typeid(models::Radar));
          if (pair != nullptr) {
-            models::IRfSensor* rs = (models::IRfSensor*) pair->object();
+            models::RfSensor* rs = (models::RfSensor*) pair->object();
 
             // When we have a R/F sensor, create a handler for it
             EmissionPduHandler* handler = nullptr;
@@ -360,14 +360,14 @@ bool Nib::emitterBeamsManager(const double curExecTime)
       {
          const base::Pair * pair = getPlayer()->getSensorByType(typeid(models::Jammer));
          if (pair != nullptr) {
-            models::IRfSensor* js = (models::IRfSensor*) pair->object();
+            models::RfSensor* js = (models::RfSensor*) pair->object();
 
             bool singleBeam = true;
-            base::IPairStream* subcomponents = js->getComponents();
+            base::PairStream* subcomponents = js->getComponents();
             if (subcomponents != nullptr) {
 
                // Check for multi-beam jammer (each beam is a subcomponent Jammer)
-               base::IList::Item* item = subcomponents->getFirstItem();
+               base::List::Item* item = subcomponents->getFirstItem();
                while (item != nullptr && numEmissionSystems < MAX_EM_SYSTEMS) {
 
                   const auto pair = static_cast<base::Pair*>( item->getValue() );

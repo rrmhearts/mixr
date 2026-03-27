@@ -1,6 +1,6 @@
 
-#ifndef __mixr_ighost_cigi3_CigiHost_HPP__
-#define __mixr_ighost_cigi3_CigiHost_HPP__
+#ifndef __mixr_ighost_cigi_CigiHost_H__
+#define __mixr_ighost_cigi_CigiHost_H__
 
 #include "mixr/ighost/cigi/IgHost.hpp"
 
@@ -28,12 +28,11 @@ class CigiIGMsgV3;       // CGBCGB CIGI_IG_RESPONSE_MESSAGE
 //class CigiOutgoingMsg;
 
 namespace mixr {
-namespace base { class Boolean; class Integer; }
+namespace base { class Boolean; class Number; class NetHandler; }
 namespace models {
 class AirVehicle; class Building; class Effect; class GroundVehicle; class LifeForm;
-class Missile; class IPlayer; class Ship; class SpaceVehicle; class IWeapon;
+class Missile; class Player; class Ship; class SpaceVehicle; class AbstractWeapon;
 }
-namespace ighost {
 namespace cigi {
 class HostSession;
 class CigiModel;
@@ -46,15 +45,15 @@ class IgThread;
 //
 // Factory name: CigiHost
 // Slots:
-//    session               <HostSession>   !  CIGI host session
-//    async                 <Boolean>       !  True (non-zero) to run in CIGI async mode (default: false - CIGI sync)
-//    hideOwnshipModel      <Boolean>       !  True to hide the ownship's model (default: true - ownship's model is not seen)
-//    ownshipModel          <Integer>       !  Ownship's model ID
-//    mslTrailModel         <Integer>       !  "Missile Trail" effect model ID
-//    smokePlumeModel       <Integer>       !  "Smoke Plume" effect model ID
-//    airExplosionModel     <Integer>       !  "Air Explosion" effect model ID
-//    groundExplosionModel  <Integer>       !  "Ground Explosion" effect model ID
-//    shipWakeModel         <Integer>       !  "Ship Wake" effect model ID
+//    session              (HostSession)     CIGI host session
+//    async                (Number)          True (non-zero) to run in CIGI async mode (default: false - CIGI sync)
+//    hideOwnshipModel     (Number)          True to hide the ownship's model (default: true - ownship's model is not seen)
+//    ownshipModel         (Number)          Ownship's model ID
+//    mslTrailModel        (Number)          "Missile Trail" effect model ID
+//    smokePlumeModel      (Number)          "Smoke Plume" effect model ID
+//    airExplosionModel    (Number)          "Air Explosion" effect model ID
+//    groundExplosionModel (Number)          "Ground Explosion" effect model ID
+//    shipWakeModel        (Number)          "Ship Wake" effect model ID
 //
 // Note: In the async mode, the sendCigiData() function, which sends the CIGI
 // packets to the session, is called by our frameSync() function in the
@@ -62,7 +61,7 @@ class IgThread;
 // startOfFrame() callback (i.e., sync'd with the IG).
 //
 //------------------------------------------------------------------------------
-class CigiHost : public IgHost
+class CigiHost final: public IgHost
 {
    DECLARE_SUBCLASS(CigiHost, IgHost)
 
@@ -186,7 +185,7 @@ private:
    void setViewDefinitionPacket(CigiViewDefV3* const p)          { fov = p;    }
    void setSensorControlPacket(CigiSensorCtrlV3* const p)        { sensor = p; }
 
-   bool setCommonModelData(CigiEntityCtrlV3* const ec, const int entity, const models::IPlayer* const);
+   bool setCommonModelData(CigiEntityCtrlV3* const ec, const int entity, const models::Player* const);
 
    bool setAirVehicleData(CigiModel* const, const int entity, const models::AirVehicle* const);
    bool setBuildingData(CigiModel* const, const int entity, const models::Building* const);
@@ -196,7 +195,7 @@ private:
    bool setMissileData(CigiModel* const, const int entity, const models::Missile* const);
    bool setShipData(CigiModel* const, const int entity, const models::Ship* const);
    bool setSpaceVehicleData(CigiModel* const, const int entity, const models::SpaceVehicle* const);
-   bool setWeaponData(CigiModel* const, const int entity, const models::IWeapon* const);
+   bool setWeaponData(CigiModel* const, const int entity, const models::AbstractWeapon* const);
 
    // creates a one shot task thread to process IG packets
    bool createProcessingThread();
@@ -237,7 +236,7 @@ private:
 
    // messages
    std::array<CigiEntityCtrlV3*, NUM_BUFFERS> ownshipEC{}; // Ownship entity control
-   std::array<CigiCompCtrlV3*, NUM_BUFFERS> ownshipCC{};   // Ownship component control
+   std::array<CigiCompCtrlV3*, NUM_BUFFERS> ownshipCC{};   // ownship component control
    CigiIGCtrlV3*     igc{};               // IG control
    CigiLosVectReqV3* los{};               // LOS request
    CigiViewCtrlV3*   view{};              // View control (optional, set by derived classes)
@@ -245,7 +244,7 @@ private:
    CigiSensorCtrlV3* sensor{};            // Sensor control
 
    // special model IDs
-   int cmtOwnship{118};                   // Ownship's model ID
+   int cmtOwnship{302};                   // Ownship's model ID
    int cmtMslTrail{1100};                 // "Missile Trail" effect model ID
    int cmtSmokePlume{1101};               // "Smoke Plume" effect model ID
    int cmtAirExplosion{1102};             // "Air Explosion" effect model ID
@@ -256,16 +255,15 @@ private:
    // slot table helper methods
    bool setSlotHostSession(HostSession* const);
    bool setSlotASyncMode(const base::Boolean* const);
-   bool setSlotHideOwnshipModel(const base::Boolean* const);
-   bool setSlotOwnshipModelId(const base::Integer* const);
-   bool setSlotMslTrailModelId(const base::Integer* const);
-   bool setSlotSmokePlumeModelId(const base::Integer* const);
-   bool setSlotAirExplosionModelId(const base::Integer* const);
-   bool setSlotGroundExplosionModelId(const base::Integer* const);
-   bool setSlotShipWakeModelId(const base::Integer* const);
+   bool setSlotHideOwnshipModel(const base::Number* const);
+   bool setSlotOwnshipModelId(const base::Number* const);
+   bool setSlotMslTrailModelId(const base::Number* const);
+   bool setSlotSmokePlumeModelId(const base::Number* const);
+   bool setSlotAirExplosionModelId(const base::Number* const);
+   bool setSlotGroundExplosionModelId(const base::Number* const);
+   bool setSlotShipWakeModelId(const base::Number* const);
 };
 
-}
 }
 }
 

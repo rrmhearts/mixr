@@ -1,17 +1,18 @@
 
 #include "mixr/models/environment/IrAtmosphere1.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/system/IrSensor.hpp"
-#include "mixr/models/system/IGimbal.hpp"
+#include "mixr/models/system/Gimbal.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
 
-#include "mixr/base/IList.hpp"
-#include "mixr/base/relations/Table2.hpp"
-#include "mixr/base/relations/Table3.hpp"
-#include "mixr/base/relations/Table4.hpp"
+#include "mixr/base/List.hpp"
+#include "mixr/base/functors/Table2.hpp"
+#include "mixr/base/functors/Table3.hpp"
+#include "mixr/base/functors/Table4.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/qty/lengths.hpp"
+#include "mixr/base/units/Distances.hpp"
 
 #include <cmath>
 
@@ -109,8 +110,8 @@ bool IrAtmosphere1::calculateAtmosphereContribution(IrQueryMsg* const msg, doubl
    const double* centerWavelengths{getWaveBandCenters()};
    const double* widths{getWaveBandWidths()};
    const double* sigArray{msg->getSignatureByWaveband()};
-   const IPlayer* ownship{msg->getOwnship()};
-   const IPlayer* target{msg->getTarget()};
+   const Player* ownship{msg->getOwnship()};
+   const Player* target{msg->getTarget()};
 
    // FAB - this should be angle of gimbal, not angle to target. (see base class)
    // Determine the angle above the horizon to be used for background radiation lookup
@@ -127,7 +128,7 @@ bool IrAtmosphere1::calculateAtmosphereContribution(IrQueryMsg* const msg, doubl
    *totalSignal = 0.0;
    *totalBackground = 0.0;
 
-   for (int i=0; i<getNumWaveBands(); i++) {
+   for (unsigned int i=0; i<getNumWaveBands(); i++) {
       const double lowerBandBound{centerWavelengths[i] - (widths[i] / 2.0)};
       const double upperBandBound{lowerBandBound + widths[i]};
 
@@ -240,7 +241,7 @@ double IrAtmosphere1::getTransmissivity(
 //------------------------------------------------------------------------------------------------------
 // getSolarRadiation() -- Return the amount of solar radiation in the region of the spectrum defined by the
 //        upper and lower wavelengths as a function of the target altitude. The output is in
-//        the qty watts/steradian sq-m.
+//        the units watts/steradian sq-m.
 //------------------------------------------------------------------------------------------------------
 
 double IrAtmosphere1::getSolarRadiation(
@@ -325,7 +326,7 @@ void IrAtmosphere1::getSolarRadiationSignatures(
 {
    const double* centerWavelengths{this->getWaveBandCenters()};
    const double* widths{this->getWaveBandWidths()};
-   for (int i = 0; i < getNumWaveBands(); i++) {
+   for (unsigned int i = 0; i < getNumWaveBands(); i++) {
       const double centerWavelength{centerWavelengths[i]};
       const double lowerWavelength{centerWavelength - (widths[i] / 2.0)};
       const double upperWavelength{lowerWavelength + widths[i]};

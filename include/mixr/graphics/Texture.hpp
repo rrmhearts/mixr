@@ -1,11 +1,11 @@
 
-#ifndef __mixr_graphics_Texture_HPP__
-#define __mixr_graphics_Texture_HPP__
+#ifndef __mixr_graphics_Texture_H__
+#define __mixr_graphics_Texture_H__
 
 #include "mixr/graphics/Image.hpp"
 
 namespace mixr {
-namespace base { class Identifier; class Integer; class INumber; }
+namespace base { class Number; class Identifier; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
@@ -19,14 +19,14 @@ namespace graphics {
 // Factory name: Texture
 //
 // Slots:
-//    width       <Integer>      ! Size of the texture map (default: 256)
-//    height      <Integer>      ! Size of the texture map.(default: 256)
-//    redScale    <INumber>      ! for glPixelTransferf(GL_RED_SCALE) (default: 1.0)
-//    redBias     <INumber>      ! for glPixelTransferf(GL_RED_BIAS) (default: 0.0)
-//    greenScale  <INumber>      ! for glPixelTransferf(GL_GREEN_SCALE) (default: 1.0)
-//    greenBias   <INumber>      ! for glPixelTransferf(GL_GREEN_BIAS) (default: 0.0)
-//    blueScale   <INumber>      ! for glPixelTransferf(GL_BLUE_SCALE) (default: 1.0)
-//    blueBias    <INumber>      ! for glPixelTransferf(GL_BLUE_BIAS) (default: 0.0)
+//    width       <Number>       ! Size of the texture map (default: 256)
+//    height      <Number>       ! Size of the texture map.(default: 256)
+//    redScale    <Number>       ! for glPixelTransferf(GL_RED_SCALE) (default: 1.0)
+//    redBias     <Number>       ! for glPixelTransferf(GL_RED_BIAS) (default: 0.0)
+//    greenScale  <Number>       ! for glPixelTransferf(GL_GREEN_SCALE) (default: 1.0)
+//    greenBias   <Number>       ! for glPixelTransferf(GL_GREEN_BIAS) (default: 0.0)
+//    blueScale   <Number>       ! for glPixelTransferf(GL_BLUE_SCALE) (default: 1.0)
+//    blueBias    <Number>       ! for glPixelTransferf(GL_BLUE_BIAS) (default: 0.0)
 //    wrapS       <Identifier>   ! for glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S) (default: GL_REPEAT)
 //    wrapT       <Identifier>   ! for glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T) (default: GL_REPEAT)
 //    magFilter   <Identifier>   ! for glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER) (default: GL_NEAREST)
@@ -160,14 +160,14 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotWidth(const base::Integer* const);
-   bool setSlotHeight(const base::Integer* const);
-   bool setSlotRedScale(const base::INumber* const);
-   bool setSlotRedBias(const base::INumber* const);
-   bool setSlotGreenScale(const base::INumber* const);
-   bool setSlotGreenBias(const base::INumber* const);
-   bool setSlotBlueScale(const base::INumber* const);
-   bool setSlotBlueBias(const base::INumber* const);
+   bool setSlotWidth(const base::Number* const);
+   bool setSlotHeight(const base::Number* const);
+   bool setSlotRedScale(const base::Number* const);
+   bool setSlotRedBias(const base::Number* const);
+   bool setSlotGreenScale(const base::Number* const);
+   bool setSlotGreenBias(const base::Number* const);
+   bool setSlotBlueScale(const base::Number* const);
+   bool setSlotBlueBias(const base::Number* const);
    bool setSlotWrapS(const base::Identifier* const);
    bool setSlotWrapT(const base::Identifier* const);
    bool setSlotMagFilter(const base::Identifier* const);

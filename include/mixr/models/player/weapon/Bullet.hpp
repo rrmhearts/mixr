@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_Bullet_HPP__
-#define __mixr_models_common_Bullet_HPP__
+#ifndef __mixr_models_Bullet_H__
+#define __mixr_models_Bullet_H__
 
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 #include <array>
 
 namespace mixr {
@@ -18,9 +18,9 @@ namespace models {
 //
 // Factory name: Bullet
 //------------------------------------------------------------------------------
-class Bullet : public IWeapon
+class Bullet : public AbstractWeapon
 {
-    DECLARE_SUBCLASS(Bullet, IWeapon)
+    DECLARE_SUBCLASS(Bullet, AbstractWeapon)
 
 public:
    static const double DEFAULT_MUZZLE_VEL;         // Meters / second
@@ -51,9 +51,9 @@ protected:
    virtual void updateBurstTrajectories(const double dt);
    virtual bool checkForTargetHit();
 
-   IPlayer* getHitPlayer()                 { return hitPlayer; }
-   const IPlayer* getHitPlayer() const     { return hitPlayer; }
-   void setHitPlayer(IPlayer*);
+   Player* getHitPlayer()                 { return hitPlayer; }
+   const Player* getHitPlayer() const     { return hitPlayer; }
+   void setHitPlayer(Player*);
 
    void weaponDynamics(const double dt) override;
    void updateTOF(const double dt) override;
@@ -61,22 +61,22 @@ protected:
    bool shutdownNotification() override;
 
    struct Burst {
-      enum class Status { ACTIVE, HIT, MISS };
+      enum Status { ACTIVE, HIT, MISS };
       Burst() : bPos(0,0,0), bVel(0,0,0) {}
-      base::Vec3d bPos;                // Burst positions -- world  (m)
-      base::Vec3d bVel;                // Burst velocities -- world (m)
-      double bTof{};                   // Burst time of flight      (sec)
-      int    bNum{};                   // Number of rounds in burst
-      int    bRate{};                  // Round rate for this burst (rds per min)
-      int    bEvent{};                 // Release event number for burst
-      Status bStatus{Status::ACTIVE};  // Burst status
+      base::Vec3d bPos;         // Burst positions -- world  (m)
+      base::Vec3d bVel;         // Burst velocities -- world (m)
+      double bTof {};           // Burst time of flight      (sec)
+      int    bNum {};           // Number of rounds in burst
+      int    bRate {};          // Round rate for this burst (rds per min)
+      int    bEvent {};         // Release event number for burst
+      Status bStatus {ACTIVE};  // Burst status
    };
 
 private:
    enum { MBT = 100 };         // Max number of burst trajectories
 
    double muzzleVel {DEFAULT_MUZZLE_VEL}; // Muzzle velocity (m/s)
-   base::safe_ptr<IPlayer> hitPlayer;     // Player we hit (if any)
+   base::safe_ptr<Player> hitPlayer;      // Player we hit (if any)
 
    // Bullet trajectories
    int nbt {};                     // Number of burst trajectories

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_interop_dis_Nib_HPP__
-#define __mixr_interop_dis_Nib_HPP__
+#ifndef __mixr_interop_dis_Nib_H__
+#define __mixr_interop_dis_Nib_H__
 
-#include "mixr/interop/INib.hpp"
+#include "mixr/interop/common/Nib.hpp"
 #include "mixr/interop/dis/NetIO.hpp"
 #include <array>
 
@@ -18,15 +18,15 @@ class Ntm;
 //    the relationship between players and their corresponding DIS entities.
 //
 //------------------------------------------------------------------------------
-class Nib : public interop::INib
+class Nib : public interop::Nib
 {
-    DECLARE_SUBCLASS(Nib, interop::INib)
+    DECLARE_SUBCLASS(Nib, interop::Nib)
 
 public:
     enum { MAX_EM_SYSTEMS = 16 };
 
 public:
-    Nib(const interop::INetIO::IoType ioType);
+    Nib(const interop::NetIO::IoType ioType);
 
    // Site & App IDs
    unsigned short getSiteID() const                           { return siteID; }
@@ -35,7 +35,7 @@ public:
    virtual void setApplicationID(const unsigned short);
 
    // Input support functions
-   virtual void updateProxyPlayer();
+   virtual void updateTheIPlayer();
    virtual void entityStatePdu2Nib(const EntityStatePDU* const);
 
    // Update check functions

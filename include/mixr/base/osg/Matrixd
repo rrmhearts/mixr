@@ -11,8 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#ifndef __mixr_base_osg_Matrixd_HPP__
-#define __mixr_base_osg_Matrixd_HPP__
+#ifndef __mixr_base_osg_Matrixd_H__
+#define __mixr_base_osg_Matrixd_H__
 
 #include "mixr/base/osg/Vec3d"
 #include "mixr/base/osg/Vec4d"
@@ -305,6 +305,11 @@ class Matrixd
         inline Vec4f operator* ( const Vec4f& v ) const;
         inline Vec4d operator* ( const Vec4d& v ) const;
 
+#ifdef USE_DEPRECATED_API
+        inline void set(const Quat& q) { makeRotate(q); }
+        inline void get(Quat& q) const { q = getRotate(); }
+#endif
+
         void setRotate(const Quat& q);
         /** Get the matrix rotation as a Quat. Note that this function
           * assumes a non-scaled matrix and will return incorrect results
@@ -454,7 +459,7 @@ class Matrixd
        }
 
     protected:
-        value_type _mat[4][4]{};
+        value_type _mat[4][4];
 
 };
 

@@ -29,21 +29,17 @@
 
 #include "mixr/base/network/UdpMulticastHandler.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
-
 #include <cstdio>
 #include <cstring>
-#include <string>
 
 namespace mixr {
 namespace base {
 
 IMPLEMENT_SUBCLASS(UdpMulticastHandler, "UdpMulticastHandler")
-EMPTY_DELETEDATA(UdpMulticastHandler)
 
 BEGIN_SLOTTABLE(UdpMulticastHandler)
 
@@ -54,14 +50,14 @@ BEGIN_SLOTTABLE(UdpMulticastHandler)
 
     "ttl",                      // 2) Multicast Time-To-Live (TTL) value; default: 1
 
-    "loopback",                 // 3) Multicast Loopback flag; default: true (on)
+    "loopback",                 // 3) Multicast Loopback flag; default: 1 (on)
 
 END_SLOTTABLE(UdpMulticastHandler)
 
 BEGIN_SLOT_MAP(UdpMulticastHandler)
     ON_SLOT(1, setSlotMulticastGroup, String)
-    ON_SLOT(2, setSlotTTL,            Integer)
-    ON_SLOT(3, setSlotLoopback,       Boolean)
+    ON_SLOT(2, setSlotTTL,            Number)
+    ON_SLOT(3, setSlotLoopback,       Number)
 END_SLOT_MAP()
 
 UdpMulticastHandler::UdpMulticastHandler()
@@ -73,10 +69,21 @@ void UdpMulticastHandler::copyData(const UdpMulticastHandler& org, const bool)
 {
     BaseClass::copyData(org);
 
-    multicastGroup = org.multicastGroup;
+    multicastGroup = nullptr;
+    if (org.multicastGroup != nullptr) {
+        const std::size_t len {std::strlen(org.multicastGroup)};
+        multicastGroup = new char[len+1];
+        utStrcpy(multicastGroup, (len+1), org.multicastGroup);
+    }
     setTTL(org.getTTL());
     setLoopback(org.getLoopback());
     initialized = org.initialized;
+}
+
+void UdpMulticastHandler::deleteData()
+{
+    if (multicastGroup != nullptr) delete[] multicastGroup;
+    multicastGroup = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +162,7 @@ bool UdpMulticastHandler::init()
 bool UdpMulticastHandler::bindSocket()
 {
     // Must have a group
-    if (multicastGroup.empty()) return false;
+    if (multicastGroup == nullptr) return false;
 
     // ---
     // Our base class will bind the socket
@@ -169,7 +176,7 @@ bool UdpMulticastHandler::bindSocket()
 #if defined(WIN32)
        addr.sin_addr.s_addr = INADDR_ANY;
 #else
-       addr.sin_addr.s_addr = ::inet_addr(multicastGroup.c_str());
+       addr.sin_addr.s_addr = ::inet_addr(multicastGroup);
 #endif
        if (getLocalPort() != 0) addr.sin_port = htons(getLocalPort());
        else addr.sin_port = htons(getPort());
@@ -197,10 +204,11 @@ bool UdpMulticastHandler::joinTheGroup()
 
    // Find our network address
    uint32_t mg{htonl (INADDR_NONE)};
-   if (!multicastGroup.empty()) mg = ::inet_addr(multicastGroup.c_str());
+   if (multicastGroup != nullptr) mg = ::inet_addr(multicastGroup);
    if (mg != INADDR_NONE) {
       setNetAddr(mg);
-   } else {
+   }
+   else {
       std::cerr << "joinTheGroup() -- invalid multicast group" << std::endl;
       return false;
    }
@@ -244,24 +252,36 @@ bool UdpMulticastHandler::closeConnection()
 //------------------------------------------------------------------------------
 
 // multicastGroup: String containing the multicast IP address
-bool UdpMulticastHandler::setSlotMulticastGroup(const String* const x)
+bool UdpMulticastHandler::setSlotMulticastGroup(const String* const msg)
 {
-    multicastGroup = x->c_str();
-    return true;
+    bool ok{};
+    if (msg != nullptr) {
+        multicastGroup = msg->getCopyString();
+        ok = true;
+    }
+    return ok;
 }
 
 // ttl: Time-To-Live value
-bool UdpMulticastHandler::setSlotTTL(const Integer* const x)
+bool UdpMulticastHandler::setSlotTTL(const Number* const msg)
 {
-    setTTL(x->asInt());
-    return true;
+    bool ok{};
+    if (msg != nullptr) {
+        setTTL( msg->getInt() );
+        ok = true;
+    }
+    return ok;
 }
 
 // loopback: Loopback flag
-bool UdpMulticastHandler::setSlotLoopback(const Boolean* const x)
+bool UdpMulticastHandler::setSlotLoopback(const Number* const msg)
 {
-    setLoopback(x->asBool());
-    return true;
+    bool ok{};
+    if (msg != nullptr) {
+        setLoopback( msg->getBoolean() );
+        ok = true;
+    }
+    return ok;
 }
 
 }

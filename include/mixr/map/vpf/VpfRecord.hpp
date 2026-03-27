@@ -1,8 +1,8 @@
 
-#ifndef __mixr_map_vpf_VpfRecord_HPP__
-#define __mixr_map_vpf_VpfRecord_HPP__
+#ifndef __mixr_map_vpf_VpfRecord_H__
+#define __mixr_map_vpf_VpfRecord_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
 
 #include "mixr/map/vpf/VpfTable.hpp"
 
@@ -19,9 +19,9 @@ class VpfDataType;
 // Description: This is a single fixed length or variable length object that
 // will store a list of VPFDataType values for quick access.
 // -------------------------------------------------------------------------------
-class VpfRecord : public base::IObject
+class VpfRecord : public base::Object
 {
-    DECLARE_SUBCLASS(VpfRecord, base::IObject)
+    DECLARE_SUBCLASS(VpfRecord, base::Object)
 
 public:
     VpfRecord();
@@ -29,7 +29,7 @@ public:
     static const int MAX_COORDS {500};
 
     virtual void createRecord(VpfTable* x, const char* file, const int idx);
-
+    
     const char* getData(const int column);
 
     int getCoordinate(const int column, base::Vec3d vec[], const int idx, const int max);

@@ -1,14 +1,12 @@
 
-#ifndef __mixr_models_common_Autopilot_HPP__
-#define __mixr_models_common_Autopilot_HPP__
+#ifndef __mixr_models_Autopilot_H__
+#define __mixr_models_Autopilot_H__
 
-#include "mixr/models/system/IPilot.hpp"
+#include "mixr/models/system/Pilot.hpp"
 #include "mixr/base/osg/Vec3d"
 
-#include <string>
-
 namespace mixr {
-namespace base { class IAngle; class Boolean; class Identifier; class ILength; class INumber; class ITime; }
+namespace base { class Angle; class Distance; class Identifier; class Number; class Time; }
 namespace models {
 
 //------------------------------------------------------------------------------
@@ -17,41 +15,41 @@ namespace models {
 // Factory name: Autopilot
 //
 // Slots:
-//    navMode                    <Boolean>         ! Nav (route follow) mode flag (default: true)
+//    navMode                    <Number>          ! Nav (route follow) mode flag (default: true)
 //
-//    holdAltitude               <ILength>         ! Hold altitude (Length) (default: player's altitude)
-//    altitudeHoldMode           <Boolean>         ! Altitude hold mode flag (default: true)
+//    holdAltitude               <Distance>        ! Hold altitude (Distance) [default: player's altitude]
+//    altitudeHoldMode           <Number>          ! Altitude hold mode flag [ default: true ]
 //
-//    holdVelocityKts            <INumber>         ! Hold velocity (Kts) (Number) (default: player's velocity)
-//    velocityHoldMode           <Boolean>         ! Velocity hold mode flag (default: true)
+//    holdVelocityKts            <Number>          ! Hold velocity (Kts) (Number) [default: player's velocity]
+//    velocityHoldMode           <Number>          ! Velocity hold mode flag [ default: true ]
 //
-//    holdHeading                <IAngle>          ! Hold heading (AbstractAngle) (default: player's heading)
-//    headingHoldMode            <Boolean>         ! Heading hold mode flag (default: true)
+//    holdHeading                <Angle>           ! Hold heading (AbstractAngle) [default: player's heading]
+//    headingHoldMode            <Number>          ! Heading hold mode flag [ default: true ]
 //
-//    loiterMode                 <INumber>         ! Loiter mode flag (default: false)
-//    loiterPatternLength        <ILength>         ! Loiter pattern length (default: 10.0f)
-//    loiterPatternLength        <INumber>         ! Loiter pattern length (nautical miles)
-//    loiterPatternTime          <ITime>           ! Loiter pattern time (seconds on inbound / outbound course)
-//    loiterPatternCcwFlag       <Boolean>         ! Loiter pattern counter-clockwise flag (default: false, clockwise)
+//    loiterMode                 <Number>          ! Loiter mode flag (default: false)
+//    loiterPatternLength        <Distance>        ! Loiter pattern length (default: 10.0f)
+//    loiterPatternLength        <Number>          ! Loiter pattern length (nautical miles)
+//    loiterPatternTime          <Time>            ! Loiter pattern time (seconds on inbound / outbound course)
+//    loiterPatternCcwFlag       <Number>          ! Loiter pattern counter-clockwise flag (default: false, clockwise)
 //
-//    leadFollowingDistanceTrail <ILength>         ! Desired distance behind(+) the lead (Default: 1 NM trail)
-//    leadFollowingDistanceTrail <INumber>         ! Desired distance behind(+) the lead (meters)
+//    leadFollowingDistanceTrail <Distance>        ! Desired distance behind(+) the lead (Default: 1 NM trail)
+//    leadFollowingDistanceTrail <Number>          ! Desired distance behind(+) the lead (meters)
 //
-//    leadFollowingDistanceRight <ILength>         ! Desired distance right(+) of the lead (Default: 1 NM right)
-//    leadFollowingDistanceRight <INumber>         ! Desired distance right(+) of the lead (meters)
+//    leadFollowingDistanceRight <Distance>        ! Desired distance right(+) of the lead (Default: 1 NM right)
+//    leadFollowingDistanceRight <Number>          ! Desired distance right(+) of the lead (meters)
 //
-//    leadFollowingDeltaAltitude <ILength>         ! Desired delta altitude above(+) the lead (Default: 2000ft below)
-//    leadFollowingDeltaAltitude <INumber>         ! Desired delta altitude above(+) the lead (meters)
+//    leadFollowingDeltaAltitude <Distance>        ! Desired delta altitude above(+) the lead (Default: 2000ft below)
+//    leadFollowingDeltaAltitude <Number>          ! Desired delta altitude above(+) the lead (meters)
 //
 //    leadPlayerName             <Identifier>      ! Name of our lead player (default: 0)
-//    followTheLeadMode          <Boolean>         ! "Follow the lead" mode flag (must be set after 'leadPlayer') (default: false)
+//    followTheLeadMode          <Number>          ! "Follow the lead" mode flag (must be set after 'leadPlayer') (default: false)
 //
-//    maxRateOfTurnDps           <INumber>         ! Maximum rate of turn (degrees per second)
-//    maxBankAngle               <INumber>         ! Maximum bank angle (degrees)
-//    maxClimbRateFpm            <INumber>         ! Maximum climb / dive rate (feet per minute)
-//    maxClimbRateMps            <INumber>         ! Maximum climb / dive rate (meters per second)
-//    maxPitchAngle              <INumber>         ! Maximum pitch angle (degrees)
-//    maxAcceleration            <INumber>         ! Maximum velocity acceleration (NPS)
+//    maxRateOfTurnDps           <Number>          ! Maximum rate of turn (degrees per second)
+//    maxBankAngle               <Number>          ! Maximum bank angle (degrees)
+//    maxClimbRateFpm            <Number>          ! Maximum climb / dive rate (feet per minute)
+//    maxClimbRateMps            <Number>          ! Maximum climb / dive rate (meters per second)
+//    maxPitchAngle              <Number>          ! Maximum pitch angle (degrees)
+//    maxAcceleration            <Number>          ! Maximum velocity acceleration (NPS)
 //
 // Notes:
 //   1) Default is Nav (route follow) mode, which forces heading, altitude and
@@ -73,9 +71,9 @@ namespace models {
 //      not "aircraft" limits.
 //
 //------------------------------------------------------------------------------
-class Autopilot final: public IPilot
+class Autopilot : public Pilot
 {
-   DECLARE_SUBCLASS(Autopilot, IPilot)
+   DECLARE_SUBCLASS(Autopilot, Pilot)
 
 public:
    Autopilot();
@@ -134,8 +132,8 @@ public:
    virtual double getLeadFollowingDistanceRight() const { return  leadOffset[1]; }
    virtual double getLeadFollowingDeltaAltitude() const { return -leadOffset[2]; }
    virtual bool isFollowTheLeadModeOn() const           { return followLeadModeOn; }  // "Follow the lead" mode flag
-   virtual const std::string& getLeadPlayerName()       { return leadName; }
-   virtual const IPlayer* getLeadPlayer();                                            // Our lead player
+   virtual const base::Identifier* getLeadPlayerName()  { return leadName; }
+   virtual const Player* getLeadPlayer();                                             // Our lead player
 
    // get pilot limits
    double getMaxTurnRate() const;
@@ -150,7 +148,7 @@ public:
    virtual bool setFollowTheLeadMode(const bool f);                  // "Follow the lead" mode flag
    virtual bool setLeadPlayerName(const base::Identifier* const);    // Changes the name of our lead player
    virtual bool setLeadPlayerName(const char*);                      // set the lead player name by characters
-   virtual bool setLeadPlayer(const IPlayer* const);                 // Our lead player
+   virtual bool setLeadPlayer(const Player* const);                  // Our lead player
 
    virtual bool isRollSasOn() const { return rollSasOn; }
    virtual bool isPitchSasOn() const { return pitchSasOn; }
@@ -298,39 +296,39 @@ private:
 
    // Follow that lead mode data
    base::Vec3d leadOffset;                 // Offsets from lead player (meters) Default -1NM and 2NM and 2000ft
-   const IPlayer* lead{};                  // Our lead player
-   std::string leadName;                   // Name of our lead player
-   double leadHdg{};                       // lead's heading (rad)
-   bool   followLeadModeOn{};              // Follow the lead mode flag
+   const Player* lead {};                  // Our lead player
+   const base::Identifier* leadName {};    // Name of our lead player
+   double leadHdg {};                      // lead's heading (rad)
+   bool   followLeadModeOn {};             // Follow the lead mode flag
 
 private:
    // slot table helper methods
-   bool setSlotNavMode(const base::Boolean* const);                      // Nav (route follow) mode flag
-   bool setSlotHoldAltitude(const base::ILength* const);                  // Hold altitude
-   bool setSlotAltitudeHoldMode(const base::Boolean* const);             // Altitude hold mode flag
-   bool setSlotHoldVelocityKts(const base::INumber* const);               // Hold velocity (kts)
-   bool setSlotVelocityHoldMode(const base::Boolean* const);             // Velocity hold mode flag
-   bool setSlotHoldHeading(const base::IAngle* const);                   // Hold heading
-   bool setSlotHeadingHoldMode(const base::Boolean* const);              // Heading altitude mode flag
-   bool setSlotLoiterMode(const base::Boolean* const);                   // Loiter mode flag
-   bool setSlotLoiterPatternLength(const base::ILength* const);           // Loiter orbit pattern length
-   bool setSlotLoiterPatternLength(const base::INumber* const);           // Loiter orbit pattern length (NM)
-   bool setSlotLoiterPatternTime(const base::ITime* const);              // Loiter orbit pattern length (seconds)
-   bool setSlotLoiterPatternCcwFlag(const base::Boolean* const);         // Loiter orbit pattern counter-clockwise flag
-   bool setSlotLeadFollowingDistanceTrail(const base::ILength* const);   // Desired distance behind(+) the lead
-   bool setSlotLeadFollowingDistanceTrail(const base::INumber* const);    // Desired distance (meters) behind(+) the lead
-   bool setSlotLeadFollowingDistanceRight(const base::ILength* const);   // Desired distance right(+) of the lead
-   bool setSlotLeadFollowingDistanceRight(const base::INumber* const);    // Desired distance (meters) right(+) of the lead
-   bool setSlotLeadFollowingDeltaAltitude(const base::ILength* const);   // Desired delta altitude above(+) the lead
-   bool setSlotLeadFollowingDeltaAltitude(const base::INumber* const);    // Desired delta altitude (meters) above(+) the lead
+   bool setSlotNavMode(const base::Number* const);                       // Nav (route follow) mode flag
+   bool setSlotHoldAltitude(const base::Distance* const);                // Hold altitude
+   bool setSlotAltitudeHoldMode(const base::Number* const);              // Altitude hold mode flag
+   bool setSlotHoldVelocityKts(const base::Number* const);               // Hold velocity (kts)
+   bool setSlotVelocityHoldMode(const base::Number* const);              // Velocity hold mode flag
+   bool setSlotHoldHeading(const base::Angle* const);                    // Hold heading
+   bool setSlotHeadingHoldMode(const base::Number* const);               // Heading altitude mode flag
+   bool setSlotLoiterMode(const base::Number* const);                    // Loiter mode flag
+   bool setSlotLoiterPatternLength(const base::Distance* const);         // Loiter orbit pattern length
+   bool setSlotLoiterPatternLength(const base::Number* const);           // Loiter orbit pattern length (NM)
+   bool setSlotLoiterPatternTime(const base::Time* const);               // Loiter orbit pattern length (seconds)
+   bool setSlotLoiterPatternCcwFlag(const base::Number* const);          // Loiter orbit pattern counter-clockwise flag
+   bool setSlotLeadFollowingDistanceTrail(const base::Distance* const);  // Desired distance behind(+) the lead
+   bool setSlotLeadFollowingDistanceTrail(const base::Number* const);    // Desired distance (meters) behind(+) the lead
+   bool setSlotLeadFollowingDistanceRight(const base::Distance* const);  // Desired distance right(+) of the lead
+   bool setSlotLeadFollowingDistanceRight(const base::Number* const);    // Desired distance (meters) right(+) of the lead
+   bool setSlotLeadFollowingDeltaAltitude(const base::Distance* const);  // Desired delta altitude above(+) the lead
+   bool setSlotLeadFollowingDeltaAltitude(const base::Number* const);    // Desired delta altitude (meters) above(+) the lead
    bool setSlotLeadPlayerName(const base::Identifier* const);            // Name of the player we are following
-   bool setSlotFollowTheLeadMode(const base::Boolean* const);            // "Follow the lead" mode flag
-   bool setSlotMaxRateOfTurnDps(const base::INumber* const);              // Maximum turn rate - degrees per second
-   bool setSlotMaxBankAngle(const base::INumber* const);                  // Maximum bank angle - degrees
-   bool setSlotMaxClimbRateMps(const base::INumber* const);               // Max climb/dive rate - meters per second
-   bool setSlotMaxClimbRateFpm(const base::INumber* const);               // Max climb/dive rate - feet per minute
-   bool setSlotMaxPitchAngle(const base::INumber* const);                 // Max pitch angle - degrees
-   bool setSlotMaxVelAccNps(const base::INumber* const);                  // Maximum velocity acceleration (Nps)
+   bool setSlotFollowTheLeadMode(const base::Number* const);             // "Follow the lead" mode flag
+   bool setSlotMaxRateOfTurnDps(const base::Number* const);              // Maximum turn rate - degrees per second
+   bool setSlotMaxBankAngle(const base::Number* const);                  // Maximum bank angle - degrees
+   bool setSlotMaxClimbRateMps(const base::Number* const);               // Max climb/dive rate - meters per second
+   bool setSlotMaxClimbRateFpm(const base::Number* const);               // Max climb/dive rate - feet per minute
+   bool setSlotMaxPitchAngle(const base::Number* const);                 // Max pitch angle - degrees
+   bool setSlotMaxVelAccNps(const base::Number* const);                  // Maximum velocity acceleration (Nps)
 };
 
 inline bool Autopilot::setMaxTurnRateDps(const double x)    { maxTurnRateDps = x; return true; }

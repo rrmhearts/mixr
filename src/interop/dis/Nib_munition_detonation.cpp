@@ -7,16 +7,16 @@
 #include "mixr/interop/dis/Nib.hpp"
 #include "mixr/interop/dis/pdu.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
 #include "mixr/models/WorldModel.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
-#include "mixr/base/network/INetHandler.hpp"
+#include "mixr/base/network/NetHandler.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
 namespace mixr {
 namespace dis {
@@ -27,7 +27,7 @@ namespace dis {
 bool Nib::munitionDetonationMsgFactory(const double)
 {
    // Dummy weapon?
-   const auto ww = dynamic_cast<const models::IWeapon*>( getPlayer() );
+   const auto ww = dynamic_cast<const models::AbstractWeapon*>( getPlayer() );
    if (ww != nullptr) {
       if (ww->isDummy()) return true;
    }
@@ -39,12 +39,12 @@ bool Nib::munitionDetonationMsgFactory(const double)
     const auto disIO = static_cast<NetIO*>(getNetIO());
 
     // If our NIB's player just detonated, then it must be a weapon!
-    const auto mPlayer = dynamic_cast<models::IWeapon*>(getPlayer());
+    const auto mPlayer = dynamic_cast<models::AbstractWeapon*>(getPlayer());
     if (mPlayer == nullptr) return false;
 
     // Ok, we have the weapon, now get the firing and target players
-    models::IPlayer* tPlayer = mPlayer->getTargetPlayer();
-    models::IPlayer* fPlayer = mPlayer->getLaunchVehicle();
+    models::Player* tPlayer = mPlayer->getTargetPlayer();
+    models::Player* fPlayer = mPlayer->getLaunchVehicle();
     if (fPlayer == nullptr) return false;
 
     // ---
@@ -161,7 +161,7 @@ bool Nib::munitionDetonationMsgFactory(const double)
     // ---
     // Send the PDU
     // ---
-    if (base::INetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
+    if (base::NetHandler::isNotNetworkByteOrder()) pdu.swapBytes();
     ok = disIO->sendData(reinterpret_cast<char*>(&pdu), sizeof(pdu));
 
     // Set the detonation message sent flag so that we don't do this again.

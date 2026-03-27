@@ -1,22 +1,22 @@
 
 #include "mixr/models/system/trackmanager/AirAngleOnlyTrkMgr.hpp"
 
-#include "mixr/models/player/IPlayer.hpp"
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 #include "mixr/models/IrQueryMsg.hpp"
-#include "mixr/models/track/ITrack.hpp"
-#include "mixr/models/track/RfTrack.hpp"
-#include "mixr/models/track/IrTrack.hpp"
+#include "mixr/models/Track.hpp"
 #include "mixr/models/WorldModel.hpp"
 
-#include "mixr/simulation/IDataRecorder.hpp"
+#include "mixr/simulation/AbstractDataRecorder.hpp"
 
-#include "mixr/base/IList.hpp"
+#include "mixr/base/numeric/Number.hpp"
+
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 
-#include "mixr/base/qty/times.hpp"
-#include "mixr/base/qty/angles.hpp"
+#include "mixr/base/units/Times.hpp"
+#include "mixr/base/units/Angles.hpp"
 
 #include <cmath>
 
@@ -30,7 +30,7 @@ EMPTY_DELETEDATA(AirAngleOnlyTrkMgr)
 AirAngleOnlyTrkMgr::AirAngleOnlyTrkMgr()
 {
     STANDARD_CONSTRUCTOR()
-    setType( ITrack::ONBOARD_SENSOR_BIT | ITrack::AIR_TRACK_BIT );
+    setType( Track::ONBOARD_SENSOR_BIT | Track::AIR_TRACK_BIT );
 }
 
 void AirAngleOnlyTrkMgr::copyData(const AirAngleOnlyTrkMgr& org, const bool)
@@ -44,7 +44,7 @@ void AirAngleOnlyTrkMgr::copyData(const AirAngleOnlyTrkMgr& org, const bool)
 void AirAngleOnlyTrkMgr::processTrackList(const double dt)
 {
     // Make sure we have an ownship to work with
-    const auto ownship = dynamic_cast<IPlayer*>( findContainerByType(typeid(IPlayer)) );
+    const auto ownship = dynamic_cast<Player*>( findContainerByType(typeid(Player)) );
     if (ownship == nullptr || dt == 0.0) return;
 
     // Make sure we have the A and B matrix
@@ -80,16 +80,16 @@ void AirAngleOnlyTrkMgr::processTrackList(const double dt)
     double newAzimuth[MAX_REPORTS]{};
     double tmp{};
     for (IrQueryMsg* q = getQuery(&tmp); q != nullptr && nReports < MAX_REPORTS; q = getQuery(&tmp)) {
-        IPlayer* tgt{q->getTarget()};
+        Player* tgt{q->getTarget()};
 
         bool dummy{};
-        if (tgt->isMajorType(IPlayer::WEAPON)) {
-            dummy = (static_cast<const IWeapon*>(tgt))->isDummy();
+        if (tgt->isMajorType(Player::WEAPON)) {
+            dummy = (static_cast<const AbstractWeapon*>(tgt))->isDummy();
         }
 
-        if ( tgt->isMajorType(IPlayer::AIR_VEHICLE) ||
-            tgt->isMajorType(IPlayer::SHIP) ||
-            (tgt->isMajorType(IPlayer::WEAPON) && !dummy)
+        if ( tgt->isMajorType(Player::AIR_VEHICLE) ||
+            tgt->isMajorType(Player::SHIP) ||
+            (tgt->isMajorType(Player::WEAPON) && !dummy)
             ) {
                 // Using only air vehicles
                 queryMessages[nReports] = q;
@@ -255,7 +255,7 @@ void AirAngleOnlyTrkMgr::processTrackList(const double dt)
             //}
 
              // Object 1: player, Object 2: Track Data
-            IPlayer* ownship{getOwnship()};
+            Player* ownship{getOwnship()};
             BEGIN_RECORD_DATA_SAMPLE( getWorldModel()->getDataRecorder(), REID_TRACK_REMOVED )
                SAMPLE_2_OBJECTS( ownship, trk )
             END_RECORD_DATA_SAMPLE()
@@ -290,7 +290,7 @@ void AirAngleOnlyTrkMgr::processTrackList(const double dt)
             IrTrack* newTrk{new IrTrack()};
             newTrk->setTrackID( getNewTrackID() );
             newTrk->setTarget( queryMessages[i]->getTarget() );
-            newTrk->setType(ITrack::AIR_TRACK_BIT | ITrack::ONBOARD_SENSOR_BIT);
+            newTrk->setType(Track::AIR_TRACK_BIT | Track::ONBOARD_SENSOR_BIT);
             newTrk->setPosition(queryMessages[i]->getTarget()->getPosition() - ownship->getPosition());
             newTrk->setVelocity(queryMessages[i]->getTarget()->getVelocity() - ownship->getVelocity());
             newTrk->setRelAzimuth(queryMessages[i]->getRelativeAzimuth());

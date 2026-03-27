@@ -9,7 +9,7 @@ namespace mixr {
 namespace base {
 
 //------------
-// Converts the integer number, 'num', to an ascii string
+// Converts the integer number, 'num', to an ascii string.
 //------------
 void utInteger2Str(const int num, char* const str, int width)
 {

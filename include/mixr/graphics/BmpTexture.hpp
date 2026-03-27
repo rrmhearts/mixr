@@ -1,12 +1,12 @@
 
-#ifndef __mixr_graphics_BmpTexture_HPP__
-#define __mixr_graphics_BmpTexture_HPP__
+#ifndef __mixr_graphics_BmpTexture_H__
+#define __mixr_graphics_BmpTexture_H__
 
 #include "mixr/graphics/Texture.hpp"
 #include <GL/gl.h>
 
 namespace mixr {
-namespace base { class String; }
+    namespace base { class String; }
 
 namespace graphics {
 
@@ -19,6 +19,7 @@ namespace graphics {
 // Slots:
 //    path    <String>     ! Path to the texture directory (default: 0)
 //    file    <String>     ! BmpTexture file name (default: 0)
+//
 //------------------------------------------------------------------------------
 class BmpTexture : public Texture
 {

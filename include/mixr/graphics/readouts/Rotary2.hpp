@@ -1,43 +1,31 @@
 
-#ifndef __mixr_graphics_Rotary2_HPP__
-#define __mixr_graphics_Rotary2_HPP__
+#ifndef __mixr_graphics_Rotary2_H__
+#define __mixr_graphics_Rotary2_H__
 
-#include "mixr/graphics/readouts/IReadout.hpp"
+#include "Rotary.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class Integer; }
+namespace base { class Object; class Number; }
 namespace graphics {
 
 //------------------------------------------------------------------------------
 // Class: Rotary2
+//
 // Description: Binary rotary
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: Rotary2
-// Slots: none
+//
 //------------------------------------------------------------------------------
-// Events:
-//    SELECT    <Boolean>   !
-//    SELECT    <Integer>   !
-//------------------------------------------------------------------------------
-class Rotary2 final: public IReadout
+class Rotary2 : public Rotary
 {
-    DECLARE_SUBCLASS(Rotary2, IReadout)
+    DECLARE_SUBCLASS(Rotary2, Rotary)
 
 public:
    Rotary2();
-
-   void draw() final;
-   bool event(const int key, base::IObject* const obj = nullptr) final;
+   bool event(const int key, base::Object* const obj = nullptr) override;
 
    // event handler methods
-   bool onSelect(const base::Boolean* const);
-   bool onSelect(const base::Integer* const);
-
-private:
-    // this flag tells us our components need to be pre-drawn (to avoid flicker)
-    bool preDrawSelectList{true};
+   virtual bool onSelect(const base::Number* const osobj);
 };
 
 }

@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_LifeForm_HPP__
-#define __mixr_models_common_LifeForm_HPP__
+#ifndef __mixr_models_LifeForm_H__
+#define __mixr_models_LifeForm_H__
 
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/player/Player.hpp"
 
 namespace mixr {
 namespace models {
@@ -12,9 +12,9 @@ namespace models {
 // Description: Generic life form
 // Factory name: LifeForm
 //------------------------------------------------------------------------------
-class LifeForm : public IPlayer
+class LifeForm : public Player
 {
-    DECLARE_SUBCLASS(LifeForm, IPlayer)
+    DECLARE_SUBCLASS(LifeForm, Player)
 
 public:
     LifeForm();
@@ -66,7 +66,7 @@ private:
     double lookAngle {};                // the look angle we are looking at (up or down 90 degs)
     bool tgtAquired {};                 // we have a target in our crosshairs
     int lockMode {SEARCHING};           // the mode we are in (searching, tgt in sight, locked)
-    IPlayer* tgtPlayer {};              // our target player that we have aquired
+    Player* tgtPlayer {};               // our target player that we have aquired
     int weaponSel {LF_GUN};             // the weapon we have selected
 };
 

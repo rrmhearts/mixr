@@ -5,8 +5,6 @@
 #include "mixr/base/numeric/Integer.hpp"
 #include "mixr/base/Pair.hpp"
 
-#include <iostream>
-
 namespace mixr {
 namespace graphics {
 
@@ -30,8 +28,8 @@ Rotary::Rotary()
 void Rotary::draw()
 {
    if (preDrawSelectList) {
-      int start{1};
-      base::Pair* p{findByIndex(start)};
+      int start {1};
+      base::Pair* p {findByIndex(start)};
       while (p != nullptr) {
          const auto g = dynamic_cast<graphics::Graphic*>(p->object());
          if (g != nullptr) g->draw();

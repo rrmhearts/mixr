@@ -1,18 +1,17 @@
 
-#ifndef __mixr_base_UdpUnicastHandler_HPP__
-#define __mixr_base_UdpUnicastHandler_HPP__
+#ifndef __mixr_base_UdpUnicastHandler_H__
+#define __mixr_base_UdpUnicastHandler_H__
 
-#include "mixr/base/network/IPosixHandler.hpp"
-
-#include <string>
+#include "mixr/base/network/PosixHandler.hpp"
 
 namespace mixr {
 namespace base {
-class Identifier;
+
 class String;
 
 //------------------------------------------------------------------------------
 // Class: UdpUnicastHandler
+//
 // Description: UDP/IP unicast network handler.  Sends unicast packets to the
 //              destination IP and port.
 //
@@ -23,27 +22,25 @@ class String;
 //
 //              The local port must be defined if you're going to be changing
 //              the destination port.
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: UdpUnicastHandler
-// Slots:
-//      ipAddress  <String>     ! Destination host name or IP address "111.122.133.144" string
-//                              ! (default: found via local host name)
-//      ipAddress  <Identifier> ! Destination host name identifier (e.g., 'localhost') to be
-//                              ! used to look up a particular address
 //
-// Example:
+// Slots:
+//      ipAddress  <String>    ! Destination host name or IP address "111.122.133.144"
+//                             ! (default: found via local host name)
+//
+// Input File Example:
 //
 //        ( UdpUnicastHandler
 //           ipAddress: hostname    // Destination host name
 //           port: 2010             // Destination port
 //           localPort: 2011        // Local port to send from
 //        )
+//
 //------------------------------------------------------------------------------
-class UdpUnicastHandler final: public IPosixHandler
+class UdpUnicastHandler : public PosixHandler
 {
-   DECLARE_SUBCLASS(UdpUnicastHandler, IPosixHandler)
+   DECLARE_SUBCLASS(UdpUnicastHandler, PosixHandler)
 
 public:
    UdpUnicastHandler();
@@ -66,16 +63,15 @@ public:
       );
 
 protected:
-   bool init() final;
-   bool bindSocket() final;
+   bool init() override;
+   bool bindSocket() override;
 
 private:
-   std::string ipAddr;   // host name or IP address
+   char* ipAddr {};   // Host's name or IP Address
 
 private:
    // slot table helper methods
    bool setSlotIpAddress(const String* const);
-   bool setSlotIpAddress(const Identifier* const);
 };
 
 }

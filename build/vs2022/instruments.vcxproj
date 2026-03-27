@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3109FE1C-9DBE-7612-26B3-70E992676D16}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>instruments</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Release\instruments\</IntDir>
+    <TargetName>mixr_instruments</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Debug\instruments\</IntDir>
+    <TargetName>mixr_instruments_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi /Ot %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\instruments\Instrument.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\adi\Adi.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\adi\GhostHorizon.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Button.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Knob.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\PushButton.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\RotarySwitch.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\SolenoidButton.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\SolenoidSwitch.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\buttons\Switch.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\AltitudeDial.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\AnalogDial.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialArcSegment.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialPointer.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\DialTickMarks.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\dials\GMeterDial.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DObjects.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\Eadi3DPage.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\eadi3d\IrisGLCompat.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\engines\EngPage.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\factory.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\AnalogGauge.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\AoaIndexer.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\GaugeSlider.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\Tape.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\gauges\TickMarks.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\landinggear\LandingGear.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\landinggear\LandingLight.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\maps\BearingPointer.hpp" />
+    <ClInclude Include="..\..\include\mixr\instruments\maps\CompassRose.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\instruments\Instrument.cpp" />
+    <ClCompile Include="..\..\src\instruments\adi\Adi.cpp" />
+    <ClCompile Include="..\..\src\instruments\adi\GhostHorizon.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\Button.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\Knob.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\PushButton.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\RotarySwitch.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\SolenoidButton.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\SolenoidSwitch.cpp" />
+    <ClCompile Include="..\..\src\instruments\buttons\Switch.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\AltitudeDial.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\AnalogDial.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\DialArcSegment.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\DialPointer.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\DialTickMarks.cpp" />
+    <ClCompile Include="..\..\src\instruments\dials\GMeterDial.cpp" />
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DFont.cpp" />
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DObjects.cpp" />
+    <ClCompile Include="..\..\src\instruments\eadi3d\Eadi3DPage.cpp" />
+    <ClCompile Include="..\..\src\instruments\eadi3d\IrisGLCompat.cpp" />
+    <ClCompile Include="..\..\src\instruments\eadi3d\makeTheFont.cpp" />
+    <ClCompile Include="..\..\src\instruments\engines\EngPage.cpp" />
+    <ClCompile Include="..\..\src\instruments\factory.cpp" />
+    <ClCompile Include="..\..\src\instruments\gauges\AnalogGauge.cpp" />
+    <ClCompile Include="..\..\src\instruments\gauges\AoaIndexer.cpp" />
+    <ClCompile Include="..\..\src\instruments\gauges\GaugeSlider.cpp" />
+    <ClCompile Include="..\..\src\instruments\gauges\Tape.cpp" />
+    <ClCompile Include="..\..\src\instruments\gauges\TickMarks.cpp" />
+    <ClCompile Include="..\..\src\instruments\landinggear\LandingGear.cpp" />
+    <ClCompile Include="..\..\src\instruments\landinggear\LandingLight.cpp" />
+    <ClCompile Include="..\..\src\instruments\maps\BearingPointer.cpp" />
+    <ClCompile Include="..\..\src\instruments\maps\CompassRose.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\mixr\instruments\adi\adi.epp" />
+    <None Include="..\..\include\mixr\instruments\adi\adi2.epp" />
+    <None Include="..\..\include\mixr\instruments\buttons\buttons.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\altTape.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\altitudedial.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\cas.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\enginedial.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\ftitdial.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\gmeter.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\hsi.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\nozzle.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\oilpressure.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\rpm.epp" />
+    <None Include="..\..\include\mixr\instruments\dials\speedbrake.epp" />
+    <None Include="..\..\include\mixr\instruments\eadi3d\eadi3DPage.epp" />
+    <None Include="..\..\include\mixr\instruments\engines\engpage.epp" />
+    <None Include="..\..\include\mixr\instruments\gauges\digaoagauge.epp" />
+    <None Include="..\..\include\mixr\instruments\gauges\gauge.epp" />
+    <None Include="..\..\include\mixr\instruments\gauges\vvi.epp" />
+    <None Include="..\..\include\mixr\instruments\landinggear\landinggear.epp" />
+    <None Include="..\..\include\mixr\instruments\maps\mappage.epp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

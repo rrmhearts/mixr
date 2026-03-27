@@ -1,0 +1,14 @@
+﻿  VMap0FeatureClass.cpp
+  VMap0LibDirectory.cpp
+  VMap0MainDirectory.cpp
+  VMap0RefCoverageDirectory.cpp
+  VMap0ReferenceDirectory.cpp
+  VpfDataType.cpp
+  VpfDirectory.cpp
+  VpfIndexTable.cpp
+  VpfRecord.cpp
+  VpfSpatialIndexTable.cpp
+  VpfTable.cpp
+  factory.cpp
+  Generating Code...
+  map_vpf.vcxproj -> C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\lib\mixr_map_vpf_d.lib

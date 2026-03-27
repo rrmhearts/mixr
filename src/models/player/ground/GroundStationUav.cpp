@@ -13,8 +13,7 @@ GroundStationUav::GroundStationUav()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GroundStationUav");
-    setType_old(&generic);
-    setType("GroundStationUav");
+    setType(&generic);
 }
 
 }

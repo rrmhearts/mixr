@@ -1,8 +1,8 @@
 
-#ifndef __mixr_instruments_Eadi3DFont_HPP__
-#define __mixr_instruments_Eadi3DFont_HPP__
+#ifndef __mixr_instruments_Eadi3DFont_H__
+#define __mixr_instruments_Eadi3DFont_H__
 
-#include "mixr/graphics/fonts/IFont.hpp"
+#include "mixr/graphics/fonts/AbstractFont.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -19,9 +19,9 @@ namespace instruments {
 //          Produces the stroke font map.
 //
 //------------------------------------------------------------------------------
-class Eadi3DFont : public graphics::IFont
+class Eadi3DFont : public graphics::AbstractFont
 {
-    DECLARE_SUBCLASS(Eadi3DFont, graphics::IFont)
+    DECLARE_SUBCLASS(Eadi3DFont, graphics::AbstractFont)
 
 public:
     Eadi3DFont();

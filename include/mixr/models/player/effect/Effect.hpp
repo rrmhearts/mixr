@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_common_Effect_HPP__
-#define __mixr_models_common_Effect_HPP__
+#ifndef __mixr_models_Effect_H__
+#define __mixr_models_Effect_H__
 
-#include "mixr/models/player/weapon/IWeapon.hpp"
+#include "mixr/models/player/weapon/AbstractWeapon.hpp"
 
 namespace mixr {
 namespace models {
@@ -18,12 +18,12 @@ namespace models {
 //
 // Factory name: Effect
 // Slots:
-//    dragIndex   <INumber>   ! drag index used by default dynamics (default: 0.0006)
+//    dragIndex   <Number>   ! drag index used by default dynamics (default: 0.0006)
 //
 //------------------------------------------------------------------------------
-class Effect : public IWeapon
+class Effect : public AbstractWeapon
 {
-    DECLARE_SUBCLASS(Effect, IWeapon)
+    DECLARE_SUBCLASS(Effect, AbstractWeapon)
 
 public:
     Effect();
@@ -35,7 +35,7 @@ public:
     const char* getNickname() const override;
     int getCategory() const override;
 
-    bool collisionNotification(IPlayer* const p) override;
+    bool collisionNotification(Player* const p) override;
     bool crashNotification() override;
 
 protected:
@@ -47,7 +47,7 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotDragIndex(base::INumber* const);
+   bool setSlotDragIndex(base::Number* const);
 };
 
 }

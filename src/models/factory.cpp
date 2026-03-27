@@ -1,17 +1,12 @@
 
 #include "mixr/models/factory.hpp"
 
-#include "mixr/base/IObject.hpp"
-
-// actions
-#include "mixr/models/action/ActionCamouflageType.hpp"
-#include "mixr/models/action/ActionDecoyRelease.hpp"
-#include "mixr/models/action/ActionImagingSar.hpp"
-#include "mixr/models/action/ActionWeaponRelease.hpp"
+#include "mixr/base/Object.hpp"
 
 // dynamics models
-#include "mixr/models/dynamics/LaeroDynamics.hpp"
-#include "mixr/models/dynamics/RacDynamics.hpp"
+#include "mixr/models/dynamics/JSBSimModel.hpp"
+#include "mixr/models/dynamics/RacModel.hpp"
+#include "mixr/models/dynamics/LaeroModel.hpp"
 
 // environment models
 #include "mixr/models/environment/IrAtmosphere.hpp"
@@ -54,7 +49,7 @@
 #include "mixr/models/player/weapon/Sam.hpp"
 #include "mixr/models/player/Building.hpp"
 #include "mixr/models/player/LifeForm.hpp"
-//#include "mixr/models/player/Player.hpp"
+#include "mixr/models/player/Player.hpp"
 #include "mixr/models/player/Ship.hpp"
 
 // sensor models
@@ -72,6 +67,7 @@
 #include "mixr/models/system/trackmanager/AngleOnlyTrackManager.hpp"
 #include "mixr/models/system/trackmanager/GmtiTrkMgr.hpp"
 #include "mixr/models/system/trackmanager/RwrTrkMgr.hpp"
+#include "mixr/models/system/trackmanager/TrackManager.hpp"
 
 // system models
 #include "mixr/models/system/Antenna.hpp"
@@ -80,61 +76,62 @@
 #include "mixr/models/system/CollisionDetect.hpp"
 #include "mixr/models/system/CommRadio.hpp"
 #include "mixr/models/system/Datalink.hpp"
+#include "mixr/models/system/ExternalStore.hpp"
 #include "mixr/models/system/FuelTank.hpp"
 #include "mixr/models/system/Gimbal.hpp"
-#include "mixr/models/system/Gun.hpp"
+#include "mixr/models/system/Guns.hpp"
 #include "mixr/models/system/Iff.hpp"
 #include "mixr/models/system/IrSeeker.hpp"
 #include "mixr/models/system/IrSensor.hpp"
 #include "mixr/models/system/Jammer.hpp"
 #include "mixr/models/system/MergingIrSensor.hpp"
 #include "mixr/models/system/OnboardComputer.hpp"
+#include "mixr/models/system/Pilot.hpp"
 #include "mixr/models/system/Radar.hpp"
+#include "mixr/models/system/Radio.hpp"
+#include "mixr/models/system/RfSensor.hpp"
 #include "mixr/models/system/Rwr.hpp"
 #include "mixr/models/system/Sar.hpp"
+#include "mixr/models/system/ScanGimbal.hpp"
 #include "mixr/models/system/SensorMgr.hpp"
 #include "mixr/models/system/SimpleStoresMgr.hpp"
 #include "mixr/models/system/StabilizingGimbal.hpp"
+#include "mixr/models/system/Stores.hpp"
 #include "mixr/models/system/StoresMgr.hpp"
 #include "mixr/models/system/System.hpp"
 
-// signatures (IR)
-#include "mixr/models/signature/IrSphereSignature.hpp"
-#include "mixr/models/signature/IrSignature.hpp"
-#include "mixr/models/signature/IrBoxSignature.hpp"
-// signatures (RF)
-#include "mixr/models/signature/RfAzElSignature.hpp"
-#include "mixr/models/signature/RfConstantSignature.hpp"
-#include "mixr/models/signature/RfDihedralCRSignature.hpp"
-#include "mixr/models/signature/RfSphereSignature.hpp"
-#include "mixr/models/signature/RfSwitchSignature.hpp"
-#include "mixr/models/signature/RfTrihedralCRSignature.hpp"
-
-// tracks
-#include "mixr/models/track/RfTrack.hpp"
-#include "mixr/models/track/IrTrack.hpp"
-
 // misc
+#include "mixr/models/Actions.hpp"
+#include "mixr/models/AircraftIrSignature.hpp"
+
+#include "mixr/models/IrShapes.hpp"
+#include "mixr/models/IrSignature.hpp"
+#include "mixr/models/Signatures.hpp"
+
 #include "mixr/models/SimAgent.hpp"
 #include "mixr/models/MultiActorAgent.hpp"
 
 #include "mixr/models/TargetData.hpp"
+#include "mixr/models/Track.hpp"
 
 #include <string>
 
 namespace mixr {
 namespace models {
 
-base::IObject* factory(const std::string& name)
+base::Object* factory(const std::string& name)
 {
-   base::IObject* obj {};
+   base::Object* obj {};
 
-   // dynamics
-   if ( name == LaeroDynamics::getFactoryName() ) {       // Laero
-      obj = new LaeroDynamics();
+   // dynamics models
+   if ( name == RacModel::getFactoryName() ) {              // RAC
+      obj = new RacModel();
    }
-   else if ( name == RacDynamics::getFactoryName() ) {    // RAC
-      obj = new RacDynamics();
+   else if ( name == JSBSimModel::getFactoryName() ) {      // JSBSim
+      obj = new JSBSimModel();
+   }
+   else if ( name == LaeroModel::getFactoryName() ) {       // Laero
+      obj = new LaeroModel();
    }
 
    // environment
@@ -160,11 +157,11 @@ base::IObject* factory(const std::string& name)
    else if ( name == WorldModel::getFactoryName() ) {
       obj = new WorldModel();
    }
-
+   
    // Players
-//   else if ( name == Player::getFactoryName() ) {
-//      obj = new Player();
-//   }
+   else if ( name == Player::getFactoryName() ) {
+      obj = new Player();
+   }
    else if ( name == AirVehicle::getFactoryName() ) {
       obj = new AirVehicle();
    }
@@ -232,7 +229,7 @@ base::IObject* factory(const std::string& name)
       obj = new BoosterSpaceVehicle();
    }
 
-   // Systems
+   // System
    else if ( name == System::getFactoryName() ) {
       obj = new System();
    }
@@ -240,7 +237,10 @@ base::IObject* factory(const std::string& name)
       obj = new AvionicsPod();
    }
 
-   // Pilot types
+   // Basic Pilot types
+   else if ( name == Pilot::getFactoryName() ) {
+      obj = new Pilot();
+   }
    else if ( name == Autopilot::getFactoryName() ) {
       obj = new Autopilot();
    }
@@ -315,6 +315,12 @@ base::IObject* factory(const std::string& name)
    }
 
    // Stores, stores manager and external stores (FuelTank, Gun & Bullets (used by the Gun))
+   else if ( name == Stores::getFactoryName() ) {
+      obj = new Stores();
+   }
+   else if ( name == SimpleStoresMgr::getFactoryName() ) {
+      obj = new SimpleStoresMgr();
+   }
    else if ( name == FuelTank::getFactoryName() ) {
       obj = new FuelTank();
    }
@@ -334,9 +340,9 @@ base::IObject* factory(const std::string& name)
    else if ( name == Gimbal::getFactoryName() ) {
       obj = new Gimbal();
    }
-//   else if ( name == ScanGimbal::getFactoryName() ) {
-//      obj = new ScanGimbal();
-//   }
+   else if ( name == ScanGimbal::getFactoryName() ) {
+      obj = new ScanGimbal();
+   }
    else if ( name == StabilizingGimbal::getFactoryName() ) {
       obj = new StabilizingGimbal();
    }
@@ -347,54 +353,64 @@ base::IObject* factory(const std::string& name)
       obj = new IrSeeker();
    }
 
+   // R/F Signatures
+   else if ( name == SigConstant::getFactoryName() ) {
+      obj = new SigConstant();
+   }
+   else if ( name == SigSphere::getFactoryName() ) {
+      obj = new SigSphere();
+   }
+   else if ( name == SigPlate::getFactoryName() ) {
+      obj = new SigPlate();
+   }
+   else if ( name == SigDihedralCR::getFactoryName() ) {
+      obj = new SigDihedralCR();
+   }
+   else if ( name == SigTrihedralCR::getFactoryName() ) {
+      obj = new SigTrihedralCR();
+   }
+   else if ( name == SigSwitch::getFactoryName() ) {
+      obj = new SigSwitch();
+   }
+   else if ( name == SigAzEl::getFactoryName() ) {
+      obj = new SigAzEl();
+   }
    // IR Signatures
    else if ( name == IrSignature::getFactoryName() ) {
       obj = new IrSignature();
    }
-   else if ( name == IrSphereSignature::getFactoryName() ) {
-      obj = new IrSphereSignature();
+   else if ( name == AircraftIrSignature::getFactoryName() ) {
+      obj = new AircraftIrSignature;
    }
-   else if ( name == IrBoxSignature::getFactoryName() ) {
-      obj = new IrBoxSignature();
+   else if ( name == IrShape::getFactoryName() ) {
+      obj = new IrShape();
    }
-
-   // R/F Signatures
-   else if ( name == RfAzElSignature::getFactoryName() ) {
-      obj = new RfAzElSignature();
+   else if ( name == IrSphere::getFactoryName() ) {
+      obj = new IrSphere();
    }
-   else if ( name == RfConstantSignature::getFactoryName() ) {
-      obj = new RfConstantSignature();
+   else if ( name == IrBox::getFactoryName() ) {
+      obj = new IrBox();
    }
-   else if ( name == RfDihedralCRSignature::getFactoryName() ) {
-      obj = new RfDihedralCRSignature();
-   }
-   else if ( name == RfSphereSignature::getFactoryName() ) {
-      obj = new RfSphereSignature();
-   }
-   else if ( name == RfSwitchSignature::getFactoryName() ) {
-      obj = new RfSwitchSignature();
-   }
-   else if ( name == RfTrihedralCRSignature::getFactoryName() ) {
-      obj = new RfTrihedralCRSignature();
-   }
-
-   // Onboard Computers
+    // Onboard Computers
    else if ( name == OnboardComputer::getFactoryName() ) {
       obj = new OnboardComputer();
    }
    // Radios
+   else if ( name == Radio::getFactoryName() ) {
+      obj = new Radio();
+   }
    else if ( name == CommRadio::getFactoryName() ) {
       obj = new CommRadio();
    }
    else if ( name == Iff::getFactoryName() ) {
       obj = new Iff();
    }
-   // Systems
+   // Sensors
+   else if ( name == RfSensor::getFactoryName() ) {
+      obj = new RfSensor();
+   }
    else if ( name == SensorMgr::getFactoryName() ) {
       obj = new SensorMgr();
-   }
-   else if ( name == StoresMgr::getFactoryName() ) {
-      obj = new StoresMgr();
    }
    else if ( name == Radar::getFactoryName() ) {
       obj = new Radar();
@@ -416,11 +432,8 @@ base::IObject* factory(const std::string& name)
    }
 
    // Tracks
-   else if ( name == RfTrack::getFactoryName() ) {
-      obj = new RfTrack();
-   }
-   else if ( name == IrTrack::getFactoryName() ) {
-      obj = new IrAtmosphere();
+   else if ( name == Track::getFactoryName() ) {
+      obj = new Track();
    }
 
    // Track Managers

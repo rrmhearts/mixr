@@ -1,12 +1,12 @@
 
-#ifndef __mixr_interop_dis_Ntm_HPP__
-#define __mixr_interop_dis_Ntm_HPP__
+#ifndef __mixr_interop_dis_Ntm_H__
+#define __mixr_interop_dis_Ntm_H__
 
-#include "mixr/interop/INtm.hpp"
+#include "mixr/interop/common/Ntm.hpp"
 #include "mixr/interop/dis/NetIO.hpp"
 
 namespace mixr {
-namespace base { class IList; }
+namespace base { class List; }
 namespace dis {
 
 //------------------------------------------------------------------------------
@@ -20,14 +20,14 @@ namespace dis {
 //
 // Factory name: DisNtm
 // Slots:
-//    disEntityType  <base::IList> ! DIS Entity type vector:
-//                                 !  [ kind domain country category subcategory specific extra ]
-//                                 !  example: [ 1 2 333 4 5 6 7 ]
+//    disEntityType  <vector>   ! DIS Entity type vector:
+//                              !  [ kind domain country category subcategory specific extra ]
+//                              !  example: [ 1 2 333 4 5 6 7 ]
 //
 //------------------------------------------------------------------------------
-class Ntm : public interop::INtm
+class Ntm : public interop::Ntm
 {
-    DECLARE_SUBCLASS(Ntm, interop::INtm)
+    DECLARE_SUBCLASS(Ntm, interop::Ntm)
 
 public:
    Ntm();
@@ -51,7 +51,7 @@ public:
       const unsigned char  extra = 0
    );
 
-   bool copyEntityType(interop::INib* const targetNib) const override;
+   bool copyEntityType(interop::Nib* const targetNib) const override;
 
 private:
     // Standard (DIS based) type codes
@@ -65,7 +65,7 @@ private:
 
 private:
    // slot table helper methods
-   virtual bool setSlotDisEntityType(const base::IList* const);         // Sets DIS entity type enumerations
+   virtual bool setSlotDisEntityType(const base::List* const);         // Sets DIS entity type enumerations
 };
 
 }

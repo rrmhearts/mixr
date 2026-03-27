@@ -1,6 +1,9 @@
 
 #include "mixr/models/player/Building.hpp"
 
+#include "mixr/base/List.hpp"
+#include "mixr/base/units/Angles.hpp"
+
 namespace mixr {
 namespace models {
 
@@ -12,8 +15,7 @@ Building::Building()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericBuilding");
-    setType_old(&generic);
-    setType("GenericBuilding");
+    setType(&generic);
 }
 
 void Building::copyData(const Building& org, const bool)

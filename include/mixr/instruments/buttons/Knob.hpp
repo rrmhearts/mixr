@@ -1,11 +1,11 @@
 
-#ifndef __mixr_instruments_Knob_HPP__
-#define __mixr_instruments_Knob_HPP__
+#ifndef __mixr_instruments_Knob_H__
+#define __mixr_instruments_Knob_H__
 
 #include "mixr/instruments/buttons/Button.hpp"
 
 namespace mixr {
-namespace base { class Boolean; class INumber; class Table1; }
+namespace base { class Table1; }
 namespace instruments {
 
 //------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ public:
     void draw() override;
 
     void updateData(const double dt = 0.0) override;
-    bool event(const int event, base::IObject* const obj = nullptr) override;
+    bool event(const int event, base::Object* const obj = nullptr) override;
 
 protected:
     // event functions
@@ -66,9 +66,9 @@ private:
 private:
     // slot table helper methods
     bool setSlotValueTable(base::Table1* const);
-    bool setSlotEndless(const base::Boolean* const);
-    bool setSlotEndlessStart(const base::INumber* const);
-    bool setSlotEndlessLimit(const base::INumber* const);
+    bool setSlotEndless(const base::Number* const);
+    bool setSlotEndlessStart(const base::Number* const);
+    bool setSlotEndlessLimit(const base::Number* const);
 };
 
 }

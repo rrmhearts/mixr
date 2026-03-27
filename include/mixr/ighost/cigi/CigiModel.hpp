@@ -1,21 +1,20 @@
 
-#ifndef __mixr_ighost_cigi3_CigiModel_HPP__
-#define __mixr_ighost_cigi3_CigiModel_HPP__
+#ifndef __mixr_ighost_cigi_CigiModel_H__
+#define __mixr_ighost_cigi_CigiModel_H__
 
-#include "mixr/base/IObject.hpp"
+#include "mixr/base/Object.hpp"
+#include "mixr/base/safe_ptr.hpp"
 
 #include "mixr/ighost/cigi/CigiHost.hpp"
-
 #include <array>
-#include <string>
 
 class CigiEntityCtrlV3;
 class CigiCompCtrlV3;
 class CigiArtPartCtrlV3;
 
 namespace mixr {
-namespace models { class IPlayer; }
-namespace ighost {
+namespace base { class String; }
+namespace models { class Player; }
 namespace cigi {
 class Player2CigiMap;
 
@@ -32,9 +31,9 @@ class Player2CigiMap;
 //
 // Factory name: CigiModel
 //------------------------------------------------------------------------------
-class CigiModel : public base::IObject
+class CigiModel : public base::Object
 {
-   DECLARE_SUBCLASS(CigiModel, base::IObject)
+   DECLARE_SUBCLASS(CigiModel, base::Object)
 
 public:
    enum class State {
@@ -55,13 +54,13 @@ public:
    State getState() const                      { return state; }          // Model's state  ( INACTIVE, ACTIVE, etc. }
    void setState(const State newState)         { state = newState; }      // Sets the model's state  ( INACTIVE, ACTIVE, etc. }
 
-   models::IPlayer* getPlayer()                { return player; }         // The player object associated with this model
-   const models::IPlayer* getPlayer() const    { return player; }         // The player object associated with this model (const version)
+   models::Player* getPlayer()                 { return player; }         // The player object associated with this model
+   const models::Player* getPlayer() const     { return player; }         // The player object associated with this model (const version)
 
    const Player2CigiMap* getTypeMapper() const { return typeMapper; }     // IG type mapper
 
    int getPlayerID() const                     { return playerID; }       // Player ID for the player associated with this model
-   const std::string& getFederateName() const  { return federateName; }   // Player's federate name (if networked)
+   const base::String* getFederateName() const { return federateName; }   // Player's federate name (if networked)
 
    int getAgeCount() const                     { return ageCount; }       // Age counter value (number of IG frames since last IG update)
    int incAgeCount()                           { return ++ageCount; }     // Increments the age counter
@@ -81,7 +80,7 @@ public:
    // Initializes this model for player, 'p' (we're ACTIVE), and
    // looks up the IG model type ID in the model table, 'igModelTable'.
    // If the size of the IG model table is zero(0), then the model type ID is not set.
-   void initialize(models::IPlayer* const p, const Player2CigiMap** const igModelTable = nullptr, const int numModels = 0);
+   void initialize(models::Player* const p, const Player2CigiMap** const igModelTable = nullptr, const int numModels = 0);
 
    // Clear out this model (we're INACTIVE)
    void clear();
@@ -113,9 +112,9 @@ private:
    int entityId{};
 
    // Sets the player object, p, associated with this model
-   void setPlayer(models::IPlayer* const);
+   void setPlayer(models::Player* const);
 
-   models::IPlayer* player{};            // This player
+   models::Player* player{};             // This player
    State state{State::INACTIVE};         // Model Active flag
    int ageCount{};                       // Age counter (how many times have we've been overlooked)
    bool checked{};                       // Model was checked
@@ -125,11 +124,10 @@ private:
    bool hotActive{};               // HOT entry is active
 
    // Model IDs  -- Comparisons in this order --
-   int playerID{};                 // player ID
-   std::string federateName;       // federate name
+   int playerID{};                                    // Player ID
+   base::safe_ptr<const base::String> federateName;   // Federate name
 };
 
-}
 }
 }
 

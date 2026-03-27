@@ -1,16 +1,16 @@
 //------------------------------------------------------------------------------
 // Classes:
-//    RVector -- Row Vector
-//    CVector -- Column Vector
+//    RVector  -- Row Vector
+//    CVector  -- Column Vector
 //------------------------------------------------------------------------------
-// Notes: references
-//    "Applied Numerical Analysis Using Matlab", 1ed, Laurene V. Fausett, Prentice Hall (1999)
-//    "Introduction to Numerical Analysis", 2ed, Kendall E. Atkinson, Wiley (1989)
-//    "Numerical Methods", 1ed, Robert W. Hornbeck, Quantum (1975)
-//    "Applied Numerical Methods for Digital Computation", 4ed, James-Smith-Wolford, Harper Collins (1993)
+// References:
+// "Applied Numerical Analysis Using Matlab", 1ed, Laurene V. Fausett, Prentice Hall (1999)
+// "Introduction to Numerical Analysis", 2ed, Kendall E. Atkinson, Wiley (1989)
+// "Numerical Methods", 1ed, Robert W. Hornbeck, Quantum (1975)
+// "Applied Numerical Methods for Digital Computation", 4ed, James-Smith-Wolford, Harper Collins (1993)
 //------------------------------------------------------------------------------
-#ifndef __mixr_base_Vectors_HPP__
-#define __mixr_base_Vectors_HPP__
+#ifndef __mixr_base_Vectors_H__
+#define __mixr_base_Vectors_H__
 
 #include "mixr/base/Matrix.hpp"
 
@@ -20,11 +20,8 @@ namespace base {
 //------------------------------------------------------------------------------
 // Class: RVector
 // Description: General purpose row vector
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: RVector
-// Slots: none
 //------------------------------------------------------------------------------
 class RVector : private Matrix
 {
@@ -231,11 +228,8 @@ inline RVector* getRowVector(const Matrix& A, const unsigned int r)
 //------------------------------------------------------------------------------
 // Class: CVector
 // Description: General purpose column vector
-//------------------------------------------------------------------------------
-// EDL Interface:
 //
 // Factory name: CVector
-// Slots: none
 //------------------------------------------------------------------------------
 class CVector : private Matrix
 {
@@ -349,6 +343,7 @@ public:
    int getFldWidth() const {
       return Matrix::getFldWidth();
    }
+
 
    // overloaded "<<" operator
    friend std::ostream& operator<<(std::ostream& sout, const CVector& V);

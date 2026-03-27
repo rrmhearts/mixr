@@ -1,0 +1,36 @@
+﻿  Instrument.cpp
+  Adi.cpp
+  GhostHorizon.cpp
+  Button.cpp
+  Knob.cpp
+  PushButton.cpp
+  RotarySwitch.cpp
+  SolenoidButton.cpp
+  SolenoidSwitch.cpp
+  Switch.cpp
+  AltitudeDial.cpp
+  AnalogDial.cpp
+  DialArcSegment.cpp
+  DialPointer.cpp
+  DialTickMarks.cpp
+  GMeterDial.cpp
+  Eadi3DFont.cpp
+  Eadi3DObjects.cpp
+  Eadi3DPage.cpp
+  IrisGLCompat.cpp
+  Generating Code...
+  Compiling...
+  makeTheFont.cpp
+  EngPage.cpp
+  factory.cpp
+  AnalogGauge.cpp
+  AoaIndexer.cpp
+  GaugeSlider.cpp
+  Tape.cpp
+  TickMarks.cpp
+  LandingGear.cpp
+  LandingLight.cpp
+  BearingPointer.cpp
+  CompassRose.cpp
+  Generating Code...
+  instruments.vcxproj -> C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\lib\mixr_instruments.lib

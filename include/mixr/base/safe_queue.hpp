@@ -1,16 +1,17 @@
 
 #include "mixr/base/util/atomics.hpp"
 
-#ifndef __mixr_base_safe_queue_HPP__
-#define __mixr_base_safe_queue_HPP__
+#ifndef __mixr_base_safe_queue_H__
+#define __mixr_base_safe_queue_H__
 
 namespace mixr {
 namespace base {
 
 //------------------------------------------------------------------------------
 // Template: safe_queue<T>
+//
 // Description: Thread-safe queue of items of type T
-//------------------------------------------------------------------------------
+//
 // Notes:
 //    1) Use the constructor's 'qsize' parameter to set the max size of the queue.
 //    2) Use put() to add items and get() to remove items.
@@ -39,7 +40,7 @@ public:
    // Puts an item at the back of the queue.
    bool put(T item) {
       lock( semaphore );
-      bool ok{};
+      bool ok = false;
       if (n < SIZE) {
          // Put item in the queue
          queue[in++] = item;
@@ -54,12 +55,13 @@ public:
    // Gets an item from the front of the queue
    T get() {
       lock( semaphore );
-      T p{};
+      T p = 0;
       if (!isEmpty()) {
          // Get item out of the queue
          if (in >= n) {
             p = queue[in - n];
-         } else {
+         }
+         else {
             p = queue[SIZE + in - n];
          }
          n--;
@@ -73,13 +75,14 @@ public:
    // the queue (i.e. at the next get()).
    T peek0(unsigned int idx = 0) {
       lock( semaphore );
-      T p{};
+      T p = 0;
       if (idx < n) {
-         unsigned int j{n - idx};
+         unsigned int j = n - idx;
          // Get item out of the queue
          if (in >= j) {
             p = queue[in - j];
-         } else {
+         }
+         else {
             p = queue[SIZE + in - j];
          }
       }
@@ -97,11 +100,11 @@ public:
 
 private:
    safe_queue<T>& operator=(safe_queue<T>&) { return *this; }
-   T* queue{};                 // The Queue
-   const unsigned int SIZE{};  // Max size of the queue
-   unsigned int in{};          // In (put) Index
-   unsigned int n{};           // Number of items in queue
-   mutable long semaphore{};   // semaphore
+   T* queue {};                // The Queue
+   const unsigned int SIZE {}; // Max size of the queue
+   unsigned int in {};         // In (put) Index
+   unsigned int n {};          // Number of items in queue
+   mutable long semaphore {};  // semaphore
 };
 
 }

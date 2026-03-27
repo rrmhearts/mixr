@@ -1,8 +1,8 @@
 
-#ifndef __mixr_models_SensorMgr_HPP__
-#define __mixr_models_SensorMgr_HPP__
+#ifndef __mixr_models_SensorMgr_H__
+#define __mixr_models_SensorMgr_H__
 
-#include "mixr/models/system/IRfSensor.hpp"
+#include "mixr/models/system/RfSensor.hpp"
 
 namespace mixr {
 namespace models {
@@ -10,13 +10,12 @@ namespace models {
 //------------------------------------------------------------------------------
 // Class: SensorMgr
 //
-// Description: Concrete class for managing a list of R/F sensors
-//
-// Factory name: ISensorMgr
+// Description: Generic class for managing a list of R/F sensors
+// Factory name: SensorMgr
 //------------------------------------------------------------------------------
-class SensorMgr : public IRfSensor
+class SensorMgr : public RfSensor
 {
-    DECLARE_SUBCLASS(SensorMgr, IRfSensor)
+    DECLARE_SUBCLASS(SensorMgr, RfSensor)
 
 public:
     SensorMgr();

@@ -1,11 +1,10 @@
 
 #include "mixr/linkage/adapters/DiscreteInput.hpp"
 
-#include "mixr/base/concepts/linkage/IIoData.hpp"
-#include "mixr/base/concepts/linkage/IIoDevice.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoData.hpp"
+#include "mixr/base/concepts/linkage/AbstractIoDevice.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
 #include <iostream>
 
@@ -16,21 +15,17 @@ IMPLEMENT_SUBCLASS(DiscreteInput, "DiscreteInput")
 EMPTY_DELETEDATA(DiscreteInput)
 
 BEGIN_SLOTTABLE(DiscreteInput)
-    "di",         // 1) Discrete Input location (IIoData's DI channel)
+    "di",         // 1) Discrete Input location (AbstractIoData's DI channel)
     "port",       // 2) Device port number (default: 0)
     "channel",    // 3) Device channel (bit) number on the port
     "inverted",   // 4) Inverted bit flag (default: false)
-    "value",      // 5) Initial value (default: false)
-    "count"       // 6) Number of DIs to manage starting at 'di' and 'channel'
 END_SLOTTABLE(DiscreteInput)
 
 BEGIN_SLOT_MAP(DiscreteInput)
-    ON_SLOT( 1, setSlotLocation, base::Integer)
-    ON_SLOT( 2, setSlotPort,     base::Integer)
-    ON_SLOT( 3, setSlotChannel,  base::Integer)
-    ON_SLOT( 4, setSlotInverted, base::Boolean)
-    ON_SLOT( 5, setSlotValue,    base::Boolean)
-    ON_SLOT( 6, setSlotCount,    base::Integer)
+    ON_SLOT( 1, setSlotLocation, base::Number)
+    ON_SLOT( 2, setSlotPort,     base::Number)
+    ON_SLOT( 3, setSlotChannel,  base::Number)
+    ON_SLOT( 4, setSlotInverted, base::Number)
 END_SLOT_MAP()
 
 DiscreteInput::DiscreteInput()
@@ -45,45 +40,33 @@ void DiscreteInput::copyData(const DiscreteInput& org, const bool)
    location = org.location;
    port = org.port;
    channel = org.channel;
-   devEnb = org.devEnb;
    invert = org.invert;
-   value = org.value;
-   count = org.count;
 }
 
-void DiscreteInput::processInputsImpl(const base::IIoDevice* const device, base::IIoData* const inData)
+void DiscreteInput::processInputsImpl(const base::AbstractIoDevice* const device, base::AbstractIoData* const inData)
 {
    if (inData != nullptr) {
-      int chan = channel;
-      int loc = location;
-      int n = ((count >= 0) ? count : -count);
-      if (n == 0) n = 1; // default to at least one
+      bool value{};
 
-      for (int i = 0; i < n; i++) {
-
-         // Get the bit from the DI card
-         if (device != nullptr && devEnb) {
-            device->getDiscreteInput(&value, chan, port);
-         }
-
-         // Send the bit to the cockpit input handler
-         bool value0(value);
-         if (invert) value0 = !value;
-         inData->setDiscreteInput(loc,value0);
-
-         chan++;
-         if (count >= 0) loc++;
-         else loc--;
+      // Get the bit from the device card
+      if (device != nullptr) {
+         device->getDiscreteInput(&value, channel, port);
       }
+
+      // Set the bit to the cockpit input handler
+      bool value0 {value};
+      if (invert)
+         value0 = !value;
+      inData->setDiscreteInput(location, value0);
    }
 }
 
 // location: Input array index (location)
-bool DiscreteInput::setSlotLocation(const base::Integer* const msg)
+bool DiscreteInput::setSlotLocation(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setLocation(v);
       }
@@ -92,11 +75,11 @@ bool DiscreteInput::setSlotLocation(const base::Integer* const msg)
 }
 
 // port: DiHandler's port number
-bool DiscreteInput::setSlotPort(const base::Integer* const msg)
+bool DiscreteInput::setSlotPort(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setPort(v);
       }
@@ -105,11 +88,11 @@ bool DiscreteInput::setSlotPort(const base::Integer* const msg)
 }
 
 // channel: DiHandler's channel (bit) number on the port
-bool DiscreteInput::setSlotChannel(const base::Integer* const msg)
+bool DiscreteInput::setSlotChannel(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      const int v {msg->asInt()};
+      const int v {msg->getInt()};
       if (v >= 0) {
          ok = setChannel(v);
       }
@@ -118,35 +101,14 @@ bool DiscreteInput::setSlotChannel(const base::Integer* const msg)
 }
 
 // invert: Inverted bit flag (default: false)
-bool DiscreteInput::setSlotInverted(const base::Boolean* const msg)
+bool DiscreteInput::setSlotInverted(const base::Number* const msg)
 {
    bool ok {};
    if (msg != nullptr) {
-      ok = setInvert( msg->asBool() );
-   }
-   return ok;
-}
-
-// value: Initial value (default: false)
-bool DiscreteInput::setSlotValue(const base::Boolean* const msg)
-{
-   bool ok{};
-   if (msg != nullptr) {
-      ok = setValue( msg->asBool() );
-   }
-   return ok;
-}
-
-// count: number of discrete bits
-bool DiscreteInput::setSlotCount(const base::Integer* const msg)
-{
-   bool ok{};
-   if (msg != nullptr) {
-      ok = setCount( msg->asInt() );
+      ok = setInvert( msg->getBoolean() );
    }
    return ok;
 }
 
 }
 }
-

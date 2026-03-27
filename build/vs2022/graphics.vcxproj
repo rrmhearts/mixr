@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{36EF08BC-22BC-63C7-4BD5-516F37019955}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>graphics</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Release\graphics\</IntDir>
+    <TargetName>mixr_graphics</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\lib\</OutDir>
+    <IntDir>obj\Debug\graphics\</IntDir>
+    <TargetName>mixr_graphics_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;FTGL_LIBRARY_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;..\..\..\mixr-3rdparty\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi /Ot %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;FTGL_LIBRARY_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\mixr-3rdparty\include;..\..\..\mixr-3rdparty\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd4351 /wd4996 /wd4005 /wd4100 /Oi %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\mixr\graphics\BmpTexture.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Clip3D.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\ColorGradient.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\ColorRotary.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Display.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Graphic.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Image.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\MapPage.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Material.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\MfdPage.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Page.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Polygon.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Readouts.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Rotators.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Scanline.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Shapes.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\SymbolLoader.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Texture.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\Translator.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\factory.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\AbstractFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\AbstractFtglFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\BitmapFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglBitmapFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglExtrdFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglHaloFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglOutlineFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglPixmapFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglPolygonFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\FtglTextureFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\fonts\StrokeFont.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\AbstractField.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\AsciiText.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Cursor.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\DirectionReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\HexReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\LatitudeReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\LongitudeReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\NumericReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\OctalReadout.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Rotary.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\Rotary2.hpp" />
+    <ClInclude Include="..\..\include\mixr\graphics\readouts\TimeReadout.hpp" />
+    <ClInclude Include="..\..\src\graphics\readouts\ReformatScanner.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\graphics\BmpTexture.cpp" />
+    <ClCompile Include="..\..\src\graphics\Clip3D.cpp" />
+    <ClCompile Include="..\..\src\graphics\ColorGradient.cpp" />
+    <ClCompile Include="..\..\src\graphics\ColorRotary.cpp" />
+    <ClCompile Include="..\..\src\graphics\Display.cpp" />
+    <ClCompile Include="..\..\src\graphics\Graphic.cpp" />
+    <ClCompile Include="..\..\src\graphics\Image.cpp" />
+    <ClCompile Include="..\..\src\graphics\MapPage.cpp" />
+    <ClCompile Include="..\..\src\graphics\Material.cpp" />
+    <ClCompile Include="..\..\src\graphics\MfdPage.cpp" />
+    <ClCompile Include="..\..\src\graphics\Page.cpp" />
+    <ClCompile Include="..\..\src\graphics\Polygon.cpp" />
+    <ClCompile Include="..\..\src\graphics\Rotators.cpp" />
+    <ClCompile Include="..\..\src\graphics\Scanline.cpp" />
+    <ClCompile Include="..\..\src\graphics\Shapes.cpp" />
+    <ClCompile Include="..\..\src\graphics\SymbolLoader.cpp" />
+    <ClCompile Include="..\..\src\graphics\Texture.cpp" />
+    <ClCompile Include="..\..\src\graphics\Translator.cpp" />
+    <ClCompile Include="..\..\src\graphics\factory.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\AbstractFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\AbstractFtglFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\BitmapFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglBitmapFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglExtrdFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglHaloFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglOutlineFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglPixmapFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglPolygonFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\FtglTextureFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\fonts\StrokeFont.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\AbstractField.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\AsciiText.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\Cursor.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\DirectionReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\HexReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\LatitudeReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\LongitudeReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\NumericReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\OctalReadout.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\ReformatScanner.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\Rotary.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\Rotary2.cpp" />
+    <ClCompile Include="..\..\src\graphics\readouts\TimeReadout.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\graphics\readouts\reformat_scanner.l" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

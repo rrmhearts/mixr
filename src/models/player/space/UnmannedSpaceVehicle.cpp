@@ -13,8 +13,7 @@ UnmannedSpaceVehicle::UnmannedSpaceVehicle()
 {
     STANDARD_CONSTRUCTOR()
     static base::String generic("GenericUnmannedSpaceVehicle");
-    setType_old(&generic);
-    setType("GenericUnmannedSpaceVehicle");
+    setType(&generic);
 }
 
 void UnmannedSpaceVehicle::dynamics(const double dt)

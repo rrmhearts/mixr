@@ -1,27 +1,22 @@
 
 #include "mixr/models/navigation/Steerpoint.hpp"
 
-#include "mixr/models/action/IAction.hpp"
-#include "mixr/models/navigation/INavigation.hpp"
-#include "mixr/models/player/IPlayer.hpp"
+#include "mixr/models/navigation/Navigation.hpp"
+#include "mixr/models/player/Player.hpp"
+#include "mixr/models/Actions.hpp"
 
-#include "mixr/terrain/ITerrain.hpp"
+#include "mixr/terrain/Terrain.hpp"
 
 #include "mixr/base/Identifier.hpp"
-#include "mixr/base/IList.hpp"
+#include "mixr/base/LatLon.hpp"
+#include "mixr/base/List.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
+#include "mixr/base/PairStream.hpp"
 #include "mixr/base/String.hpp"
 
-#include "mixr/base/Latitude.hpp"
-#include "mixr/base/Longitude.hpp"
-
-#include "mixr/base/numeric/Integer.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-
-#include "mixr/base/qty/angles.hpp"
-#include "mixr/base/qty/lengths.hpp"
-#include "mixr/base/qty/times.hpp"
+#include "mixr/base/units/Angles.hpp"
+#include "mixr/base/units/Distances.hpp"
+#include "mixr/base/units/Times.hpp"
 
 #include "mixr/base/util/nav_utils.hpp"
 
@@ -46,45 +41,45 @@ BEGIN_SLOTTABLE(Steerpoint)
     "description",      // 11) Description              (String)
     "magvar",           // 12) Magnetic Var @ point     (Angle)
     "next",             // 13) Next steerpoint number: by name (Identifier) or index (Number)
-    "action",           // 14) Steerpoint action        (IAction)
+    "action",           // 14) Steerpoint action        (Action)
 END_SLOTTABLE(Steerpoint)
 
 BEGIN_SLOT_MAP(Steerpoint)
     ON_SLOT( 1, setSlotSteerpointType, base::Identifier)
 
-    ON_SLOT( 2, setSlotLatitude,       base::Latitude)
-    ON_SLOT( 2, setSlotLatitude,       base::INumber)
+    ON_SLOT( 2, setSlotLatitude,       base::LatLon)
+    ON_SLOT( 2, setSlotLatitude,       base::Number)
 
-    ON_SLOT( 3, setSlotLongitude,      base::Longitude)
-    ON_SLOT( 3, setSlotLongitude,      base::INumber)
+    ON_SLOT( 3, setSlotLongitude,      base::LatLon)
+    ON_SLOT( 3, setSlotLongitude,      base::Number)
 
-    ON_SLOT( 4, setSlotXPos,           base::ILength)
+    ON_SLOT( 4, setSlotXPos,           base::Distance)
 
-    ON_SLOT( 5, setSlotYPos,           base::ILength)
+    ON_SLOT( 5, setSlotYPos,           base::Distance)
 
-    ON_SLOT( 6, setSlotElevation,      base::ILength)
-    ON_SLOT( 6, setSlotElevation,      base::INumber)
+    ON_SLOT( 6, setSlotElevation,      base::Distance)
+    ON_SLOT( 6, setSlotElevation,      base::Number)
 
-    ON_SLOT( 7, setSlotCmdAltitude,    base::ILength)
-    ON_SLOT( 7, setSlotCmdAltitude,    base::INumber)
+    ON_SLOT( 7, setSlotCmdAltitude,    base::Distance)
+    ON_SLOT( 7, setSlotCmdAltitude,    base::Number)
 
-    ON_SLOT( 8, setSlotCmdAirspeed,    base::INumber)
+    ON_SLOT( 8, setSlotCmdAirspeed,    base::Number)
 
-    ON_SLOT( 9, setSlotPTA,            base::ITime)
-    ON_SLOT( 9, setSlotPTA,            base::INumber)
+    ON_SLOT( 9, setSlotPTA,            base::Time)
+    ON_SLOT( 9, setSlotPTA,            base::Number)
 
-    ON_SLOT(10, setSlotSCA,            base::ILength)
-    ON_SLOT(10, setSlotSCA,            base::INumber)
+    ON_SLOT(10, setSlotSCA,            base::Distance)
+    ON_SLOT(10, setSlotSCA,            base::Number)
 
     ON_SLOT(11, setSlotDescription,    base::String)
 
-    ON_SLOT(12, setSlotMagVar,         base::IAngle)
-    ON_SLOT(12, setSlotMagVar,         base::INumber)
+    ON_SLOT(12, setSlotMagVar,         base::Angle)
+    ON_SLOT(12, setSlotMagVar,         base::Number)
 
     ON_SLOT(13, setSlotNext,           base::Identifier)
-    ON_SLOT(13, setSlotNext,           base::Integer)
+    ON_SLOT(13, setSlotNext,           base::Number)
 
-    ON_SLOT(14, setSlotAction,         IAction)
+    ON_SLOT(14, setSlotAction,         Action)
 END_SLOT_MAP()
 
 Steerpoint::Steerpoint()
@@ -102,7 +97,7 @@ void Steerpoint::copyData(const Steerpoint& org, const bool)
     next = nullptr; // find it using 'initNextStptName' or 'initNexStptIdx'
 
     {
-       base::Identifier* n{};
+       base::String* n{};
        if (org.initNextStptName != nullptr) n = org.initNextStptName->clone();
        initNextStptName = n;
        if (n != nullptr) n->unref();
@@ -118,7 +113,7 @@ void Steerpoint::copyData(const Steerpoint& org, const bool)
     }
 
     {
-       IAction* aa{};
+       Action* aa{};
        if (org.action != nullptr) aa = org.action->clone();
        action = aa;
        if (aa != nullptr) aa->unref();
@@ -184,8 +179,8 @@ void Steerpoint::reset()
 {
     if (haveInitElev) {
         elevation  = initElev;
-        initPosVec[IPlayer::IDOWN] = -initElev;
-        posVec[IPlayer::IDOWN] = -initElev;
+        initPosVec[Player::IDOWN] = -initElev;
+        posVec[Player::IDOWN] = -initElev;
     }
 
     // ---
@@ -216,13 +211,13 @@ void Steerpoint::reset()
 
 double Steerpoint::getElevationFt() const
 {
-    return getElevationM() * base::length::M2FT;
+    return getElevationM() * base::distance::M2FT;
 }
 
 const char* Steerpoint::getDescription() const
 {
     const char* p{};
-    if (description != nullptr) p = description->c_str();
+    if (description != nullptr) p = *description;
     return p;
 }
 
@@ -244,14 +239,14 @@ double Steerpoint::getLongitude() const
 
 double Steerpoint::getCmdAltitudeFt() const
 {
-    return getCmdAltitude() * base::length::M2FT;
+    return getCmdAltitude() * base::distance::M2FT;
 }
 
 //------------------------------------------------------------------------------
 // Set the ground elevation at the steerpoint from this terrain database
 // Returns true if successful.
 //------------------------------------------------------------------------------
-bool Steerpoint::setElevation(const terrain::ITerrain* const terrain, const bool interp)
+bool Steerpoint::setElevation(const terrain::Terrain* const terrain, const bool interp)
 {
    bool ok{};
    if (!needLL) {
@@ -296,7 +291,7 @@ void Steerpoint::setLongitude(const double v)
 void Steerpoint::setElevation(const double x)
 {
     elevation = x;
-    posVec[IPlayer::IDOWN] = -x;
+    posVec[Player::IDOWN] = -x;
 }
 
 void Steerpoint::setDescription(const base::String* const d)
@@ -317,7 +312,7 @@ void Steerpoint::setCmdAirspeedKts(const double x)
 }
 
 // Sets the action to be performed
-bool Steerpoint::setAction(IAction* const aa)
+bool Steerpoint::setAction(Action* const aa)
 {
    action = aa;
    return true;
@@ -331,59 +326,59 @@ bool Steerpoint::setSlotSteerpointType(const base::Identifier* const msg)
     bool ok{};
     if (msg != nullptr) {
         ok = true;  // assume that it's valid
-        if      (*msg == "DEST"  || *msg == "dest")  setSteerpointType(StptType::DEST);
-        else if (*msg == "MARK"  || *msg == "mark")  setSteerpointType(StptType::MARK);
-        else if (*msg == "FIX"   || *msg == "fix")   setSteerpointType(StptType::FIX);
-        else if (*msg == "OAP"   || *msg == "oap")   setSteerpointType(StptType::OAP);
-        else if (*msg == "TGT"   || *msg == "tgt")   setSteerpointType(StptType::TGT);
-        else if (*msg == "IP"    || *msg == "ip")    setSteerpointType(StptType::IP);
+        if      (*msg == "DEST"  || *msg == "dest")  setSteerpointType(DEST);
+        else if (*msg == "MARK"  || *msg == "mark")  setSteerpointType(MARK);
+        else if (*msg == "FIX"   || *msg == "fix")   setSteerpointType(FIX);
+        else if (*msg == "OAP"   || *msg == "oap")   setSteerpointType(OAP);
+        else if (*msg == "TGT"   || *msg == "tgt")   setSteerpointType(TGT);
+        else if (*msg == "IP"    || *msg == "ip")    setSteerpointType(IP);
         else {
-            std::cerr << "Steerpoint::setSlotSteerpointType(): invalid steerpoint type: " << *msg << std::endl;
-            std::cerr << " -- valid types are { dest, mark, fix, oap, tgt }" << std::endl;
+            std::cerr << "xxx(): invalid steerpoint type: " << *msg << std::endl;
+            std::cerr << " -- valid types are { DEST, MARK, FIX, OAP, TGT }" << std::endl;
             ok = false; // it's no longer ok
         }
     }
     return ok;
 }
 
-bool Steerpoint::setSlotLatitude(const base::Latitude* const msg)
+bool Steerpoint::setSlotLatitude(const base::LatLon* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initLatitude = msg->getDecimalDegrees();
+        initLatitude = *msg;
         haveInitLat = true;
         setLatitude( initLatitude );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotLatitude(const base::INumber* const msg)
+bool Steerpoint::setSlotLatitude(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initLatitude = msg->asDouble();
+        initLatitude = msg->getDouble();
         haveInitLat = true;
         setLatitude( initLatitude );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotLongitude(const base::Longitude* const msg)
+bool Steerpoint::setSlotLongitude(const base::LatLon* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initLongitude = msg->getDecimalDegrees();
+        initLongitude = *msg;
         haveInitLon = true;
         setLongitude( initLongitude );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotLongitude(const base::INumber* const msg)
+bool Steerpoint::setSlotLongitude(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initLongitude = msg->asDouble();
+        initLongitude = msg->getDouble();
         haveInitLon = true;
         setLongitude( initLongitude );
         ok = true;
@@ -392,7 +387,7 @@ bool Steerpoint::setSlotLongitude(const base::INumber* const msg)
 }
 
 /*
-bool Steerpoint::setSlotPosition(const base::IList* const msg)
+bool Steerpoint::setSlotPosition(const base::List* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
@@ -411,91 +406,91 @@ bool Steerpoint::setSlotPosition(const base::IList* const msg)
 }
 */
 
-bool Steerpoint::setSlotXPos(const base::ILength* const x)
-{
-    bool ok{};
-    if (x != nullptr) {
-        initPosVec[IPlayer::INORTH] = x->getValueInMeters();
-        haveInitPos = true;
-        setPosition( initPosVec[0], initPosVec[1], initPosVec[2] );
-        ok = true;
-    }
-    return ok;
-}
-
-bool Steerpoint::setSlotYPos(const base::ILength* const x)
-{
-    bool ok{};
-    if (x != nullptr) {
-        initPosVec[IPlayer::IEAST] = x->getValueInMeters();
-        haveInitPos = true;
-        setPosition( initPosVec[0], initPosVec[1], initPosVec[2] );
-        ok = true;
-    }
-    return ok;
-}
-
-bool Steerpoint::setSlotElevation(const base::ILength* const x)
-{
-    bool ok{};
-    if (x != nullptr) {
-        initElev = x->getValueInMeters();
-        elevation  = initElev;
-        initPosVec[IPlayer::IDOWN] = -initElev;
-        posVec[IPlayer::IDOWN] = -initElev;
-        haveInitElev = true;
-        ok = true;
-    }
-    return ok;
-}
-bool Steerpoint::setSlotElevation(const base::INumber* const msg)
+bool Steerpoint::setSlotXPos(const base::Distance* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initElev = msg->asDouble();
+        initPosVec[Player::INORTH] = base::Meters::convertStatic(*msg);
+        haveInitPos = true;
+        setPosition( initPosVec[0], initPosVec[1], initPosVec[2] );
+        ok = true;
+    }
+    return ok;
+}
+
+bool Steerpoint::setSlotYPos(const base::Distance* const msg)
+{
+    bool ok{};
+    if (msg != nullptr) {
+        initPosVec[Player::IEAST] = base::Meters::convertStatic(*msg);
+        haveInitPos = true;
+        setPosition( initPosVec[0], initPosVec[1], initPosVec[2] );
+        ok = true;
+    }
+    return ok;
+}
+
+bool Steerpoint::setSlotElevation(const base::Distance* const msg)
+{
+    bool ok{};
+    if (msg != nullptr) {
+        initElev = base::Meters::convertStatic(*msg);
         elevation  = initElev;
-        initPosVec[IPlayer::IDOWN] = -initElev;
-        posVec[IPlayer::IDOWN] = -initElev;
+        initPosVec[Player::IDOWN] = -initElev;
+        posVec[Player::IDOWN] = -initElev;
+        haveInitElev = true;
+        ok = true;
+    }
+    return ok;
+}
+bool Steerpoint::setSlotElevation(const base::Number* const msg)
+{
+    bool ok{};
+    if (msg != nullptr) {
+        initElev = msg->getReal();
+        elevation  = initElev;
+        initPosVec[Player::IDOWN] = -initElev;
+        posVec[Player::IDOWN] = -initElev;
         haveInitElev = true;
         ok = true;
     }
     return ok;
 }
 
-bool Steerpoint::setSlotPTA(const base::ITime* const x)
+bool Steerpoint::setSlotPTA(const base::Time* const msg)
 {
     bool ok{};
-    if (x != nullptr) {
-        setPTA(x->getValueInSeconds());
+    if (msg != nullptr) {
+        setPTA( base::Seconds::convertStatic(*msg) );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotPTA(const base::INumber* const msg)
+bool Steerpoint::setSlotPTA(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
         // assumes seconds
-        setPTA( msg->asDouble() );
+        setPTA( msg->getFloat() );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotSCA(const base::ILength* const x)
+bool Steerpoint::setSlotSCA(const base::Distance* const msg)
 {
     bool ok{};
-    if (x != nullptr) {
-        setSCA(x->getValueInFeet());
+    if (msg != nullptr) {
+        setSCA( base::Feet::convertStatic(*msg) );
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotSCA(const base::INumber* const x)
+bool Steerpoint::setSlotSCA(const base::Number* const msg)
 {
     bool ok{};
-    if (x != nullptr) {
+    if (msg != nullptr) {
         // assumes feet
-        setSCA(x->asDouble());
+        setSCA( msg->getFloat() );
         ok = true;
     }
     return ok;
@@ -511,33 +506,33 @@ bool Steerpoint::setSlotDescription(const base::String* const msg)
     return ok;
 }
 
-bool Steerpoint::setSlotMagVar(const base::IAngle* const msg)
+bool Steerpoint::setSlotMagVar(const base::Angle* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initMagVar = msg->getValueInDegrees();
+        initMagVar = static_cast<double>(base::Degrees::convertStatic(*msg));
         haveInitMagVar = true;
         ok = true;
     }
     return ok;
 }
-bool Steerpoint::setSlotMagVar(const base::INumber* const msg)
+bool Steerpoint::setSlotMagVar(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
         // assumes degrees
-        initMagVar = msg->asDouble();
+        initMagVar = msg->getReal();
         haveInitMagVar = true;
         ok = true;
     }
     return ok;
 }
 
-bool Steerpoint::setSlotCmdAltitude(const base::ILength* const x)
+bool Steerpoint::setSlotCmdAltitude(const base::Distance* const msg)
 {
     bool ok{};
-    if (x != nullptr) {
-        initCmdAlt = x->getValueInMeters();
+    if (msg != nullptr) {
+        initCmdAlt = base::Meters::convertStatic(*msg);
         haveInitCmdAlt = true;
         setCmdAltitude(initCmdAlt);
         ok = true;
@@ -545,11 +540,11 @@ bool Steerpoint::setSlotCmdAltitude(const base::ILength* const x)
     return ok;
 }
 
-bool Steerpoint::setSlotCmdAltitude(const base::INumber* const msg)
+bool Steerpoint::setSlotCmdAltitude(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initCmdAlt = msg->asDouble();
+        initCmdAlt = msg->getReal();
         haveInitCmdAlt = true;
         setCmdAltitude(initCmdAlt);
         ok = true;
@@ -557,11 +552,11 @@ bool Steerpoint::setSlotCmdAltitude(const base::INumber* const msg)
     return ok;
 }
 
-bool Steerpoint::setSlotCmdAirspeed(const base::INumber* const msg)
+bool Steerpoint::setSlotCmdAirspeed(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initCmdAirspeed = msg->asDouble();
+        initCmdAirspeed = msg->getReal();
         haveInitCmdAs = true;
         setCmdAirspeedKts(initCmdAirspeed);
         ok = true;
@@ -579,11 +574,11 @@ bool Steerpoint::setSlotNext(const base::Identifier* const msg)
     return ok;
 }
 
-bool Steerpoint::setSlotNext(const base::Integer* const msg)
+bool Steerpoint::setSlotNext(const base::Number* const msg)
 {
     bool ok{};
     if (msg != nullptr) {
-        initNextStptIdx = msg->asInt();
+        initNextStptIdx = msg->getInt();
         ok = true;
     }
     return ok;
@@ -613,7 +608,7 @@ void Steerpoint::clearNavData()
 //------------------------------------------------------------------------------
 // compute() -- Compute steerpoint data
 //------------------------------------------------------------------------------
-bool Steerpoint::compute(const INavigation* const nav, const Steerpoint* const from)
+bool Steerpoint::compute(const Navigation* const nav, const Steerpoint* const from)
 {
     bool ok{};
     if (nav != nullptr) {
@@ -710,9 +705,9 @@ bool Steerpoint::compute(const INavigation* const nav, const Steerpoint* const f
             // ---
             // Update our component steerpoint list (from NAV data, or 'direct-to' only)
             // ---
-            base::IPairStream* steerpoints{getComponents()};
+            base::PairStream* steerpoints{getComponents()};
             if (steerpoints != nullptr) {
-                base::IList::Item* item{steerpoints->getFirstItem()};
+                base::List::Item* item{steerpoints->getFirstItem()};
                 while (item != nullptr) {
                     base::Pair* pair{static_cast<base::Pair*>(item->getValue())};
                     Steerpoint* p{static_cast<Steerpoint*>(pair->object())};
@@ -740,13 +735,13 @@ bool Steerpoint::compute(const INavigation* const nav, const Steerpoint* const f
 // type Steerpoint (or derived); tell them that we are their container
 //------------------------------------------------------------------------------
 void Steerpoint::processComponents(
-      base::IPairStream* const list,
+      base::PairStream* const list,
       const std::type_info&,
       base::Pair* const add,
-      base::IComponent* const remove
+      base::Component* const remove
    )
 {
-   base::IComponent::processComponents(list,typeid(Steerpoint),add,remove);
+   base::Component::processComponents(list,typeid(Steerpoint),add,remove);
 }
 
 }

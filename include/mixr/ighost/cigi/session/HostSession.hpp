@@ -1,8 +1,8 @@
 
-#ifndef __mixr_ighost_cigi3_session_HostSession_HPP__
-#define __mixr_ighost_cigi3_session_HostSession_HPP__
+#ifndef __mixr_ighost_cigi_session_HostSession_H__
+#define __mixr_ighost_cigi_session_HostSession_H__
 
-#include "mixr/base/IComponent.hpp"
+#include "mixr/base/Component.hpp"
 
 #include <memory>
 
@@ -23,8 +23,7 @@ class CigiIncomingMsg;
 class CigiOutgoingMsg;
 
 namespace mixr {
-namespace base { class INetHandler; }
-namespace ighost {
+namespace base { class NetHandler; }
 namespace cigi {
 class CigiHost;
 class SignalProcessor;
@@ -39,12 +38,12 @@ class SignalProcessor;
 //
 // Factory name: CigiHostSession
 // Slots:
-//    netInput       (INetHandler)   Network input handler
-//    netOutput      (INetHandler)   Network output handler
+//    netInput       (NetHandler)   Network input handler
+//    netOutput      (NetHandler)   Network output handler
 //------------------------------------------------------------------------------
-class HostSession : public base::IComponent
+class HostSession : public base::Component
 {
-   DECLARE_SUBCLASS(HostSession, base::IComponent)
+   DECLARE_SUBCLASS(HostSession, base::Component)
 
 public:
    HostSession();
@@ -78,8 +77,8 @@ private:
 
    bool initNetworkConnections();
 
-   base::safe_ptr<base::INetHandler> netInput;   // input network handler
-   base::safe_ptr<base::INetHandler> netOutput;  // output network handler
+   base::safe_ptr<base::NetHandler> netInput;   // input network handler
+   base::safe_ptr<base::NetHandler> netOutput;  // output network handler
 
    bool networkInitialized{};                   // CIGI has been initialized
    bool networkInitFailed{};                    // CIGI initialization has failed
@@ -88,11 +87,10 @@ private:
 
 private:
    // slot table helper methods
-   bool setSlotNetInput(base::INetHandler* const);
-   bool setSlotNetOutput(base::INetHandler* const);
+   bool setSlotNetInput(base::NetHandler* const);
+   bool setSlotNetOutput(base::NetHandler* const);
 };
 
-}
 }
 }
 

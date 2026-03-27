@@ -2,11 +2,10 @@
 #include "mixr/instruments/buttons/Knob.hpp"
 #include "mixr/graphics/Display.hpp"
 
-#include "mixr/base/qty/util/angle_utils.hpp"
-#include "mixr/base/relations/Table1.hpp"
+#include "mixr/base/numeric/Number.hpp"
 
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
+#include "mixr/base/units/angle_utils.hpp"
+#include "mixr/base/functors/Table1.hpp"
 
 #include <GL/glu.h>
 #include <cmath>
@@ -26,9 +25,9 @@ END_SLOTTABLE(Knob)
 
 BEGIN_SLOT_MAP(Knob)
     ON_SLOT(1, setSlotValueTable,   base::Table1)
-    ON_SLOT(2, setSlotEndless,      base::Boolean)
-    ON_SLOT(3, setSlotEndlessStart, base::INumber)
-    ON_SLOT(4, setSlotEndlessLimit, base::INumber)
+    ON_SLOT(2, setSlotEndless,      base::Number)
+    ON_SLOT(3, setSlotEndlessStart, base::Number)
+    ON_SLOT(4, setSlotEndlessLimit, base::Number)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(Knob)
@@ -80,30 +79,30 @@ bool Knob::setSlotValueTable(base::Table1* const x)
 //------------------------------------------------------------------------------
 // setSlotEndless() - set up our table to be endless or not
 //------------------------------------------------------------------------------
-bool Knob::setSlotEndless(const base::Boolean* const x)
+bool Knob::setSlotEndless(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setEndless(x->asBool());
+    if (x != nullptr) ok = setEndless(x->getBoolean());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotEndlessStart() - start value of endless knob
 //------------------------------------------------------------------------------
-bool Knob::setSlotEndlessStart(const base::INumber* const x)
+bool Knob::setSlotEndlessStart(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setEndlessStart(x->asDouble());
+    if (x != nullptr) ok = setEndlessStart(x->getReal());
     return ok;
 }
 
 //------------------------------------------------------------------------------
 // setSlotEndlessLimit() - limit value of endless knob
 //------------------------------------------------------------------------------
-bool Knob::setSlotEndlessLimit(const base::INumber* const x)
+bool Knob::setSlotEndlessLimit(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setEndlessLimit(x->asDouble());
+    if (x != nullptr) ok = setEndlessLimit(x->getReal());
     return ok;
 }
 

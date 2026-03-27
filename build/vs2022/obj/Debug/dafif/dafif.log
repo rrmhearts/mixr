@@ -1,0 +1,13 @@
+﻿  Airport.cpp
+  AirportLoader.cpp
+  Database.cpp
+  Ils.cpp
+  Navaid.cpp
+  NavaidLoader.cpp
+  Record.cpp
+  Runway.cpp
+  Waypoint.cpp
+  WaypointLoader.cpp
+  factory.cpp
+  Generating Code...
+  dafif.vcxproj -> C:\Users\Ryan\Documents\Gitlab_VDL\mixr-platform\mixr\lib\mixr_dafif_d.lib

@@ -2,13 +2,10 @@
 #include "mixr/instruments/buttons/SolenoidSwitch.hpp"
 
 #include "mixr/graphics/Display.hpp"
-
-#include "mixr/base/numeric/Boolean.hpp"
-#include "mixr/base/numeric/INumber.hpp"
-#include "mixr/base/numeric/Integer.hpp"
+#include "mixr/base/numeric/Number.hpp"
 #include "mixr/base/Pair.hpp"
-#include "mixr/base/IPairStream.hpp"
-#include "mixr/base/timers/UpTimer.hpp"
+#include "mixr/base/PairStream.hpp"
+#include "mixr/base/Timers.hpp"
 
 namespace mixr {
 namespace instruments {
@@ -21,12 +18,12 @@ BEGIN_SLOTTABLE(SolenoidSwitch)
 END_SLOTTABLE(SolenoidSwitch)
 
 BEGIN_SLOT_MAP(SolenoidSwitch)
-    ON_SLOT(1, setSlotHoldTimer, base::INumber)
-    ON_SLOT(2, setSlotEventMap,  base::IPairStream)
+    ON_SLOT(1, setSlotHoldTimer, base::Number)
+    ON_SLOT(2, setSlotEventMap,  base::PairStream)
 END_SLOT_MAP()
 
 BEGIN_EVENT_HANDLER(SolenoidSwitch)
-    ON_EVENT_OBJ(SELECT, selectLatch, base::Boolean)
+    ON_EVENT_OBJ(SELECT, selectLatch, base::Number)
 END_EVENT_HANDLER()
 
 SolenoidSwitch::SolenoidSwitch()
@@ -71,10 +68,10 @@ void SolenoidSwitch::deleteData()
 //------------------------------------------------------------------------------
 // setSlotHoldTimer() - set how long to hold our button before state change
 //------------------------------------------------------------------------------
-bool SolenoidSwitch::setSlotHoldTimer(const base::INumber* const x)
+bool SolenoidSwitch::setSlotHoldTimer(const base::Number* const x)
 {
     bool ok = false;
-    if (x != nullptr) ok = setHoldTimer(x->asDouble());
+    if (x != nullptr) ok = setHoldTimer(x->getReal());
     return ok;
 }
 
@@ -85,16 +82,16 @@ bool SolenoidSwitch::setSlotHoldTimer(const base::INumber* const x)
 // will map that event to this one and will send that to the display to be
 // processed.
 //------------------------------------------------------------------------------
-bool SolenoidSwitch::setSlotEventMap(const base::IPairStream* const x)
+bool SolenoidSwitch::setSlotEventMap(const base::PairStream* const x)
 {
     if (x != nullptr) {
         if (x->entries() != 3) std::cout << "SolenoidSwitch::setSlotEventMap() - Need 3 eventIds for the button, will not send eventIds for the ones without it" << std::endl;
         int count = 0;
-        const base::IList::Item* item = x->getFirstItem();
+        const base::List::Item* item = x->getFirstItem();
         while (item != nullptr && count < 3) {
             const auto pair = static_cast<const base::Pair*>(item->getValue());
-            const auto num = dynamic_cast<const base::Integer*>(pair->object());
-            if (num != nullptr) eventMap[count] = num->asInt();
+            const auto num = dynamic_cast<const base::Number*>(pair->object());
+            if (num != nullptr) eventMap[count] = num->getInt();
             count++;
             item = item->getNext();
         }
@@ -106,10 +103,10 @@ bool SolenoidSwitch::setSlotEventMap(const base::IPairStream* const x)
 //------------------------------------------------------------------------------
 // selectLatch() - tells our switch if it's ok to "latch"
 //------------------------------------------------------------------------------
-bool SolenoidSwitch::selectLatch(const base::Boolean* const x)
+bool SolenoidSwitch::selectLatch(const base::Number* const x)
 {
     if (x != nullptr) {
-        latched = x->asBool();
+        latched = x->getBoolean();
     }
     return true;
 }
