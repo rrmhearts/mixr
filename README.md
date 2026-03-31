@@ -2,7 +2,7 @@
 Mixed Reality Simulation Platform (MIXR)
 ========================================
 
-The most current version of the mixed reality simulation platform can be found at [www.mixr-platform.org][mixr].
+The most current version of the mixed reality simulation platform can be found at [www.mixr-platform.org][mixr]. This version is 18.01 plus some personal changes and bug fixes for learning purposes.
 
 Directories
 -----------
